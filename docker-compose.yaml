@@ -1,0 +1,59 @@
+version: "3"
+services:
+  backend:
+    container_name: backend # Name of the backend container
+    build: # Build configuration for the backend
+      context: ./backend # Directory containing Dockerfile
+      dockerfile: Dockerfile
+    image: strapi:latest # Use the latest Strapi image
+    restart: unless-stopped # Always restart unless explicitly stopped
+    environment: # Environment variables for configuration
+      HOST: 0.0.0.0
+      PORT: 1337
+      DATABASE_HOST: database # Link to the database service by name
+      DATABASE_NAME: pdf_db
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      NODE_ENV: development # Set node environment to development
+    volumes: # Mount points for persistent data and source code
+      - ./backend/config:/opt/app/config
+      - ./backend/public/uploads:/opt/app/public/uploads
+    ports:
+      - "1337:1337" # Expose port 1337 to the host
+    networks:
+      - strapi # Connect to the 'strapi' network
+    depends_on:
+      - database # Depends on the database service
+  database:
+    container_name: database # Name of the database container
+    platform: linux/arm64 # Specify the platform (important for ARM64 architectures)
+    image: postgres:12.0-alpine # Use PostgreSQL 12 on Alpine for smaller size
+    restart: unless-stopped
+    environment: # PostgreSQL user, password, and database name
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: pdf_db
+    volumes:
+      - strapi-data:/var/lib/postgresql/data/ # Persistent storage for the database
+    networks:
+      - strapi # Connect to the 'strapi' network
+  frontend:
+    container_name: frontend # Name of the frontend container
+    build: # Build configuration for the frontend
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:1337 # Environment variable for the API URL
+    ports:
+      - "3000:3000" # Expose port 3000 to the host
+    networks:
+      - strapi # Connect to the 'strapi' network
+    depends_on:
+      - backend # Depends on the backend service
+volumes:
+  strapi-data: # Define a volume for PostgreSQL data
+networks:
+  strapi: # Custom network for inter-container communication
+    name: Strapi
+    driver: bridge
