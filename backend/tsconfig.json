@@ -19,5 +19,6 @@
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types"],
+    "esModuleInterop": true
   }
 }

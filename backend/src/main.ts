@@ -4,7 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { LoggerService, ValidationPipe } from '@nestjs/common';
 import { LoggerFactory } from './util/logger-factory';
 import { CamelCasePipe } from './common/pipes/camel-case.pipe';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const logger: LoggerService = LoggerFactory('CC Portal API');
