@@ -7,6 +7,7 @@ import {
   Param,
   HttpCode,
   ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
 import { CreateUserRequest } from './request/create-user.request';
@@ -20,6 +21,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ToggleWhitelistedRequest } from './request/toggle-whitelisted.request';
+import { Roles } from 'src/auth/guard/role.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { RoleGuard } from 'src/auth/guard/role.guard';
+import { RoleEnum } from '../entities/role.entity';
 
 @ApiTags('Users')
 @Controller('users')
@@ -120,6 +125,8 @@ export class UsersController {
     description: 'Bad Request',
   })
   @ApiResponse({ status: 404, description: 'User with {id} not found' })
+  @Roles(RoleEnum.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Patch(':id/whitelist')
   async toggleWhitelist(
     @Param('id', ParseUUIDPipe) id: string,

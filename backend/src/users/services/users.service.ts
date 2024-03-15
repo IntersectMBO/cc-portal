@@ -62,7 +62,7 @@ export class UsersService {
     return UserMapper.userToDto(returnedUser);
   }
 
-  async findByEmail(email: string): Promise<User> {
+  async findByEmail(email: string): Promise<UserDto> {
     const user = await this.userRepository.findOne({
       where: {
         email: email,
@@ -71,7 +71,7 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException(`User with email address ${email} not found`);
     }
-    return user;
+    return UserMapper.userToDto(user);
   }
 
   async findAll(): Promise<UserDto[]> {
