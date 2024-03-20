@@ -1,7 +1,7 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { LoggerService, ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, LoggerService, ValidationPipe } from '@nestjs/common';
 import { LoggerFactory } from './util/logger-factory';
 import { CamelCasePipe } from './common/pipes/camel-case.pipe';
 import * as cookieParser from 'cookie-parser';
@@ -22,6 +22,11 @@ async function bootstrap() {
 
   app.setGlobalPrefix('/api');
   //TODO add env variable related to current environment (DEV/STAGE/PROD) and only allow * origin for NON PROD environments
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector), {
+      excludeExtraneousValues: true,
+    }),
+  );
   app.enableCors({
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',

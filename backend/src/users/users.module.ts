@@ -10,5 +10,6 @@ import { UsersFacade } from './facade/users.facade';
   imports: [TypeOrmModule.forFeature([User, Role])],
   controllers: [UsersController],
   providers: [UsersFacade, UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}
