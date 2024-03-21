@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { UpdateUserRequest } from '../api/request/update-user.request';
-import { UsersService } from '../services/users.service';
-import { CreateUserRequest } from '../api/request/create-user.request';
-import { UserResponse } from '../api/response/user.response';
-import { UserMapper } from '../mapper/userMapper.mapper';
+import { Injectable } from "@nestjs/common";
+import { UpdateUserRequest } from "../api/request/update-user.request";
+import { UsersService } from "../services/users.service";
+import { CreateUserRequest } from "../api/request/create-user.request";
+import { UserResponse } from "../api/response/user.response";
+import { UserMapper } from "../mapper/userMapper.mapper";
 @Injectable()
 export class UsersFacade {
   constructor(private readonly usersService: UsersService) {}

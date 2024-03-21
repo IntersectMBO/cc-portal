@@ -4,15 +4,15 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
-} from '@nestjs/common';
-import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entities/user.entity';
-import { EntityManager, Repository } from 'typeorm';
-import { Role, RoleEnum } from '../entities/role.entity';
-import { UserDto } from '../dto/user.dto';
-import { UserMapper } from '../mapper/userMapper.mapper';
-import { UpdateUserDto } from '../dto/update-user.dto';
-import { CreateUserDto } from '../dto/create-user.dto';
+} from "@nestjs/common";
+import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
+import { User } from "../entities/user.entity";
+import { EntityManager, Repository } from "typeorm";
+import { Role, RoleEnum } from "../entities/role.entity";
+import { UserDto } from "../dto/user.dto";
+import { UserMapper } from "../mapper/userMapper.mapper";
+import { UpdateUserDto } from "../dto/update-user.dto";
+import { CreateUserDto } from "../dto/create-user.dto";
 
 @Injectable()
 export class UsersService {
@@ -56,7 +56,7 @@ export class UsersService {
       });
     } catch (e) {
       this.logger.error(`Error within transaction: ${e.message}`);
-      throw new InternalServerErrorException('Transaction failed');
+      throw new InternalServerErrorException("Transaction failed");
     }
 
     return UserMapper.userToDto(returnedUser);
@@ -116,7 +116,7 @@ export class UsersService {
       });
     } catch (e) {
       this.logger.error(`error when updating the user  : ${e.message}`);
-      throw new InternalServerErrorException('update user failed');
+      throw new InternalServerErrorException("update user failed");
     }
 
     return UserMapper.userToDto(updatedUser);
