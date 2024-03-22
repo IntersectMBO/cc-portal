@@ -31,7 +31,8 @@ export class UsersFacade {
   async update(id: string, updateUserRequest: UpdateUserRequest) {
     const updateUserDto =
       UserMapper.mapUpdateUserRequestToDto(updateUserRequest);
-    return this.usersService.update(id, updateUserDto);
+    const user = await this.usersService.update(id, updateUserDto);
+    return UserMapper.mapUserDtoToResponse(user);
   }
 
   async toggleWhitelist(

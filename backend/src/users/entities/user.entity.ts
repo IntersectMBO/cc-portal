@@ -7,6 +7,13 @@ import {
 } from "typeorm";
 import { Role } from "./role.entity";
 import { CommonEntity } from "../../common/entities/common.entity";
+import { Permission } from "./permission.entity";
+
+export enum UserStatusEnum {
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  PENDING = "pending",
+}
 
 @Entity("users")
 export class User extends CommonEntity {
@@ -52,6 +59,14 @@ export class User extends CommonEntity {
   })
   profilePhoto: string; //path to the profile photo
 
+  @Column({
+    name: "status",
+    type: "enum",
+    enum: UserStatusEnum,
+    nullable: true,
+  })
+  status: UserStatusEnum;
+
   @ManyToMany(() => Role, (role) => role.users, {
     eager: true,
   })
@@ -67,6 +82,22 @@ export class User extends CommonEntity {
     },
   })
   roles: Role[];
+
+  @ManyToMany(() => Permission, (permission) => permission.users, {
+    eager: true,
+  })
+  @JoinTable({
+    name: "user_permissions",
+    joinColumn: {
+      name: "user_id",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "permission_id",
+      referencedColumnName: "id",
+    },
+  })
+  permissions: Permission[];
 
   @Column({
     name: "whitelisted",

@@ -53,7 +53,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@test.com\"\n}",
+							"raw": "{\n    \"email\": \"test@test.com\",\n    \"roles\": [\"user\", \"admin\"],\n    \"permissions\": [\"manage_cc_members\", \"add_constitution_version\", \"add_new_admin\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"

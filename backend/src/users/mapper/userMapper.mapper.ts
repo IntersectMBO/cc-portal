@@ -15,8 +15,12 @@ export class UserMapper {
     userDto.hotAddress = user.hotAddress;
     userDto.description = user.description;
     userDto.profilePhoto = user.profilePhoto;
+    userDto.status = user.status;
     userDto.whitelisted = user.whitelisted;
     userDto.roles = user.roles?.map((role) => role.code);
+    userDto.permissions = user.permissions?.map(
+      (permission) => permission.name,
+    );
 
     userDto.createdAt = user.createdAt;
     userDto.updatedAt = user.updatedAt;
@@ -29,6 +33,8 @@ export class UserMapper {
   ): CreateUserDto {
     const createUserDto = new CreateUserDto();
     createUserDto.email = createUserRequest.email;
+    createUserDto.roles = createUserRequest.roles;
+    createUserDto.permissions = createUserRequest.permissions;
     return createUserDto;
   }
 
@@ -48,8 +54,10 @@ export class UserMapper {
     userResponse.hotAddress = userDto.hotAddress;
     userResponse.description = userDto.description;
     userResponse.profilePhoto = userDto.profilePhoto;
+    userResponse.status = userDto.status;
     userResponse.whitelisted = userDto.whitelisted;
     userResponse.roles = userDto.roles;
+    userResponse.permissions = userDto.permissions;
     userResponse.createdAt = userDto.createdAt;
     userResponse.updatedAt = userDto.updatedAt;
     return userResponse;

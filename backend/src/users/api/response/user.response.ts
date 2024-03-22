@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
+import { UserStatusEnum } from "src/users/entities/user.entity";
 import { Timestamp } from "typeorm";
 
 export class UserResponse {
@@ -43,9 +44,20 @@ export class UserResponse {
   @Expose({ name: "profile_photo" })
   profilePhoto: string;
 
+  @ApiProperty({
+    description: "Status of user",
+    example: "pending",
+  })
+  @Expose({ name: "status" })
+  status: UserStatusEnum;
+
   @ApiProperty({ description: "Roles of the user", example: ["user"] })
   @Expose({ name: "roles" })
   roles: string[];
+
+  @ApiProperty({ description: "Permissions of the user", example: ["pending"] })
+  @Expose({ name: "permissions" })
+  permissions: string[];
 
   @ApiProperty({
     description: "Flag that deterines whether user is blacklisted or not",
