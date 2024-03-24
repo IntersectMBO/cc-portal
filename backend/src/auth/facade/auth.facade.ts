@@ -1,20 +1,23 @@
-import { UsersService } from 'src/users/services/users.service';
-import { UserDto } from 'src/users/dto/user.dto';
-import { TokenResponse } from '../api/response/token.response';
-import { UserMapper } from 'src/users/mapper/userMapper.mapper';
+import { UsersService } from "src/users/services/users.service";
+import { UserDto } from "src/users/dto/user.dto";
+import { TokenResponse } from "../api/response/token.response";
+import { UserMapper } from "src/users/mapper/userMapper.mapper";
 import {
   ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
-} from '@nestjs/common';
-import { AuthService } from '../service/auth.service';
+} from "@nestjs/common";
+import { AuthService } from "../service/auth.service";
+import { EmailService } from "src/email/service/email.service";
+import { EmailDto } from "src/email/dto/email.dto";
 
 @Injectable()
 export class AuthFacade {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    private readonly emailService: EmailService,
   ) {}
 
   async validateUser(email: string): Promise<UserDto> {
@@ -26,9 +29,9 @@ export class AuthFacade {
   }
 
   async generateTokens(userDto: UserDto): Promise<TokenResponse> {
-    if (!userDto.whitelisted) {
-      throw new ForbiddenException(`User is not whitelisted`);
-    }
+    // if (!userDto.whitelisted) {
+    //   throw new ForbiddenException(`User is not whitelisted`);
+    // }
     const payload = {
       userId: userDto.id,
       email: userDto.email,
@@ -46,7 +49,7 @@ export class AuthFacade {
     // Validate the refresh token and extract payload
     const payload = this.authService.validateRefreshToken(refreshToken);
     if (!payload) {
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException("Invalid refresh token");
     }
 
     // Extract userId and address from the payload
@@ -55,11 +58,11 @@ export class AuthFacade {
     // Make sure the user still exists and is valid
     const user = await this.usersService.findByEmail(email);
     if (!user || user.id !== userId) {
-      throw new UnauthorizedException('Authentication failed');
+      throw new UnauthorizedException("Authentication failed");
     }
 
     if (!user.whitelisted) {
-      throw new ForbiddenException('User is not whitelisted');
+      throw new ForbiddenException("User is not whitelisted");
     }
 
     // Issue new access token using the same payload
@@ -69,5 +72,9 @@ export class AuthFacade {
     result.refreshToken = this.authService.issueRefreshToken({ userId, email });
 
     return result;
+  }
+
+  async sendEmail(emailDto: EmailDto): Promise<void> {
+    await this.emailService.sendEmail(emailDto);
   }
 }
