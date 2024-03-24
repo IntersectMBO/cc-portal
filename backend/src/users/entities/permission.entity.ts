@@ -15,7 +15,7 @@ export class Permission extends CommonEntity {
   id: string;
 
   @Column({
-    name: "name",
+    name: "code",
     type: "enum",
     enum: PermissionAdminEnum,
   })

@@ -1,14 +1,14 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class InitialMigration1711063213301 implements MigrationInterface {
-  name = "InitialMigration1711063213301";
+export class InitialMigraton1711309526820 implements MigrationInterface {
+  name = "InitialMigraton1711309526820";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TYPE "public"."permissions_name_enum" AS ENUM('manage_cc_members', 'add_constitution_version', 'add_new_admin')`,
+      `CREATE TYPE "public"."permissions_code_enum" AS ENUM('manage_cc_members', 'add_constitution_version', 'add_new_admin')`,
     );
     await queryRunner.query(
-      `CREATE TABLE "permissions" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" "public"."permissions_name_enum" NOT NULL, CONSTRAINT "PK_920331560282b8bd21bb02290df" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "permissions" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "code" "public"."permissions_code_enum" NOT NULL, CONSTRAINT "PK_920331560282b8bd21bb02290df" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TYPE "public"."users_status_enum" AS ENUM('active', 'inactive', 'pending')`,
@@ -114,6 +114,6 @@ export class InitialMigration1711063213301 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "users"`);
     await queryRunner.query(`DROP TYPE "public"."users_status_enum"`);
     await queryRunner.query(`DROP TABLE "permissions"`);
-    await queryRunner.query(`DROP TYPE "public"."permissions_name_enum"`);
+    await queryRunner.query(`DROP TYPE "public"."permissions_code_enum"`);
   }
 }
