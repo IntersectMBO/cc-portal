@@ -1,4 +1,4 @@
 export enum TemplateMapper {
-  LOGIN = "login.hbs",
-  REGISTRATION = "registration.hbs",
+  LOGIN = 'login.hbs',
+  REGISTRATION = 'registration.hbs',
 }
