@@ -5,16 +5,16 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
-} from "@nestjs/common";
-import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
-import { User } from "../entities/user.entity";
-import { EntityManager, Repository } from "typeorm";
-import { Role } from "../entities/role.entity";
-import { UserDto } from "../dto/user.dto";
-import { UserMapper } from "../mapper/userMapper.mapper";
-import { UpdateUserDto } from "../dto/update-user.dto";
-import { Permission } from "../entities/permission.entity";
-import { CreateUserDto } from "../dto/create-user.dto";
+} from '@nestjs/common';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { User } from '../entities/user.entity';
+import { EntityManager, Repository } from 'typeorm';
+import { Role } from '../entities/role.entity';
+import { UserDto } from '../dto/user.dto';
+import { UserMapper } from '../mapper/userMapper.mapper';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { Permission } from '../entities/permission.entity';
+import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -62,16 +62,16 @@ export class UsersService {
     }
 
     const userPermissions: Permission[] = [];
-    for (const permissionName of createUserDto.permissions) {
+    for (const permissionCode of createUserDto.permissions) {
       const permission = await this.permissionRepository.findOne({
         where: {
-          name: permissionName,
+          code: permissionCode,
         },
       });
 
       if (!permission) {
         throw new BadRequestException(
-          `Permission with name ${permissionName} not found`,
+          `Permission with code ${permissionCode} not found`,
         );
       }
 
@@ -89,7 +89,7 @@ export class UsersService {
       });
     } catch (e) {
       this.logger.error(`Error within transaction: ${e.message}`);
-      throw new InternalServerErrorException("Transaction failed");
+      throw new InternalServerErrorException('Transaction failed');
     }
 
     return UserMapper.userToDto(returnedUser);
@@ -149,7 +149,7 @@ export class UsersService {
       });
     } catch (e) {
       this.logger.error(`error when updating the user  : ${e.message}`);
-      throw new InternalServerErrorException("update user failed");
+      throw new InternalServerErrorException('update user failed');
     }
 
     return UserMapper.userToDto(updatedUser);

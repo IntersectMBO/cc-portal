@@ -1,14 +1,14 @@
-import { UsersService } from "src/users/services/users.service";
-import { UserDto } from "src/users/dto/user.dto";
-import { TokenResponse } from "../api/response/token.response";
-import { UserMapper } from "src/users/mapper/userMapper.mapper";
+import { UsersService } from 'src/users/services/users.service';
+import { UserDto } from 'src/users/dto/user.dto';
+import { TokenResponse } from '../api/response/token.response';
+import { UserMapper } from 'src/users/mapper/userMapper.mapper';
 import {
   ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
-} from "@nestjs/common";
-import { AuthService } from "../service/auth.service";
+} from '@nestjs/common';
+import { AuthService } from '../service/auth.service';
 
 @Injectable()
 export class AuthFacade {
@@ -47,7 +47,7 @@ export class AuthFacade {
     // Validate the refresh token and extract payload
     const payload = this.authService.validateRefreshToken(refreshToken);
     if (!payload) {
-      throw new UnauthorizedException("Invalid refresh token");
+      throw new UnauthorizedException('Invalid refresh token');
     }
 
     // Extract userId and address from the payload
@@ -56,11 +56,11 @@ export class AuthFacade {
     // Make sure the user still exists and is valid
     const user = await this.usersService.findByEmail(email);
     if (!user || user.id !== userId) {
-      throw new UnauthorizedException("Authentication failed");
+      throw new UnauthorizedException('Authentication failed');
     }
 
     if (!user.whitelisted) {
-      throw new ForbiddenException("User is not whitelisted");
+      throw new ForbiddenException('User is not whitelisted');
     }
 
     // Issue new access token using the same payload

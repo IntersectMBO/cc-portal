@@ -1,9 +1,9 @@
-import { PassportModule } from "@nestjs/passport";
-import { JwtModule } from "@nestjs/jwt";
-import { JwtAuthStrategy } from "./jwt-auth.strategy";
-import { JwtAuthGuard } from "./jwt-auth.guard";
-import { ConfigModule, ConfigService } from "@nestjs/config"; // Assuming you're using nestjs/config for configuration
-import { Module } from "@nestjs/common";
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtAuthStrategy } from './jwt-auth.strategy';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { ConfigModule, ConfigService } from '@nestjs/config'; // Assuming you're using nestjs/config for configuration
+import { Module } from '@nestjs/common';
 
 @Module({
   imports: [
@@ -11,10 +11,10 @@ import { Module } from "@nestjs/common";
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.getOrThrow<string>("ACCESS_SECRET"),
+        secret: configService.getOrThrow<string>('ACCESS_SECRET'),
         signOptions: {
           expiresIn: configService.getOrThrow<string>(
-            "JWT_ACCESS_TOKEN_EXPIRES_IN",
+            'JWT_ACCESS_TOKEN_EXPIRES_IN',
           ),
         },
       }),

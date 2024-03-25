@@ -1,33 +1,33 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CommonEntity } from "../../common/entities/common.entity";
-import { Role } from "./role.entity";
-import { User } from "./user.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { CommonEntity } from '../../common/entities/common.entity';
+import { Role } from './role.entity';
+import { User } from './user.entity';
 
 export enum PermissionAdminEnum {
-  MANAGE_CC_MEMBERS = "manage_cc_members",
-  ADD_CONSTITUTION = "add_constitution_version",
-  ADD_ADMIN = "add_new_admin",
+  MANAGE_CC_MEMBERS = 'manage_cc_members',
+  ADD_CONSTITUTION = 'add_constitution_version',
+  ADD_ADMIN = 'add_new_admin',
 }
 
-@Entity("permissions")
+@Entity('permissions')
 export class Permission extends CommonEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
-    name: "code",
-    type: "enum",
+    name: 'code',
+    type: 'enum',
     enum: PermissionAdminEnum,
   })
-  name: string;
+  code: string;
 
   @ManyToMany(() => Role, (role) => role.permissions, {
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
   roles: Role[];
 
   @ManyToMany(() => User, (user) => user.permissions, {
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
   users: User[];
 }

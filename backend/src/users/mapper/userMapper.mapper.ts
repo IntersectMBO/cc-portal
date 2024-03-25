@@ -1,10 +1,10 @@
-import { CreateUserRequest } from "../api/request/create-user.request";
-import { UpdateUserRequest } from "../api/request/update-user.request";
-import { UserResponse } from "../api/response/user.response";
-import { CreateUserDto } from "../dto/create-user.dto";
-import { UpdateUserDto } from "../dto/update-user.dto";
-import { UserDto } from "../dto/user.dto";
-import { User } from "../entities/user.entity";
+import { CreateUserRequest } from '../api/request/create-user.request';
+import { UpdateUserRequest } from '../api/request/update-user.request';
+import { UserResponse } from '../api/response/user.response';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { UserDto } from '../dto/user.dto';
+import { User } from '../entities/user.entity';
 
 export class UserMapper {
   static userToDto(user: User): UserDto {
@@ -19,7 +19,7 @@ export class UserMapper {
     userDto.whitelisted = user.whitelisted;
     userDto.roles = user.roles?.map((role) => role.code);
     userDto.permissions = user.permissions?.map(
-      (permission) => permission.name,
+      (permission) => permission.code,
     );
 
     userDto.createdAt = user.createdAt;

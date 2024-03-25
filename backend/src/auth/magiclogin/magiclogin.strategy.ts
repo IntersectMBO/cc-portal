@@ -1,13 +1,13 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { PassportStrategy } from "@nestjs/passport";
-import Strategy from "passport-magic-login";
-import { AuthFacade } from "../facade/auth.facade";
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+import Strategy from 'passport-magic-login';
+import { AuthFacade } from '../facade/auth.facade';
 
 @Injectable()
 export class MagicLoginStrategy extends PassportStrategy(
   Strategy,
-  "magic-login",
+  'magic-login',
 ) {
   private readonly logger = new Logger(MagicLoginStrategy.name);
 
@@ -16,12 +16,12 @@ export class MagicLoginStrategy extends PassportStrategy(
     private readonly authFacade: AuthFacade,
   ) {
     super({
-      secret: configService.getOrThrow("MAGIC_LOGIN_SECRET"),
+      secret: configService.getOrThrow('MAGIC_LOGIN_SECRET'),
       jwtOptions: {
-        expiresIn: configService.getOrThrow("MAGIC_LOGIN_LINK_EXPIRES_IN"),
+        expiresIn: configService.getOrThrow('MAGIC_LOGIN_LINK_EXPIRES_IN'),
       },
       callbackUrl:
-        configService.getOrThrow("BASE_URL") + "/auth/login/callback",
+        configService.getOrThrow('BASE_URL') + '/auth/login/callback',
       sendMagicLink: async (destination: string, href: string) => {
         // sendMail here
         this.logger.log(`sending email to ${destination}, with link ${href}`);

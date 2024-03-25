@@ -1,86 +1,86 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Expose } from "class-transformer";
-import { UserStatusEnum } from "src/users/entities/user.entity";
-import { Timestamp } from "typeorm";
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
+import { UserStatusEnum } from 'src/users/entities/user.entity';
+import { Timestamp } from 'typeorm';
 
 export class UserResponse {
   @ApiProperty({
-    description: "Unique ID of the user",
-    example: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
+    description: 'Unique ID of the user',
+    example: '7ceb9ab7-6427-40b7-be2e-37ba6742d5fd',
   })
-  @Expose({ name: "id" })
+  @Expose({ name: 'id' })
   id: string;
 
-  @ApiProperty({ description: "Name of the user", example: "John Doe" })
-  @Expose({ name: "name" })
+  @ApiProperty({ description: 'Name of the user', example: 'John Doe' })
+  @Expose({ name: 'name' })
   name: string;
 
   @ApiProperty({
-    description: "Email address of the user",
-    example: "john.doe@example.com",
+    description: 'Email address of the user',
+    example: 'john.doe@example.com',
   })
-  @Expose({ name: "email" })
+  @Expose({ name: 'email' })
   email: string;
 
   @ApiProperty({
-    description: "Hot address of the user",
-    example: "sofija@example.com",
+    description: 'Hot address of the user',
+    example: 'sofija@example.com',
   })
-  @Expose({ name: "hot_address" })
+  @Expose({ name: 'hot_address' })
   hotAddress: string;
 
   @ApiProperty({
-    description: "Description of the user",
+    description: 'Description of the user',
     example:
-      "Travel enthusiast and adventure seeker always looking for new destinations to explore.",
+      'Travel enthusiast and adventure seeker always looking for new destinations to explore.',
   })
-  @Expose({ name: "description" })
+  @Expose({ name: 'description' })
   description: string;
 
   @ApiProperty({
-    description: "Profile photo of the user",
-    example: "path/to/image.jpg",
+    description: 'Profile photo of the user',
+    example: 'path/to/image.jpg',
   })
-  @Expose({ name: "profile_photo" })
+  @Expose({ name: 'profile_photo' })
   profilePhoto: string;
 
   @ApiProperty({
-    description: "Status of user",
-    example: "pending",
+    description: 'Status of user',
+    example: 'pending',
   })
-  @Expose({ name: "status" })
+  @Expose({ name: 'status' })
   status: UserStatusEnum;
 
-  @ApiProperty({ description: "Roles of the user", example: ["user"] })
-  @Expose({ name: "roles" })
+  @ApiProperty({ description: 'Roles of the user', example: ['user'] })
+  @Expose({ name: 'roles' })
   roles: string[];
 
-  @ApiProperty({ description: "Permissions of the user", example: ["pending"] })
-  @Expose({ name: "permissions" })
+  @ApiProperty({ description: 'Permissions of the user', example: ['pending'] })
+  @Expose({ name: 'permissions' })
   permissions: string[];
 
   @ApiProperty({
-    description: "Flag that deterines whether user is blacklisted or not",
+    description: 'Flag that deterines whether user is blacklisted or not',
     example: false,
   })
-  @Expose({ name: "whitelisted" })
+  @Expose({ name: 'whitelisted' })
   whitelisted: boolean;
 
   @ApiProperty({
-    name: "created_at",
+    name: 'created_at',
     type: Date,
-    format: "date-time",
-    description: "Time of creating a user",
+    format: 'date-time',
+    description: 'Time of creating a user',
   })
-  @Expose({ name: "created_at" })
+  @Expose({ name: 'created_at' })
   createdAt: Timestamp;
 
   @ApiProperty({
-    name: "updated_at",
+    name: 'updated_at',
     type: Date,
-    format: "date-time",
-    description: "Time of updating a user",
+    format: 'date-time',
+    description: 'Time of updating a user',
   })
-  @Expose({ name: "updated_at" })
+  @Expose({ name: 'updated_at' })
   updatedAt: Timestamp;
 }
