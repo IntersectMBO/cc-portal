@@ -7,11 +7,10 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtAuthModule } from './jwt/jwt-auth.module';
 import { AuthFacade } from './facade/auth.facade';
 import { EmailModule } from 'src/email/email.module';
-import { EmailService } from 'src/email/service/email.service';
 
 @Module({
   imports: [UsersModule, PassportModule, JwtAuthModule, EmailModule],
   controllers: [AuthController],
-  providers: [AuthService, MagicLoginStrategy, AuthFacade, EmailService],
+  providers: [AuthService, MagicLoginStrategy, AuthFacade],
 })
 export class AuthModule {}

@@ -4,7 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import Strategy from 'passport-magic-login';
 import { AuthFacade } from '../facade/auth.facade';
 import { EmailDto } from 'src/email/dto/email.dto';
-import { TemplateMapper } from 'src/email/mapper/template.mapper';
+import { EmailMapper } from 'src/email/mapper/email.mapper';
 
 @Injectable()
 export class MagicLoginStrategy extends PassportStrategy(
@@ -25,15 +25,7 @@ export class MagicLoginStrategy extends PassportStrategy(
       callbackUrl:
         configService.getOrThrow('BASE_URL') + '/api/auth/login/callback',
       sendMagicLink: async (destination: string, href: string) => {
-        const emailDto: EmailDto = {
-          to: destination,
-          subject: 'CC Portal login',
-          template: TemplateMapper.LOGIN,
-          context: {
-            email: destination,
-            link: href,
-          },
-        };
+        const emailDto: EmailDto = EmailMapper.loginEmail(destination, href);
         this.authFacade.sendEmail(emailDto);
         this.logger.log(`sending email to ${destination}, with link ${href}`);
       },
