@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entities/user.entity';
+import { User, UserStatusEnum } from '../entities/user.entity';
 import { EntityManager, Repository } from 'typeorm';
 import { Role } from '../entities/role.entity';
 import { UserDto } from '../dto/user.dto';
@@ -15,6 +15,8 @@ import { UserMapper } from '../mapper/userMapper.mapper';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { Permission } from '../entities/permission.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { RoleDto } from '../dto/role.dto';
+import { RoleMapper } from '../mapper/roleMapper.mapper';
 
 @Injectable()
 export class UsersService {
@@ -33,11 +35,11 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
     const userData: Partial<User> = {
-      email: createUserDto.email,
+      email: createUserDto.destination,
     };
     const existingUser = await this.userRepository.findOne({
       where: {
-        email: createUserDto.email,
+        email: createUserDto.destination,
       },
     });
     if (existingUser) {
@@ -162,5 +164,21 @@ export class UsersService {
     await this.userRepository.save(user);
 
     return UserMapper.userToDto(user);
+  }
+
+  async updateUserStatus(
+    id: string,
+    userStatus: UserStatusEnum,
+  ): Promise<UserDto> {
+    const user = await this.findById(id);
+    user.status = userStatus;
+    await this.userRepository.save(user);
+    return UserMapper.userToDto(user);
+  }
+
+  async getAllRoles(): Promise<RoleDto[]> {
+    const roles = await this.roleRepository.find();
+    const results: RoleDto[] = roles.map((role) => RoleMapper.roleToDto(role));
+    return results;
   }
 }

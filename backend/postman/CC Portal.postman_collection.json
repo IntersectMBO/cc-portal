@@ -28,6 +28,25 @@
 					"response": []
 				},
 				{
+					"name": "Get All Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/users/roles",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get User By Id",
 					"request": {
 						"method": "GET",
@@ -53,7 +72,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@test.com\"\n}",
+							"raw": "{\n    \"email\": \"test@test.com\",\n    \"roles\": [\"admin\"],\n    \"permissions\": [\"manage_cc_members\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -161,9 +180,78 @@
 				}
 			]
 		},
+		
 		{
 			"name": "Auth",
 			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"destination\": \"test@test.com\",\n    \"roles\": [\"admin\"],\n    \"permissions\": [\"manage_cc_members\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/auth/register",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register callback",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"userId\", jsonData.user.id);",
+									"postman.setEnvironmentVariable(\"accessToken\", 'Bearer '+jsonData.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/auth/register/callback?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXN0aW5hdGlvbiI6InRlc3RAdGVzdC5jb24iLCJjb2RlIjoiNDQxMzEiLCJpYXQiOjE3MTAyNDUxNTYsImV4cCI6MTcxMDI0NTQ1Nn0.A66L6PK-D4bKe0Owtp_WS7z2gvAIafnrEuouv9CwUzA",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register",
+								"callback"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXN0aW5hdGlvbiI6InRlc3RAdGVzdC5jb24iLCJjb2RlIjoiNDQxMzEiLCJpYXQiOjE3MTAyNDUxNTYsImV4cCI6MTcxMDI0NTQ1Nn0.A66L6PK-D4bKe0Owtp_WS7z2gvAIafnrEuouv9CwUzA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Login",
 					"request": {

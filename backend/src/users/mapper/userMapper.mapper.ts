@@ -32,7 +32,7 @@ export class UserMapper {
     createUserRequest: CreateUserRequest,
   ): CreateUserDto {
     const createUserDto = new CreateUserDto();
-    createUserDto.email = createUserRequest.email;
+    createUserDto.destination = createUserRequest.destination;
     createUserDto.roles = createUserRequest.roles;
     createUserDto.permissions = createUserRequest.permissions;
     return createUserDto;

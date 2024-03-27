@@ -25,6 +25,7 @@ import { Roles } from 'src/auth/guard/role.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { RoleGuard } from 'src/auth/guard/role.guard';
 import { RoleEnum } from '../entities/role.entity';
+import { RoleResponse } from './response/role.response';
 
 @ApiTags('Users')
 @Controller('users')
@@ -65,6 +66,19 @@ export class UsersController {
   @Get()
   async findAll(): Promise<UserResponse[]> {
     return await this.usersFacade.findAll();
+  }
+
+  @ApiOperation({ summary: 'Get all roles' })
+  @ApiResponse({
+    status: 200,
+    description: 'Roles',
+    isArray: true,
+    type: RoleResponse,
+  })
+  @ApiResponse({ status: 404, description: 'Role not found' })
+  @Get('roles')
+  async getAllRoles(): Promise<RoleResponse[]> {
+    return await this.usersFacade.getAllRoles();
   }
 
   @ApiOperation({ summary: 'Find one user by ID' })

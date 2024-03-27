@@ -11,6 +11,8 @@ import {
 import { AuthService } from '../service/auth.service';
 import { EmailService } from 'src/email/service/email.service';
 import { EmailDto } from 'src/email/dto/email.dto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UserStatusEnum } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthFacade {
@@ -19,6 +21,23 @@ export class AuthFacade {
     private readonly usersService: UsersService,
     private readonly emailService: EmailService,
   ) {}
+
+  async registerUser(createUser: CreateUserDto): Promise<UserDto> {
+    const user = await this.usersService.create(createUser);
+    if (!user) {
+      throw new NotFoundException(`User not found`);
+    }
+    return user;
+  }
+
+  async updateWhitelistedAndStatus(userDto: UserDto) {
+    let user = await this.usersService.toggleWhitelist(userDto.id, true);
+    user = await this.usersService.updateUserStatus(
+      userDto.id,
+      UserStatusEnum.ACTIVE,
+    );
+    return user;
+  }
 
   async validateUser(email: string): Promise<UserDto> {
     const user = await this.usersService.findByEmail(email);

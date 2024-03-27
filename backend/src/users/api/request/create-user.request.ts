@@ -8,7 +8,7 @@ export class CreateUserRequest {
   })
   @MaxLength(80, { message: `Maximum character length is 80` })
   @IsEmail()
-  email: string;
+  destination: string;
 
   @ApiProperty({
     description: 'List of roles of the user',

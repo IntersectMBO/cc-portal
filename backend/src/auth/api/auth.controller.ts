@@ -8,7 +8,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { MagicLoginStrategy } from '../magiclogin/magiclogin.strategy';
+import { MagicLoginStrategy } from '../strategy/magiclogin.strategy';
 import { LoginRequest } from './request/login.request';
 import { AuthFacade } from '../facade/auth.facade';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,6 +21,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { RefreshTokenRequest } from './request/refresh-token.request';
+import { CreateUserRequest } from 'src/users/api/request/create-user.request';
+import { Roles } from '../guard/role.decorator';
+import { MagicRegisterStrategy } from '../strategy/magicregister.strategy';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -28,7 +31,54 @@ export class AuthController {
   constructor(
     private readonly authFacade: AuthFacade,
     private readonly strategy: MagicLoginStrategy,
+    private readonly registerStrategy: MagicRegisterStrategy,
   ) {}
+
+  @ApiOperation({ summary: 'Register a user. Sending email with a magic link' })
+  @ApiBody({ type: CreateUserRequest })
+  @ApiResponse({
+    status: 201,
+    description: `{ "success": "true" }`,
+  })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @HttpCode(201)
+  @Post('register')
+  @Roles('admin')
+  async register(
+    @Req() req,
+    @Res() res,
+    @Body() createUserRequest: CreateUserRequest,
+  ) {
+    await this.authFacade.registerUser(createUserRequest);
+    return this.registerStrategy.send(req, res);
+  }
+
+  @ApiOperation({
+    summary: 'Callback register a user. Click on the magic link',
+  })
+  @ApiParam({
+    name: 'token',
+    required: true,
+    description: 'JWT token which is a part of the magic link',
+    type: String,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `User register in successfully`,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @UseGuards(AuthGuard('magic-register'))
+  @Get('register/callback')
+  async callbackRegister(@Req() req): Promise<TokenResponse> {
+    let user = req.user;
+    user = await this.authFacade.updateWhitelistedAndStatus(user);
+    return await this.authFacade.generateTokens(user);
+  }
 
   @ApiOperation({ summary: 'Login a user. Sending email with a magic link' })
   @ApiBody({ type: LoginRequest })

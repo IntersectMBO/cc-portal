@@ -4,6 +4,8 @@ import { UsersService } from '../services/users.service';
 import { CreateUserRequest } from '../api/request/create-user.request';
 import { UserResponse } from '../api/response/user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
+import { RoleResponse } from '../api/response/role.response';
+import { RoleMapper } from '../mapper/roleMapper.mapper';
 @Injectable()
 export class UsersFacade {
   constructor(private readonly usersService: UsersService) {}
@@ -12,6 +14,14 @@ export class UsersFacade {
     const users = await this.usersService.findAll();
     const results: UserResponse[] = users.map((x) =>
       UserMapper.mapUserDtoToResponse(x),
+    );
+    return results;
+  }
+
+  async getAllRoles(): Promise<RoleResponse[]> {
+    const roles = await this.usersService.getAllRoles();
+    const results: RoleResponse[] = roles.map((role) =>
+      RoleMapper.mapRoleDtoToResponse(role),
     );
     return results;
   }

@@ -55,7 +55,10 @@ export class UserResponse {
   @Expose({ name: 'roles' })
   roles: string[];
 
-  @ApiProperty({ description: 'Permissions of the user', example: ['pending'] })
+  @ApiProperty({
+    description: 'Permissions of the user',
+    example: ['manage_cc_members'],
+  })
   @Expose({ name: 'permissions' })
   permissions: string[];
 
