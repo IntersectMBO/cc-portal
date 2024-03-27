@@ -25,6 +25,7 @@
     "typeorm:revert-migrations": "npm run typeorm migration:revert -- -d ./typeORM.config.ts"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.11.2",
     "@nestjs/class-transformer": "^0.4.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.0",
@@ -38,8 +39,10 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.6",
+    "handlebars": "^4.7.8",
     "humps": "^2.0.1",
     "nest-winston": "^1.9.4",
+    "nodemailer": "^6.9.13",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-magic-login": "^1.2.2",
@@ -58,6 +61,7 @@
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
+    "@types/nodemailer": "^6.4.14",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",

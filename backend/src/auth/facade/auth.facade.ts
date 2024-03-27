@@ -9,12 +9,15 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
+import { EmailService } from 'src/email/service/email.service';
+import { EmailDto } from 'src/email/dto/email.dto';
 
 @Injectable()
 export class AuthFacade {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    private readonly emailService: EmailService,
   ) {}
 
   async validateUser(email: string): Promise<UserDto> {
@@ -26,9 +29,9 @@ export class AuthFacade {
   }
 
   async generateTokens(userDto: UserDto): Promise<TokenResponse> {
-    if (!userDto.whitelisted) {
-      throw new ForbiddenException(`User is not whitelisted`);
-    }
+    // if (!userDto.whitelisted) {
+    //   throw new ForbiddenException(`User is not whitelisted`);
+    // }
     const payload = {
       userId: userDto.id,
       email: userDto.email,
@@ -69,5 +72,9 @@ export class AuthFacade {
     result.refreshToken = this.authService.issueRefreshToken({ userId, email });
 
     return result;
+  }
+
+  async sendEmail(emailDto: EmailDto): Promise<void> {
+    await this.emailService.sendEmail(emailDto);
   }
 }

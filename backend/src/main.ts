@@ -1,7 +1,11 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ClassSerializerInterceptor, LoggerService, ValidationPipe } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  LoggerService,
+  ValidationPipe,
+} from '@nestjs/common';
 import { LoggerFactory } from './util/logger-factory';
 import { CamelCasePipe } from './common/pipes/camel-case.pipe';
 import * as cookieParser from 'cookie-parser';

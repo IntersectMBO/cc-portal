@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import Strategy from 'passport-magic-login';
 import { AuthFacade } from '../facade/auth.facade';
+import { EmailDto } from 'src/email/dto/email.dto';
+import { EmailMapper } from 'src/email/mapper/email.mapper';
 
 @Injectable()
 export class MagicLoginStrategy extends PassportStrategy(
@@ -21,9 +23,10 @@ export class MagicLoginStrategy extends PassportStrategy(
         expiresIn: configService.getOrThrow('MAGIC_LOGIN_LINK_EXPIRES_IN'),
       },
       callbackUrl:
-        configService.getOrThrow('BASE_URL') + '/auth/login/callback',
+        configService.getOrThrow('BASE_URL') + '/api/auth/login/callback',
       sendMagicLink: async (destination: string, href: string) => {
-        // sendMail here
+        const emailDto: EmailDto = EmailMapper.loginEmail(destination, href);
+        this.authFacade.sendEmail(emailDto);
         this.logger.log(`sending email to ${destination}, with link ${href}`);
       },
       verify: async (payload, callback) =>
