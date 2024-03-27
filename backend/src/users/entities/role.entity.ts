@@ -1,8 +1,16 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { CommonEntity } from '../../common/entities/common.entity';
+import { Permission } from './permission.entity';
 
 export enum RoleEnum {
+  SUPER_ADMIN = 'super_admin',
   ADMIN = 'admin',
   USER = 'user',
 }
@@ -23,6 +31,22 @@ export class Role extends CommonEntity {
     onDelete: 'CASCADE',
   })
   users: User[];
+
+  @ManyToMany(() => Permission, (permission) => permission.roles, {
+    eager: true,
+  })
+  @JoinTable({
+    name: 'role_permissions',
+    joinColumn: {
+      name: 'role_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'permission_id',
+      referencedColumnName: 'id',
+    },
+  })
+  permissions: Permission[];
 
   constructor(role: Partial<Role>) {
     super();
