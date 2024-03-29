@@ -6,6 +6,7 @@ import {
   orange,
   primaryBlue,
   progressYellow,
+  customPalette,
   successGreen,
   poppins,
 } from "@/constants";
@@ -30,28 +31,6 @@ declare module "@mui/material/styles" {
     negativeRed: string;
     neutralGray: string;
     orangeDark: string;
-    neutralWhite: string;
-    positiveGreen: string;
-    primaryBlue: string;
-    secondaryBlue: string;
-    specialCyan: string;
-    specialCyanBorder: string;
-    lightBlue: string;
-    textBlack: string;
-    textGray: string;
-    lightOrange: string;
-    fadedPurple: string;
-  }
-  interface PaletteOptions {
-    accentOrange: string;
-    accentYellow: string;
-    boxShadow1: string;
-    boxShadow2: string;
-    highlightBlue: string;
-    orangeDark: string;
-    inputRed: string;
-    negativeRed: string;
-    neutralGray: string;
     neutralWhite: string;
     positiveGreen: string;
     primaryBlue: string;
@@ -178,30 +157,7 @@ export const theme = createTheme({
       fontFamily: poppins.style.fontFamily,
     },
   },
-  palette: {
-    accentOrange: "#F29339",
-    accentYellow: "#F2D9A9",
-    boxShadow1: "rgba(0, 18, 61, 0.37)",
-    boxShadow2: "rgba(47, 98, 220, 0.2)",
-    fadedPurple: "#716E88",
-    highlightBlue: "#C2EFF299",
-    inputRed: "#FAEAEB",
-    lightBlue: "#D6E2FF",
-    lightOrange: "#FFCBAD",
-    negativeRed: "#E58282",
-    neutralGray: "#8E908E",
-    neutralWhite: "#FFFFFF",
-    orangeDark: "#803205",
-    positiveGreen: "#5CC165",
-    primary: { main: "#0033AD" },
-    primaryBlue: "#0033AD",
-    secondary: { main: "rgb(255, 100, 10)" },
-    secondaryBlue: "#6F99FF",
-    specialCyan: "#1C94B2",
-    specialCyanBorder: "#77BFD1",
-    textBlack: "#242232",
-    textGray: "#525252",
-  },
+  palette: customPalette,
 });
 
 theme.shadows[1] =

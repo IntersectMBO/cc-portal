@@ -5,8 +5,7 @@ import { Box } from "@mui/material";
 import { Button } from "@/components/atoms/Button";
 import { Typography } from "@/components/atoms/Typography";
 
-import { IMAGES, ICONS, PATHS } from "@/constants";
-import { cyan } from "@/constants/colors";
+import { IMAGES, ICONS, PATHS, customPalette } from "@/constants";
 
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -23,7 +22,7 @@ export const Hero = () => {
       overflow="visible"
       position="relative"
       px={{ xxs: 2, sm: 5, md: 10 }}
-      sx={{ backgroundColor: cyan.c50, zIndex: -100 }}
+      sx={{ backgroundColor: customPalette.neutralWhite, zIndex: -100 }}
     >
       <Box alignItems="center" flex={1} height="min-content">
         <Typography variant="headline2" sx={{ whiteSpace: "pre-line" }}>
