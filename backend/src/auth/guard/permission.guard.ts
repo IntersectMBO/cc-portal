@@ -18,10 +18,11 @@ export class PermissionGuard implements CanActivate {
     return this.matchPermissions(permissions, user.permissions);
   }
 
-  matchPermissions(requiredPermissions: string[], userPermissions: string[]) {
-    const result = requiredPermissions.some((permission) =>
-      userPermissions.includes(permission),
+  matchPermissions(permissions: string[], userPermissions: string[]) {
+    const result = permissions.filter((permission) =>
+      userPermissions.some((userPermission) => userPermission === permission),
     );
-    return result;
+
+    return result.length > 0;
   }
 }

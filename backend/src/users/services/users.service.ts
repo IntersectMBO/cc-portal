@@ -48,37 +48,10 @@ export class UsersService {
       );
     }
 
-    const userRoles: Role[] = [];
-    for (const roleCode of createUserDto.roles) {
-      const role = await this.roleRepository.findOne({
-        where: {
-          code: roleCode,
-        },
-      });
-
-      if (!role) {
-        throw new BadRequestException(`Role with code ${roleCode} not found`);
-      }
-
-      userRoles.push(role);
-    }
-
-    const userPermissions: Permission[] = [];
-    for (const permissionName of createUserDto.permissions) {
-      const permission = await this.permissionRepository.findOne({
-        where: {
-          code: permissionName,
-        },
-      });
-
-      if (!permission) {
-        throw new BadRequestException(
-          `Permission with name ${permissionName} not found`,
-        );
-      }
-
-      userPermissions.push(permission);
-    }
+    const userRoles = await this.getUserRoles(createUserDto.roles);
+    const userPermissions = await this.getUserPermissions(
+      createUserDto.permissions,
+    );
 
     //Store user and related entities and return User Entity
     let returnedUser: User;
@@ -96,6 +69,46 @@ export class UsersService {
     }
 
     return UserMapper.userToDto(returnedUser);
+  }
+
+  private async getUserRoles(roleCodes: string[]): Promise<Role[]> {
+    const userRoles: Role[] = [];
+    for (const roleCode of roleCodes) {
+      const role = await this.roleRepository.findOne({
+        where: {
+          code: roleCode,
+        },
+      });
+
+      if (!role) {
+        throw new BadRequestException(`Role with code ${roleCode} not found`);
+      }
+
+      userRoles.push(role);
+    }
+    return userRoles;
+  }
+
+  private async getUserPermissions(
+    permissionNames: string[],
+  ): Promise<Permission[]> {
+    const userPermissions: Permission[] = [];
+    for (const permissionName of permissionNames) {
+      const permission = await this.permissionRepository.findOne({
+        where: {
+          code: permissionName,
+        },
+      });
+
+      if (!permission) {
+        throw new BadRequestException(
+          `Permission with name ${permissionName} not found`,
+        );
+      }
+
+      userPermissions.push(permission);
+    }
+    return userPermissions;
   }
 
   async findByEmail(email: string): Promise<UserDto> {

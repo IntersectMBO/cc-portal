@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
   HttpCode,
   Post,
@@ -24,6 +25,12 @@ import { RefreshTokenRequest } from './request/refresh-token.request';
 import { CreateUserRequest } from 'src/users/api/request/create-user.request';
 import { Roles } from '../guard/role.decorator';
 import { MagicRegisterStrategy } from '../strategy/magicregister.strategy';
+import { RoleEnum } from 'src/users/entities/role.entity';
+import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
+import { RoleGuard } from '../guard/role.guard';
+import { PermissionAdminEnum } from 'src/users/entities/permission.entity';
+import { PermissionGuard } from '../guard/permission.guard';
+import { Permissions } from '../guard/permission.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -45,12 +52,28 @@ export class AuthController {
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @HttpCode(201)
   @Post('register')
-  @Roles('admin')
+  @Roles(RoleEnum.ADMIN)
+  @Permissions(
+    PermissionAdminEnum.MANAGE_CC_MEMBERS,
+    PermissionAdminEnum.ADD_ADMIN,
+  )
+  @UseGuards(JwtAuthGuard, RoleGuard, PermissionGuard)
   async register(
     @Req() req,
     @Res() res,
     @Body() createUserRequest: CreateUserRequest,
   ) {
+    const adminPermissions = req.user.permissions;
+    const checkRolesAndPermissions =
+      await this.authFacade.checkAdminPermissionsAndRoles(
+        adminPermissions,
+        createUserRequest.roles,
+      );
+    if (checkRolesAndPermissions === false) {
+      throw new ForbiddenException(
+        'Admin does not have permission to add administrative privileges.',
+      );
+    }
     await this.authFacade.registerUser(createUserRequest);
     return this.registerStrategy.send(req, res);
   }

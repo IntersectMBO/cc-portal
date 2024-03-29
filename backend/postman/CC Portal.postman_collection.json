@@ -72,7 +72,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@test.com\",\n    \"roles\": [\"admin\"],\n    \"permissions\": [\"manage_cc_members\"]\n}",
+							"raw": "{\n    \"destination\": \"test@test.com\",\n    \"roles\": [\"admin\"],\n    \"permissions\": [\"manage_cc_members\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
