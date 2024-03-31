@@ -1,7 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEmail, IsEnum, MaxLength } from 'class-validator';
-import { PermissionAdminEnum } from 'src/users/entities/permission.entity';
-import { RoleEnum } from 'src/users/entities/role.entity';
+import { IsArray, IsEmail, MaxLength } from 'class-validator';
 
 export class CreateUserRequest {
   @ApiProperty({
@@ -17,7 +15,6 @@ export class CreateUserRequest {
     example: ['user'],
   })
   @IsArray()
-  @IsEnum(RoleEnum, { each: true })
   roles: string[];
 
   @ApiProperty({
@@ -25,6 +22,5 @@ export class CreateUserRequest {
     example: ['add_constitution_version'],
   })
   @IsArray()
-  @IsEnum(PermissionAdminEnum, { each: true })
   permissions: string[];
 }
