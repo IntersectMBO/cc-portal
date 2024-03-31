@@ -48,33 +48,13 @@ export class UsersService {
 
     const userRoles: Role[] = [];
     for (const roleCode of createUserDto.roles) {
-      const role = await this.roleRepository.findOne({
-        where: {
-          code: roleCode,
-        },
-      });
-
-      if (!role) {
-        throw new BadRequestException(`Role with code ${roleCode} not found`);
-      }
-
+      const role = await this.findRoleByCode(roleCode);
       userRoles.push(role);
     }
 
     const userPermissions: Permission[] = [];
-    for (const permissionName of createUserDto.permissions) {
-      const permission = await this.permissionRepository.findOne({
-        where: {
-          code: permissionName,
-        },
-      });
-
-      if (!permission) {
-        throw new BadRequestException(
-          `Permission with name ${permissionName} not found`,
-        );
-      }
-
+    for (const permissionCode of createUserDto.permissions) {
+      const permission = await this.findPermissionByCode(permissionCode);
       userPermissions.push(permission);
     }
 
@@ -94,6 +74,35 @@ export class UsersService {
     }
 
     return UserMapper.userToDto(returnedUser);
+  }
+
+  private async findRoleByCode(roleCode: string): Promise<Role> {
+    const role = await this.roleRepository.findOne({
+      where: {
+        code: roleCode,
+      },
+    });
+
+    if (!role) {
+      throw new BadRequestException(`Role with code ${roleCode} not found`);
+    }
+    return role;
+  }
+
+  private async findPermissionByCode(
+    permissionCode: string,
+  ): Promise<Permission> {
+    const permission = await this.permissionRepository.findOne({
+      where: {
+        code: permissionCode,
+      },
+    });
+    if (!permission) {
+      throw new BadRequestException(
+        `Permission with code ${permissionCode} not found`,
+      );
+    }
+    return permission;
   }
 
   async findByEmail(email: string): Promise<UserDto> {
