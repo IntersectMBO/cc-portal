@@ -15,6 +15,7 @@ import { UserMapper } from '../mapper/userMapper.mapper';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { Permission } from '../entities/permission.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { S3Service } from '../../s3/s3.service';
 
 @Injectable()
 export class UsersService {
@@ -29,6 +30,7 @@ export class UsersService {
     private readonly permissionRepository: Repository<Permission>,
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
+    private s3Service: S3Service,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
@@ -132,13 +134,21 @@ export class UsersService {
     return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserDto> {
+  async update(
+    file: Express.Multer.File,
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserDto> {
     const user = await this.findById(id);
     if (!user) {
       throw new NotFoundException(`user with id ${id} not found`);
     }
     user.name = updateUserDto.name;
-
+    user.description = updateUserDto.description;
+    user.hotAddress = updateUserDto.hotAddress;
+    const bucketKey = `${file.fieldname}${Date.now()}`;
+    const fileUrl = await this.s3Service.uploadFile(file, bucketKey);
+    user.profilePhoto = fileUrl;
     let updatedUser: User;
     try {
       updatedUser = await this.entityManager.transaction(() => {

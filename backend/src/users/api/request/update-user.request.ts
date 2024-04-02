@@ -13,4 +13,28 @@ export class UpdateUserRequest {
   })
   @IsString()
   name: string;
+
+  @ApiProperty({
+    description: 'Description of the user',
+    example:
+      'As an enthusiastic individual deeply passionate about blockchain technology,I am committed to exploring and advancing the transformative potential of decentralized systems.',
+  })
+  @MinLength(2, { message: `Minimum character length is 2` })
+  @MaxLength(500, { message: `Maximum character length is 500` })
+  //allowed every character
+  @IsString()
+  description: string;
+
+  @ApiProperty({
+    description: 'Hot address of the user',
+    example: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+  })
+  @MinLength(2, { message: `Minimum character length is 2` })
+  @MaxLength(255, { message: `Maximum character length is 255` })
+  //needs check
+  @Matches(/^[a-zA-Z0-9_.:\-\/]+$/, {
+    message: `Hot address can contain :, -, /`,
+  })
+  @IsString()
+  hotAddress: string;
 }

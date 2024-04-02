@@ -28,10 +28,15 @@ export class UsersFacade {
     return UserMapper.mapUserDtoToResponse(user);
   }
 
-  async update(id: string, updateUserRequest: UpdateUserRequest) {
+  async update(
+    file: Express.Multer.File,
+    id: string,
+    updateUserRequest: UpdateUserRequest,
+  ) {
     const updateUserDto =
       UserMapper.mapUpdateUserRequestToDto(updateUserRequest);
-    return this.usersService.update(id, updateUserDto);
+    const user = await this.usersService.update(file, id, updateUserDto);
+    return UserMapper.mapUserDtoToResponse(user);
   }
 
   async toggleWhitelist(

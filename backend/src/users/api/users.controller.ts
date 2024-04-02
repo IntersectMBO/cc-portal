@@ -7,6 +7,10 @@ import {
   Param,
   HttpCode,
   ParseUUIDPipe,
+  UseInterceptors,
+  UploadedFile,
+  HttpStatus,
+  ParseFilePipeBuilder,
   UseGuards,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
@@ -26,6 +30,8 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { RoleGuard } from 'src/auth/guard/role.guard';
 import { RoleEnum } from '../entities/role.entity';
 
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -100,12 +106,26 @@ export class UsersController {
   })
   @ApiResponse({ status: 500, description: 'Internal server error.' })
   @HttpCode(200)
+  @UseInterceptors(FileInterceptor('file'))
   @Patch(':id')
   async update(
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: /(jpg|jpeg|png|gif)$/,
+        })
+        .addMaxSizeValidator({
+          maxSize: 5242880,
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    file: Express.Multer.File,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
-    return await this.usersFacade.update(id, updateUserRequest);
+    return await this.usersFacade.update(file, id, updateUserRequest);
   }
 
   @ApiOperation({ summary: 'Toggle blacklist of the user profile' })
