@@ -22,9 +22,9 @@ export const Hero = () => {
       overflow="visible"
       position="relative"
       px={{ xxs: 2, sm: 5, md: 10 }}
-      sx={{ backgroundColor: customPalette.neutralWhite, zIndex: -100 }}
+      sx={{ backgroundColor: customPalette.neutralWhite }}
     >
-      <Box alignItems="center" flex={1} height="min-content">
+      <Box alignItems="center" flex={1} height="min-content" zIndex={1}>
         <Typography variant="headline2" sx={{ whiteSpace: "pre-line" }}>
           {t("hero.headline")}
         </Typography>
@@ -50,7 +50,7 @@ export const Hero = () => {
         flex={1}
         right={0}
         top={0}
-        zIndex={-1}
+        zIndex={0}
         sx={{
           position: { xxs: "absolute", lg: "relative" },
           "& img": {
