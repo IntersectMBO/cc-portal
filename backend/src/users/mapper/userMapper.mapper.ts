@@ -1,10 +1,10 @@
-import { CreateUserRequest } from '../api/request/create-user.request';
-import { UpdateUserRequest } from '../api/request/update-user.request';
-import { UserResponse } from '../api/response/user.response';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
-import { UserDto } from '../dto/user.dto';
-import { User } from '../entities/user.entity';
+import { CreateUserRequest } from "../api/request/create-user.request";
+import { UpdateUserRequest } from "../api/request/update-user.request";
+import { UserResponse } from "../api/response/user.response";
+import { CreateUserDto } from "../dto/create-user.dto";
+import { UpdateUserDto } from "../dto/update-user.dto";
+import { UserDto } from "../dto/user.dto";
+import { User } from "../entities/user.entity";
 
 export class UserMapper {
   static userToDto(user: User): UserDto {
@@ -12,6 +12,9 @@ export class UserMapper {
     userDto.id = user.id;
     userDto.name = user.name;
     userDto.email = user.email;
+    userDto.hotAddress = user.hotAddress;
+    userDto.description = user.description;
+    userDto.profilePhoto = user.profilePhoto;
     userDto.whitelisted = user.whitelisted;
     userDto.roles = user.roles?.map((role) => role.code);
 
@@ -42,6 +45,9 @@ export class UserMapper {
     userResponse.id = userDto.id;
     userResponse.name = userDto.name;
     userResponse.email = userDto.email;
+    userResponse.hotAddress = userDto.hotAddress;
+    userResponse.description = userDto.description;
+    userResponse.profilePhoto = userDto.profilePhoto;
     userResponse.whitelisted = userDto.whitelisted;
     userResponse.roles = userDto.roles;
     userResponse.createdAt = userDto.createdAt;
