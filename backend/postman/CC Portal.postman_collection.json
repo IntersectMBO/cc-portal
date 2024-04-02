@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "462d6cc9-d838-4a60-956f-2f595b2c2af0",
+		"_postman_id": "8f8f68d0-5829-41bd-b601-88ab74b40794",
 		"name": "CC Portal",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20133713"
+		"_exporter_id": "25756447"
 	},
 	"item": [
 		{
@@ -53,7 +53,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@test.com\"\n}",
+							"raw": "{\n    \"email\": \"test@test.com\",\n    \"roles\": [\"user\", \"admin\"],\n    \"permissions\": [\"manage_cc_members\", \"add_constitution_version\", \"add_new_admin\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -79,23 +79,39 @@
 						"method": "PATCH",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"sofija\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/andelalausevic/Downloads/valentines-day.png"
+								},
+								{
+									"key": "name",
+									"value": "nijesofja",
+									"type": "text"
+								},
+								{
+									"key": "updateUserDto.description",
+									"value": "Hey I am Andjela",
+									"type": "text"
+								},
+								{
+									"key": "hotAddress",
+									"value": "12hshui343hje3jkj4h34",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "{{base-url}}/api/users/id",
+							"raw": "{{base-url}}/api/users/f32fd8ed-2173-4bd5-b9bc-bd58814d1fcd",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"id"
+								"f32fd8ed-2173-4bd5-b9bc-bd58814d1fcd"
 							]
 						}
 					},
