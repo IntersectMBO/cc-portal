@@ -1,4 +1,5 @@
 import { Timestamp } from 'typeorm';
+import { UserStatusEnum } from '../entities/user.entity';
 
 export class UserDto {
   id: string;
@@ -7,7 +8,7 @@ export class UserDto {
   hotAddress: string;
   description: string;
   profilePhoto: string;
-  status: string;
+  status: UserStatusEnum;
   roles: string[];
   permissions: string[];
   whitelisted: boolean;
