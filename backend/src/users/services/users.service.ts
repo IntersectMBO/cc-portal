@@ -1,18 +1,20 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
   Logger,
   NotFoundException,
-} from "@nestjs/common";
-import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
-import { User } from "../entities/user.entity";
-import { EntityManager, Repository } from "typeorm";
-import { Role, RoleEnum } from "../entities/role.entity";
-import { UserDto } from "../dto/user.dto";
-import { UserMapper } from "../mapper/userMapper.mapper";
-import { UpdateUserDto } from "../dto/update-user.dto";
-import { CreateUserDto } from "../dto/create-user.dto";
+} from '@nestjs/common';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { User } from '../entities/user.entity';
+import { EntityManager, Repository } from 'typeorm';
+import { Role } from '../entities/role.entity';
+import { UserDto } from '../dto/user.dto';
+import { UserMapper } from '../mapper/userMapper.mapper';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { Permission } from '../entities/permission.entity';
+import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +25,8 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Role)
     private readonly roleRepoository: Repository<Role>,
+    @InjectRepository(Permission)
+    private readonly permissionRepository: Repository<Permission>,
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
   ) {}
@@ -41,22 +45,49 @@ export class UsersService {
         `User with email address ${existingUser.email} already exists`,
       );
     }
-    const userRole = await this.roleRepoository.findOne({
-      where: {
-        code: RoleEnum.USER,
-      },
-    });
-    //Store user and related entities and return User Entity
+
+    const userRoles: Role[] = [];
+    for (const roleCode of createUserDto.roles) {
+      const role = await this.roleRepoository.findOne({
+        where: {
+          code: roleCode,
+        },
+      });
+
+      if (!role) {
+        throw new BadRequestException(`Role with code ${roleCode} not found`);
+      }
+
+      userRoles.push(role);
+    }
+
+    const userPermissions: Permission[] = [];
+    for (const permissionCode of createUserDto.permissions) {
+      const permission = await this.permissionRepository.findOne({
+        where: {
+          code: permissionCode,
+        },
+      });
+
+      if (!permission) {
+        throw new BadRequestException(
+          `Permission with code ${permissionCode} not found`,
+        );
+      }
+
+      userPermissions.push(permission);
+    }
+
     let returnedUser: User;
     try {
       returnedUser = await this.entityManager.transaction(() => {
         const user = this.userRepository.create(userData);
-        user.roles = [userRole];
+        user.roles = userRoles;
         return this.userRepository.save(user);
       });
     } catch (e) {
       this.logger.error(`Error within transaction: ${e.message}`);
-      throw new InternalServerErrorException("Transaction failed");
+      throw new InternalServerErrorException('Transaction failed');
     }
 
     return UserMapper.userToDto(returnedUser);
@@ -116,7 +147,7 @@ export class UsersService {
       });
     } catch (e) {
       this.logger.error(`error when updating the user  : ${e.message}`);
-      throw new InternalServerErrorException("update user failed");
+      throw new InternalServerErrorException('update user failed');
     }
 
     return UserMapper.userToDto(updatedUser);
