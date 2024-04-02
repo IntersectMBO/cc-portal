@@ -51,26 +51,9 @@ services:
       - strapi # Connect to the 'strapi' network
     depends_on:
       - backend # Depends on the backend service
-  s3:
-    image: minio/minio
-    container_name: minio_local
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: bloxico
-      MINIO_ROOT_PASSWORD: bloxico
-    command: ["server", "/data", "--console-address", ":9001"]
-    volumes:
-      - s3_data:/data
-    networks:
-      - bloxico_local
 volumes:
   strapi-data: # Define a volume for PostgreSQL data
-  s3_data: 
 networks:
   strapi: # Custom network for inter-container communication
     name: Strapi
-    driver: bridge
-  bloxico_local: # Custom network for the bloxico service
     driver: bridge

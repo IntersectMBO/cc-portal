@@ -11,7 +11,9 @@ import { S3Service } from '../../s3/s3.service';
 import { Permission } from '../entities/permission.entity';
 import { UserDto } from '../dto/user.dto';
 const mockS3Service = {
-  uploadFile: jest.fn().mockResolvedValue('mocked_file_url'),
+  uploadFileMinio: jest.fn().mockResolvedValue('mocked_file_name'),
+  createBucketIfNotExists: jest.fn().mockResolvedValue('new_bucket'),
+  getFileUrl: jest.fn().mockResolvedValue('mocked_file_url'),
 };
 const mockUser: UserDto = {
   id: 'mockedId',
@@ -20,10 +22,10 @@ const mockUser: UserDto = {
   hotAddress: 'mockedHotAddress',
   description: 'mockedDescription',
   profilePhoto: 'mockedProfilePhoto',
-  status: UserStatusEnum.ACTIVE, // Pretpostavljeno da je ACTIVE
-  roles: ['role1', 'role2'], // Pretpostavljeno da su ovo uloge korisnika
-  permissions: ['permission1', 'permission2'], // Pretpostavljeno da su ovo dozvole korisnika
-  whitelisted: true, // Pretpostavljeno da je true
+  status: UserStatusEnum.ACTIVE,
+  roles: ['role1', 'role2'],
+  permissions: ['permission1', 'permission2'],
+  whitelisted: true,
   createdAt: null,
   updatedAt: null,
 };

@@ -1,30 +1,60 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  S3Client,
-  PutObjectCommand,
-  PutObjectCommandInput,
-  PutObjectCommandOutput,
-} from '@aws-sdk/client-s3';
+/*import {} from //S3Client,
+PutObjectCommand,
+PutObjectCommandInput,
+PutObjectCommandOutput,
+'@aws-sdk/client-s3';
+*/
 import { ConfigService } from '@nestjs/config';
-
+import * as Minio from 'minio';
 @Injectable()
 export class S3Service {
   private logger = new Logger(S3Service.name);
-  private region: string;
-  private s3: S3Client;
+  private minioClient: Minio.Client;
+  private bucketName: string;
 
   constructor(private configService: ConfigService) {
-    this.region = configService.get<string>('aws_region') || 'eu-central-1';
-    const access_key = configService.get<string>('aws_access_key');
-    const secret_key = configService.get<string>('aws_secret_access_key');
-    this.s3 = new S3Client({
-      region: this.region,
-      credentials: {
-        secretAccessKey: secret_key,
-        accessKeyId: access_key,
-      },
+    this.minioClient = new Minio.Client({
+      endPoint: this.configService.get('MINIO_ENDPOINT'),
+      port: Number(this.configService.get('MINIO_PORT')),
+      useSSL: this.configService.get('MINIO_USE_SSL') === 'true',
+      accessKey: this.configService.get('MINIO_ACCESS_KEY'),
+      secretKey: this.configService.get('MINIO_SECRET_KEY'),
     });
+    this.bucketName = this.configService.get('MINIO_BUCKET');
   }
+  async createBucketIfNotExists() {
+    const bucketExists = await this.minioClient.bucketExists(this.bucketName);
+    if (!bucketExists) {
+      await this.minioClient.makeBucket(this.bucketName, 'eu-west-1');
+    }
+  }
+  async uploadFileMinio(file: Express.Multer.File) {
+    const fileName = `${Date.now()}-${file.originalname}`;
+    const bufferArray = Object.values(file.buffer);
+    const buffer = Buffer.from(bufferArray);
+    await this.minioClient.putObject(
+      this.bucketName,
+      fileName,
+      buffer,
+      file.size,
+    );
+    return fileName;
+  }
+
+  async getFileUrl(fileName: string): Promise<string> {
+    return await this.minioClient.presignedUrl(
+      'GET',
+      this.bucketName,
+      fileName,
+    );
+  }
+
+  async deleteFile(fileName: string) {
+    await this.minioClient.removeObject(this.bucketName, fileName);
+  }
+  //if we migrate to aws
+  /*
   async uploadFile(file: Express.Multer.File, key: string): Promise<string> {
     const bucket = this.configService.get<string>('aws_bucket');
     const bufferArray = Object.values(file.buffer);
@@ -50,4 +80,5 @@ export class S3Service {
       throw err;
     }
   }
+  */
 }

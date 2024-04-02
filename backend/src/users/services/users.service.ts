@@ -146,9 +146,10 @@ export class UsersService {
     user.name = updateUserDto.name;
     user.description = updateUserDto.description;
     user.hotAddress = updateUserDto.hotAddress;
-    const bucketKey = `${file.fieldname}${Date.now()}`;
-    const fileUrl = await this.s3Service.uploadFile(file, bucketKey);
-    user.profilePhoto = fileUrl;
+    // const bucketKey = `${file.fieldname}${Date.now()}`;
+    await this.s3Service.createBucketIfNotExists();
+    const fileName = await this.s3Service.uploadFileMinio(file);
+    user.profilePhoto = await this.s3Service.getFileUrl(fileName);
     let updatedUser: User;
     try {
       updatedUser = await this.entityManager.transaction(() => {
