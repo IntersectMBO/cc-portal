@@ -22,6 +22,7 @@
       "@pages": ["./src/pages/index.ts"],
       "@consts": ["./src/constants/index.ts"],
       "@atoms": ["./src/components/atoms/index.ts"],
+      "@molecules": ["./src/components/molecules/index.ts"],
       "@organisms": ["./src/components/organisms/index.ts"],
       "@utils": ["./src/lib/utils/index.ts"],
       "@context": ["./src/context/index.ts"]
