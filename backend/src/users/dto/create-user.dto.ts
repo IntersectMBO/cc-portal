@@ -1,5 +1,5 @@
 export class CreateUserDto {
   destination: string;
-  roles: string[];
-  permissions: string[];
+  role: string;
+  permissions?: string[];
 }

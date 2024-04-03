@@ -48,7 +48,7 @@ export class UsersService {
       );
     }
 
-    const userRoles = await this.getUserRoles(createUserDto.roles);
+    const userRole = await this.findRoleByCode(createUserDto.role);
     const userPermissions = await this.getUserPermissions(
       createUserDto.permissions,
     );
@@ -58,7 +58,8 @@ export class UsersService {
     try {
       returnedUser = await this.entityManager.transaction(() => {
         const user = this.userRepository.create(userData);
-        user.roles = userRoles;
+        user.role = userRole;
+        user.status = UserStatusEnum.PENDING;
         user.permissions = userPermissions;
 
         return this.userRepository.save(user);
@@ -71,22 +72,18 @@ export class UsersService {
     return UserMapper.userToDto(returnedUser);
   }
 
-  private async getUserRoles(roleCodes: string[]): Promise<Role[]> {
-    const userRoles: Role[] = [];
-    for (const roleCode of roleCodes) {
-      const role = await this.roleRepository.findOne({
-        where: {
-          code: roleCode,
-        },
-      });
+  private async findRoleByCode(roleCode: string): Promise<Role> {
+    const role = await this.roleRepository.findOne({
+      where: {
+        code: roleCode,
+      },
+    });
 
-      if (!role) {
-        throw new BadRequestException(`Role with code ${roleCode} not found`);
-      }
-
-      userRoles.push(role);
+    if (!role) {
+      throw new BadRequestException(`Role with code ${roleCode} not found`);
     }
-    return userRoles;
+
+    return role;
   }
 
   private async getUserPermissions(
@@ -171,13 +168,13 @@ export class UsersService {
     return UserMapper.userToDto(updatedUser);
   }
 
-  async toggleWhitelist(id: string, whitelisted: boolean): Promise<UserDto> {
+  /*async toggleWhitelist(id: string, whitelisted: boolean): Promise<UserDto> {
     const user = await this.findById(id);
     user.whitelisted = whitelisted;
     await this.userRepository.save(user);
 
     return UserMapper.userToDto(user);
-  }
+  }*/
 
   async updateUserStatus(
     id: string,

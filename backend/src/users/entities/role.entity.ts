@@ -3,17 +3,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { CommonEntity } from '../../common/entities/common.entity';
 import { Permission } from './permission.entity';
-
-export enum RoleEnum {
-  SUPER_ADMIN = 'super_admin',
-  ADMIN = 'admin',
-  USER = 'user',
-}
+import { RoleEnum } from '../enums/role.enum';
 
 @Entity('roles')
 export class Role extends CommonEntity {
@@ -27,9 +23,7 @@ export class Role extends CommonEntity {
   })
   code: string;
 
-  @ManyToMany(() => User, (user) => user.roles, {
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => User, (user) => user.role)
   users: User[];
 
   @ManyToMany(() => Permission, (permission) => permission.roles, {

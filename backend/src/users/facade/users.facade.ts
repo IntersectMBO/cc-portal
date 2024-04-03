@@ -45,11 +45,11 @@ export class UsersFacade {
     return UserMapper.mapUserDtoToResponse(user);
   }
 
-  async toggleWhitelist(
+  /*async toggleWhitelist(
     id: string,
     whitelisted: boolean,
   ): Promise<UserResponse> {
     const userDto = await this.usersService.toggleWhitelist(id, whitelisted);
     return UserMapper.mapUserDtoToResponse(userDto);
-  }
+  }*/
 }

@@ -23,11 +23,12 @@ export class UserResponse {
   email: string;
 
   @ApiProperty({
-    description: 'Hot address of the user',
-    example: 'sofija@example.com',
+    description: 'Hot addresses of the user',
+    example: ['sofija@example.com', 'newyork@example.com'],
+    type: [String],
   })
-  @Expose({ name: 'hot_address' })
-  hotAddress: string;
+  @Expose({ name: 'hot_addresses' })
+  hotAddresses: string[];
 
   @ApiProperty({
     description: 'Description of the user',
@@ -51,9 +52,9 @@ export class UserResponse {
   @Expose({ name: 'status' })
   status: UserStatusEnum;
 
-  @ApiProperty({ description: 'Roles of the user', example: ['user'] })
-  @Expose({ name: 'roles' })
-  roles: string[];
+  @ApiProperty({ description: 'Role of the user', example: 'user' })
+  @Expose({ name: 'role' })
+  role: string;
 
   @ApiProperty({
     description: 'Permissions of the user',
@@ -61,13 +62,6 @@ export class UserResponse {
   })
   @Expose({ name: 'permissions' })
   permissions: string[];
-
-  @ApiProperty({
-    description: 'Flag that deterines whether user is blacklisted or not',
-    example: false,
-  })
-  @Expose({ name: 'whitelisted' })
-  whitelisted: boolean;
 
   @ApiProperty({
     name: 'created_at',

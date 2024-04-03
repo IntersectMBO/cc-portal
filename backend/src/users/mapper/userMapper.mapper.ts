@@ -12,12 +12,14 @@ export class UserMapper {
     userDto.id = user.id;
     userDto.name = user.name;
     userDto.email = user.email;
-    userDto.hotAddress = user.hotAddress;
     userDto.description = user.description;
     userDto.profilePhoto = user.profilePhoto;
     userDto.status = user.status;
-    userDto.whitelisted = user.whitelisted;
-    userDto.roles = user.roles?.map((role) => role.code);
+    //userDto.whitelisted = user.whitelisted;
+    userDto.hotAddresses = user.hotAddresses?.map(
+      (hotAddress) => hotAddress.id,
+    );
+    userDto.role = user.role.code;
     userDto.permissions = user.permissions?.map(
       (permission) => permission.code,
     );
@@ -33,8 +35,8 @@ export class UserMapper {
   ): CreateUserDto {
     const createUserDto = new CreateUserDto();
     createUserDto.destination = createUserRequest.destination;
-    createUserDto.roles = createUserRequest.roles;
-    createUserDto.permissions = createUserRequest.permissions;
+    createUserDto.role = createUserRequest.role;
+    /*createUserDto.permissions = createUserRequest.permissions;*/
     return createUserDto;
   }
 
@@ -51,12 +53,11 @@ export class UserMapper {
     userResponse.id = userDto.id;
     userResponse.name = userDto.name;
     userResponse.email = userDto.email;
-    userResponse.hotAddress = userDto.hotAddress;
+    userResponse.hotAddresses = userDto.hotAddresses;
     userResponse.description = userDto.description;
     userResponse.profilePhoto = userDto.profilePhoto;
     userResponse.status = userDto.status;
-    userResponse.whitelisted = userDto.whitelisted;
-    userResponse.roles = userDto.roles;
+    userResponse.role = userDto.role;
     userResponse.permissions = userDto.permissions;
     userResponse.createdAt = userDto.createdAt;
     userResponse.updatedAt = userDto.updatedAt;

@@ -4,6 +4,7 @@ import { Role } from './src/users/entities/role.entity';
 import { User } from './src/users/entities/user.entity';
 import { DataSource } from 'typeorm';
 import { Permission } from './src/users/entities/permission.entity';
+import { HotAddress } from './src/users/entities/hotaddress.entity';
 
 config();
 
@@ -18,5 +19,5 @@ export default new DataSource({
   password: configService.getOrThrow('POSTGRES_PASSWORD'),
   migrations: ['migrations/**'],
   migrationsTableName: 'migrations',
-  entities: [User, Role, Permission],
+  entities: [User, Role, Permission, HotAddress],
 });

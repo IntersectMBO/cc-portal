@@ -72,7 +72,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"destination\": \"test@test.com\",\n    \"roles\": [\"admin\"],\n    \"permissions\": [\"manage_cc_members\"]\n}",
+							"raw": "{\n    \"destination\": \"test@test.com\",\n    \"role\": \"admin\",\n    \"permissions\": [\"manage_cc_members\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -119,41 +119,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Toggle Whitelist",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{accessToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"whitelisted\": true\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base-url}}/api/users/748c4144-a3ce-47b8-b78a-25a4b12c9212/whitelist",
-							"host": [
-								"{{base-url}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"748c4144-a3ce-47b8-b78a-25a4b12c9212",
-								"whitelist"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -185,13 +150,13 @@
 			"name": "Auth",
 			"item": [
 				{
-					"name": "Register",
+					"name": "Register User",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"destination\": \"test@test.com\",\n    \"roles\": [\"admin\"],\n    \"permissions\": [\"manage_cc_members\"]\n}",
+							"raw": "{\n    \"destination\": \"test@test.com\",\n    \"role\": \"user\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -199,14 +164,42 @@
 							}
 						},
 						"url": {
-							"raw": "{{base-url}}/api/auth/register",
+							"raw": "{{base-url}}/api/auth/register-user",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"auth",
-								"register"
+								"register-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"destination\": \"test1@test.com\",\n    \"role\": \"admin\",\n    \"permissions\": [\"manage_cc_members\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/auth/register-admin",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register-admin"
 							]
 						}
 					},

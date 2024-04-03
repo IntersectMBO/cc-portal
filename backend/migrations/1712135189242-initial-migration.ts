@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitialMigration1711544586465 implements MigrationInterface {
-  name = 'InitialMigration1711544586465';
+export class InitialMigration1712135189242 implements MigrationInterface {
+  name = 'InitialMigration1712135189242';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -11,25 +11,19 @@ export class InitialMigration1711544586465 implements MigrationInterface {
       `CREATE TABLE "permissions" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "code" "public"."permissions_code_enum" NOT NULL, CONSTRAINT "PK_920331560282b8bd21bb02290df" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
+      `CREATE TABLE "hot_addresses" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "address" character varying, "userId" uuid, CONSTRAINT "PK_12cb54736dc433f949461aad8dd" PRIMARY KEY ("id"))`,
+    );
+    await queryRunner.query(
       `CREATE TYPE "public"."users_status_enum" AS ENUM('active', 'inactive', 'pending')`,
     );
     await queryRunner.query(
-      `CREATE TABLE "users" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(50), "email" character varying(80) NOT NULL, "hot_adress" character varying(255), "description" character varying(500), "profile_photo" character varying, "status" "public"."users_status_enum", "whitelisted" boolean NOT NULL DEFAULT false, CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "users" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(50), "email" character varying(80) NOT NULL, "description" character varying(500), "profile_photo" character varying, "status" "public"."users_status_enum", "roleId" uuid, CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TYPE "public"."roles_code_enum" AS ENUM('super_admin', 'admin', 'user')`,
     );
     await queryRunner.query(
       `CREATE TABLE "roles" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "code" "public"."roles_code_enum" NOT NULL, CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY ("id"))`,
-    );
-    await queryRunner.query(
-      `CREATE TABLE "user_roles" ("user_id" uuid NOT NULL, "role_id" uuid NOT NULL, CONSTRAINT "PK_23ed6f04fe43066df08379fd034" PRIMARY KEY ("user_id", "role_id"))`,
-    );
-    await queryRunner.query(
-      `CREATE INDEX "IDX_87b8888186ca9769c960e92687" ON "user_roles" ("user_id") `,
-    );
-    await queryRunner.query(
-      `CREATE INDEX "IDX_b23c65e50a758245a33ee35fda" ON "user_roles" ("role_id") `,
     );
     await queryRunner.query(
       `CREATE TABLE "user_permissions" ("user_id" uuid NOT NULL, "permission_id" uuid NOT NULL, CONSTRAINT "PK_a537c48b1f80e8626a71cb56589" PRIMARY KEY ("user_id", "permission_id"))`,
@@ -50,10 +44,10 @@ export class InitialMigration1711544586465 implements MigrationInterface {
       `CREATE INDEX "IDX_17022daf3f885f7d35423e9971" ON "role_permissions" ("permission_id") `,
     );
     await queryRunner.query(
-      `ALTER TABLE "user_roles" ADD CONSTRAINT "FK_87b8888186ca9769c960e926870" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE`,
+      `ALTER TABLE "hot_addresses" ADD CONSTRAINT "FK_62931a7e70621bccf85779ee4c1" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
-      `ALTER TABLE "user_roles" ADD CONSTRAINT "FK_b23c65e50a758245a33ee35fda1" FOREIGN KEY ("role_id") REFERENCES "roles"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
+      `ALTER TABLE "users" ADD CONSTRAINT "FK_368e146b785b574f42ae9e53d5e" FOREIGN KEY ("roleId") REFERENCES "roles"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
       `ALTER TABLE "user_permissions" ADD CONSTRAINT "FK_3495bd31f1862d02931e8e8d2e8" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE`,
@@ -83,10 +77,10 @@ export class InitialMigration1711544586465 implements MigrationInterface {
       `ALTER TABLE "user_permissions" DROP CONSTRAINT "FK_3495bd31f1862d02931e8e8d2e8"`,
     );
     await queryRunner.query(
-      `ALTER TABLE "user_roles" DROP CONSTRAINT "FK_b23c65e50a758245a33ee35fda1"`,
+      `ALTER TABLE "users" DROP CONSTRAINT "FK_368e146b785b574f42ae9e53d5e"`,
     );
     await queryRunner.query(
-      `ALTER TABLE "user_roles" DROP CONSTRAINT "FK_87b8888186ca9769c960e926870"`,
+      `ALTER TABLE "hot_addresses" DROP CONSTRAINT "FK_62931a7e70621bccf85779ee4c1"`,
     );
     await queryRunner.query(
       `DROP INDEX "public"."IDX_17022daf3f885f7d35423e9971"`,
@@ -102,17 +96,11 @@ export class InitialMigration1711544586465 implements MigrationInterface {
       `DROP INDEX "public"."IDX_3495bd31f1862d02931e8e8d2e"`,
     );
     await queryRunner.query(`DROP TABLE "user_permissions"`);
-    await queryRunner.query(
-      `DROP INDEX "public"."IDX_b23c65e50a758245a33ee35fda"`,
-    );
-    await queryRunner.query(
-      `DROP INDEX "public"."IDX_87b8888186ca9769c960e92687"`,
-    );
-    await queryRunner.query(`DROP TABLE "user_roles"`);
     await queryRunner.query(`DROP TABLE "roles"`);
     await queryRunner.query(`DROP TYPE "public"."roles_code_enum"`);
     await queryRunner.query(`DROP TABLE "users"`);
     await queryRunner.query(`DROP TYPE "public"."users_status_enum"`);
+    await queryRunner.query(`DROP TABLE "hot_addresses"`);
     await queryRunner.query(`DROP TABLE "permissions"`);
     await queryRunner.query(`DROP TYPE "public"."permissions_code_enum"`);
   }

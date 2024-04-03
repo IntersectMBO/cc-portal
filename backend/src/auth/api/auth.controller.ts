@@ -1,7 +1,7 @@
 import {
+  BadRequestException,
   Body,
   Controller,
-  ForbiddenException,
   Get,
   HttpCode,
   Post,
@@ -23,21 +23,19 @@ import {
 } from '@nestjs/swagger';
 import { RefreshTokenRequest } from './request/refresh-token.request';
 import { CreateUserRequest } from 'src/users/api/request/create-user.request';
-import { Roles } from '../guard/role.decorator';
 import { MagicRegisterStrategy } from '../strategy/magicregister.strategy';
-import { RoleEnum } from 'src/users/entities/role.entity';
-import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
-import { RoleGuard } from '../guard/role.guard';
-import { PermissionAdminEnum } from 'src/users/entities/permission.entity';
 import { PermissionGuard } from '../guard/permission.guard';
 import { Permissions } from '../guard/permission.decorator';
+import { PermissionAdminEnum } from 'src/users/enums/permission.enum';
+import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
+import { RoleEnum } from 'src/users/enums/role.enum';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authFacade: AuthFacade,
-    private readonly strategy: MagicLoginStrategy,
+    private readonly loginStrategy: MagicLoginStrategy,
     private readonly registerStrategy: MagicRegisterStrategy,
   ) {}
 
@@ -51,31 +49,49 @@ export class AuthController {
   @ApiResponse({ status: 404, description: 'Not Found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @HttpCode(201)
-  @Post('register')
-  @Roles(RoleEnum.ADMIN)
-  @Permissions(
-    PermissionAdminEnum.MANAGE_CC_MEMBERS,
-    PermissionAdminEnum.ADD_ADMIN,
-  )
-  @UseGuards(JwtAuthGuard, RoleGuard, PermissionGuard)
-  async register(
+  @Post('register-user')
+  @Permissions(PermissionAdminEnum.MANAGE_CC_MEMBERS)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  async registerUser(
     @Req() req,
     @Res() res,
     @Body() createUserRequest: CreateUserRequest,
   ) {
-    const adminPermissions = req.user.permissions;
-    const checkRolesAndPermissions =
-      await this.authFacade.checkAdminPermissionsAndRoles(
-        adminPermissions,
-        createUserRequest.roles,
-      );
-    if (checkRolesAndPermissions === false) {
-      throw new ForbiddenException(
-        'Admin does not have permission to add administrative privileges.',
-      );
+    console.log(req.body.role);
+    if (req.body.role === RoleEnum.USER) {
+      await this.authFacade.register(createUserRequest);
+      return this.registerStrategy.send(req, res);
+    } else {
+      throw new BadRequestException('User role is required for registration.');
     }
-    await this.authFacade.registerUser(createUserRequest);
-    return this.registerStrategy.send(req, res);
+  }
+
+  @ApiOperation({
+    summary: 'Register an admin. Sending email with a magic link',
+  })
+  @ApiBody({ type: CreateUserRequest })
+  @ApiResponse({
+    status: 201,
+    description: `{ "success": "true" }`,
+  })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @HttpCode(201)
+  @Post('register-admin')
+  @Permissions(PermissionAdminEnum.ADD_ADMIN)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  async registerAdmin(
+    @Req() req,
+    @Res() res,
+    @Body() createUserRequest: CreateUserRequest,
+  ) {
+    if (req.body.role === RoleEnum.ADMIN) {
+      await this.authFacade.register(createUserRequest);
+      return this.registerStrategy.send(req, res);
+    } else {
+      throw new BadRequestException('Admin role is required for registration.');
+    }
   }
 
   @ApiOperation({
@@ -99,7 +115,7 @@ export class AuthController {
   @Get('register/callback')
   async callbackRegister(@Req() req): Promise<TokenResponse> {
     let user = req.user;
-    user = await this.authFacade.updateWhitelistedAndStatus(user);
+    user = await this.authFacade.updateStatus(user);
     return await this.authFacade.generateTokens(user);
   }
 
@@ -116,7 +132,7 @@ export class AuthController {
   @Post('login')
   async login(@Req() req, @Res() res, @Body() loginRequest: LoginRequest) {
     await this.authFacade.validateUser(loginRequest.destination);
-    return this.strategy.send(req, res);
+    return this.loginStrategy.send(req, res);
   }
 
   @ApiOperation({ summary: 'Callback login a user. Click on the magic link' })
