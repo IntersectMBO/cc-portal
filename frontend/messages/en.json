@@ -4,7 +4,9 @@
     "hero": {
       "headline": "CoCreate future of CC Portal by Intersect Cardano",
       "description": "Lorem ipsum dolor sit amet consectetur. Facilisi neque felis egestas magna tempus.Lorem ipsum dolor sit amet consectetur. Facilisi neque felis egestas magna tempus.",
-      "button": "See Constitution"
+      "seeConstitution": "See Constitution",
+      "signIn": "Sign In",
+      "constitutionalCommitteePortal": "Constitutional Committee Portal"
     }
   },
   "Constitution": {

@@ -4,4 +4,6 @@ export const IMAGES = {
   menuIcon: "/images/MenuIcon.png",
   arrowLeft: "/images/ArrowLeft.png",
   arrowRight: "/images/ArrowRight.png",
+  login: "/images/Login.png",
+  bookOpen: "/images/BookOpen.png",
 };
