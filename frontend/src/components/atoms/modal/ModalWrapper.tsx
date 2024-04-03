@@ -2,45 +2,45 @@
 
 import { SxProps, styled } from "@mui/material/styles";
 
-import { callAll } from "@utils";
-import { useModal } from "@context";
-import { ICONS } from "@consts";
+import { customPalette } from "@consts";
 
+type ModalVariant = "modal" | "popup";
 interface Props {
-  variant?: "modal" | "popup";
+  variant?: ModalVariant;
   onClose?: () => void;
-  hideCloseButton?: boolean;
   children: React.ReactNode;
   dataTestId?: string;
   sx?: SxProps;
+  icon?: string;
 }
 
 export const ModalWrapper = ({
   children,
-  onClose,
   variant = "modal",
-  hideCloseButton = false,
   dataTestId = "modal",
   sx,
+  icon,
 }: Props) => {
-  const { closeModal } = useModal();
-
   return (
-    <BaseWrapper variant={variant} data-testid={dataTestId} sx={sx}>
-      {variant !== "popup" && !hideCloseButton && (
-        <CloseButton
-          data-testid="close-modal-button"
-          alt="close"
-          onClick={callAll(closeModal, onClose)}
-          src={ICONS.rocketLaunch}
-        />
+    <BaseWrapper
+      backgroundColor={customPalette.arcticWhite}
+      variant={variant}
+      data-testid={dataTestId}
+      sx={sx}
+    >
+      {variant !== "popup" && (
+        <img width={64} data-testid="modal-icon" alt="icon" src={icon} />
       )}
+
       {children}
     </BaseWrapper>
   );
 };
 
-export const BaseWrapper = styled("div")<Pick<Props, "variant">>`
+export const BaseWrapper = styled("div")<{
+  variant: ModalVariant;
+  backgroundColor: string;
+}>`
   box-shadow: 1px 2px 11px 0px #00123d5e;
   max-height: 90vh;
   position: absolute;
@@ -48,7 +48,7 @@ export const BaseWrapper = styled("div")<Pick<Props, "variant">>`
   left: 50%;
   display: flex;
   flex-direction: column;
-  background: #fbfbff;
+  background: ${({ backgroundColor }) => backgroundColor};
   border-radius: 24px;
   transform: translate(-50%, -50%);
 
@@ -57,7 +57,7 @@ export const BaseWrapper = styled("div")<Pick<Props, "variant">>`
       return `
         width: 80vw;
         max-width: 510px;
-        padding: 52px 24px 34px 24px;
+        padding: 24px;
       `;
     }
     if (variant === "popup") {
@@ -67,11 +67,4 @@ export const BaseWrapper = styled("div")<Pick<Props, "variant">>`
       `;
     }
   }}
-`;
-
-export const CloseButton = styled("img")`
-  cursor: pointer;
-  position: absolute;
-  top: 24px;
-  right: 24px;
 `;

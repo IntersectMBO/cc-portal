@@ -21,7 +21,7 @@ export const Hero = ({ children }: HeroProps) => {
       overflow="visible"
       position="relative"
       px={{ xxs: 2, sm: 5, md: 10 }}
-      sx={{ backgroundColor: customPalette.neutralWhite }}
+      sx={{ backgroundColor: customPalette.arcticWhite }}
     >
       <Box alignItems="center" flex={1} height="min-content" zIndex={1}>
         <Typography variant="headline2" sx={{ whiteSpace: "pre-line" }}>
