@@ -3,13 +3,14 @@ import { Button } from "@/components/atoms/Button";
 import { ICONS, IMAGES, PATHS } from "@/constants";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useModal } from "@context";
 import { Grid } from "@mui/material";
 import { HeroActionsProps } from "../types";
 
 export function HeroActions({ role }: HeroActionsProps) {
   const t = useTranslations("Index");
+  const { openModal } = useModal();
   const isAmdmin = role === "admin";
-
   return (
     <Grid container gap={1}>
       {isAmdmin ? (
@@ -19,7 +20,9 @@ export function HeroActions({ role }: HeroActionsProps) {
               size="large"
               startIcon={<img src={IMAGES.login} />}
               onClick={() => {
-                console.log("sign in");
+                openModal({
+                  type: "signIn",
+                });
               }}
             >
               {t("hero.signIn")}
