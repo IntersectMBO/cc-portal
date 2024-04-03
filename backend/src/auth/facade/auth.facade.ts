@@ -3,7 +3,6 @@ import { UserDto } from 'src/users/dto/user.dto';
 import { TokenResponse } from '../api/response/token.response';
 import { UserMapper } from 'src/users/mapper/userMapper.mapper';
 import {
-  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -11,6 +10,9 @@ import {
 import { AuthService } from '../service/auth.service';
 import { EmailService } from 'src/email/service/email.service';
 import { EmailDto } from 'src/email/dto/email.dto';
+import { UserStatusEnum } from 'src/users/entities/user.entity';
+import { CreateUserRequest } from 'src/users/api/request/create-user.request';
+import { RoleEnum } from 'src/users/enums/role.enum';
 
 @Injectable()
 export class AuthFacade {
@@ -19,6 +21,26 @@ export class AuthFacade {
     private readonly usersService: UsersService,
     private readonly emailService: EmailService,
   ) {}
+
+  async register(
+    createUserRequest: CreateUserRequest,
+    role: RoleEnum,
+  ): Promise<UserDto> {
+    const createUserDto =
+      UserMapper.mapCreateUserRequestToDto(createUserRequest);
+    createUserDto.role = role;
+    const user = await this.usersService.create(createUserDto);
+
+    return user;
+  }
+
+  async updateStatus(userDto: UserDto): Promise<UserDto> {
+    const user = await this.usersService.updateUserStatus(
+      userDto.id,
+      UserStatusEnum.ACTIVE,
+    );
+    return user;
+  }
 
   async validateUser(email: string): Promise<UserDto> {
     const user = await this.usersService.findByEmail(email);
@@ -29,13 +51,11 @@ export class AuthFacade {
   }
 
   async generateTokens(userDto: UserDto): Promise<TokenResponse> {
-    // if (!userDto.whitelisted) {
-    //   throw new ForbiddenException(`User is not whitelisted`);
-    // }
     const payload = {
       userId: userDto.id,
       email: userDto.email,
-      roles: userDto.roles,
+      role: userDto.role,
+      permissions: userDto.permissions,
     };
 
     const result = new TokenResponse();
@@ -59,10 +79,6 @@ export class AuthFacade {
     const user = await this.usersService.findByEmail(email);
     if (!user || user.id !== userId) {
       throw new UnauthorizedException('Authentication failed');
-    }
-
-    if (!user.whitelisted) {
-      throw new ForbiddenException('User is not whitelisted');
     }
 
     // Issue new access token using the same payload

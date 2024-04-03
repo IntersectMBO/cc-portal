@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsEmail, IsEnum, MaxLength } from 'class-validator';
 import { PermissionEnum } from 'src/users/enums/permission.enum';
 
-export class CreateUserRequest {
+export class CreateAdminRequest {
   @ApiProperty({
     description: 'Email address of the user',
     example: 'john.doe@example.com',
@@ -17,5 +17,5 @@ export class CreateUserRequest {
   })
   @IsArray()
   @IsEnum(PermissionEnum, { each: true })
-  permissions?: string[] = [];
+  permissions: string[] = [];
 }
