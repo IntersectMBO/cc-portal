@@ -1,3 +1,5 @@
+import { CreateAdminRequest } from '../api/request/create-admin.request';
+import { CreateCCMemberRequest } from '../api/request/create-cc-member.request';
 import { CreateUserRequest } from '../api/request/create-user.request';
 import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UserResponse } from '../api/response/user.response';
@@ -35,9 +37,25 @@ export class UserMapper {
   ): CreateUserDto {
     const createUserDto = new CreateUserDto();
     createUserDto.destination = createUserRequest.destination;
-    createUserDto.role = createUserRequest.role;
-    /*createUserDto.permissions = createUserRequest.permissions;*/
+    createUserDto.permissions = createUserRequest.permissions;
     return createUserDto;
+  }
+
+  static mapCreateCCMemberRequestToCreateUserRequest(
+    createCCMemberRequest: CreateCCMemberRequest,
+  ): CreateUserRequest {
+    const createUserRequest = new CreateUserRequest();
+    createUserRequest.destination = createCCMemberRequest.destination;
+    return createUserRequest;
+  }
+
+  static mapCreateAdminRequestToCreateUserRequest(
+    createAdminRequest: CreateAdminRequest,
+  ): CreateUserRequest {
+    const createUserRequest = new CreateUserRequest();
+    createUserRequest.destination = createAdminRequest.destination;
+    createUserRequest.permissions = createAdminRequest.permissions;
+    return createUserRequest;
   }
 
   static mapUpdateUserRequestToDto(

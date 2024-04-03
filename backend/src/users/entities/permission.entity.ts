@@ -2,7 +2,7 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CommonEntity } from '../../common/entities/common.entity';
 import { Role } from './role.entity';
 import { User } from './user.entity';
-import { PermissionAdminEnum } from '../enums/permission.enum';
+import { PermissionEnum } from '../enums/permission.enum';
 
 @Entity('permissions')
 export class Permission extends CommonEntity {
@@ -12,7 +12,7 @@ export class Permission extends CommonEntity {
   @Column({
     name: 'code',
     type: 'enum',
-    enum: PermissionAdminEnum,
+    enum: PermissionEnum,
   })
   code: string;
 

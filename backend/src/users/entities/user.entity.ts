@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -68,6 +69,7 @@ export class User extends CommonEntity {
   @ManyToOne(() => Role, (role) => role.users, {
     eager: true,
   })
+  @JoinColumn({ name: 'role_id' })
   role: Role;
 
   @ManyToMany(() => Permission, (permission) => permission.users, {

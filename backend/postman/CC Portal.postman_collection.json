@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "462d6cc9-d838-4a60-956f-2f595b2c2af0",
-		"name": "CC Portal",
+		"_postman_id": "aec582c9-802c-4f73-b9ec-5efde00f5781",
+		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20133713"
 	},
@@ -66,33 +66,6 @@
 					"response": []
 				},
 				{
-					"name": "Create User",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"destination\": \"test@test.com\",\n    \"role\": \"admin\",\n    \"permissions\": [\"manage_cc_members\"]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base-url}}/api/users",
-							"host": [
-								"{{base-url}}"
-							],
-							"path": [
-								"api",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Update User",
 					"request": {
 						"method": "PATCH",
@@ -145,7 +118,6 @@
 				}
 			]
 		},
-		
 		{
 			"name": "Auth",
 			"item": [
@@ -153,10 +125,16 @@
 					"name": "Register User",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"destination\": \"test@test.com\",\n    \"role\": \"user\"\n}",
+							"raw": "{\n    \"destination\": \"test@test.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -181,10 +159,16 @@
 					"name": "Register Admin",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"destination\": \"test1@test.com\",\n    \"role\": \"admin\",\n    \"permissions\": [\"manage_cc_members\"]\n}",
+							"raw": "{\n    \"destination\": \"testadmin@test.com\",\n    \"permissions\": [\"manage_cc_members\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"

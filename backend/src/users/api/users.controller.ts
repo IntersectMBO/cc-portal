@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
@@ -9,7 +8,6 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
-import { CreateUserRequest } from './request/create-user.request';
 import { UpdateUserRequest } from './request/update-user.request';
 import { UserResponse } from './response/user.response';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -19,29 +17,6 @@ import { RoleResponse } from './response/role.response';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersFacade: UsersFacade) {}
-
-  @ApiOperation({ summary: 'Create a user' })
-  @ApiBody({ type: CreateUserRequest })
-  @ApiResponse({
-    status: 201,
-    description: 'User created successfully.',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad Request',
-  })
-  @ApiResponse({
-    status: 409,
-    description: 'User with requested email address already exists',
-  })
-  @ApiResponse({ status: 500, description: 'Internal server error.' })
-  @HttpCode(201)
-  @Post()
-  async create(
-    @Body() createUserRequest: CreateUserRequest,
-  ): Promise<UserResponse> {
-    return await this.usersFacade.create(createUserRequest);
-  }
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({

@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -26,9 +25,12 @@ import { CreateUserRequest } from 'src/users/api/request/create-user.request';
 import { MagicRegisterStrategy } from '../strategy/magicregister.strategy';
 import { PermissionGuard } from '../guard/permission.guard';
 import { Permissions } from '../guard/permission.decorator';
-import { PermissionAdminEnum } from 'src/users/enums/permission.enum';
+import { PermissionEnum } from 'src/users/enums/permission.enum';
 import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
 import { RoleEnum } from 'src/users/enums/role.enum';
+import { CreateCCMemberRequest } from 'src/users/api/request/create-cc-member.request';
+import { UserMapper } from 'src/users/mapper/userMapper.mapper';
+import { CreateAdminRequest } from 'src/users/api/request/create-admin.request';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -50,20 +52,19 @@ export class AuthController {
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @HttpCode(201)
   @Post('register-user')
-  @Permissions(PermissionAdminEnum.MANAGE_CC_MEMBERS)
+  @Permissions(PermissionEnum.MANAGE_CC_MEMBERS)
   @UseGuards(JwtAuthGuard, PermissionGuard)
   async registerUser(
     @Req() req,
     @Res() res,
-    @Body() createUserRequest: CreateUserRequest,
+    @Body() createCCMemberRequest: CreateCCMemberRequest,
   ) {
-    console.log(req.body.role);
-    if (req.body.role === RoleEnum.USER) {
-      await this.authFacade.register(createUserRequest);
-      return this.registerStrategy.send(req, res);
-    } else {
-      throw new BadRequestException('User role is required for registration.');
-    }
+    const createUserRequest =
+      UserMapper.mapCreateCCMemberRequestToCreateUserRequest(
+        createCCMemberRequest,
+      );
+    await this.authFacade.register(createUserRequest, RoleEnum.USER);
+    return this.registerStrategy.send(req, res);
   }
 
   @ApiOperation({
@@ -79,19 +80,17 @@ export class AuthController {
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @HttpCode(201)
   @Post('register-admin')
-  @Permissions(PermissionAdminEnum.ADD_ADMIN)
+  @Permissions(PermissionEnum.ADD_ADMIN)
   @UseGuards(JwtAuthGuard, PermissionGuard)
   async registerAdmin(
     @Req() req,
     @Res() res,
-    @Body() createUserRequest: CreateUserRequest,
+    @Body() createAdminRequest: CreateAdminRequest,
   ) {
-    if (req.body.role === RoleEnum.ADMIN) {
-      await this.authFacade.register(createUserRequest);
-      return this.registerStrategy.send(req, res);
-    } else {
-      throw new BadRequestException('Admin role is required for registration.');
-    }
+    const createUserRequest =
+      UserMapper.mapCreateAdminRequestToCreateUserRequest(createAdminRequest);
+    await this.authFacade.register(createUserRequest, RoleEnum.ADMIN);
+    return this.registerStrategy.send(req, res);
   }
 
   @ApiOperation({

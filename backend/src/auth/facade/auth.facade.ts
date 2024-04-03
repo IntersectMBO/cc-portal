@@ -10,8 +10,9 @@ import {
 import { AuthService } from '../service/auth.service';
 import { EmailService } from 'src/email/service/email.service';
 import { EmailDto } from 'src/email/dto/email.dto';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UserStatusEnum } from 'src/users/entities/user.entity';
+import { CreateUserRequest } from 'src/users/api/request/create-user.request';
+import { RoleEnum } from 'src/users/enums/role.enum';
 
 @Injectable()
 export class AuthFacade {
@@ -21,8 +22,14 @@ export class AuthFacade {
     private readonly emailService: EmailService,
   ) {}
 
-  async register(createUser: CreateUserDto): Promise<UserDto> {
-    const user = await this.usersService.create(createUser);
+  async register(
+    createUserRequest: CreateUserRequest,
+    role: RoleEnum,
+  ): Promise<UserDto> {
+    const createUserDto =
+      UserMapper.mapCreateUserRequestToDto(createUserRequest);
+    createUserDto.role = role;
+    const user = await this.usersService.create(createUserDto);
 
     return user;
   }
@@ -44,9 +51,6 @@ export class AuthFacade {
   }
 
   async generateTokens(userDto: UserDto): Promise<TokenResponse> {
-    // if (!userDto.whitelisted) {
-    //   throw new ForbiddenException(`User is not whitelisted`);
-    // }
     const payload = {
       userId: userDto.id,
       email: userDto.email,
@@ -76,10 +80,6 @@ export class AuthFacade {
     if (!user || user.id !== userId) {
       throw new UnauthorizedException('Authentication failed');
     }
-
-    /*if (!user.whitelisted) {
-      throw new ForbiddenException('User is not whitelisted');
-    }*/
 
     // Issue new access token using the same payload
     const result = new TokenResponse();

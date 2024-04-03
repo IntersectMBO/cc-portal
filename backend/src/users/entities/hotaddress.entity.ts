@@ -1,5 +1,11 @@
 import { CommonEntity } from '../../common/entities/common.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 
 @Entity('hot_addresses')
@@ -10,10 +16,10 @@ export class HotAddress extends CommonEntity {
   @Column({
     name: 'address',
     type: 'varchar',
-    nullable: true,
   })
   address: string;
 
   @ManyToOne(() => User, (user) => user.hotAddresses)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 }
