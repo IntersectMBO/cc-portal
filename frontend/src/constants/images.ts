@@ -7,4 +7,5 @@ export const IMAGES = {
   login: "/images/Login.png",
   bookOpen: "/images/BookOpen.png",
   pastelSignIn: "/images/PastelSignIn.png",
+  pastelDeleteRole: "/images/PastelDeleteRole.png",
 };
