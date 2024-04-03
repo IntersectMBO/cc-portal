@@ -6,10 +6,10 @@ import { User } from './entities/user.entity';
 import { Role } from './entities/role.entity';
 import { UsersFacade } from './facade/users.facade';
 import { Permission } from './entities/permission.entity';
-import { AwsS3Module } from 'src/s3/s3.module';
+import { HotAddress } from './entities/hotaddress.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Role, Permission]), AwsS3Module],
+  imports: [TypeOrmModule.forFeature([User, Role, Permission, HotAddress])],
   controllers: [UsersController],
   providers: [UsersFacade, UsersService],
   exports: [UsersService],

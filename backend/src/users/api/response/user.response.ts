@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { UserStatusEnum } from '../../entities/user.entity';
+import { UserStatusEnum } from 'src/users/entities/user.entity';
 import { Timestamp } from 'typeorm';
 
 export class UserResponse {
@@ -23,11 +23,12 @@ export class UserResponse {
   email: string;
 
   @ApiProperty({
-    description: 'Hot address of the user',
-    example: 'sofija@example.com',
+    description: 'Hot addresses of the user',
+    example: ['sofija@example.com', 'newyork@example.com'],
+    type: [String],
   })
-  @Expose({ name: 'hot_address' })
-  hotAddress: string;
+  @Expose({ name: 'hot_addresses' })
+  hotAddresses: string[];
 
   @ApiProperty({
     description: 'Description of the user',
@@ -51,20 +52,16 @@ export class UserResponse {
   @Expose({ name: 'status' })
   status: UserStatusEnum;
 
-  @ApiProperty({ description: 'Roles of the user', example: ['user'] })
-  @Expose({ name: 'roles' })
-  roles: string[];
-
-  @ApiProperty({ description: 'Permissions of the user', example: ['pending'] })
-  @Expose({ name: 'permissions' })
-  permissions: string[];
+  @ApiProperty({ description: 'Role of the user', example: 'user' })
+  @Expose({ name: 'role' })
+  role: string;
 
   @ApiProperty({
-    description: 'Flag that deterines whether user is blacklisted or not',
-    example: false,
+    description: 'Permissions of the user',
+    example: ['manage_cc_members'],
   })
-  @Expose({ name: 'whitelisted' })
-  whitelisted: boolean;
+  @Expose({ name: 'permissions' })
+  permissions: string[];
 
   @ApiProperty({
     name: 'created_at',

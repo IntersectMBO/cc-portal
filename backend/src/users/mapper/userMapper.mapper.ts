@@ -1,3 +1,5 @@
+import { CreateAdminRequest } from '../api/request/create-admin.request';
+import { CreateCCMemberRequest } from '../api/request/create-cc-member.request';
 import { CreateUserRequest } from '../api/request/create-user.request';
 import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UserResponse } from '../api/response/user.response';
@@ -12,11 +14,14 @@ export class UserMapper {
     userDto.id = user.id;
     userDto.name = user.name;
     userDto.email = user.email;
-    userDto.hotAddress = user.hotAddress;
     userDto.description = user.description;
     userDto.profilePhoto = user.profilePhoto;
-    userDto.whitelisted = user.whitelisted;
-    userDto.roles = user.roles?.map((role) => role.code);
+    userDto.status = user.status;
+    //userDto.whitelisted = user.whitelisted;
+    userDto.hotAddresses = user.hotAddresses?.map(
+      (hotAddress) => hotAddress.id,
+    );
+    userDto.role = user.role.code;
     userDto.permissions = user.permissions?.map(
       (permission) => permission.code,
     );
@@ -31,8 +36,26 @@ export class UserMapper {
     createUserRequest: CreateUserRequest,
   ): CreateUserDto {
     const createUserDto = new CreateUserDto();
-    createUserDto.email = createUserRequest.email;
+    createUserDto.destination = createUserRequest.destination;
+    createUserDto.permissions = createUserRequest.permissions;
     return createUserDto;
+  }
+
+  static mapCreateCCMemberRequestToCreateUserRequest(
+    createCCMemberRequest: CreateCCMemberRequest,
+  ): CreateUserRequest {
+    const createUserRequest = new CreateUserRequest();
+    createUserRequest.destination = createCCMemberRequest.destination;
+    return createUserRequest;
+  }
+
+  static mapCreateAdminRequestToCreateUserRequest(
+    createAdminRequest: CreateAdminRequest,
+  ): CreateUserRequest {
+    const createUserRequest = new CreateUserRequest();
+    createUserRequest.destination = createAdminRequest.destination;
+    createUserRequest.permissions = createAdminRequest.permissions;
+    return createUserRequest;
   }
 
   static mapUpdateUserRequestToDto(
@@ -50,11 +73,12 @@ export class UserMapper {
     userResponse.id = userDto.id;
     userResponse.name = userDto.name;
     userResponse.email = userDto.email;
-    userResponse.hotAddress = userDto.hotAddress;
+    userResponse.hotAddresses = userDto.hotAddresses;
     userResponse.description = userDto.description;
     userResponse.profilePhoto = userDto.profilePhoto;
-    userResponse.whitelisted = userDto.whitelisted;
-    userResponse.roles = userDto.roles;
+    userResponse.status = userDto.status;
+    userResponse.role = userDto.role;
+    userResponse.permissions = userDto.permissions;
     userResponse.createdAt = userDto.createdAt;
     userResponse.updatedAt = userDto.updatedAt;
     return userResponse;

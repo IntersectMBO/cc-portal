@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "8f8f68d0-5829-41bd-b601-88ab74b40794",
-		"name": "CC Portal",
+		"_postman_id": "aec582c9-802c-4f73-b9ec-5efde00f5781",
+		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25756447"
+		"_exporter_id": "20133713"
 	},
 	"item": [
 		{
@@ -28,6 +28,25 @@
 					"response": []
 				},
 				{
+					"name": "Get All Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/users/roles",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get User By Id",
 					"request": {
 						"method": "GET",
@@ -41,33 +60,6 @@
 								"api",
 								"users",
 								"id"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create User",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@test.com\",\n    \"roles\": [\"user\", \"admin\"],\n    \"permissions\": [\"manage_cc_members\", \"add_constitution_version\", \"add_new_admin\"]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base-url}}/api/users",
-							"host": [
-								"{{base-url}}"
-							],
-							"path": [
-								"api",
-								"users"
 							]
 						}
 					},
@@ -138,15 +130,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base-url}}/api/users/748c4144-a3ce-47b8-b78a-25a4b12c9212/whitelist",
+							"raw": "{{base-url}}/api/users/id",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"748c4144-a3ce-47b8-b78a-25a4b12c9212",
-								"whitelist"
+								"id"
 							]
 						}
 					},
@@ -180,6 +171,114 @@
 		{
 			"name": "Auth",
 			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"destination\": \"test@test.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/auth/register-user",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"destination\": \"testadmin@test.com\",\n    \"permissions\": [\"manage_cc_members\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/auth/register-admin",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register callback",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"userId\", jsonData.user.id);",
+									"postman.setEnvironmentVariable(\"accessToken\", 'Bearer '+jsonData.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/auth/register/callback?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXN0aW5hdGlvbiI6InRlc3RAdGVzdC5jb24iLCJjb2RlIjoiNDQxMzEiLCJpYXQiOjE3MTAyNDUxNTYsImV4cCI6MTcxMDI0NTQ1Nn0.A66L6PK-D4bKe0Owtp_WS7z2gvAIafnrEuouv9CwUzA",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register",
+								"callback"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXN0aW5hdGlvbiI6InRlc3RAdGVzdC5jb24iLCJjb2RlIjoiNDQxMzEiLCJpYXQiOjE3MTAyNDUxNTYsImV4cCI6MTcxMDI0NTQ1Nn0.A66L6PK-D4bKe0Owtp_WS7z2gvAIafnrEuouv9CwUzA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Login",
 					"request": {

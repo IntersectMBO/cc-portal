@@ -1,13 +1,17 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Role } from './role.entity';
 import { CommonEntity } from '../../common/entities/common.entity';
 import { Permission } from './permission.entity';
+import { HotAddress } from './hotaddress.entity';
 
 export enum UserStatusEnum {
   ACTIVE = 'active',
@@ -37,14 +41,6 @@ export class User extends CommonEntity {
   email: string;
 
   @Column({
-    name: 'hot_adress',
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-  })
-  hotAddress: string;
-
-  @Column({
     name: 'description',
     type: 'varchar',
     length: 500,
@@ -57,7 +53,7 @@ export class User extends CommonEntity {
     type: 'varchar',
     nullable: true,
   })
-  profilePhoto: string; //path to the profile photo
+  profilePhoto: string;
 
   @Column({
     name: 'status',
@@ -67,21 +63,14 @@ export class User extends CommonEntity {
   })
   status: UserStatusEnum;
 
-  @ManyToMany(() => Role, (role) => role.users, {
+  @OneToMany(() => HotAddress, (hotAddress) => hotAddress.user)
+  hotAddresses: HotAddress[];
+
+  @ManyToOne(() => Role, (role) => role.users, {
     eager: true,
   })
-  @JoinTable({
-    name: 'user_roles',
-    joinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'role_id',
-      referencedColumnName: 'id',
-    },
-  })
-  roles: Role[];
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
 
   @ManyToMany(() => Permission, (permission) => permission.users, {
     eager: true,
@@ -98,12 +87,6 @@ export class User extends CommonEntity {
     },
   })
   permissions: Permission[];
-
-  @Column({
-    name: 'whitelisted',
-    default: false,
-  })
-  whitelisted: boolean;
 
   constructor(user: Partial<User>) {
     super();
