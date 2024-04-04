@@ -1,10 +1,10 @@
 import { IsOptional } from 'class-validator';
-import { CID } from 'multiformats/dist/src/basics';
+// import { CID } from 'multiformats/cid';
 
 export class HeliaDto {
   @IsOptional()
   fileContent: string;
 
-  @IsOptional()
-  cid: CID;
+  // @IsOptional()
+  // cid: CID;
 }

@@ -1,56 +1,63 @@
 import { Injectable } from '@nestjs/common';
 import { UnixFS } from '@helia/unixfs';
-import { TextEncoder, TextDecoder } from 'util';
+import { TextDecoder } from 'util';
 import { HeliaLibp2p } from 'helia';
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { HeliaDto } from '../dto/add-file-to-helia.dto';
+// import { HeliaDto } from '../dto/add-file-to-helia.dto';
+import { CID } from 'multiformats/cid';
+import multibase = require('multibase');
 
+// const dynamic = new Function('modulePath', 'return import(modulePath)');
 @Injectable()
 export class IpfsUploadService {
-  constructor(
-    private readonly eventEmitter: EventEmitter2,
-    private readonly textEncoder: TextEncoder,
-    private readonly textDecoder: TextDecoder,
-  ) {}
+  constructor(private readonly textDecoder: TextDecoder) {}
   private helia: HeliaLibp2p;
   private fs: UnixFS;
 
-  async createHeliaNode(): Promise<HeliaLibp2p> {
-    if (this.helia == null) {
-      const { createHelia } = await eval('import("helia")');
-      this.helia = await createHelia();
-      this.eventEmitter.emit('unixfs.created', this.createUnixFs());
+  async addFileToHeliaNode(fileBuffer: Buffer): Promise<void> {
+    await this.createHeliaNode();
+    const fileObj = Object.values(fileBuffer);
+
+    const cid = await this.fs.addFile({ content: Uint8Array.from(fileObj) });
+    console.log('Added file:', cid.toString());
+  }
+
+  async getFileContentFromCID(dto: string): Promise<string> {
+    const { CID } = await eval('import("multiformats/cid")');
+
+    await this.createHeliaNode();
+    let text: string = '';
+
+    for await (const chunk of this.fs.cat(CID.parse(dto))) {
+      text += this.textDecoder.decode(chunk, { stream: true });
     }
-    console.log(
-      'Helia is running, PeerId: ' + this.helia.libp2p.peerId.toString(),
-    );
+    return text;
+  }
+  //-------------------------------
+
+  private async createHeliaNode(): Promise<HeliaLibp2p> {
+    if (this.helia == null) {
+      const { FsBlockstore } = await eval('import("blockstore-fs")');
+      const { MemoryDatastore } = await eval('import("datastore-core")');
+      const { createHelia } = await eval('import("helia")');
+      const blockStore = new FsBlockstore('../blockstore');
+      const dataStore = new MemoryDatastore();
+      this.helia = await createHelia({
+        blockstore: blockStore,
+        dataStore: dataStore,
+      });
+      console.log(
+        'Helia is running, PeerId: ' + this.helia.libp2p.peerId.toString(),
+      );
+      await this.createUnixFs();
+    }
     return this.helia;
   }
-  @OnEvent('unixfs.created')
   private async createUnixFs(): Promise<UnixFS> {
     const { unixfs } = await eval('import("@helia/unixfs")');
     this.fs = unixfs(this.helia);
     console.log('UnixFS is set up on top of Helia node ');
     return this.fs;
   }
-  //-------------------------------
-
-  addFileToHeliaNode = async (dto: HeliaDto): Promise<void> => {
-    const bytes = this.textEncoder.encode(dto.fileContent);
-    const cid = await this.fs.addBytes(bytes);
-    return console.log('Added file:', cid.toString());
-  };
-
-  async getFileContent(dto: HeliaDto): Promise<string> {
-    let text: string = '';
-
-    for await (const chunk of this.fs.cat(dto.cid)) {
-      text += this.textDecoder.decode(chunk, { stream: true });
-    }
-
-    return text;
-  }
-
   async onApplicationShutdown(): Promise<void> {
     if (this.helia != null) {
       await this.helia.stop();
