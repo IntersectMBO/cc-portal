@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { S3Service } from '../../s3/s3.service';
 import { Permission } from '../entities/permission.entity';
 import { UserDto } from '../dto/user.dto';
+import { HotAddress } from '../entities/hotaddress.entity';
 const mockS3Service = {
   uploadFileMinio: jest.fn().mockResolvedValue('mocked_file_name'),
   createBucketIfNotExists: jest.fn().mockResolvedValue('new_bucket'),
@@ -19,20 +20,23 @@ const mockUser: UserDto = {
   id: 'mockedId',
   name: 'John Doe',
   email: 'mockedEmail',
-  hotAddress: 'mockedHotAddress',
+  hotAddresses: ['mockedHotAddress', 'aasjjsjsus'],
   description: 'mockedDescription',
   profilePhoto: 'mockedProfilePhoto',
   status: UserStatusEnum.ACTIVE,
-  roles: ['role1', 'role2'],
+  role: 'role1',
   permissions: ['permission1', 'permission2'],
-  whitelisted: true,
   createdAt: null,
   updatedAt: null,
 };
 
 const mockUserRepository = {
-  create: jest.fn().mockImplementation((user) => ({ ...user })),
-  save: jest.fn().mockImplementation((user) => Promise.resolve({ ...user })),
+  create: jest.fn().mockImplementation((user) => {
+    return user;
+  }),
+  save: jest.fn().mockImplementation((user) => {
+    return user;
+  }),
   findOne: jest.fn().mockImplementation((id) => {
     if (id.where.id !== mockUser.id) {
       return new NotFoundException('user not found');
@@ -50,6 +54,15 @@ const mockPermRepository = {
   save: jest.fn().mockResolvedValue({}),
   findOne: jest.fn().mockResolvedValue({}),
 };
+const mockHotAddressRepository = {
+  create: jest.fn().mockImplementation((hotAdd: string[]) => {
+    return hotAdd;
+  }),
+  save: jest.fn().mockImplementation((hotAdd: string[]) => {
+    return hotAdd;
+  }),
+};
+
 const mockEntityManager = {
   transaction: jest.fn().mockImplementation(async (callback) => {
     try {
@@ -74,6 +87,10 @@ describe('UsersService', () => {
           provide: getRepositoryToken(Permission),
           useValue: mockPermRepository,
         },
+        {
+          provide: getRepositoryToken(HotAddress),
+          useValue: mockHotAddressRepository,
+        },
         { provide: EntityManager, useValue: mockEntityManager },
         {
           provide: ConfigService,
@@ -95,7 +112,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddress: 'updated_hot_address',
+      hotAddresses: ['updated_hot_address', 'updated_2'],
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id: string = 'mockedId';
@@ -104,7 +121,7 @@ describe('UsersService', () => {
     // Verifying the result
     expect(result.name).toBe(updateUserDto.name);
     expect(result.description).toBe(updateUserDto.description);
-    expect(result.hotAddress).toBe(updateUserDto.hotAddress);
+    expect(result.hotAddresses).toEqual(updateUserDto.hotAddresses);
     expect(result.profilePhoto).toBe('mocked_file_url');
     expect(mockUserRepository.save).toHaveBeenCalled();
   });
@@ -113,7 +130,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddress: 'updated_hot_address',
+      hotAddresses: ['updated_hot_address', 'updated_2'],
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id = 'mock_Id';
@@ -131,7 +148,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddress: 'updated_hot_address',
+      hotAddresses: ['updated_hot_address', 'updated_2'],
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id = 'mocked_id';

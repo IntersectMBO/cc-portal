@@ -19,7 +19,7 @@ export class UserMapper {
     userDto.status = user.status;
     //userDto.whitelisted = user.whitelisted;
     userDto.hotAddresses = user.hotAddresses?.map(
-      (hotAddress) => hotAddress.id,
+      (hotAddress) => hotAddress.address,
     );
     userDto.role = user.role.code;
     userDto.permissions = user.permissions?.map(
@@ -64,7 +64,7 @@ export class UserMapper {
     const updateUserDto = new UpdateUserDto();
     updateUserDto.name = updateUserRequest.name;
     updateUserDto.description = updateUserRequest.description;
-    updateUserDto.hotAddress = updateUserRequest.hotAddress;
+    updateUserDto.hotAddresses = updateUserRequest.hotAddresses;
     return updateUserDto;
   }
 

@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MinLength, MaxLength, Matches, IsString } from 'class-validator';
+import {
+  MinLength,
+  MaxLength,
+  Matches,
+  IsString,
+  IsArray,
+} from 'class-validator';
 
 export class UpdateUserRequest {
   @ApiProperty({
@@ -24,17 +30,10 @@ export class UpdateUserRequest {
   //allowed every character
   @IsString()
   description: string;
-
   @ApiProperty({
-    description: 'Hot address of the user',
-    example: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+    description: 'Array of hot address of the user',
+    example: '[1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa,a7a7gsgya6st6aggdy6sgs6]',
   })
-  @MinLength(2, { message: `Minimum character length is 2` })
-  @MaxLength(255, { message: `Maximum character length is 255` })
-  //needs check
-  @Matches(/^[a-zA-Z0-9_.:\-\/]+$/, {
-    message: `Hot address can contain :, -, /`,
-  })
-  @IsString()
-  hotAddress: string;
+  @IsArray()
+  hotAddresses: string[];
 }

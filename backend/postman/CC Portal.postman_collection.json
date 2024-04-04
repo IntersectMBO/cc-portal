@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "aec582c9-802c-4f73-b9ec-5efde00f5781",
+		"_postman_id": "997b7a36-916b-4c3b-89e7-cf907b43fd4d",
 		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20133713"
+		"_exporter_id": "25756447"
 	},
 	"item": [
 		{
@@ -76,7 +76,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/Users/andelalausevic/Downloads/valentines-day.png"
+									"src": "/Users/cc-portal/backend/postman/1712183767053-valentines-day.png"
 								},
 								{
 									"key": "name",

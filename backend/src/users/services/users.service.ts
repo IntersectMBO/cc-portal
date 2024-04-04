@@ -18,6 +18,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { S3Service } from '../../s3/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
+import { HotAddress } from '../entities/hotaddress.entity';
 
 @Injectable()
 export class UsersService {
@@ -30,6 +31,8 @@ export class UsersService {
     private readonly roleRepository: Repository<Role>,
     @InjectRepository(Permission)
     private readonly permissionRepository: Repository<Permission>,
+    @InjectRepository(HotAddress)
+    private readonly hotAddressRepository: Repository<HotAddress>,
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
     private s3Service: S3Service,
@@ -160,7 +163,23 @@ export class UsersService {
     }
     user.name = updateUserDto.name;
     user.description = updateUserDto.description;
-    //user.hotAddress = updateUserDto.hotAddress;
+    const hotAddresses: string[] = updateUserDto.hotAddresses;
+    let savedAddresses: HotAddress[] = [];
+    try {
+      savedAddresses = []; // Inicijalizacija niza savedAddresses
+      await Promise.all(
+        hotAddresses.map(async (address) => {
+          const hotAddress = this.hotAddressRepository.create({
+            address: address,
+          });
+          const savedAddress = await this.hotAddressRepository.save(hotAddress);
+          savedAddresses.push(savedAddress);
+        }),
+      );
+    } catch (error) {
+      console.error('Error while saving hotAddreses:', error);
+    }
+    user.hotAddresses = savedAddresses;
     // const bucketKey = `${file.fieldname}${Date.now()}`;
     await this.s3Service.createBucketIfNotExists();
     const fileName = await this.s3Service.uploadFileMinio(file);
