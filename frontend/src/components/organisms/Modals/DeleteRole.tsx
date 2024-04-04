@@ -1,9 +1,10 @@
 import { Typography } from "@mui/material";
 
 import { ModalContents, ModalHeader, ModalWrapper } from "@atoms";
-import { IMAGES } from "@/constants";
+import { IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
 import { ModalActions } from "@atoms";
+import { Field } from "@molecules";
 
 export const DeleteRole = () => {
   const t = useTranslations("Modals");
@@ -20,6 +21,11 @@ export const DeleteRole = () => {
         >
           {t("deleteRole.description")}
         </Typography>
+        <Field.Input
+          placeholder={t("deleteRole.fields.delete.placeholder")}
+          label={t("deleteRole.fields.delete.label")}
+          value=""
+        />
         <ModalActions onConfirm={() => console.log("confirm")} />
       </ModalContents>
     </ModalWrapper>

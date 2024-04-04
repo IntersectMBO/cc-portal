@@ -6,7 +6,7 @@ interface Props {
 
 export const ModalContents = ({ children }: Props) => {
   return (
-    <Box display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column" gap={3}>
       {children}
     </Box>
   );
