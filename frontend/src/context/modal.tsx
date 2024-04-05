@@ -3,7 +3,7 @@ import { createContext, useContext, useMemo, useReducer } from "react";
 
 import { callAll, basicReducer, BasicReducer } from "@utils";
 import { MuiModalChildren } from "@atoms";
-import { SignInModal } from "@organisms";
+import { SignInModal, AddMemberModal } from "@organisms";
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -16,7 +16,7 @@ interface ContextModal {
   onClose?: () => void;
 }
 
-export type ModalType = "none" | "signIn";
+export type ModalType = "none" | "signIn" | "addMember";
 
 const modals: Record<ModalType, ContextModal> = {
   none: {
@@ -24,6 +24,9 @@ const modals: Record<ModalType, ContextModal> = {
   },
   signIn: {
     component: <SignInModal />,
+  },
+  addMember: {
+    component: <AddMemberModal />,
   },
 };
 

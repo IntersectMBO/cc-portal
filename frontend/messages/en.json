@@ -35,8 +35,25 @@
       "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
       "fields": {
         "delete": {
-          "label": "Write delete  ",
+          "label": "Write delete",
           "placeholder": "Write delete"
+        }
+      }
+    },
+    "addMember": {
+      "headline": "Add member",
+      "fields": {
+        "email": {
+          "label": "Email address",
+          "placeholder": "Email address"
+        },
+        "role": {
+          "label": "Role",
+          "placeholder": "Role"
+        },
+        "permissions": {
+          "label": "Permissions",
+          "placeholder": "Permissions"
         }
       }
     }

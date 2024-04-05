@@ -1,10 +1,4 @@
-import {
-  InfoText,
-  ModalContents,
-  ModalHeader,
-  ModalWrapper,
-  Typography,
-} from "@atoms";
+import { ModalContents, ModalHeader, ModalWrapper, Typography } from "@atoms";
 import { IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
 import { ModalActions } from "@atoms";
