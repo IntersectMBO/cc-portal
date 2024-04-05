@@ -34,3 +34,8 @@ export type TextAreaFieldProps = TextAreaProps & {
   labelStyles?: TypographyProps;
   layoutStyles?: BoxProps;
 };
+
+export interface MultipleSelectProps extends Omit<InputFieldProps, "onChange"> {
+  items: string[];
+  onChange: (options: string[]) => void;
+}
