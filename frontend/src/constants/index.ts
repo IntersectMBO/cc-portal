@@ -3,8 +3,10 @@
 // These constants ensure uniform behavior and settings across different parts of the app.
 // Refer to this file to use or update default configurations for consistent application functionality.
 
-// Define an array of available language locales for the application.
-export const locales = ["en", "de"];
-
-// Set the default language locale for the application.
-export const defaultLocale = "en";
+export * from "./colors";
+export * from "./icons";
+export * from "./images";
+export * from "./locale";
+export * from "./navItems";
+export * from "./paths";
+export * from "./font";
