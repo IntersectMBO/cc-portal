@@ -32,7 +32,7 @@
     },
     "signUp": {
       "headline": "Sign Up",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget. ",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
       "fields": {
         "username": {
           "label": "Username",
@@ -49,6 +49,10 @@
         },
         "upload": "Upload profile photo"
       }
+    },
+    "signOut": {
+      "headline": "Sign Out",
+      "description": "Are you sure you want to Sign out?"
     },
     "deleteRole": {
       "headline": "Delete role",

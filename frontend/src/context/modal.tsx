@@ -5,6 +5,7 @@ import { callAll, basicReducer, BasicReducer } from "@utils";
 import { MuiModalChildren } from "@atoms";
 import { SignInModal, AddMemberModal, UploadConstitution } from "@organisms";
 import { SignUpModal } from "@/components/organisms/Modals/SignUpModal";
+import { SignOutModal } from "@/components/organisms/Modals/SignOutModal";
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -22,6 +23,7 @@ export type ModalType =
   | "signIn"
   | "signUpModal"
   | "addMember"
+  | "signOutModal"
   | "uploadConstitution";
 
 const modals: Record<ModalType, ContextModal> = {
@@ -33,6 +35,9 @@ const modals: Record<ModalType, ContextModal> = {
   },
   signUpModal: {
     component: <SignUpModal />,
+  },
+  signOutModal: {
+    component: <SignOutModal />,
   },
   addMember: {
     component: <AddMemberModal />,
