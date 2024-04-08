@@ -63,7 +63,9 @@ export class User extends CommonEntity {
   })
   status: UserStatusEnum;
 
-  @OneToMany(() => HotAddress, (hotAddress) => hotAddress.user)
+  @OneToMany(() => HotAddress, (hotAddress) => hotAddress.user, {
+    cascade: true,
+  })
   hotAddresses: HotAddress[];
 
   @ManyToOne(() => Role, (role) => role.users, {

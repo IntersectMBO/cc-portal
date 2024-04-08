@@ -151,36 +151,49 @@ export class UsersService {
     }
     return user;
   }
-
+  private async findByIdWithAdd(id: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: ['hotAddresses'],
+    });
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return user;
+  }
   async update(
     file: Express.Multer.File,
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<UserDto> {
-    const user = await this.findById(id);
+    const user = await this.findByIdWithAdd(id);
     if (!user) {
       throw new NotFoundException(`user with id ${id} not found`);
     }
     user.name = updateUserDto.name;
     user.description = updateUserDto.description;
-    const hotAddresses: string[] = updateUserDto.hotAddresses;
-    let savedAddresses: HotAddress[] = [];
     try {
-      savedAddresses = []; // Inicijalizacija niza savedAddresses
-      await Promise.all(
-        hotAddresses.map(async (address) => {
-          const hotAddress = this.hotAddressRepository.create({
-            address: address,
-          });
-          const savedAddress = await this.hotAddressRepository.save(hotAddress);
-          savedAddresses.push(savedAddress);
-        }),
-      );
+      await this.checkUniqueUserHotAddress(updateUserDto.hotAddresses);
     } catch (error) {
-      console.error('Error while saving hotAddreses:', error);
+      this.logger.error(`error when updating the user  : ${error.message}`);
+      throw error;
     }
-    user.hotAddresses = savedAddresses;
-    // const bucketKey = `${file.fieldname}${Date.now()}`;
+    if (!user.hotAddresses || user.hotAddresses.length === 0) {
+      user.hotAddresses = updateUserDto.hotAddresses.map((address) => {
+        const hotAddress = new HotAddress();
+        hotAddress.address = address;
+        return hotAddress;
+      });
+    } else {
+      //If user already had addresses we add new ones
+      updateUserDto.hotAddresses.forEach((address: string) => {
+        const hotAddress = new HotAddress();
+        hotAddress.address = address;
+        user.hotAddresses.push(hotAddress);
+      });
+    }
     await this.s3Service.createBucketIfNotExists();
     const fileName = await this.s3Service.uploadFileMinio(file);
     user.profilePhoto = await this.s3Service.getFileUrl(fileName);
@@ -215,7 +228,18 @@ export class UsersService {
     await this.userRepository.save(user);
     return UserMapper.userToDto(user);
   }
-
+  async checkUniqueUserHotAddress(hotAddresses: string[]) {
+    for (const add of hotAddresses) {
+      const existingUserHotAddress = await this.hotAddressRepository.findOne({
+        where: {
+          address: add,
+        },
+      });
+      if (existingUserHotAddress) {
+        throw new ConflictException(`Address name ${add} already exists`);
+      }
+    }
+  }
   async getAllRoles(): Promise<RoleDto[]> {
     const roles = await this.roleRepository.find();
     const results: RoleDto[] = roles.map((role) => RoleMapper.roleToDto(role));

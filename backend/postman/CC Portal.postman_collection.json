@@ -69,7 +69,13 @@
 					"name": "Update User",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
@@ -84,26 +90,31 @@
 									"type": "text"
 								},
 								{
-									"key": "updateUserDto.description",
+									"key": "description",
 									"value": "Hey I am Andjela",
 									"type": "text"
 								},
 								{
-									"key": "hotAddress",
+									"key": "hotAddresses",
 									"value": "12hshui343hje3jkj4h34",
+									"type": "text"
+								},
+								{
+									"key": "hotAddresses",
+									"value": "12hshui343hj",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{base-url}}/api/users/f32fd8ed-2173-4bd5-b9bc-bd58814d1fcd",
+							"raw": "{{base-url}}/api/users/id",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"f32fd8ed-2173-4bd5-b9bc-bd58814d1fcd"
+								"id"
 							]
 						}
 					},

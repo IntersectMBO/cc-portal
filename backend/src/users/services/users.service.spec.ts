@@ -11,6 +11,7 @@ import { S3Service } from '../../s3/s3.service';
 import { Permission } from '../entities/permission.entity';
 import { UserDto } from '../dto/user.dto';
 import { HotAddress } from '../entities/hotaddress.entity';
+import { ConflictException } from '@nestjs/common/exceptions/conflict.exception';
 const mockS3Service = {
   uploadFileMinio: jest.fn().mockResolvedValue('mocked_file_name'),
   createBucketIfNotExists: jest.fn().mockResolvedValue('new_bucket'),
@@ -20,7 +21,7 @@ const mockUser: UserDto = {
   id: 'mockedId',
   name: 'John Doe',
   email: 'mockedEmail',
-  hotAddresses: ['mockedHotAddress', 'aasjjsjsus'],
+  hotAddresses: null,
   description: 'mockedDescription',
   profilePhoto: 'mockedProfilePhoto',
   status: UserStatusEnum.ACTIVE,
@@ -28,6 +29,26 @@ const mockUser: UserDto = {
   permissions: ['permission1', 'permission2'],
   createdAt: null,
   updatedAt: null,
+};
+const user: User = {
+  id: 'mockedId',
+  name: 'John Doe',
+  email: 'mockedEmail',
+  description: 'mockedDescription',
+  profilePhoto: 'mockedProfilePhoto',
+  status: UserStatusEnum.ACTIVE,
+  role: null,
+  permissions: null,
+  hotAddresses: null,
+  createdAt: null,
+  updatedAt: null,
+};
+const mockHotAdd: HotAddress = {
+  id: 'mockId',
+  address: 'mockedHotAddress',
+  createdAt: null,
+  updatedAt: null,
+  user: user,
 };
 
 const mockUserRepository = {
@@ -60,6 +81,12 @@ const mockHotAddressRepository = {
   }),
   save: jest.fn().mockImplementation((hotAdd: string[]) => {
     return hotAdd;
+  }),
+  findOne: jest.fn().mockImplementation((add) => {
+    if (add.where.address === mockHotAdd.address) {
+      throw new ConflictException('hot address already exist');
+    }
+    return null;
   }),
 };
 

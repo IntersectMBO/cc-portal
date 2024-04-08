@@ -10,15 +10,28 @@ import {
   UploadedFile,
   HttpStatus,
   ParseFilePipeBuilder,
+  UseGuards,
+  Request,
+  BadRequestException,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
 import { UserResponse } from './response/user.response';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { RoleResponse } from './response/role.response';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { UserPathGuard } from 'src/auth/guard/users-path.guard';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -62,6 +75,7 @@ export class UsersController {
     return await this.usersFacade.findOne(id);
   }
 
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a user' })
   @ApiBody({ type: UpdateUserRequest })
   @ApiResponse({
@@ -74,6 +88,10 @@ export class UsersController {
     description: 'Bad Request',
   })
   @ApiResponse({
+    status: 400,
+    description: 'provided id does not match the requested one',
+  })
+  @ApiResponse({
     status: 404,
     description: 'user with {id} not found',
   })
@@ -82,9 +100,21 @@ export class UsersController {
     description: 'User with requested email address already exists',
   })
   @ApiResponse({ status: 500, description: 'Internal server error.' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'identification number of the user',
+    type: String,
+  })
+  @ApiBody({
+    type: UpdateUserRequest,
+    description: 'Data to update the user with',
+  })
+  @ApiConsumes('multipart/form-data')
   @HttpCode(200)
   @UseInterceptors(FileInterceptor('file'))
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, UserPathGuard)
   async update(
     @UploadedFile(
       new ParseFilePipeBuilder()
@@ -99,9 +129,16 @@ export class UsersController {
         }),
     )
     file: Express.Multer.File,
+    @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
+    const userPayload = req.user;
+    if (userPayload.userId !== id) {
+      throw new BadRequestException(
+        `provided id does not match the requested one`,
+      );
+    }
     return await this.usersFacade.update(file, id, updateUserRequest);
   }
 }
