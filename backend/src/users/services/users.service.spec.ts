@@ -17,11 +17,12 @@ const mockS3Service = {
   createBucketIfNotExists: jest.fn().mockResolvedValue('new_bucket'),
   getFileUrl: jest.fn().mockResolvedValue('mocked_file_url'),
 };
+
 const mockUser: UserDto = {
   id: 'mockedId',
   name: 'John Doe',
   email: 'mockedEmail',
-  hotAddresses: null,
+  hotAddresses: [],
   description: 'mockedDescription',
   profilePhoto: 'mockedProfilePhoto',
   status: UserStatusEnum.ACTIVE,
@@ -139,7 +140,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddresses: ['updated_hot_address', 'updated_2'],
+      hotAddress: 'updated_hot_address',
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id: string = 'mockedId';
@@ -148,7 +149,7 @@ describe('UsersService', () => {
     // Verifying the result
     expect(result.name).toBe(updateUserDto.name);
     expect(result.description).toBe(updateUserDto.description);
-    expect(result.hotAddresses).toEqual(updateUserDto.hotAddresses);
+    expect(result.hotAddresses).toEqual([updateUserDto.hotAddress]);
     expect(result.profilePhoto).toBe('mocked_file_url');
     expect(mockUserRepository.save).toHaveBeenCalled();
   });
@@ -157,7 +158,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddresses: ['updated_hot_address', 'updated_2'],
+      hotAddress: 'updated_hot_address',
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id = 'mock_Id';
@@ -175,7 +176,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddresses: ['updated_hot_address', 'updated_2'],
+      hotAddress: 'updated_hot_address',
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id = 'mocked_id';

@@ -40,4 +40,7 @@ export class UsersFacade {
     const user = await this.usersService.update(file, id, updateUserDto);
     return UserMapper.mapUserDtoToResponse(user);
   }
+  async deleteFile(id: string): Promise<string> {
+    return await this.usersService.deleteFile(id);
+  }
 }

@@ -4,7 +4,8 @@ import {
   MaxLength,
   Matches,
   IsString,
-  IsArray,
+  ValidateIf,
+  IsOptional,
 } from 'class-validator';
 
 export class UpdateUserRequest {
@@ -17,8 +18,10 @@ export class UpdateUserRequest {
   @Matches(/^[a-zA-Z0-9_.\s]+$/, {
     message: `Name can't contain special characters & symbols`,
   })
+  @ValidateIf((e) => e.name !== '')
   @IsString()
-  name: string;
+  @IsOptional()
+  name?: string;
 
   @ApiProperty({
     description: 'Description of the user',
@@ -28,12 +31,22 @@ export class UpdateUserRequest {
   @MinLength(2, { message: `Minimum character length is 2` })
   @MaxLength(500, { message: `Maximum character length is 500` })
   //allowed every character
+  @ValidateIf((e) => e.description !== '')
   @IsString()
-  description: string;
+  @IsOptional()
+  description?: string;
+
   @ApiProperty({
-    description: 'Array of hot address of the user',
-    example: '[1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa,a7a7gsgya6st6aggdy6sgs6]',
+    description: 'Hot address of the user',
+    example: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
   })
-  @IsArray()
-  hotAddresses: string[];
+  @MinLength(2, { message: `Minimum character length is 2` })
+  @MaxLength(255, { message: `Maximum character length is 255` })
+  //needs check
+  @Matches(/^[a-zA-Z0-9_.:\-\/]+$/, {
+    message: `Hot address can contain :, -, /`,
+  })
+  @IsString()
+  @IsOptional()
+  hotAddress?: string;
 }

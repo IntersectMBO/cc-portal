@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "997b7a36-916b-4c3b-89e7-cf907b43fd4d",
+		"_postman_id": "aec582c9-802c-4f73-b9ec-5efde00f5781",
 		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25756447"
+		"_exporter_id": "20133713"
 	},
 	"item": [
 		{
@@ -68,41 +68,42 @@
 				{
 					"name": "Update User",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5YWI0NWY0MS1mMTk5LTQzODYtYmRhMC00MThiMDBhZGQ3YTUiLCJlbWFpbCI6ImFuZGplbGFsYXVzQGdtYWlsLmNvbSIsInJvbGUiOiJzdXBlcl9hZG1pbiIsInBlcm1pc3Npb25zIjpbIm1hbmFnZV9jY19tZW1iZXJzIiwiYWRkX2NvbnN0aXR1dGlvbl92ZXJzaW9uIiwiYWRkX25ld19hZG1pbiJdLCJpYXQiOjE3MTI2MTU3MjQsImV4cCI6MTcxMjYxNjAyNH0.t0bBqeIGg-H5nWkqdnx9Z6rn1bdbtFgoOi7Pauu0WVU",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{accessToken}}",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "file",
-									"type": "file",
-									"src": "/Users/cc-portal/backend/postman/1712183767053-valentines-day.png"
-								},
-								{
 									"key": "name",
-									"value": "nijesofja",
+									"value": "",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "Hey I am Andjela",
+									"value": "",
 									"type": "text"
 								},
 								{
-									"key": "hotAddresses",
-									"value": "12hshui343hje3jkj4h34",
-									"type": "text"
+									"key": "file",
+									"type": "file",
+									"src": "/Users/cc-portal/backend/postman/1712183767053-valentines-day.png",
+									"disabled": true
 								},
 								{
-									"key": "hotAddresses",
-									"value": "12hshui343hj",
-									"type": "text"
+									"key": "hot_address",
+									"value": "bla",
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
@@ -121,33 +122,29 @@
 					"response": []
 				},
 				{
-					"name": "Toggle Whitelist",
+					"name": "Remove image from user",
 					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{accessToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"whitelisted\": true\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5YWI0NWY0MS1mMTk5LTQzODYtYmRhMC00MThiMDBhZGQ3YTUiLCJlbWFpbCI6ImFuZGplbGFsYXVzQGdtYWlsLmNvbSIsInJvbGUiOiJzdXBlcl9hZG1pbiIsInBlcm1pc3Npb25zIjpbIm1hbmFnZV9jY19tZW1iZXJzIiwiYWRkX2NvbnN0aXR1dGlvbl92ZXJzaW9uIiwiYWRkX25ld19hZG1pbiJdLCJpYXQiOjE3MTI2MTU3MjQsImV4cCI6MTcxMjYxNjAyNH0.t0bBqeIGg-H5nWkqdnx9Z6rn1bdbtFgoOi7Pauu0WVU",
+									"type": "string"
 								}
-							}
+							]
 						},
+						"method": "PATCH",
+						"header": [],
 						"url": {
-							"raw": "{{base-url}}/api/users/id",
+							"raw": "{{base-url}}/api/users/remove-image/id",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
+								"remove-image",
 								"id"
 							]
 						}

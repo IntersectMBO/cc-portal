@@ -175,28 +175,25 @@ export class UsersService {
     user.name = updateUserDto.name;
     user.description = updateUserDto.description;
     try {
-      await this.checkUniqueUserHotAddress(updateUserDto.hotAddresses);
+      if (updateUserDto.hotAddress) {
+        await this.checkUniqueUserHotAddress(updateUserDto.hotAddress);
+      }
     } catch (error) {
       this.logger.error(`error when updating the user  : ${error.message}`);
       throw error;
     }
-    if (!user.hotAddresses || user.hotAddresses.length === 0) {
-      user.hotAddresses = updateUserDto.hotAddresses.map((address) => {
-        const hotAddress = new HotAddress();
-        hotAddress.address = address;
-        return hotAddress;
-      });
-    } else {
-      //If user already had addresses we add new ones
-      updateUserDto.hotAddresses.forEach((address: string) => {
-        const hotAddress = new HotAddress();
-        hotAddress.address = address;
-        user.hotAddresses.push(hotAddress);
-      });
+    if (updateUserDto.hotAddress) {
+      const hotAddress = new HotAddress();
+      hotAddress.address = updateUserDto.hotAddress;
+      console.log(user.hotAddresses);
+      console.log(user);
+      user.hotAddresses.push(hotAddress);
     }
     await this.s3Service.createBucketIfNotExists();
-    const fileName = await this.s3Service.uploadFileMinio(file);
-    user.profilePhoto = await this.s3Service.getFileUrl(fileName);
+    if (file) {
+      const fileName = await this.s3Service.uploadFileMinio(file);
+      user.profilePhoto = await this.s3Service.getFileUrl(fileName);
+    }
     let updatedUser: User;
     try {
       updatedUser = await this.entityManager.transaction(() => {
@@ -209,6 +206,40 @@ export class UsersService {
     }
 
     return UserMapper.userToDto(updatedUser);
+  }
+  async deleteFile(id: string): Promise<string> {
+    const user = await this.findById(id);
+    if (!user) {
+      throw new NotFoundException(`user with id ${id} not found`);
+    }
+    if (user.profilePhoto) {
+      const fileName = this.extractFileNameFromUrl(user.profilePhoto);
+      console.log(fileName);
+      try {
+        await this.s3Service.deleteFile(fileName);
+        user.profilePhoto = null;
+        await this.entityManager.transaction(() => {
+          const userData = this.userRepository.create(user);
+          return this.userRepository.save(userData);
+        });
+        return 'Image successfully removed';
+      } catch (e) {
+        this.logger.error(
+          `error when removing image from the user  : ${e.message}`,
+        );
+        throw new InternalServerErrorException('removing picture failed');
+      }
+    } else {
+      throw new InternalServerErrorException(
+        'User doesnt have profile picture',
+      );
+    }
+  }
+  extractFileNameFromUrl(url) {
+    const parts = url.split('/');
+    const fileNameWithQueryParams = parts[parts.length - 1];
+    const fileName = decodeURIComponent(fileNameWithQueryParams.split('?')[0]);
+    return fileName;
   }
 
   /*async toggleWhitelist(id: string, whitelisted: boolean): Promise<UserDto> {
@@ -228,16 +259,14 @@ export class UsersService {
     await this.userRepository.save(user);
     return UserMapper.userToDto(user);
   }
-  async checkUniqueUserHotAddress(hotAddresses: string[]) {
-    for (const add of hotAddresses) {
-      const existingUserHotAddress = await this.hotAddressRepository.findOne({
-        where: {
-          address: add,
-        },
-      });
-      if (existingUserHotAddress) {
-        throw new ConflictException(`Address name ${add} already exists`);
-      }
+  async checkUniqueUserHotAddress(hotAddress: string) {
+    const existingUserHotAddress = await this.hotAddressRepository.findOne({
+      where: {
+        address: hotAddress,
+      },
+    });
+    if (existingUserHotAddress) {
+      throw new ConflictException(`Address ${hotAddress} already exists`);
     }
   }
   async getAllRoles(): Promise<RoleDto[]> {

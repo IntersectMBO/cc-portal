@@ -125,6 +125,7 @@ export class UsersController {
           maxSize: 3145728,
         })
         .build({
+          fileIsRequired: false,
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
         }),
     )
@@ -140,5 +141,27 @@ export class UsersController {
       );
     }
     return await this.usersFacade.update(file, id, updateUserRequest);
+  }
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Delete image of user' })
+  @ApiResponse({ status: 200, description: 'Image successfully removed' })
+  @ApiResponse({ status: 404, description: 'User with id not found' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'identifactor of user',
+  })
+  @Patch('remove-image/:id')
+  @UseGuards(JwtAuthGuard, UserPathGuard)
+  async remove(@Request() req: any, @Param('id', ParseUUIDPipe) id: string) {
+    const userPayload = req.user;
+    if (userPayload.userId !== id) {
+      throw new BadRequestException(
+        `provided id does not match the requested one`,
+      );
+    }
+
+    const user = await this.usersFacade.deleteFile(id);
+    return user;
   }
 }
