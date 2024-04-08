@@ -30,6 +30,26 @@
         }
       }
     },
+    "signUp": {
+      "headline": "Sign Up",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget. ",
+      "fields": {
+        "username": {
+          "label": "Username",
+          "placeholder": "Text here"
+        },
+        "hotAddress": {
+          "label": "Hot address",
+          "placeholder": "Text here"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Enter a description",
+          "helpfulText": "This is a hint text to help user."
+        },
+        "upload": "Upload profile photo"
+      }
+    },
     "deleteRole": {
       "headline": "Delete role",
       "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
