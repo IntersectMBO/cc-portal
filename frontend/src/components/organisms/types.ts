@@ -1,5 +1,4 @@
 import { CompileMDXResult } from "next-mdx-remote/rsc";
-import { UserStatus } from "@atoms";
 
 export interface ConstitutionProps {
   constitution: CompileMDXResult;
@@ -24,11 +23,4 @@ export type UserRole = "admin" | "user" | null;
 
 export interface HeroActionsProps {
   role: UserRole;
-}
-
-export interface UsersListProps {
-  name: string;
-  email: string;
-  roles: string[];
-  status: UserStatus;
 }
