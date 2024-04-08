@@ -10,6 +10,4 @@ export const IMAGES = {
   pastelDeleteRole: "/images/PastelDeleteRole.png",
   pastelAddMember: "/images/PastelAddMember.png",
   pastelSignOut: "/images/PastelSignOut.png",
-  avatar: "/images/Avatar.png",
-  mail: "/images/Mail.png",
 };
