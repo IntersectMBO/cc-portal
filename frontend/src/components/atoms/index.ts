@@ -15,5 +15,6 @@ export * from "./TextArea";
 export * from "./MultipleSelect";
 export * from "./UploadFileButton";
 export * from "./StatusPill";
+export * from "./Chip";
 
 export * from "./types";
