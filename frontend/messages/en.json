@@ -56,6 +56,11 @@
           "placeholder": "Permissions"
         }
       }
+    },
+    "uploadConstitution": {
+      "headline": "Upload new version of Constitution",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "upload": "Upload Constitution"
     }
   }
 }
