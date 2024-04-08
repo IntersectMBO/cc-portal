@@ -19,7 +19,7 @@ export const UploadConstitution = () => {
   return (
     <ModalWrapper
       dataTestId="upload-constitution-modal"
-      icon={IMAGES.pastelAddMember}
+      icon={IMAGES.pastelSignOut}
     >
       <ModalHeader>{t("uploadConstitution.headline")}</ModalHeader>
       <ModalContents>

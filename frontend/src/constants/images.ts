@@ -9,4 +9,5 @@ export const IMAGES = {
   pastelSignIn: "/images/PastelSignIn.png",
   pastelDeleteRole: "/images/PastelDeleteRole.png",
   pastelAddMember: "/images/PastelAddMember.png",
+  pastelSignOut: "/images/PastelSignOut.png",
 };
