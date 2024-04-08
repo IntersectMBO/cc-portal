@@ -139,6 +139,4 @@ export const customPalette = {
   specialCyanBorder: "#77BFD1",
   textBlack: "#242232",
   textGray: "#525252",
-  arcticWhite: "#FBFBFF",
-  inputPlaceholder: "#a6a6a6",
 };
