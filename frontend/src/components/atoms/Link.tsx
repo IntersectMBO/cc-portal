@@ -14,7 +14,7 @@ type LinkProps = {
 };
 
 export const Link: FC<LinkProps> = (props) => {
-  const { dataTestId, label, href, size = "small" } = props;
+  const { dataTestId, label, href, size = "small", onClick } = props;
   const currentPath = usePathname();
   const isActive = currentPath.includes(href);
 

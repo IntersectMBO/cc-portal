@@ -14,13 +14,3 @@ export interface ConstitutionPageProps {
   content: string[];
   key: number;
 }
-
-export interface HeroProps {
-  children: React.ReactElement;
-}
-
-export type UserRole = "admin" | "user" | null;
-
-export interface HeroActionsProps {
-  role: UserRole;
-}

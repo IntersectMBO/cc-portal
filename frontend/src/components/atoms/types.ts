@@ -31,39 +31,3 @@ export type TypographyProps = Pick<
     | "body2"
     | "caption";
 };
-
-export type InputProps = InputBaseProps & {
-  dataTestId?: string;
-  errorMessage?: string;
-};
-
-export type SpacerProps = {
-  x?: number;
-  y?: number;
-};
-
-export type CheckboxProps = Omit<MUICheckboxProps, "onChange" | "value"> & {
-  dataTestId?: string;
-  errorMessage?: string;
-  onChange: (newValue: ChangeEvent<Element> | boolean) => void;
-  value: boolean;
-};
-
-export type FormErrorMessageProps = {
-  errorMessage?: string;
-  errorStyles?: MUITypographyProps;
-};
-
-export type FormHelpfulTextProps = {
-  helpfulText?: string;
-  helpfulTextStyle?: MUITypographyProps;
-};
-
-export type TextAreaProps = TextareaAutosizeProps & {
-  errorMessage?: string;
-};
-
-export type InfoTextProps = {
-  label: string;
-  sx?: SxProps;
-};

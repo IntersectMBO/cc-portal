@@ -1,16 +1,16 @@
 import React from "react";
 
-import { AppContextProvider } from "@context";
+import { locales } from "@/constants";
+import { AppContextProvider } from "@/context/context";
 import { NextIntlClientProvider } from "next-intl";
 import { unstable_setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
-import { Footer, TopNav } from "@organisms";
-import { poppins, locales } from "@consts";
+import { Footer, TopNav } from "@/components/organisms";
+import { poppins } from "@/constants/font";
 import { CssBaseline } from "@mui/material";
-import { RenderModal } from "@atoms";
 
 export function generateStaticParams() {
   // Generate static params for each locale, used in static generation methods.
@@ -54,7 +54,6 @@ async function RootLayout({ children, params: { locale } }) {
               <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <TopNav />
-                <RenderModal />
                 {children}
                 <Footer />
               </ThemeProvider>
