@@ -175,19 +175,19 @@ export class UsersService {
     user.name = updateUserDto.name;
     user.description = updateUserDto.description;
     try {
-      if (updateUserDto.hotAddress) {
-        await this.checkUniqueUserHotAddress(updateUserDto.hotAddress);
+      if (updateUserDto.hotAddresses) {
+        await this.checkUniqueUserHotAddress(updateUserDto.hotAddresses);
       }
     } catch (error) {
       this.logger.error(`error when updating the user  : ${error.message}`);
       throw error;
     }
-    if (updateUserDto.hotAddress) {
-      const hotAddress = new HotAddress();
-      hotAddress.address = updateUserDto.hotAddress;
-      console.log(user.hotAddresses);
-      console.log(user);
-      user.hotAddresses.push(hotAddress);
+    if (updateUserDto.hotAddresses) {
+      updateUserDto.hotAddresses.forEach((address: string) => {
+        const hotAddress = new HotAddress();
+        hotAddress.address = address;
+        user.hotAddresses.push(hotAddress);
+      });
     }
     await this.s3Service.createBucketIfNotExists();
     if (file) {
@@ -214,7 +214,6 @@ export class UsersService {
     }
     if (user.profilePhoto) {
       const fileName = this.extractFileNameFromUrl(user.profilePhoto);
-      console.log(fileName);
       try {
         await this.s3Service.deleteFile(fileName);
         user.profilePhoto = null;
@@ -259,14 +258,16 @@ export class UsersService {
     await this.userRepository.save(user);
     return UserMapper.userToDto(user);
   }
-  async checkUniqueUserHotAddress(hotAddress: string) {
-    const existingUserHotAddress = await this.hotAddressRepository.findOne({
-      where: {
-        address: hotAddress,
-      },
-    });
-    if (existingUserHotAddress) {
-      throw new ConflictException(`Address ${hotAddress} already exists`);
+  async checkUniqueUserHotAddress(hotAddresses: string[]) {
+    for (const add of hotAddresses) {
+      const existingUserHotAddress = await this.hotAddressRepository.findOne({
+        where: {
+          address: add,
+        },
+      });
+      if (existingUserHotAddress) {
+        throw new ConflictException(`Address ${add} already exists`);
+      }
     }
   }
   async getAllRoles(): Promise<RoleDto[]> {

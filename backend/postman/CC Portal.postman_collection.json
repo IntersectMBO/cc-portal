@@ -85,7 +85,7 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "",
+									"value": "Andjela",
 									"type": "text"
 								},
 								{
@@ -100,10 +100,14 @@
 									"disabled": true
 								},
 								{
-									"key": "hot_address",
-									"value": "bla",
-									"type": "text",
-									"disabled": true
+									"key": "hot_addresses",
+									"value": "andjelahot",
+									"type": "text"
+								},
+								{
+									"key": "hot_addresses",
+									"value": "andjelahot2",
+									"type": "text"
 								}
 							]
 						},

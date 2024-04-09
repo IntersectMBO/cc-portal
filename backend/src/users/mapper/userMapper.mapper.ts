@@ -64,7 +64,7 @@ export class UserMapper {
     const updateUserDto = new UpdateUserDto();
     updateUserDto.name = updateUserRequest.name;
     updateUserDto.description = updateUserRequest.description;
-    updateUserDto.hotAddress = updateUserRequest.hotAddress;
+    updateUserDto.hotAddresses = updateUserRequest.hotAddresses;
     return updateUserDto;
   }
 
