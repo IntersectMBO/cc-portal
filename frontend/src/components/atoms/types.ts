@@ -67,3 +67,5 @@ export type InfoTextProps = {
   label: string;
   sx?: SxProps;
 };
+
+export type UserStatus = "pending" | "active" | "inactive";
