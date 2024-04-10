@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class InitialMigration1712156097579 implements MigrationInterface {
-    name = 'InitialMigration1712156097579'
+export class InitialMigration1712352863280 implements MigrationInterface {
+    name = 'InitialMigration1712352863280'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TYPE "public"."permissions_code_enum" AS ENUM('manage_cc_members', 'add_constitution_version', 'add_new_admin')`);
@@ -11,6 +11,7 @@ export class InitialMigration1712156097579 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "users" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(50), "email" character varying(80) NOT NULL, "description" character varying(500), "profile_photo" character varying, "status" "public"."users_status_enum", "role_id" uuid, CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TYPE "public"."roles_code_enum" AS ENUM('super_admin', 'admin', 'user')`);
         await queryRunner.query(`CREATE TABLE "roles" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "code" "public"."roles_code_enum" NOT NULL, CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "ipfs" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "cid" character varying NOT NULL, "content_type" character varying NOT NULL, CONSTRAINT "PK_af553336f95ba7f14152e2048ee" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "user_permissions" ("user_id" uuid NOT NULL, "permission_id" uuid NOT NULL, CONSTRAINT "PK_a537c48b1f80e8626a71cb56589" PRIMARY KEY ("user_id", "permission_id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_3495bd31f1862d02931e8e8d2e" ON "user_permissions" ("user_id") `);
         await queryRunner.query(`CREATE INDEX "IDX_8145f5fadacd311693c15e41f1" ON "user_permissions" ("permission_id") `);
@@ -38,6 +39,7 @@ export class InitialMigration1712156097579 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "public"."IDX_8145f5fadacd311693c15e41f1"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_3495bd31f1862d02931e8e8d2e"`);
         await queryRunner.query(`DROP TABLE "user_permissions"`);
+        await queryRunner.query(`DROP TABLE "ipfs"`);
         await queryRunner.query(`DROP TABLE "roles"`);
         await queryRunner.query(`DROP TYPE "public"."roles_code_enum"`);
         await queryRunner.query(`DROP TABLE "users"`);
