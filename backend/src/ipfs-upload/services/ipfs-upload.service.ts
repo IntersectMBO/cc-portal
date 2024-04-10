@@ -2,16 +2,29 @@ import { Injectable } from '@nestjs/common';
 import { UnixFS } from '@helia/unixfs';
 import { TextDecoder } from 'util';
 import { HeliaLibp2p } from 'helia';
-// import { HeliaDto } from '../dto/add-file-to-helia.dto';
-import { CID } from 'multiformats/cid';
-import multibase = require('multibase');
+import { S3 } from '@aws-sdk/client-s3';
+import { ConfigService } from '@nestjs/config';
+import { importDynamic } from '../../util/import.dynamic';
 
-// const dynamic = new Function('modulePath', 'return import(modulePath)');
+// import { HeliaDto } from '../dto/add-file-to-helia.dto';
+
 @Injectable()
 export class IpfsUploadService {
-  constructor(private readonly textDecoder: TextDecoder) {}
   private helia: HeliaLibp2p;
   private fs: UnixFS;
+  private s3: S3;
+  constructor(
+    private readonly textDecoder: TextDecoder,
+    private readonly configService: ConfigService,
+  ) {
+    this.s3 = new S3({
+      region: this.configService.getOrThrow('MINIO_REGION'),
+      credentials: {
+        accessKeyId: this.configService.getOrThrow('MINIO_ACCESS_KEY'),
+        secretAccessKey: this.configService.getOrThrow('MINIO_SECRET_KEY'),
+      },
+    });
+  }
 
   async addFileToHeliaNode(fileBuffer: Buffer): Promise<void> {
     await this.createHeliaNode();
@@ -22,7 +35,7 @@ export class IpfsUploadService {
   }
 
   async getFileContentFromCID(dto: string): Promise<string> {
-    const { CID } = await eval('import("multiformats/cid")');
+    const { CID } = await importDynamic('multiformats/cid');
 
     await this.createHeliaNode();
     let text: string = '';
@@ -36,14 +49,10 @@ export class IpfsUploadService {
 
   private async createHeliaNode(): Promise<HeliaLibp2p> {
     if (this.helia == null) {
-      const { FsBlockstore } = await eval('import("blockstore-fs")');
-      const { MemoryDatastore } = await eval('import("datastore-core")');
-      const { createHelia } = await eval('import("helia")');
-      const blockStore = new FsBlockstore('../blockstore');
-      const dataStore = new MemoryDatastore();
+      const { createHelia } = await importDynamic('helia');
       this.helia = await createHelia({
-        blockstore: blockStore,
-        dataStore: dataStore,
+        blockstore: this.createBlockstore(),
+        dataStore: this.createDatastore(),
       });
       console.log(
         'Helia is running, PeerId: ' + this.helia.libp2p.peerId.toString(),
@@ -52,12 +61,32 @@ export class IpfsUploadService {
     }
     return this.helia;
   }
+
   private async createUnixFs(): Promise<UnixFS> {
-    const { unixfs } = await eval('import("@helia/unixfs")');
+    const { unixfs } = await importDynamic('@helia/unixfs');
     this.fs = unixfs(this.helia);
     console.log('UnixFS is set up on top of Helia node ');
     return this.fs;
   }
+
+  async createDatastore() {
+    const { S3Datastore } = await importDynamic('datastore-s3');
+    const datastore = new S3Datastore(
+      this.s3,
+      this.configService.getOrThrow('MINIO_BUCKET'),
+    );
+    return datastore;
+  }
+
+  async createBlockstore() {
+    const { S3Blockstore } = await importDynamic('blockstore-s3');
+    const blockstore = new S3Blockstore(
+      this.s3,
+      this.configService.getOrThrow('MINIO_BUCKET'),
+    );
+    return blockstore;
+  }
+
   async onApplicationShutdown(): Promise<void> {
     if (this.helia != null) {
       await this.helia.stop();

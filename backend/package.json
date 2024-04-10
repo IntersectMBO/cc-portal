@@ -25,6 +25,7 @@
     "typeorm:revert-migrations": "npm run typeorm migration:revert -- -d ./typeORM.config.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.552.0",
     "@helia/unixfs": "^3.0.2",
     "@nestjs-modules/mailer": "^1.11.2",
     "@nestjs/class-transformer": "^0.4.0",
@@ -40,9 +41,11 @@
     "@nestjs/typeorm": "^10.0.2",
     "@types/humps": "^2.0.6",
     "@types/multer": "^1.4.11",
+    "blockstore-s3": "^1.0.15",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.6",
+    "datastore-s3": "^11.1.11",
     "handlebars": "^4.7.8",
     "helia": "^4.1.0",
     "humps": "^2.0.1",
