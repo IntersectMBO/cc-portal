@@ -77,7 +77,6 @@ export class UsersController {
 
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a user' })
-  @ApiBody({ type: UpdateUserRequest })
   @ApiResponse({
     status: 200,
     description: 'User updated successfully.',
@@ -107,8 +106,19 @@ export class UsersController {
     type: String,
   })
   @ApiBody({
-    type: UpdateUserRequest,
-    description: 'Data to update the user with',
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        description: { type: 'string' },
+        hotAddresses: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+      },
+    },
   })
   @ApiConsumes('multipart/form-data')
   @HttpCode(200)
