@@ -4,7 +4,9 @@
     "hero": {
       "headline": "CoCreate future of CC Portal by Intersect Cardano",
       "description": "Lorem ipsum dolor sit amet consectetur. Facilisi neque felis egestas magna tempus.Lorem ipsum dolor sit amet consectetur. Facilisi neque felis egestas magna tempus.",
-      "button": "See Constitution"
+      "seeConstitution": "See Constitution",
+      "signIn": "Sign In",
+      "constitutionalCommitteePortal": "Constitutional Committee Portal"
     }
   },
   "Constitution": {
@@ -12,5 +14,81 @@
   },
   "Footer": {
     "copyright": "© 2024 Intersect MBO"
+  },
+  "Modals": {
+    "common": {
+      "confirm": "Confirm",
+      "close": "Close"
+    },
+    "signIn": {
+      "headline": "Sign In",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "fields": {
+        "email": {
+          "label": "Email address",
+          "placeholder": "Text here"
+        }
+      }
+    },
+    "signUp": {
+      "headline": "Sign Up",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "fields": {
+        "username": {
+          "label": "Username",
+          "placeholder": "Text here"
+        },
+        "hotAddress": {
+          "label": "Hot address",
+          "placeholder": "Text here"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Enter a description",
+          "helpfulText": "This is a hint text to help user."
+        },
+        "upload": "Upload profile photo"
+      }
+    },
+    "signOut": {
+      "headline": "Sign Out",
+      "description": "Are you sure you want to Sign out?"
+    },
+    "deleteRole": {
+      "headline": "Delete role",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "fields": {
+        "delete": {
+          "label": "Write delete",
+          "placeholder": "Write delete"
+        }
+      }
+    },
+    "addMember": {
+      "headline": "Add member",
+      "fields": {
+        "email": {
+          "label": "Email address",
+          "placeholder": "Email address"
+        },
+        "role": {
+          "label": "Role",
+          "placeholder": "Role"
+        },
+        "permissions": {
+          "label": "Permissions",
+          "placeholder": "Permissions"
+        }
+      }
+    },
+    "uploadConstitution": {
+      "headline": "Upload new version of Constitution",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "upload": "Upload Constitution"
+    }
+  },
+  "AdminDashboard": {
+    "role": "Role",
+    "status": "Status"
   }
 }

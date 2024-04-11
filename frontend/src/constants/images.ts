@@ -4,4 +4,12 @@ export const IMAGES = {
   menuIcon: "/images/MenuIcon.png",
   arrowLeft: "/images/ArrowLeft.png",
   arrowRight: "/images/ArrowRight.png",
+  login: "/images/Login.png",
+  bookOpen: "/images/BookOpen.png",
+  pastelSignIn: "/images/PastelSignIn.png",
+  pastelDeleteRole: "/images/PastelDeleteRole.png",
+  pastelAddMember: "/images/PastelAddMember.png",
+  pastelSignOut: "/images/PastelSignOut.png",
+  avatar: "/images/Avatar.png",
+  mail: "/images/Mail.png",
 };
