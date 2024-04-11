@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { UserStatusEnum } from 'src/users/entities/user.entity';
+import { UserStatusEnum } from '../../entities/user.entity';
 import { Timestamp } from 'typeorm';
 
 export class UserResponse {
