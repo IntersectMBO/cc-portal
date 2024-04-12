@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -6,13 +7,16 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entities/user.entity';
+import { User, UserStatusEnum } from '../entities/user.entity';
 import { EntityManager, Repository } from 'typeorm';
-import { Role, RoleEnum } from '../entities/role.entity';
+import { Role } from '../entities/role.entity';
 import { UserDto } from '../dto/user.dto';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { Permission } from '../entities/permission.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { RoleDto } from '../dto/role.dto';
+import { RoleMapper } from '../mapper/roleMapper.mapper';
 
 @Injectable()
 export class UsersService {
@@ -22,18 +26,20 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Role)
-    private readonly roleRepoository: Repository<Role>,
+    private readonly roleRepository: Repository<Role>,
+    @InjectRepository(Permission)
+    private readonly permissionRepository: Repository<Permission>,
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
     const userData: Partial<User> = {
-      email: createUserDto.email,
+      email: createUserDto.destination,
     };
     const existingUser = await this.userRepository.findOne({
       where: {
-        email: createUserDto.email,
+        email: createUserDto.destination,
       },
     });
     if (existingUser) {
@@ -41,17 +47,21 @@ export class UsersService {
         `User with email address ${existingUser.email} already exists`,
       );
     }
-    const userRole = await this.roleRepoository.findOne({
-      where: {
-        code: RoleEnum.USER,
-      },
-    });
+
+    const userRole = await this.findRoleByCode(createUserDto.role);
+    const userPermissions = await this.getUserPermissions(
+      createUserDto.permissions,
+    );
+
     //Store user and related entities and return User Entity
     let returnedUser: User;
     try {
       returnedUser = await this.entityManager.transaction(() => {
         const user = this.userRepository.create(userData);
-        user.roles = [userRole];
+        user.role = userRole;
+        user.status = UserStatusEnum.PENDING;
+        user.permissions = userPermissions;
+
         return this.userRepository.save(user);
       });
     } catch (e) {
@@ -60,6 +70,42 @@ export class UsersService {
     }
 
     return UserMapper.userToDto(returnedUser);
+  }
+
+  private async findRoleByCode(roleCode: string): Promise<Role> {
+    const role = await this.roleRepository.findOne({
+      where: {
+        code: roleCode,
+      },
+    });
+
+    if (!role) {
+      throw new BadRequestException(`Role with code ${roleCode} not found`);
+    }
+
+    return role;
+  }
+
+  private async getUserPermissions(
+    permissionNames: string[],
+  ): Promise<Permission[]> {
+    const userPermissions: Permission[] = [];
+    for (const permissionName of permissionNames) {
+      const permission = await this.permissionRepository.findOne({
+        where: {
+          code: permissionName,
+        },
+      });
+
+      if (!permission) {
+        throw new BadRequestException(
+          `Permission with name ${permissionName} not found`,
+        );
+      }
+
+      userPermissions.push(permission);
+    }
+    return userPermissions;
   }
 
   async findByEmail(email: string): Promise<UserDto> {
@@ -122,11 +168,27 @@ export class UsersService {
     return UserMapper.userToDto(updatedUser);
   }
 
-  async toggleWhitelist(id: string, whitelisted: boolean): Promise<UserDto> {
+  /*async toggleWhitelist(id: string, whitelisted: boolean): Promise<UserDto> {
     const user = await this.findById(id);
     user.whitelisted = whitelisted;
     await this.userRepository.save(user);
 
     return UserMapper.userToDto(user);
+  }*/
+
+  async updateUserStatus(
+    id: string,
+    userStatus: UserStatusEnum,
+  ): Promise<UserDto> {
+    const user = await this.findById(id);
+    user.status = userStatus;
+    await this.userRepository.save(user);
+    return UserMapper.userToDto(user);
+  }
+
+  async getAllRoles(): Promise<RoleDto[]> {
+    const roles = await this.roleRepository.find();
+    const results: RoleDto[] = roles.map((role) => RoleMapper.roleToDto(role));
+    return results;
   }
 }

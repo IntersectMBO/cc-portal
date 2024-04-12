@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UsersService } from '../services/users.service';
-import { CreateUserRequest } from '../api/request/create-user.request';
 import { UserResponse } from '../api/response/user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
+import { RoleResponse } from '../api/response/role.response';
+import { RoleMapper } from '../mapper/roleMapper.mapper';
 @Injectable()
 export class UsersFacade {
   constructor(private readonly usersService: UsersService) {}
@@ -16,29 +17,23 @@ export class UsersFacade {
     return results;
   }
 
-  async findOne(id: string): Promise<UserResponse> {
-    const user = await this.usersService.findOne(id);
-    return UserMapper.mapUserDtoToResponse(user);
+  async getAllRoles(): Promise<RoleResponse[]> {
+    const roles = await this.usersService.getAllRoles();
+    const results: RoleResponse[] = roles.map((role) =>
+      RoleMapper.mapRoleDtoToResponse(role),
+    );
+    return results;
   }
 
-  async create(createUserRequest: CreateUserRequest): Promise<UserResponse> {
-    const createUserDto =
-      UserMapper.mapCreateUserRequestToDto(createUserRequest);
-    const user = await this.usersService.create(createUserDto);
+  async findOne(id: string): Promise<UserResponse> {
+    const user = await this.usersService.findOne(id);
     return UserMapper.mapUserDtoToResponse(user);
   }
 
   async update(id: string, updateUserRequest: UpdateUserRequest) {
     const updateUserDto =
       UserMapper.mapUpdateUserRequestToDto(updateUserRequest);
-    return this.usersService.update(id, updateUserDto);
-  }
-
-  async toggleWhitelist(
-    id: string,
-    whitelisted: boolean,
-  ): Promise<UserResponse> {
-    const userDto = await this.usersService.toggleWhitelist(id, whitelisted);
-    return UserMapper.mapUserDtoToResponse(userDto);
+    const user = await this.usersService.update(id, updateUserDto);
+    return UserMapper.mapUserDtoToResponse(user);
   }
 }

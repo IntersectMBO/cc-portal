@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, MaxLength } from 'class-validator';
+import { IsArray, IsEmail, IsEnum, MaxLength } from 'class-validator';
+import { PermissionEnum } from 'src/users/enums/permission.enum';
 
 export class CreateUserRequest {
   @ApiProperty({
@@ -8,5 +9,13 @@ export class CreateUserRequest {
   })
   @MaxLength(80, { message: `Maximum character length is 80` })
   @IsEmail()
-  email: string;
+  destination: string;
+
+  @ApiProperty({
+    description: 'List of permissions of the user',
+    example: ['add_constitution_version'],
+  })
+  @IsArray()
+  @IsEnum(PermissionEnum, { each: true })
+  permissions?: string[] = [];
 }

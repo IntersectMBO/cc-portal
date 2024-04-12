@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
       useFactory: async (configService: ConfigService) => ({
         transport: {
           host: configService.getOrThrow('SENDGRID_HOST'),
-          port: 587,
+          port: configService.getOrThrow('SENDGRID_PORT'),
           auth: {
             user: configService.getOrThrow('SENDGRID_USER'),
             pass: configService.getOrThrow('SENDGRID_API_KEY'),
@@ -32,5 +32,6 @@ import { ConfigService } from '@nestjs/config';
     }),
   ],
   providers: [EmailService, ConfigService],
+  exports: [EmailService],
 })
 export class EmailModule {}
