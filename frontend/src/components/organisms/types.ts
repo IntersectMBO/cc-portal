@@ -1,19 +1,8 @@
-import { CompileMDXResult } from "next-mdx-remote/rsc";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { UserStatus } from "@atoms";
 
 export interface ConstitutionProps {
-  constitution: CompileMDXResult;
-}
-
-export interface PaginationButtonProps {
-  handleClick: () => void;
-  disabled: boolean;
-  type: "prev" | "next";
-}
-
-export interface ConstitutionPageProps {
-  content: string[];
-  key: number;
+  constitution: MDXRemoteSerializeResult;
 }
 
 export interface HeroProps {

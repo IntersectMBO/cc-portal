@@ -3,4 +3,5 @@ export const ICONS = {
   arrowDown: "/icons/ArrowDown.svg",
   upload: "/icons/Upload.svg",
   close: "/icons/Close.svg",
+  menuIcon: "/icons/MenuIcon.svg",
 };

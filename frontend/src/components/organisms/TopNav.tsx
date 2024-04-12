@@ -3,7 +3,7 @@ import React from "react";
 
 import { AppBar, Box, Grid } from "@mui/material";
 
-import { IMAGES, PATHS, NAV_ITEMS } from "@/constants";
+import { IMAGES, PATHS, NAV_ITEMS, customPalette } from "@consts";
 import { Link } from "@/components/atoms";
 import NextLink from "next/link";
 
@@ -12,7 +12,7 @@ export const TopNav = () => {
     <AppBar
       component="nav"
       sx={{
-        backgroundColor: "white",
+        backgroundColor: customPalette.arcticWhite,
         borderColor: "lightblue",
         borderRadius: 0,
         boxShadow: 0,
