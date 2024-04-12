@@ -41,6 +41,7 @@
     "cookie-parser": "^1.4.6",
     "handlebars": "^4.7.8",
     "humps": "^2.0.1",
+    "ioredis": "^5.3.2",
     "nest-winston": "^1.9.4",
     "nodemailer": "^6.9.13",
     "passport": "^0.7.0",
@@ -51,8 +52,7 @@
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
     "winston": "^3.11.0",
-    "winston-daily-rotate-file": "^5.0.0",
-    "ioredis": "^5.3.2"
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
