@@ -5,6 +5,7 @@ import { User } from './src/users/entities/user.entity';
 import { DataSource } from 'typeorm';
 import { Permission } from './src/users/entities/permission.entity';
 import { HotAddress } from './src/users/entities/hotaddress.entity';
+import { Ipfs } from './src/ipfs-upload/entities/ipfs.entity';
 
 config();
 
@@ -19,5 +20,5 @@ export default new DataSource({
   password: configService.getOrThrow('POSTGRES_PASSWORD'),
   migrations: ['migrations/**'],
   migrationsTableName: 'migrations',
-  entities: [User, Role, Permission, HotAddress],
+  entities: [User, Role, Permission, HotAddress, Ipfs],
 });

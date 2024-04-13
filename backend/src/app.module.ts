@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { RedisModule } from './redis/redis.module';
 import { ConstitutionModule } from './constitution/constitution.module';
+import { IpfsUploadModule } from './ipfs-upload/ipfs-upload.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConstitutionModule } from './constitution/constitution.module';
     EmailModule,
     RedisModule,
     ConstitutionModule,
+    IpfsUploadModule,
   ],
   controllers: [],
   providers: [],

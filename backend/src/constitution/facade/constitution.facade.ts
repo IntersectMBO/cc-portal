@@ -5,6 +5,8 @@ import { ConstitutionMapper } from '../mapper/constitution.mapper';
 import { CreateConstitutionRequest } from '../api/request/create-constitution.request';
 import { CreateConstitutionDto } from '../dto/create-constitution.dto';
 import { ConstitutionDto } from 'src/redis/dto/constitution.dto';
+import { Change, diffLines } from 'diff';
+import { CompareConstitutionsRequest } from '../api/request/compare-constitution.request';
 
 @Injectable()
 export class ConstitutionFacade {
@@ -47,5 +49,16 @@ export class ConstitutionFacade {
     dto: CreateConstitutionDto,
   ): Promise<ConstitutionDto> {
     throw new Error('Function not implemented.');
+  }
+  compareTwoConstitutionVersions(
+    request: CompareConstitutionsRequest,
+  ): Change[] {
+    const compareConstitutionDto =
+      ConstitutionMapper.compareConstitutionsRequestToDto(request);
+    return diffLines(
+      compareConstitutionDto.olderVersion,
+      compareConstitutionDto.currentVersion,
+      { newlineIsToken: true },
+    );
   }
 }
