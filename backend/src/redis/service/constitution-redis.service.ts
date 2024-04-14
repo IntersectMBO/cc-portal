@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-
 import { Constants } from '../util/constants';
 import { RedisRepository } from '../repository/redis.repo';
 import { ConstitutionDto } from '../dto/constitution.dto';

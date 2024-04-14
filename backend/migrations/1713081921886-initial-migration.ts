@@ -1,32 +1,32 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitialMigration1712989724402 implements MigrationInterface {
-  name = 'InitialMigration1712989724402';
+export class InitialMigration1713081921886 implements MigrationInterface {
+  name = 'InitialMigration1713081921886';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TYPE "permissions_code_enum" AS ENUM('manage_cc_members', 'add_constitution_version', 'add_new_admin')`,
+      `CREATE TYPE "public"."permissions_code_enum" AS ENUM('manage_cc_members', 'add_constitution_version', 'add_new_admin')`,
     );
     await queryRunner.query(
-      `CREATE TABLE "permissions" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "code" "permissions_code_enum" NOT NULL, CONSTRAINT "PK_920331560282b8bd21bb02290df" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "permissions" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "code" "public"."permissions_code_enum" NOT NULL, CONSTRAINT "PK_920331560282b8bd21bb02290df" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "hot_addresses" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "address" character varying NOT NULL, "user_id" uuid, CONSTRAINT "PK_12cb54736dc433f949461aad8dd" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TYPE "users_status_enum" AS ENUM('active', 'inactive', 'pending')`,
+      `CREATE TYPE "public"."users_status_enum" AS ENUM('active', 'inactive', 'pending')`,
     );
     await queryRunner.query(
-      `CREATE TABLE "users" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(50), "email" character varying(80) NOT NULL, "description" character varying(500), "profile_photo" character varying, "status" "users_status_enum", "role_id" uuid, CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "users" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(50), "email" character varying(80) NOT NULL, "description" character varying(500), "profile_photo" character varying, "status" "public"."users_status_enum", "role_id" uuid, CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TYPE "roles_code_enum" AS ENUM('super_admin', 'admin', 'user')`,
+      `CREATE TYPE "public"."roles_code_enum" AS ENUM('super_admin', 'admin', 'user')`,
     );
     await queryRunner.query(
-      `CREATE TABLE "roles" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "code" "roles_code_enum" NOT NULL, CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "roles" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "code" "public"."roles_code_enum" NOT NULL, CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "ipfs" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "cid" character varying NOT NULL, CONSTRAINT "PK_af553336f95ba7f14152e2048ee" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "ipfs" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "cid" character varying NOT NULL, "content_type" character varying NOT NULL, CONSTRAINT "PK_af553336f95ba7f14152e2048ee" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "user_permissions" ("user_id" uuid NOT NULL, "permission_id" uuid NOT NULL, CONSTRAINT "PK_a537c48b1f80e8626a71cb56589" PRIMARY KEY ("user_id", "permission_id"))`,
@@ -85,19 +85,27 @@ export class InitialMigration1712989724402 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "hot_addresses" DROP CONSTRAINT "FK_e125763f26d4736a5701f6c4d4b"`,
     );
-    await queryRunner.query(`DROP INDEX "IDX_17022daf3f885f7d35423e9971"`);
-    await queryRunner.query(`DROP INDEX "IDX_178199805b901ccd220ab7740e"`);
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_17022daf3f885f7d35423e9971"`,
+    );
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_178199805b901ccd220ab7740e"`,
+    );
     await queryRunner.query(`DROP TABLE "role_permissions"`);
-    await queryRunner.query(`DROP INDEX "IDX_8145f5fadacd311693c15e41f1"`);
-    await queryRunner.query(`DROP INDEX "IDX_3495bd31f1862d02931e8e8d2e"`);
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_8145f5fadacd311693c15e41f1"`,
+    );
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_3495bd31f1862d02931e8e8d2e"`,
+    );
     await queryRunner.query(`DROP TABLE "user_permissions"`);
     await queryRunner.query(`DROP TABLE "ipfs"`);
     await queryRunner.query(`DROP TABLE "roles"`);
-    await queryRunner.query(`DROP TYPE "roles_code_enum"`);
+    await queryRunner.query(`DROP TYPE "public"."roles_code_enum"`);
     await queryRunner.query(`DROP TABLE "users"`);
-    await queryRunner.query(`DROP TYPE "users_status_enum"`);
+    await queryRunner.query(`DROP TYPE "public"."users_status_enum"`);
     await queryRunner.query(`DROP TABLE "hot_addresses"`);
     await queryRunner.query(`DROP TABLE "permissions"`);
-    await queryRunner.query(`DROP TYPE "permissions_code_enum"`);
+    await queryRunner.query(`DROP TYPE "public"."permissions_code_enum"`);
   }
 }

@@ -9,6 +9,6 @@ export class Ipfs extends CommonEntity {
   @Column({ name: 'cid', type: 'varchar' })
   cid: string;
 
-  // @Column({ name: 'content_type', type: 'varchar' })
-  // contentType: string;
+  @Column({ name: 'content_type', type: 'varchar' })
+  contentType: string;
 }

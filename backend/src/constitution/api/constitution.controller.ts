@@ -1,4 +1,4 @@
-import { Controller, Get, Body } from '@nestjs/common';
+import { Controller, Get, Body, Query } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ConstitutionResponse } from './response/constitution.response';
 import { ConstitutionFacade } from '../facade/constitution.facade';
@@ -41,12 +41,16 @@ export class ConstitutionController {
     summary: 'Compare two constitution versions in a git diff fashion',
   })
   @ApiResponse({ status: 200 })
-  compareTwoConstitutionVersions(
-    @Body()
-    compareConstitutionsRequest: CompareConstitutionsRequest,
-  ): Change[] {
+  async compareTwoConstitutionVersions(
+    @Query('base') base: string,
+    @Query('target') target: string,
+  ): Promise<Change[]> {
+    const compareConstitutionRequest = new CompareConstitutionsRequest();
+
+    compareConstitutionRequest.currentVersionCID = base;
+    compareConstitutionRequest.oldVersionCID = target;
     return this.constitutionFacade.compareTwoConstitutionVersions(
-      compareConstitutionsRequest,
+      compareConstitutionRequest,
     );
   }
 }

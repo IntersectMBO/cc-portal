@@ -23,8 +23,8 @@ export class ConstitutionMapper {
     request: CompareConstitutionsRequest,
   ): CompareConstitutionsDto {
     const dto = new CompareConstitutionsDto(
-      request.olderVersion,
-      request.currentVersion,
+      request.currentVersionCID,
+      request.oldVersionCID,
     );
     return dto;
   }

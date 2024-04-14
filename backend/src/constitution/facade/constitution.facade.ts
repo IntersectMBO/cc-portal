@@ -5,13 +5,17 @@ import { ConstitutionMapper } from '../mapper/constitution.mapper';
 import { CreateConstitutionRequest } from '../api/request/create-constitution.request';
 import { CreateConstitutionDto } from '../dto/create-constitution.dto';
 import { ConstitutionDto } from 'src/redis/dto/constitution.dto';
-import { Change, diffLines } from 'diff';
+import { Change } from 'diff';
 import { CompareConstitutionsRequest } from '../api/request/compare-constitution.request';
+import { ConstitutionService } from '../services/constitution.service';
+import { IpfsUploadService } from '../../ipfs-upload/services/ipfs-upload.service';
 
 @Injectable()
 export class ConstitutionFacade {
   constructor(
     private readonly constitutionRedisService: ConstitutionRedisService,
+    private readonly constitutionService: ConstitutionService,
+    private readonly ipfsUploadService: IpfsUploadService,
   ) {}
 
   async getCurrentConstitutionFile(): Promise<ConstitutionResponse> {
@@ -50,15 +54,31 @@ export class ConstitutionFacade {
   ): Promise<ConstitutionDto> {
     throw new Error('Function not implemented.');
   }
-  compareTwoConstitutionVersions(
+  // TODO Inject constitution versions from Redis into "request" param and invoke findByCID from ipfs-service (microservice)
+  async compareTwoConstitutionVersions(
     request: CompareConstitutionsRequest,
-  ): Change[] {
+  ): Promise<Change[]> {
     const compareConstitutionDto =
       ConstitutionMapper.compareConstitutionsRequestToDto(request);
-    return diffLines(
-      compareConstitutionDto.olderVersion,
-      compareConstitutionDto.currentVersion,
-      { newlineIsToken: true },
-    );
+
+    for (const cid of Object.values(compareConstitutionDto)) {
+      await this.ipfsUploadService.findByCID(cid);
+    }
+    try {
+      const currentConstitutionVersionFile =
+        await this.ipfsUploadService.getFileContentsFromCID(
+          compareConstitutionDto.currentVersionCID,
+        );
+      const oldConstitutionVersionFile =
+        await this.ipfsUploadService.getFileContentsFromCID(
+          compareConstitutionDto.oldVersionCID,
+        );
+      return this.constitutionService.diffConstitutions(
+        currentConstitutionVersionFile,
+        oldConstitutionVersionFile,
+      );
+    } catch (error) {
+      console.error('An error occurred while fetching file contents:', error);
+    }
   }
 }
