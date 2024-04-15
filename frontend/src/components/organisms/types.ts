@@ -13,7 +13,6 @@ export interface PaginationButtonProps {
 
 export interface ConstitutionPageProps {
   content: string[];
-  key: number;
 }
 
 export interface HeroProps {
@@ -23,7 +22,7 @@ export interface HeroProps {
 export type UserRole = "admin" | "user" | null;
 
 export interface HeroActionsProps {
-  role: UserRole;
+  role?: UserRole;
 }
 
 export interface UsersListProps {

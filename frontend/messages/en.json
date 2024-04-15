@@ -12,8 +12,13 @@
   "Constitution": {
     "title": "Cardano Constituition"
   },
+  "Navigation": {
+    "addNewMember": "Add new member",
+    "uploadNewVersion": "Upload new version"
+  },
   "Footer": {
-    "copyright": "© 2024 Intersect MBO"
+    "copyright": "© 2024 Intersect MBO",
+    "signOut": "Sign Out"
   },
   "Modals": {
     "common": {
