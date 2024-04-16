@@ -90,9 +90,9 @@ export async function getUser(id: string): Promise<FetchUserData> {
   }
 }
 
-export async function getUsers() {
+export async function getUsers(): Promise<FetchUserData[]> {
   try {
-    const res = await axiosInstance.get("/api/users");
+    const res: FetchUserData[] = await axiosInstance.get("/api/users");
     return res;
   } catch (error) {
     console.log("error get users", error);

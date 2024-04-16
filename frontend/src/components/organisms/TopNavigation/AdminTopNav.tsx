@@ -6,7 +6,7 @@ import { Box, Grid } from "@mui/material";
 import { Button } from "@atoms";
 import { TopNavWrapper } from "./TopNavWrapper";
 import { useTranslations } from "next-intl";
-import { useModal } from "@/context";
+import { useModal } from "@context";
 
 export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const t = useTranslations("Navigation");

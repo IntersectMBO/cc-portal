@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { PATHS } from "@consts";
 import { registerAuthCallback, decodeUserToken } from "@/lib/api";
-import { useAppContext, useModal } from "@/context";
+import { useAppContext, useModal } from "@context";
 
 export default function VerifyRegister({ searchParams }) {
   const router = useRouter();

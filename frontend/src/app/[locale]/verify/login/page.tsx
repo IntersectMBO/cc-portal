@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { PATHS } from "@consts";
 import { loginAuthCallback, decodeUserToken } from "@/lib/api";
 import { isAdminRole } from "@utils";
-import { useAppContext } from "@/context";
+import { useAppContext } from "@context";
 
 export default function VerifyLogin({ params: { locale }, searchParams }) {
   const router = useRouter();

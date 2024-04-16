@@ -8,18 +8,29 @@ import { useRouter } from "next/navigation";
 // Import createContext and useContext hooks from React to create and consume the context.
 import { createContext, useContext, useEffect, useState } from "react";
 import { ModalProvider } from "./modal";
+import { DecodedToken, FetchUserData } from "@/lib/requests";
+
+interface AppContextType {
+  userSession: DecodedToken | null;
+  setUserSession: (userSession: DecodedToken | null) => void;
+  user: FetchUserData | null;
+  resetState: () => void;
+  logout: () => void;
+}
 
 // Create a new Context object. This will be used to provide and consume the context.
-const AppContext = createContext();
+const AppContext = createContext<AppContextType>({} as AppContextType);
+AppContext.displayName = "AppContext";
 
 // Define a provider component. This component will wrap the part of your app where you want the context to be accessible.
 export function AppContextProvider({ session, children }) {
   // Define any values or functions you want to make available throughout your component tree.
-  const [userSession, setUserSession] = useState(session || null);
-  const [user, setUser] = useState(session || null);
+  const [userSession, setUserSession] = useState<DecodedToken | null>(session);
+  const [user, setUser] = useState<FetchUserData | null>();
   const router = useRouter();
+
   useEffect(() => {
-    async function fetchUserData(userId) {
+    async function fetchUserData(userId: string) {
       const userData = await getUser(userId);
       setUser(userData);
     }

@@ -1,6 +1,6 @@
 import { CompileMDXResult } from "next-mdx-remote/rsc";
 import { UserStatus } from "@atoms";
-import { UserRole } from "@/lib/requests";
+import { FetchUserData, Permissions, UserRole } from "@/lib/requests";
 
 export interface ConstitutionProps {
   constitution: CompileMDXResult;
@@ -24,9 +24,4 @@ export interface HeroActionsProps {
   role?: UserRole;
 }
 
-export interface UsersListProps {
-  name: string;
-  email: string;
-  roles: string[];
-  status: UserStatus;
-}
+export interface UserListItem extends FetchUserData {}
