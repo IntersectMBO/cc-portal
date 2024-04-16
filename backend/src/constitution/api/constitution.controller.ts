@@ -3,8 +3,8 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ConstitutionResponse } from './response/constitution.response';
 import { ConstitutionFacade } from '../facade/constitution.facade';
 import { CreateConstitutionRequest } from './request/create-constitution.request';
-import { Change } from 'diff';
 import { CompareConstitutionsRequest } from './request/compare-constitution.request';
+import { ConstitutionDiffResponse } from './response/constitution-diff.response';
 
 @ApiTags('Constitution')
 @Controller('constitution')
@@ -19,7 +19,7 @@ export class ConstitutionController {
   @ApiResponse({ status: 404, description: 'Constitution not found' })
   @Get()
   async getConstitutionFile(): Promise<ConstitutionResponse> {
-    return await this.constitutionFacade.getCurrentConstitutionFile();
+    return await this.constitutionFacade.getConstitutionFileCurrent();
   }
 
   @ApiOperation({ summary: 'Store constitution file' })
@@ -44,11 +44,11 @@ export class ConstitutionController {
   async compareTwoConstitutionVersions(
     @Query('base') base: string,
     @Query('target') target: string,
-  ): Promise<Change[]> {
+  ): Promise<ConstitutionDiffResponse> {
     const compareConstitutionRequest = new CompareConstitutionsRequest();
 
-    compareConstitutionRequest.currentVersionCID = base;
-    compareConstitutionRequest.oldVersionCID = target;
+    compareConstitutionRequest.base = base;
+    compareConstitutionRequest.target = target;
     return this.constitutionFacade.compareTwoConstitutionVersions(
       compareConstitutionRequest,
     );

@@ -5,14 +5,8 @@ import { Change, diffWords } from 'diff';
 export class ConstitutionService {
   constructor() {}
 
-  async diffConstitutions(
-    currentConstitutionVersionFile: string,
-    oldConstitutionVersionFile: string,
-  ): Promise<Change[]> {
-    const diff = diffWords(
-      currentConstitutionVersionFile,
-      oldConstitutionVersionFile,
-    );
+  diffConstitutions(currentFile: string, oldFile: string): Change[] {
+    const diff = diffWords(currentFile, oldFile);
     return diff;
   }
 }

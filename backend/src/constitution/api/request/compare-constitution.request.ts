@@ -7,12 +7,12 @@ export class CompareConstitutionsRequest {
     example: 'bafkreial43tqvmht2tfvo34fnhnjiwrytjedcfwfaejcwgw6opbbai5avq',
   })
   @IsString()
-  currentVersionCID: string;
+  base: string;
 
   @ApiProperty({
     description: 'CID of an older constitution version',
     example: 'bafybeia4nj7zahtbqmv2a5f623x6z6sav3v5khzc3mk7uljdxw7go5jyue',
   })
   @IsString()
-  oldVersionCID: string;
+  target: string;
 }
