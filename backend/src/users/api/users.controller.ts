@@ -12,7 +12,7 @@ import {
   ParseFilePipeBuilder,
   UseGuards,
   Request,
-  BadRequestException,
+  Delete,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
@@ -26,10 +26,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { RoleResponse } from './response/role.response';
 
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { UserPathGuard } from 'src/auth/guard/users-path.guard';
 @ApiTags('Users')
@@ -48,19 +46,6 @@ export class UsersController {
   @Get()
   async findAll(): Promise<UserResponse[]> {
     return await this.usersFacade.findAll();
-  }
-
-  @ApiOperation({ summary: 'Get all roles' })
-  @ApiResponse({
-    status: 200,
-    description: 'Roles',
-    isArray: true,
-    type: RoleResponse,
-  })
-  @ApiResponse({ status: 404, description: 'Role not found' })
-  @Get('roles')
-  async getAllRoles(): Promise<RoleResponse[]> {
-    return await this.usersFacade.getAllRoles();
   }
 
   @ApiOperation({ summary: 'Find one user by ID' })
@@ -134,34 +119,21 @@ export class UsersController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
-    const userPayload = req.user;
-    if (userPayload.userId !== id) {
-      throw new BadRequestException(
-        `provided id does not match the requested one`,
-      );
-    }
     return await this.usersFacade.update(file, id, updateUserRequest);
   }
   @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Delete image of user' })
-  @ApiResponse({ status: 200, description: 'Image successfully removed' })
+  @ApiOperation({ summary: 'Delete photo of user' })
+  @ApiResponse({ status: 200, description: 'Photo successfully removed' })
   @ApiResponse({ status: 404, description: 'User with id not found' })
   @ApiParam({
     name: 'id',
     type: String,
     description: 'identifactor of user',
   })
-  @Patch('remove-image/:id')
+  @Delete(':id/profile-photo')
   @UseGuards(JwtAuthGuard, UserPathGuard)
   async remove(@Request() req: any, @Param('id', ParseUUIDPipe) id: string) {
-    const userPayload = req.user;
-    if (userPayload.userId !== id) {
-      throw new BadRequestException(
-        `provided id does not match the requested one`,
-      );
-    }
-
-    const user = await this.usersFacade.deleteFile(id);
+    const user = await this.usersFacade.deleteProfilePhoto(id);
     return user;
   }
 }

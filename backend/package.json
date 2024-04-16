@@ -41,7 +41,6 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.6",
-    "express": "^4.19.2",
     "handlebars": "^4.7.8",
     "humps": "^2.0.1",
     "nest-winston": "^1.9.4",

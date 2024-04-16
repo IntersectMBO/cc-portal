@@ -7,7 +7,7 @@ import { User, UserStatusEnum } from '../entities/user.entity';
 import { Role } from '../entities/role.entity';
 import { EntityManager } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { S3Service } from '../../s3/s3.service';
+import { S3Service } from '../../s3/service/s3.service';
 import { Permission } from '../entities/permission.entity';
 import { UserDto } from '../dto/user.dto';
 import { HotAddress } from '../entities/hotaddress.entity';

@@ -15,7 +15,7 @@ import { UserMapper } from '../mapper/userMapper.mapper';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { Permission } from '../entities/permission.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { S3Service } from '../../s3/s3.service';
+// import { S3Service } from '../../s3/service/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
 import { HotAddress } from '../entities/hotaddress.entity';
@@ -35,7 +35,7 @@ export class UsersService {
     private readonly hotAddressRepository: Repository<HotAddress>,
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
-    private s3Service: S3Service,
+    // private s3Service: S3Service,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
@@ -133,14 +133,19 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<UserDto> {
-    const user = await this.findById(id);
+    const user = await this.findEntityById(id);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
     return UserMapper.userToDto(user);
   }
 
-  private async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<UserDto> {
+    const user = await this.findEntityById(id);
+    return UserMapper.userToDto(user);
+  }
+
+  private async findEntityById(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: {
         id: id,
@@ -151,7 +156,38 @@ export class UsersService {
     }
     return user;
   }
-  private async findByIdWithAdd(id: string): Promise<User> {
+
+  async update(
+    fileUrl: string,
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserDto> {
+    const user = await this.findEntityByIdWithAddresses(id);
+
+    user.name = updateUserDto.name;
+    user.description = updateUserDto.description;
+    user.profilePhoto = fileUrl;
+
+    if (updateUserDto.hotAddress) {
+      await this.checkUniqueUserHotAddress(updateUserDto.hotAddress);
+
+      const hotAddress = new HotAddress();
+      hotAddress.address = updateUserDto.hotAddress;
+      user.hotAddresses.push(hotAddress);
+    }
+
+    try {
+      const updatedUser = await this.entityManager.transaction(() => {
+        return this.userRepository.save(user);
+      });
+      return UserMapper.userToDto(updatedUser);
+    } catch (e) {
+      this.logger.error(`error when updating the user  : ${e.message}`);
+      throw new InternalServerErrorException('update user failed');
+    }
+  }
+
+  private async findEntityByIdWithAddresses(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: {
         id: id,
@@ -163,112 +199,61 @@ export class UsersService {
     }
     return user;
   }
-  async update(
-    file: Express.Multer.File,
-    id: string,
-    updateUserDto: UpdateUserDto,
-  ): Promise<UserDto> {
-    const user = await this.findByIdWithAdd(id);
-    if (!user) {
-      throw new NotFoundException(`user with id ${id} not found`);
-    }
-    user.name = updateUserDto.name;
-    user.description = updateUserDto.description;
-    try {
-      if (updateUserDto.hotAddress) {
-        await this.checkUniqueUserHotAddress(updateUserDto.hotAddress);
-      }
-    } catch (error) {
-      this.logger.error(`error when updating the user  : ${error.message}`);
-      throw error;
-    }
-    if (updateUserDto.hotAddress) {
-      const hotAddress = new HotAddress();
-      hotAddress.address = updateUserDto.hotAddress;
-      console.log(user.hotAddresses);
-      console.log(user);
-      user.hotAddresses.push(hotAddress);
-    }
-    await this.s3Service.createBucketIfNotExists();
-    if (file) {
-      const fileName = await this.s3Service.uploadFileMinio(file);
-      user.profilePhoto = await this.s3Service.getFileUrl(fileName);
-    }
-    let updatedUser: User;
-    try {
-      updatedUser = await this.entityManager.transaction(() => {
-        const userData = this.userRepository.create(user);
-        return this.userRepository.save(userData);
-      });
-    } catch (e) {
-      this.logger.error(`error when updating the user  : ${e.message}`);
-      throw new InternalServerErrorException('update user failed');
-    }
 
-    return UserMapper.userToDto(updatedUser);
-  }
-  async deleteFile(id: string): Promise<string> {
-    const user = await this.findById(id);
-    if (!user) {
-      throw new NotFoundException(`user with id ${id} not found`);
-    }
-    if (user.profilePhoto) {
-      const fileName = this.extractFileNameFromUrl(user.profilePhoto);
-      console.log(fileName);
-      try {
-        await this.s3Service.deleteFile(fileName);
-        user.profilePhoto = null;
-        await this.entityManager.transaction(() => {
-          const userData = this.userRepository.create(user);
-          return this.userRepository.save(userData);
-        });
-        return 'Image successfully removed';
-      } catch (e) {
-        this.logger.error(
-          `error when removing image from the user  : ${e.message}`,
-        );
-        throw new InternalServerErrorException('removing picture failed');
-      }
-    } else {
-      throw new InternalServerErrorException(
-        'User doesnt have profile picture',
-      );
-    }
-  }
-  extractFileNameFromUrl(url) {
-    const parts = url.split('/');
-    const fileNameWithQueryParams = parts[parts.length - 1];
-    const fileName = decodeURIComponent(fileNameWithQueryParams.split('?')[0]);
-    return fileName;
-  }
-
-  /*async toggleWhitelist(id: string, whitelisted: boolean): Promise<UserDto> {
-    const user = await this.findById(id);
-    user.whitelisted = whitelisted;
-    await this.userRepository.save(user);
-
-    return UserMapper.userToDto(user);
-  }*/
-
-  async updateUserStatus(
-    id: string,
-    userStatus: UserStatusEnum,
-  ): Promise<UserDto> {
-    const user = await this.findById(id);
-    user.status = userStatus;
-    await this.userRepository.save(user);
-    return UserMapper.userToDto(user);
-  }
-  async checkUniqueUserHotAddress(hotAddress: string) {
+  private async checkUniqueUserHotAddress(hotAddress: string) {
     const existingUserHotAddress = await this.hotAddressRepository.findOne({
       where: {
         address: hotAddress,
       },
     });
     if (existingUserHotAddress) {
-      throw new ConflictException(`Address ${hotAddress} already exists`);
+      throw new ConflictException(`Address ${hotAddress} already assigned`);
     }
   }
+
+  // async deleteProfilePhoto(id: string): Promise<string> {
+  //   const user = await this.findEntityById(id);
+  //   if (!user) {
+  //     throw new NotFoundException(`user with id ${id} not found`);
+  //   }
+  //   if (!user.profilePhoto) {
+  //     throw new ConflictException(`user does not have profile photo`);
+  //   }
+  //   const fileName = this.extractFileNameFromUrl(user.profilePhoto);
+  //   console.log(fileName);
+  //   try {
+  //     await this.entityManager.transaction(async () => {
+  //       // const userData = this.userRepository.create(user);
+  //       await this.s3Service.deleteFile(UploadContext.PROFILE_PHOTO, fileName);
+  //       user.profilePhoto = null;
+  //       return await this.userRepository.save(user);
+  //     });
+  //     return 'Image successfully removed';
+  //   } catch (e) {
+  //     this.logger.error(
+  //       `error when removing image from the user  : ${e.message}`,
+  //     );
+  //     throw new InternalServerErrorException('removing picture failed');
+  //   }
+  // }
+
+  async updateUserStatus(
+    id: string,
+    userStatus: UserStatusEnum,
+  ): Promise<UserDto> {
+    const user = await this.findEntityById(id);
+    user.status = userStatus;
+    await this.userRepository.save(user);
+    return UserMapper.userToDto(user);
+  }
+
+  async removeProfilePhoto(id: string): Promise<UserDto> {
+    const user = await this.findEntityById(id);
+    user.profilePhoto = null;
+    await this.userRepository.save(user);
+    return UserMapper.userToDto(user);
+  }
+
   async getAllRoles(): Promise<RoleDto[]> {
     const roles = await this.roleRepository.find();
     const results: RoleDto[] = roles.map((role) => RoleMapper.roleToDto(role));

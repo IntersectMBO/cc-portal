@@ -49,7 +49,7 @@ export class User extends CommonEntity {
   description: string;
 
   @Column({
-    name: 'profile_photo',
+    name: 'profile_photo_url',
     type: 'varchar',
     nullable: true,
   })
