@@ -4,6 +4,8 @@ import { CreateConstitutionRequest } from '../api/request/create-constitution.re
 import { CreateConstitutionDto } from '../dto/create-constitution.dto';
 import { CompareConstitutionsRequest } from '../api/request/compare-constitution.request';
 import { CompareConstitutionsDto } from '../dto/compare-constitutions.dto';
+import { ConstitutionDiffDto } from 'src/redis/dto/constitution-diff.dto';
+import { ConstitutionDiffResponse } from '../api/response/constitution-diff.response';
 
 export class ConstitutionMapper {
   static dtoToResponse(dto: ConstitutionDto): ConstitutionResponse {
@@ -22,10 +24,18 @@ export class ConstitutionMapper {
   static compareConstitutionsRequestToDto(
     request: CompareConstitutionsRequest,
   ): CompareConstitutionsDto {
-    const dto = new CompareConstitutionsDto(
-      request.currentVersionCID,
-      request.oldVersionCID,
-    );
+    const dto = new CompareConstitutionsDto(request.base, request.target);
     return dto;
+  }
+
+  static constitutionDiffDtoToResponse(
+    dto: ConstitutionDiffDto,
+  ): ConstitutionDiffResponse {
+    const response = new ConstitutionDiffResponse();
+    response.base = dto.base;
+    response.target = dto.target;
+    response.diff = dto.diff;
+
+    return response;
   }
 }

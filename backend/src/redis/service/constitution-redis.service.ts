@@ -31,7 +31,7 @@ export class ConstitutionRedisService {
 
     await this.redisRepository.set(
       Constants.PREFIX_CONSTITUTION,
-      constitution.version,
+      constitution.cid,
       constitutionJson,
     );
   }
@@ -44,12 +44,10 @@ export class ConstitutionRedisService {
     return JSON.parse(constitution);
   }
 
-  async getConstitutionFileByVersion(
-    version: string,
-  ): Promise<ConstitutionDto | null> {
+  async getConstitutionFileByCid(cid: string): Promise<ConstitutionDto | null> {
     const constitution = await this.redisRepository.get(
       Constants.PREFIX_CONSTITUTION,
-      version,
+      cid,
     );
     return JSON.parse(constitution);
   }

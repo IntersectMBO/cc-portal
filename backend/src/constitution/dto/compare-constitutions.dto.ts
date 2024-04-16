@@ -1,9 +1,9 @@
 export class CompareConstitutionsDto {
-  currentVersionCID: string;
-  oldVersionCID: string;
+  base: string;
+  target: string;
 
-  constructor(currentVersionCID: string, oldVersionCID: string) {
-    this.currentVersionCID = currentVersionCID;
-    this.oldVersionCID = oldVersionCID;
+  constructor(base: string, target: string) {
+    this.base = base;
+    this.target = target;
   }
 }
