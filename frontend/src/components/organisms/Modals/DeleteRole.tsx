@@ -1,3 +1,4 @@
+"use client";
 import { Typography } from "@mui/material";
 
 import { ModalContents, ModalHeader, ModalWrapper } from "@atoms";

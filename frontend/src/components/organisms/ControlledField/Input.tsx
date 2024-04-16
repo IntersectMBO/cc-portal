@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useCallback } from "react";
 import { Controller, get } from "react-hook-form";
 
@@ -6,9 +8,7 @@ import { Field } from "@molecules";
 import { ControlledInputProps, RenderInputProps } from "./types";
 
 export const Input = forwardRef<HTMLInputElement, ControlledInputProps>(
-  ({
-    control, name, errors, rules, ...props
-  }, ref) => {
+  ({ control, name, errors, rules, ...props }, ref) => {
     const errorMessage = get(errors, name)?.message as string;
 
     const renderInput = useCallback(
@@ -20,7 +20,7 @@ export const Input = forwardRef<HTMLInputElement, ControlledInputProps>(
           ref={ref}
         />
       ),
-      [errorMessage, props],
+      [errorMessage, props]
     );
 
     return (
@@ -31,5 +31,5 @@ export const Input = forwardRef<HTMLInputElement, ControlledInputProps>(
         render={renderInput}
       />
     );
-  },
+  }
 );

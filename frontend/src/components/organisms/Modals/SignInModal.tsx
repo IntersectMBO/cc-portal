@@ -1,3 +1,4 @@
+"use client";
 import { ModalContents, ModalHeader, ModalWrapper, Typography } from "@atoms";
 import { IMAGES } from "@consts";
 import { useTranslations } from "next-intl";

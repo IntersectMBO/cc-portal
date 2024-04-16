@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { ModalWrapper, ModalHeader, ModalContents, ModalActions } from "@atoms";
 import { useForm } from "react-hook-form";
