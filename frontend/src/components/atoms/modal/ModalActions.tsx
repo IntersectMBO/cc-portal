@@ -6,10 +6,9 @@ import { callAll } from "@utils";
 
 interface Props {
   onClose?: () => void;
-  onConfirm?: () => void;
 }
 
-export const ModalActions = ({ onClose, onConfirm }: Props) => {
+export const ModalActions = ({ onClose }: Props) => {
   const t = useTranslations("Modals");
   const { closeModal } = useModal();
 
