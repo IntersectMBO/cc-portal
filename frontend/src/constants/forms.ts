@@ -1,29 +1,25 @@
 export const permissionsList = [
   {
-    label: "Manage CC members",
+    label: "Manage constitutional members",
     value: "manage_cc_members",
   },
   {
-    label: "Add constitution version",
+    label: "Upload Constitution version",
     value: "add_constitution_version",
   },
   {
-    label: "Add new admin",
+    label: "Add new admin members",
     value: "add_new_admin",
   },
 ];
 
 export const rolesList = [
   {
-    label: "Super admin",
-    value: "super_admin",
-  },
-  {
     label: "Admin",
     value: "admin",
   },
   {
-    label: "User",
+    label: "Constitutional member",
     value: "user",
   },
 ];

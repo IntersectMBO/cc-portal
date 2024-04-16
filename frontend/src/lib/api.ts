@@ -99,7 +99,7 @@ export async function getUsers() {
   }
 }
 
-export async function registerUser(email: string, permissions) {
+export async function registerUser(email: string) {
   try {
     const token = getAccessToken();
 
@@ -107,7 +107,6 @@ export async function registerUser(email: string, permissions) {
       "/api/auth/register-user",
       {
         destination: email,
-        permissions,
       },
       {
         headers: {
