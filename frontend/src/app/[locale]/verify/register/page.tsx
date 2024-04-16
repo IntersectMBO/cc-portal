@@ -5,17 +5,17 @@ import { Loading } from "@molecules";
 import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { PATHS } from "@consts";
-import { authCallback, decodeUserToken } from "@/lib/api";
+import { registerAuthCallback, decodeUserToken } from "@/lib/api";
 import { isAdminRole } from "@utils";
 import { useAppContext } from "@/context";
 
-export default function Verify({ params: { locale }, searchParams }) {
+export default function VerifyRegister({ params: { locale }, searchParams }) {
   const router = useRouter();
   const { setUserSession } = useAppContext();
   useEffect(() => {
     const verifyToken = async (token: string) => {
       try {
-        const response = await authCallback(token);
+        const response = await registerAuthCallback(token);
         const session = await decodeUserToken();
         setUserSession(session);
 

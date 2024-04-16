@@ -27,8 +27,8 @@ export async function login(email: FormDataEntryValue): Promise<LoginResponse> {
   }
 }
 
-// Function to handle the authentication callback after the user clicks on the magic link
-export async function authCallback(token: string) {
+// Function to handle the authentication callback after the user clicks on the login magic link
+export async function loginAuthCallback(token: string) {
   try {
     const res = await axiosInstance.get<string, any>(
       `/api/auth/login/callback?token=${token}`
@@ -36,7 +36,21 @@ export async function authCallback(token: string) {
     setAuthCookies(res.access_token, res.refresh_token);
     return res;
   } catch (error) {
-    console.log("error authCallback admin");
+    console.log("error login authCallback");
+    throw error;
+  }
+}
+
+// Function to handle the authentication callback after the user clicks on the register magic link
+export async function registerAuthCallback(token: string) {
+  try {
+    const res = await axiosInstance.get<string, any>(
+      `/api/auth/register/callback?token=${token}`
+    );
+    setAuthCookies(res.access_token, res.refresh_token);
+    return res;
+  } catch (error) {
+    console.log("error register authCallback");
     throw error;
   }
 }
