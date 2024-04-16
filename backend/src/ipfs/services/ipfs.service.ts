@@ -7,7 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Ipfs } from '../entities/ipfs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { IpfsMapper } from '../mapper/ipfs.mapper';
 import { IpfsDto } from '../dto/ipfs.dto';
 import axios from 'axios';
@@ -71,10 +71,10 @@ export class IpfsService {
 
   async findLastRecord(): Promise<IpfsDto> {
     const lastRecord = await this.ipfsRepository.findOne({
-      where: { version: IsNull() },
-      order: { version: 'DESC' },
+      where: { cid: Not(IsNull()) },
+      order: { createdAt: 'DESC' },
     });
-    return IpfsMapper.ipfsEntityToIpfsDto(lastRecord[0]);
+    return IpfsMapper.ipfsEntityToIpfsDto(lastRecord);
   }
 
   private async findByCid(cid: string): Promise<Ipfs> {
