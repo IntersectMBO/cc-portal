@@ -1,12 +1,15 @@
-import { AdminFooter, AdminTopNav } from "@organisms";
+import { decodeUserToken } from "@/lib/api";
+import { AdminFooter, AdminTopNav, Footer } from "@organisms";
 import React from "react";
 
 async function AdminLayout({ children }) {
+  const user = await decodeUserToken();
+
   return (
     <>
-      <AdminTopNav />
+      {<AdminTopNav isLoggedIn={!!user} />}
       {children}
-      <AdminFooter />
+      {user ? <AdminFooter /> : <Footer />}
     </>
   );
 }

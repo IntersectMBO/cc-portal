@@ -5,13 +5,12 @@ import MenuItem from "@mui/material/MenuItem";
 import { ICONS, IMAGES } from "@consts";
 import { Button } from "../atoms";
 import { useAppContext, useModal } from "@context";
-import { logout } from "@/lib/api";
 import { FetchUserData } from "@/lib/requests";
 import { useTranslations } from "next-intl";
 
 export default function AuthButton({ user }: { user: FetchUserData }) {
   const { openModal } = useModal();
-  const { resetState } = useAppContext();
+  const { logout } = useAppContext();
   const t = useTranslations("Navigation");
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -32,7 +31,6 @@ export default function AuthButton({ user }: { user: FetchUserData }) {
 
   const signOut = async () => {
     logout();
-    resetState();
     handleClose();
   };
   return (

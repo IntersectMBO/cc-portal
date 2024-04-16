@@ -2,7 +2,9 @@
 // which is particularly relevant for Next.js applications that support server-side rendering (SSR).
 "use client";
 
-import { getUser } from "@/lib/api";
+import { PATHS } from "@consts";
+import { getUser, logout as removeCookies } from "@/lib/api";
+import { useRouter } from "next/navigation";
 // Import createContext and useContext hooks from React to create and consume the context.
 import { createContext, useContext, useEffect, useState } from "react";
 import { ModalProvider } from "./modal";
@@ -15,7 +17,7 @@ export function AppContextProvider({ session, children }) {
   // Define any values or functions you want to make available throughout your component tree.
   const [userSession, setUserSession] = useState(session || null);
   const [user, setUser] = useState(session || null);
-
+  const router = useRouter();
   useEffect(() => {
     async function fetchUserData(userId) {
       const userData = await getUser(userId);
@@ -31,11 +33,17 @@ export function AppContextProvider({ session, children }) {
     setUser(null);
     setUserSession(null);
   };
+
+  const logout = async () => {
+    removeCookies();
+    resetState();
+    router.push(PATHS.home);
+  };
   // Render the provider component of your context, passing in the values or functions as the value prop.
   // Any child components will be able to access these values via the useAppContext hook.
   return (
     <AppContext.Provider
-      value={{ userSession, setUserSession, user, resetState }}
+      value={{ userSession, setUserSession, user, resetState, logout }}
     >
       <ModalProvider>{children}</ModalProvider>
     </AppContext.Provider>

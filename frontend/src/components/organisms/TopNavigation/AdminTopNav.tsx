@@ -7,19 +7,21 @@ import { Button } from "@atoms";
 import { TopNavWrapper } from "./TopNavWrapper";
 import { useTranslations } from "next-intl";
 
-export const AdminTopNav = () => {
+export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const t = useTranslations("Navigation");
 
   return (
     <TopNavWrapper>
-      <Box>
-        <Grid container gap={2}>
-          <Button type="submit" variant="outlined">
-            {t("addNewMember")}
-          </Button>
-          <Button type="submit"> {t("uploadNewVersion")}</Button>
-        </Grid>
-      </Box>
+      {isLoggedIn && (
+        <Box>
+          <Grid container gap={2}>
+            <Button type="submit" variant="outlined">
+              {t("addNewMember")}
+            </Button>
+            <Button type="submit"> {t("uploadNewVersion")}</Button>
+          </Grid>
+        </Box>
+      )}
     </TopNavWrapper>
   );
 };
