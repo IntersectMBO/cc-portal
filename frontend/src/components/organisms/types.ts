@@ -1,5 +1,6 @@
 import { CompileMDXResult } from "next-mdx-remote/rsc";
 import { UserStatus } from "@atoms";
+import { UserRole } from "@/lib/requests";
 
 export interface ConstitutionProps {
   constitution: CompileMDXResult;
@@ -18,8 +19,6 @@ export interface ConstitutionPageProps {
 export interface HeroProps {
   children: React.ReactElement;
 }
-
-export type UserRole = "admin" | "user" | null;
 
 export interface HeroActionsProps {
   role?: UserRole;

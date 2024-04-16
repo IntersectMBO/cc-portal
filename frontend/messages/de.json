@@ -14,7 +14,9 @@
   },
   "Navigation": {
     "addNewMember": "Add new member",
-    "uploadNewVersion": "Upload new version"
+    "uploadNewVersion": "Upload new version",
+    "editProfile": "Edit Profile",
+    "signOut": "Sign Out"
   },
   "Footer": {
     "copyright": "© 2024 Intersect MBO",
