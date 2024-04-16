@@ -8,7 +8,7 @@ import { ControlledField } from "@organisms";
 import { Permissions, UserRole } from "@/lib/requests";
 import { isAdminRole } from "@utils";
 import { registerAdmin, registerUser } from "@/lib/api";
-import { useModal } from "@/context";
+import { useModal } from "@context";
 
 interface AddMemberFormData {
   email: string;

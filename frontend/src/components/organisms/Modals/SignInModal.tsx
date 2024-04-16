@@ -4,7 +4,7 @@ import { IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
 import { ModalActions } from "@atoms";
 import { login } from "@/lib/api";
-import { useModal } from "@/context";
+import { useModal } from "@context";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
 
