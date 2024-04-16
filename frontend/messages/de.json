@@ -97,5 +97,9 @@
   "AdminDashboard": {
     "role": "Role",
     "status": "Status"
+  },
+  "NotFound": {
+    "noMembersFound": "No members found",
+    "addNewMembers": "Add new members"
   }
 }
