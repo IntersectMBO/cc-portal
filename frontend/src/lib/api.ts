@@ -3,7 +3,12 @@
 import axiosInstance from "./axiosInstance";
 import jwt from "jsonwebtoken";
 import { getAccessToken, removeAuthCookies, setAuthCookies } from "@utils";
-import { DecodedToken, FetchUserData, LoginResponse } from "./requests";
+import {
+  DecodedToken,
+  FetchUserData,
+  LoginResponse,
+  Permissions,
+} from "./requests";
 
 // Function to decode the user token stored in the authentication cookie
 export async function decodeUserToken(): Promise<DecodedToken | undefined> {
@@ -23,7 +28,7 @@ export async function login(email: FormDataEntryValue): Promise<LoginResponse> {
     });
     return res;
   } catch (error) {
-    console.log("error login admin", error);
+    console.log("error login admin");
   }
 }
 
@@ -94,7 +99,7 @@ export async function getUsers() {
   }
 }
 
-export async function registerUser(email: string) {
+export async function registerUser(email: string, permissions) {
   try {
     const token = getAccessToken();
 
@@ -102,6 +107,29 @@ export async function registerUser(email: string) {
       "/api/auth/register-user",
       {
         destination: email,
+        permissions,
+      },
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      }
+    );
+    return res;
+  } catch (error) {
+    console.log("error register user", error);
+  }
+}
+
+export async function registerAdmin(email: string, permissions: Permissions[]) {
+  try {
+    const token = getAccessToken();
+
+    const res = await axiosInstance.post(
+      "/api/auth/register-admin",
+      {
+        destination: email,
+        permissions,
       },
       {
         headers: {

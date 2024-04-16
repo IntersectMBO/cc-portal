@@ -21,9 +21,7 @@ export const SignInModal = () => {
 
   const onSubmit = async (data) => {
     try {
-      console.log("data", data);
-      const email = ""; //formData.get("email");
-      await login(email);
+      await login(data.email);
       closeModal();
     } catch (error) {}
   };
