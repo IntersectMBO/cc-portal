@@ -7,10 +7,10 @@ import { notFound } from "next/navigation";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
-import { Footer, TopNav } from "@organisms";
 import { poppins, locales } from "@consts";
 import { CssBaseline } from "@mui/material";
 import { RenderModal } from "@atoms";
+import { decodeUserToken } from "@/lib/api";
 
 export function generateStaticParams() {
   // Generate static params for each locale, used in static generation methods.
@@ -35,6 +35,7 @@ async function RootLayout({ children, params: { locale } }) {
   } catch (error) {
     notFound(); // Trigger a 404 if the message bundle cannot be loaded.
   }
+  const user = await decodeUserToken();
 
   return (
     // Set the document language
@@ -48,15 +49,13 @@ async function RootLayout({ children, params: { locale } }) {
         {/* Provide internationalization context. */}
         <NextIntlClientProvider locale={locale} messages={messages}>
           {/* Wrap children in global state context */}
-          <AppContextProvider>
+          <AppContextProvider session={user}>
             <AppRouterCacheProvider>
               {/** Customize Material UI & inject a theme into the app */}
               <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <TopNav />
                 <RenderModal />
                 {children}
-                <Footer />
               </ThemeProvider>
             </AppRouterCacheProvider>
           </AppContextProvider>

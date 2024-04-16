@@ -41,6 +41,7 @@ const modals: Record<ModalType, ContextModal> = {
   },
   signUpModal: {
     component: <SignUpModal />,
+    preventDismiss: true,
   },
   signOutModal: {
     component: <SignOutModal />,

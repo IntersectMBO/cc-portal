@@ -3,11 +3,15 @@ import { ModalContents, ModalHeader, ModalWrapper, Typography } from "@atoms";
 import { IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
 import { ModalActions } from "@atoms";
+import { login } from "@/lib/api";
+import { useModal } from "@/context";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
 
 export const SignInModal = () => {
+  const { closeModal } = useModal();
   const t = useTranslations("Modals");
+
   const {
     register,
     handleSubmit,
@@ -15,8 +19,11 @@ export const SignInModal = () => {
     control,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form submitted:", data);
+  const onSubmit = async (data) => {
+    try {
+      await login(data.email);
+      closeModal();
+    } catch (error) {}
   };
 
   return (
