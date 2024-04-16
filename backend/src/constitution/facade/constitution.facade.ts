@@ -14,7 +14,7 @@ export class ConstitutionFacade {
 
   async getCurrentConstitutionFile(): Promise<ConstitutionResponse> {
     let constitutionDto =
-      await this.constitutionRedisService.getConstitutionFile();
+      await this.constitutionRedisService.getConstitutionFileCurrent();
     if (constitutionDto) {
       return ConstitutionMapper.dtoToResponse(constitutionDto);
     }
