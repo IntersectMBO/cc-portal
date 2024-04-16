@@ -6,7 +6,7 @@ import { callAll } from "@utils";
 
 interface Props {
   onClose?: () => void;
-  onConfirm: () => void;
+  onConfirm?: () => void;
 }
 
 export const ModalActions = ({ onClose, onConfirm }: Props) => {
@@ -20,7 +20,7 @@ export const ModalActions = ({ onClose, onConfirm }: Props) => {
         gap: "38px",
       }}
     >
-      <Button onClick={onConfirm}>{t("common.confirm")}</Button>
+      <Button type="submit">{t("common.confirm")}</Button>
       <Button variant="outlined" onClick={callAll(closeModal, onClose)}>
         {t("common.close")}
       </Button>

@@ -20,7 +20,8 @@
     "next-intl": "^3.5.4",
     "next-mdx-remote": "^4.4.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.51.3"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
