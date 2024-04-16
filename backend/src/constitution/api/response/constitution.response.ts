@@ -9,6 +9,13 @@ export class ConstitutionResponse {
   @Expose({ name: 'cid' })
   cid: string;
 
+  @ApiProperty({
+    description: 'Version of the document',
+    example: '1713153716',
+  })
+  @Expose({ name: 'version' })
+  version: string;
+
   @ApiProperty({ description: 'Contents of a constitution file' })
   @Expose({ name: 'contents' })
   contents: string;

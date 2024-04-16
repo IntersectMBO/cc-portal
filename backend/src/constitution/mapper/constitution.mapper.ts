@@ -7,6 +7,7 @@ export class ConstitutionMapper {
   static dtoToResponse(dto: ConstitutionDto): ConstitutionResponse {
     const response = new ConstitutionResponse();
     response.cid = dto.cid;
+    response.version = dto.version;
     response.contents = dto.content;
     return response;
   }

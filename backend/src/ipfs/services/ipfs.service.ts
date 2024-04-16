@@ -7,7 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Ipfs } from '../entities/ipfs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { IpfsMapper } from '../mapper/ipfs.mapper';
 import { IpfsDto } from '../dto/ipfs.dto';
 import axios from 'axios';
@@ -16,7 +16,6 @@ import { Blob } from 'buffer';
 @Injectable()
 export class IpfsService {
   private logger = new Logger(IpfsService.name);
-
   private readonly MARKDOWN_CONTENT_TYPE = 'text/markdown';
 
   constructor(
@@ -46,11 +45,7 @@ export class IpfsService {
       const response = await axios.post(apiLink, formData, requestConfig);
       const cid = response.data.cid;
       const content = response.data.content;
-      const lastInsertedDoc = await this.findLastRecord();
-      let newVersion = '1.0.0'; //default
-      if (lastInsertedDoc) {
-        newVersion = await this.generateNewVersion();
-      }
+      const newVersion = Math.floor(Date.now() / 1000).toString(); // timestamp
       const insertData: IpfsDto = {
         cid: cid,
         contentType: contentType,
@@ -58,7 +53,7 @@ export class IpfsService {
         version: newVersion,
       };
       const result = await this.insertCid(insertData);
-      return IpfsMapper.ipfsCidToIpfsDto(result);
+      return IpfsMapper.ipfsDtoToDocResponse(result);
     } catch (error) {
       this.logger.error(error);
       throw error;
@@ -74,20 +69,12 @@ export class IpfsService {
     return await this.ipfsRepository.save(created);
   }
 
-  private async findLastRecord(): Promise<Ipfs> {
-    const lastRecord = await this.ipfsRepository.find({
-      order: { createdAt: 'DESC' },
+  async findLastRecord(): Promise<IpfsDto> {
+    const lastRecord = await this.ipfsRepository.findOne({
+      where: { version: IsNull() },
+      order: { version: 'DESC' },
     });
-    return lastRecord[0];
-  }
-
-  private async generateNewVersion(): Promise<string> {
-    const lastRecord = await this.findLastRecord();
-    const lastVersionSplited = lastRecord.version.split('.');
-    const newPatch = Number(lastVersionSplited[2]) + 1;
-    const newVersion =
-      lastVersionSplited[0] + '.' + lastVersionSplited[1] + '.' + newPatch;
-    return newVersion.toString();
+    return IpfsMapper.ipfsEntityToIpfsDto(lastRecord[0]);
   }
 
   private async findByCid(cid: string): Promise<Ipfs> {

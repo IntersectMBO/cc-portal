@@ -361,7 +361,7 @@
 			]
 		},
 		{
-			"name": "IPFS",
+			"name": "Constitution",
 			"item": [
 				{
 					"name": "Upload document",
@@ -385,13 +385,13 @@
 							]
 						},
 						"url": {
-							"raw": "{{base-url}}/api/ipfs/to-ipfs",
+							"raw": "{{base-url}}/api/constitution/to-ipfs",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
-								"ipfs",
+								"constitution",
 								"to-ipfs"
 							]
 						}
@@ -404,15 +404,32 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base-url}}/api/ipfs/from-ipfs/bafkreig5lbaqawdgwew6f54fjgqfeff4yyddqjrtjfaiwbi5hz5kdngzya",
+							"raw": "{{base-url}}/api/constitution/bafkreihu5g6qrlivg6ydq6j26q3vfyci5y2jxeapgz5obnnjv4bsxo76bu",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
-								"ipfs",
-								"from-ipfs",
-								"bafkreig5lbaqawdgwew6f54fjgqfeff4yyddqjrtjfaiwbi5hz5kdngzya"
+								"constitution",
+								"bafkreihu5g6qrlivg6ydq6j26q3vfyci5y2jxeapgz5obnnjv4bsxo76bu"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get current file",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution"
 							]
 						}
 					},
