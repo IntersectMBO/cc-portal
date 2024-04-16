@@ -3,7 +3,12 @@ import { createContext, useContext, useMemo, useReducer } from "react";
 
 import { callAll, basicReducer, BasicReducer } from "@utils";
 import { MuiModalChildren } from "@atoms";
-import { SignInModal, AddMemberModal, UploadConstitution } from "@organisms";
+import {
+  SignInModal,
+  AddMemberModal,
+  UploadConstitution,
+  DeleteRole,
+} from "@organisms";
 import { SignUpModal } from "@/components/organisms/Modals/SignUpModal";
 import { SignOutModal } from "@/components/organisms/Modals/SignOutModal";
 
@@ -24,7 +29,8 @@ export type ModalType =
   | "signUpModal"
   | "addMember"
   | "signOutModal"
-  | "uploadConstitution";
+  | "uploadConstitution"
+  | "deleteRole";
 
 const modals: Record<ModalType, ContextModal> = {
   none: {
@@ -44,6 +50,9 @@ const modals: Record<ModalType, ContextModal> = {
   },
   uploadConstitution: {
     component: <UploadConstitution />,
+  },
+  deleteRole: {
+    component: <DeleteRole />,
   },
 };
 
