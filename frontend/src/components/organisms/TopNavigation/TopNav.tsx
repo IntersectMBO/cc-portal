@@ -5,22 +5,13 @@ import { Box, Grid } from "@mui/material";
 
 import { NAV_ITEMS } from "@consts";
 import { Link } from "@atoms";
-import { useAppContext, useModal } from "@context";
+import { useAppContext } from "@context";
 import { TopNavWrapper } from "./TopNavWrapper";
 import { isUserRole } from "@utils";
 import AuthButton from "@/components/molecules/AuthButton";
 
 export const TopNav = () => {
   const { userSession, user } = useAppContext();
-  const { openModal } = useModal();
-
-  useEffect(() => {
-    if (user?.status === "pending") {
-      openModal({
-        type: "signUpModal",
-      });
-    }
-  }, [user]);
 
   const getNavItems = () =>
     NAV_ITEMS.map((navItem) => (

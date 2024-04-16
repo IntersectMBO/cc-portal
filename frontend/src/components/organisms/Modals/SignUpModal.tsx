@@ -5,10 +5,11 @@ import {
   ModalWrapper,
   Typography,
   UploadFileButton,
+  Button,
 } from "@atoms";
 import { IMAGES } from "@consts";
+import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { ModalActions } from "@atoms";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
 
@@ -67,7 +68,13 @@ export const SignUpModal = () => {
           >
             {t("signUp.fields.upload")}
           </UploadFileButton>
-          <ModalActions />
+          <Box
+            sx={{
+              display: "flex",
+            }}
+          >
+            <Button type="submit">{t("common.confirm")}</Button>
+          </Box>
         </ModalContents>
       </form>
     </ModalWrapper>
