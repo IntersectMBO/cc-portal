@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "aec582c9-802c-4f73-b9ec-5efde00f5781",
+		"_postman_id": "111fe66d-c6ff-45a1-9663-b674dd976e29",
 		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20133713"
@@ -353,6 +353,66 @@
 								"api",
 								"email",
 								"send-test-email"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "IPFS",
+			"item": [
+				{
+					"name": "Upload document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/aca/Documents/profile.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base-url}}/api/ipfs/to-ipfs",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"ipfs",
+								"to-ipfs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get document by cid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/ipfs/from-ipfs/bafkreig5lbaqawdgwew6f54fjgqfeff4yyddqjrtjfaiwbi5hz5kdngzya",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"ipfs",
+								"from-ipfs",
+								"bafkreig5lbaqawdgwew6f54fjgqfeff4yyddqjrtjfaiwbi5hz5kdngzya"
 							]
 						}
 					},
