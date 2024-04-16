@@ -8,7 +8,6 @@ import {
   FetchUserData,
   LoginResponse,
   Permissions,
-  FetchUsersData,
 } from "./requests";
 
 // Function to decode the user token stored in the authentication cookie
@@ -91,9 +90,9 @@ export async function getUser(id: string): Promise<FetchUserData> {
   }
 }
 
-export async function getUsers(): Promise<FetchUsersData[]> {
+export async function getUsers(): Promise<FetchUserData[]> {
   try {
-    const res: FetchUsersData[] = await axiosInstance.get("/api/users");
+    const res: FetchUserData[] = await axiosInstance.get("/api/users");
     return res;
   } catch (error) {
     console.log("error get users", error);
