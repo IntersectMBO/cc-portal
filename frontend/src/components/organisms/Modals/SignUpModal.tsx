@@ -4,7 +4,6 @@ import {
   ModalHeader,
   ModalWrapper,
   Typography,
-  UploadFileButton,
   Button,
 } from "@atoms";
 import { IMAGES } from "@consts";
@@ -61,13 +60,16 @@ export const SignUpModal = () => {
             control={control}
             {...register("description")}
           />
-          <UploadFileButton
+
+          <ControlledField.Upload
             fullWidth={false}
             size="large"
-            onChange={handleUpload}
+            errors={errors}
+            control={control}
+            {...register("file")}
           >
             {t("signUp.fields.upload")}
-          </UploadFileButton>
+          </ControlledField.Upload>
           <Box
             sx={{
               display: "flex",

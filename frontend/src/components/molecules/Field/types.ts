@@ -2,38 +2,36 @@ import { BoxProps, TypographyProps as MUITypographyProps } from "@mui/material";
 
 import {
   CheckboxProps,
+  FormErrorMessageProps,
   InputProps,
   TextAreaProps,
   TypographyProps,
 } from "@atoms";
 
-export type InputFieldProps = InputProps & {
-  errorMessage?: string;
-  errorStyles?: MUITypographyProps;
-  helpfulText?: string;
-  helpfulTextStyle?: MUITypographyProps;
-  label?: string;
-  labelStyles?: TypographyProps;
-  layoutStyles?: BoxProps;
-};
+export type InputFieldProps = InputProps &
+  FormErrorMessageProps & {
+    helpfulText?: string;
+    helpfulTextStyle?: MUITypographyProps;
+    label?: string;
+    labelStyles?: TypographyProps;
+    layoutStyles?: BoxProps;
+  };
 
-export type CheckboxFieldProps = CheckboxProps & {
-  errorMessage?: string;
-  errorStyles?: MUITypographyProps;
-  label?: string;
-  labelStyles?: TypographyProps;
-  layoutStyles?: BoxProps;
-};
+export type CheckboxFieldProps = CheckboxProps &
+  FormErrorMessageProps & {
+    label?: string;
+    labelStyles?: TypographyProps;
+    layoutStyles?: BoxProps;
+  };
 
-export type TextAreaFieldProps = TextAreaProps & {
-  errorMessage?: string;
-  errorStyles?: MUITypographyProps;
-  helpfulText?: string;
-  helpfulTextStyle?: MUITypographyProps;
-  label?: string;
-  labelStyles?: TypographyProps;
-  layoutStyles?: BoxProps;
-};
+export type TextAreaFieldProps = TextAreaProps &
+  FormErrorMessageProps & {
+    helpfulText?: string;
+    helpfulTextStyle?: MUITypographyProps;
+    label?: string;
+    labelStyles?: TypographyProps;
+    layoutStyles?: BoxProps;
+  };
 
 export interface SeletItem {
   value: string;
