@@ -2,7 +2,7 @@
 import React from "react";
 import { ModalWrapper, ModalHeader, ModalContents, ModalActions } from "@atoms";
 import { useForm, useWatch } from "react-hook-form";
-import { IMAGES, permissionsList, rolesList } from "@consts";
+import { IMAGES, permissionsList, addMemberRoleList } from "@consts";
 import { useTranslations } from "next-intl";
 import { ControlledField } from "@organisms";
 import { Permissions, UserRole } from "@/lib/requests";
@@ -11,6 +11,7 @@ import { registerAdmin, registerUser } from "@/lib/api";
 import { useModal } from "@context";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/context/snackbar";
+import { SeletItem } from "@/components/molecules";
 
 interface AddMemberFormData {
   email: string;
@@ -63,7 +64,7 @@ export const AddMemberModal = () => {
           <ControlledField.Select
             placeholder={t("addMember.fields.role.placeholder")}
             label={t("addMember.fields.role.label")}
-            items={rolesList}
+            items={addMemberRoleList as SeletItem[]}
             control={control}
             errors={errors}
             multiple={false}
