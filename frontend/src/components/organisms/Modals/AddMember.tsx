@@ -10,6 +10,7 @@ import { isAdminRole } from "@utils";
 import { registerAdmin, registerUser } from "@/lib/api";
 import { useModal } from "@context";
 import { useRouter } from "next/navigation";
+import { useSnackbar } from "@/context/snackbar";
 
 interface AddMemberFormData {
   email: string;
@@ -20,6 +21,7 @@ export const AddMemberModal = () => {
   const t = useTranslations("Modals");
   const { closeModal } = useModal();
   const router = useRouter();
+  const { addSuccessAlert, addErrorAlert } = useSnackbar();
 
   const {
     register,
@@ -38,10 +40,10 @@ export const AddMemberModal = () => {
         await registerUser(data.email);
       }
       router.refresh();
-
+      addSuccessAlert(t("addMember.alerts.success"));
       closeModal();
     } catch (error) {
-      console.log("Error add member", error);
+      addErrorAlert(t("addMember.alerts.error"));
     }
   };
 
