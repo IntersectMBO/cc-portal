@@ -4,4 +4,6 @@ export const ICONS = {
   upload: "/icons/Upload.svg",
   close: "/icons/Close.svg",
   chevronDown: "/icons/ChevronDown.svg",
+  edit: "/icons/Edit.svg",
+  logout: "/icons/Logout.svg",
 };
