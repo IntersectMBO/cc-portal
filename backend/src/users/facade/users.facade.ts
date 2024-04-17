@@ -5,6 +5,7 @@ import { UserResponse } from '../api/response/user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { RoleResponse } from '../api/response/role.response';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
+import { UpdateRoleAndPermissionsRequest } from '../api/request/update-role-and-permissions.request';
 @Injectable()
 export class UsersFacade {
   constructor(private readonly usersService: UsersService) {}
@@ -34,6 +35,17 @@ export class UsersFacade {
     const updateUserDto =
       UserMapper.mapUpdateUserRequestToDto(updateUserRequest);
     const user = await this.usersService.update(id, updateUserDto);
+    return UserMapper.mapUserDtoToResponse(user);
+  }
+
+  async updateUserRoleAndPermissions(
+    id: string,
+    updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
+  ): Promise<UserResponse> {
+    const user = await this.usersService.updateUserRoleAndPermissions(
+      id,
+      updateRoleAndPermissionsRequest,
+    );
     return UserMapper.mapUserDtoToResponse(user);
   }
 }

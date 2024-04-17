@@ -17,6 +17,8 @@ import { Permission } from '../entities/permission.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { RoleDto } from '../dto/role.dto';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
+import { UpdateRoleAndPermissionsRequest } from '../api/request/update-role-and-permissions.request';
+import { RoleEnum } from '../enums/role.enum';
 
 @Injectable()
 export class UsersService {
@@ -168,14 +170,6 @@ export class UsersService {
     return UserMapper.userToDto(updatedUser);
   }
 
-  /*async toggleWhitelist(id: string, whitelisted: boolean): Promise<UserDto> {
-    const user = await this.findById(id);
-    user.whitelisted = whitelisted;
-    await this.userRepository.save(user);
-
-    return UserMapper.userToDto(user);
-  }*/
-
   async updateUserStatus(
     id: string,
     userStatus: UserStatusEnum,
@@ -190,5 +184,37 @@ export class UsersService {
     const roles = await this.roleRepository.find();
     const results: RoleDto[] = roles.map((role) => RoleMapper.roleToDto(role));
     return results;
+  }
+
+  async updateUserRoleAndPermissions(
+    id: string,
+    updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
+  ): Promise<UserDto> {
+    const user = await this.findById(id);
+
+    const role = await this.findRoleByCode(
+      updateRoleAndPermissionsRequest.newRole,
+    );
+
+    user.role = role;
+
+    if (updateRoleAndPermissionsRequest.newRole === RoleEnum.USER) {
+      if (updateRoleAndPermissionsRequest.newPermissions.length !== 0) {
+        throw new BadRequestException(`User role can not have a permissions.`);
+      }
+      user.permissions = [];
+    } else {
+      if (updateRoleAndPermissionsRequest.newPermissions) {
+        const newPermissions = await this.getUserPermissions(
+          updateRoleAndPermissionsRequest.newPermissions,
+        );
+
+        user.permissions = newPermissions;
+      }
+    }
+
+    await this.userRepository.save(user);
+
+    return UserMapper.userToDto(user);
   }
 }

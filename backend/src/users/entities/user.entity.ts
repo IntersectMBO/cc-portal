@@ -68,12 +68,14 @@ export class User extends CommonEntity {
 
   @ManyToOne(() => Role, (role) => role.users, {
     eager: true,
+    onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'role_id' })
   role: Role;
 
   @ManyToMany(() => Permission, (permission) => permission.users, {
     eager: true,
+    onUpdate: 'CASCADE',
   })
   @JoinTable({
     name: 'user_permissions',

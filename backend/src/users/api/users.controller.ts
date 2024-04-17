@@ -6,12 +6,19 @@ import {
   Param,
   HttpCode,
   ParseUUIDPipe,
+  Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
 import { UserResponse } from './response/user.response';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RoleResponse } from './response/role.response';
+import { UpdateRoleAndPermissionsRequest } from './request/update-role-and-permissions.request';
+import { Roles } from 'src/auth/guard/role.decorator';
+import { RoleEnum } from '../enums/role.enum';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { RoleGuard } from 'src/auth/guard/role.guard';
 
 @ApiTags('Users')
 @Controller('users')
@@ -83,5 +90,31 @@ export class UsersController {
     @Body() updateUserRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
     return await this.usersFacade.update(id, updateUserRequest);
+  }
+
+  @ApiOperation({
+    summary: 'Update user role and permissions by superadmin',
+  })
+  @ApiBody({ type: UpdateRoleAndPermissionsRequest })
+  @ApiResponse({
+    status: 200,
+    description: 'User updated successfully.',
+    type: UserResponse,
+  })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @HttpCode(200)
+  @Post(':id/role-permissions')
+  @Roles(RoleEnum.SUPER_ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  async updateUserRoleAndPermissions(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
+  ): Promise<UserResponse> {
+    return await this.usersFacade.updateUserRoleAndPermissions(
+      id,
+      updateRoleAndPermissionsRequest,
+    );
   }
 }
