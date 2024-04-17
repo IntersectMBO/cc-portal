@@ -22,7 +22,7 @@ export const UserRole = ({ roles }: { roles: UserRoleType[] }) => {
         {t("role")}
       </Typography>
 
-      <ChipList list={formattedRoleList} />
+      <ChipList hideCloseButton={true} list={formattedRoleList} />
     </>
   );
 };
