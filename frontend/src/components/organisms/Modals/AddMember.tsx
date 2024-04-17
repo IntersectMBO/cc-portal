@@ -9,6 +9,7 @@ import { Permissions, UserRole } from "@/lib/requests";
 import { isAdminRole } from "@utils";
 import { registerAdmin, registerUser } from "@/lib/api";
 import { useModal } from "@context";
+import { useRouter } from "next/navigation";
 
 interface AddMemberFormData {
   email: string;
@@ -18,12 +19,15 @@ interface AddMemberFormData {
 export const AddMemberModal = () => {
   const t = useTranslations("Modals");
   const { closeModal } = useModal();
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
   } = useForm();
+
   const role = useWatch({ control, name: "role" });
 
   const onSubmit = async (data: AddMemberFormData) => {
@@ -33,6 +37,8 @@ export const AddMemberModal = () => {
       } else {
         await registerUser(data.email);
       }
+      router.refresh();
+
       closeModal();
     } catch (error) {
       console.log("Error add member", error);

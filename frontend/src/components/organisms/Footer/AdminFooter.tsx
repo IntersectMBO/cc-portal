@@ -4,11 +4,11 @@ import React from "react";
 import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { Button, Typography } from "@atoms";
-import { useAppContext } from "@context";
+import { useModal } from "@context";
 
 export const AdminFooter = () => {
   const t = useTranslations("Footer");
-  const { logout } = useAppContext();
+  const { openModal } = useModal();
 
   return (
     <Box
@@ -23,7 +23,15 @@ export const AdminFooter = () => {
       <Typography fontWeight={500} variant="caption">
         {t("copyright")}
       </Typography>
-      <Button onClick={logout} variant="outlined" size="medium">
+      <Button
+        onClick={() =>
+          openModal({
+            type: "signOutModal",
+          })
+        }
+        variant="outlined"
+        size="medium"
+      >
         {t("signOut")}
       </Button>
     </Box>

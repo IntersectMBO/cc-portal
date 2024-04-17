@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 
 import { Box, Grid } from "@mui/material";
 
@@ -7,8 +7,7 @@ import { NAV_ITEMS } from "@consts";
 import { Link } from "@atoms";
 import { useAppContext } from "@context";
 import { TopNavWrapper } from "./TopNavWrapper";
-import { isUserRole } from "@utils";
-import AuthButton from "@/components/molecules/AuthButton";
+import UserProfileButton from "@/components/molecules/UserProfileButton";
 
 export const TopNav = () => {
   const { userSession, user } = useAppContext();
@@ -28,18 +27,14 @@ export const TopNav = () => {
     return (
       <Grid container gap={2} alignItems="center">
         {getNavItems()}
-        <AuthButton user={user} />
+        <UserProfileButton user={user} />
       </Grid>
     );
   };
 
   return (
     <TopNavWrapper>
-      <Box>
-        {userSession && isUserRole(userSession.role)
-          ? renderAuthNavItems()
-          : getNavItems()}
-      </Box>
+      <Box>{userSession ? renderAuthNavItems() : getNavItems()}</Box>
     </TopNavWrapper>
   );
 };

@@ -1,16 +1,19 @@
 "use client";
 import * as React from "react";
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import { ICONS, IMAGES } from "@consts";
 import { Button } from "../atoms";
-import { useAppContext, useModal } from "@context";
+import { useModal } from "@context";
 import { FetchUserData } from "@/lib/requests";
 import { useTranslations } from "next-intl";
+import { Grid } from "@mui/material";
 
-export default function AuthButton({ user }: { user: FetchUserData }) {
+export default function UserProfileButton({
+  user,
+}: {
+  user: Pick<FetchUserData, "name" | "profile_photo">;
+}) {
   const { openModal } = useModal();
-  const { logout } = useAppContext();
   const t = useTranslations("Navigation");
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -30,17 +33,21 @@ export default function AuthButton({ user }: { user: FetchUserData }) {
   };
 
   const signOut = async () => {
-    logout();
-    handleClose();
+    openModal({
+      type: "signOutModal",
+    });
   };
+
   return (
     <div>
       <Button
         id="basic-button"
+        size="extraLarge"
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
+        sx={{ minWidth: 170 }}
         startIcon={
           <img
             width={20}
@@ -61,9 +68,33 @@ export default function AuthButton({ user }: { user: FetchUserData }) {
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
+        PaperProps={{
+          style: { backgroundColor: "transparent", boxShadow: "none" },
+        }}
       >
-        <MenuItem onClick={editProfile}>{t("editProfile")}</MenuItem>
-        <MenuItem onClick={signOut}>{t("signOut")}</MenuItem>
+        <Grid
+          container
+          direction="column"
+          sx={{ minWidth: 170, width: "100%" }}
+          gap={0.5}
+        >
+          <Button
+            size="medium"
+            variant="outlined"
+            onClick={editProfile}
+            startIcon={<img width={20} height={20} src={ICONS.edit} />}
+          >
+            {t("editProfile")}
+          </Button>
+          <Button
+            size="medium"
+            variant="outlined"
+            onClick={signOut}
+            startIcon={<img width={20} height={20} src={ICONS.logout} />}
+          >
+            {t("signOut")}
+          </Button>
+        </Grid>
       </Menu>
     </div>
   );
