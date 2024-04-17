@@ -5,9 +5,11 @@ import { ChipList, Typography } from "@atoms";
 import { customPalette } from "@consts";
 import { useTranslations } from "next-intl";
 import { UserRole as UserRoleType } from "@/lib/requests";
+import { formatRoleList } from "@utils";
 
 export const UserRole = ({ roles }: { roles: UserRoleType[] }) => {
   const t = useTranslations("AdminDashboard");
+  const formattedRoleList = formatRoleList(roles);
 
   return (
     <>
@@ -20,7 +22,7 @@ export const UserRole = ({ roles }: { roles: UserRoleType[] }) => {
         {t("role")}
       </Typography>
 
-      <ChipList list={roles} />
+      <ChipList list={formattedRoleList} />
     </>
   );
 };

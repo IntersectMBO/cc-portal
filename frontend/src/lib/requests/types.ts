@@ -1,9 +1,16 @@
-export type UserRole = "super_admin" | "admin" | "user" | null;
+export type UserRole = "super_admin" | "admin" | "user" | "alumni" | null;
 
-export type Permissions =
-  | "manage_cc_members"
-  | "add_constitution_version"
-  | "add_new_admin";
+export interface RoleListObject {
+  value: UserRole;
+  label: string;
+}
+
+export type Permissions = "manage_cc_members" | "add_constitution_version";
+
+export interface PermissionsListObject {
+  value: Permissions;
+  label: string;
+}
 
 export interface DecodedToken {
   userId: string;

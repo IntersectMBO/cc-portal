@@ -36,7 +36,8 @@ export type TextAreaFieldProps = TextAreaProps & {
 };
 
 export interface SeletItem {
-  [key: string]: string;
+  value: string;
+  label: string;
 }
 
 export interface MultipleSelectProps extends Omit<InputFieldProps, "onChange"> {
