@@ -7,11 +7,12 @@ import { useRouter } from "next/navigation";
 import { PATHS } from "@consts";
 import { registerAuthCallback, decodeUserToken } from "@/lib/api";
 import { useAppContext, useModal } from "@context";
+import { SignupModalState } from "@organisms";
 
 export default function VerifyRegister({ searchParams }) {
   const router = useRouter();
   const { setUserSession } = useAppContext();
-  const { openModal } = useModal();
+  const { openModal } = useModal<SignupModalState>();
 
   useEffect(() => {
     const verifyToken = async (token: string) => {
@@ -22,6 +23,9 @@ export default function VerifyRegister({ searchParams }) {
         router.push(PATHS.home);
         openModal({
           type: "signUpModal",
+          state: {
+            showCloseButton: false,
+          },
         });
       } catch (error) {
         console.error("Error fetching data:", error);

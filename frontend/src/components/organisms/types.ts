@@ -25,3 +25,7 @@ export interface HeroActionsProps {
 }
 
 export interface UserListItem extends FetchUserData {}
+
+export interface SignupModalState {
+  showCloseButton?: boolean;
+}

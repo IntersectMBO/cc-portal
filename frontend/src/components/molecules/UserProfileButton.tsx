@@ -28,6 +28,9 @@ export default function UserProfileButton({
   const editProfile = () => {
     openModal({
       type: "signUpModal",
+      state: {
+        showCloseButton: true,
+      },
     });
     handleClose();
   };

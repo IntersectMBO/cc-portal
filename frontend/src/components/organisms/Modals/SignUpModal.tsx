@@ -1,18 +1,22 @@
 "use client";
+import { useModal } from "@context";
 import {
   ModalContents,
   ModalHeader,
   ModalWrapper,
   Typography,
   Button,
+  ModalActions,
 } from "@atoms";
 import { IMAGES } from "@consts";
 import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
+import { SignupModalState } from "../types";
 
 export const SignUpModal = () => {
+  const { state } = useModal<SignupModalState>();
   const t = useTranslations("Modals");
 
   const {
@@ -24,9 +28,6 @@ export const SignUpModal = () => {
 
   const onSubmit = (data) => {
     console.log("Form submitted:", data);
-  };
-  const handleUpload = (file: File) => {
-    console.log("uploaded file", file);
   };
 
   return (
@@ -75,7 +76,11 @@ export const SignUpModal = () => {
               display: "flex",
             }}
           >
-            <Button type="submit">{t("common.confirm")}</Button>
+            {state.showCloseButton ? (
+              <ModalActions />
+            ) : (
+              <Button type="submit">{t("common.confirm")}</Button>
+            )}
           </Box>
         </ModalContents>
       </form>
