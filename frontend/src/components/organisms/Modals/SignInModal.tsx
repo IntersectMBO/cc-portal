@@ -7,10 +7,12 @@ import { login } from "@/lib/api";
 import { useModal } from "@context";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
+import { useSnackbar } from "@/context/snackbar";
 
 export const SignInModal = () => {
   const { closeModal } = useModal();
   const t = useTranslations("Modals");
+  const { addSuccessAlert, addErrorAlert } = useSnackbar();
 
   const {
     register,
@@ -23,7 +25,10 @@ export const SignInModal = () => {
     try {
       await login(data.email);
       closeModal();
-    } catch (error) {}
+      addSuccessAlert(t("signIn.alerts.success"));
+    } catch (error) {
+      addErrorAlert(t("signIn.alerts.error"));
+    }
   };
 
   return (

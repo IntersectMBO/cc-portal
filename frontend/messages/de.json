@@ -35,6 +35,10 @@
           "label": "Email address",
           "placeholder": "Text here"
         }
+      },
+      "alerts": {
+        "success": "Magic link successfully sent",
+        "error": "Error sending magic link"
       }
     },
     "signUp": {
@@ -86,6 +90,10 @@
           "label": "Permissions",
           "placeholder": "Permissions"
         }
+      },
+      "alerts": {
+        "success": "New member successfully added",
+        "error": "Error adding new member"
       }
     },
     "uploadConstitution": {
@@ -101,5 +109,8 @@
   "NotFound": {
     "noMembersFound": "No members found",
     "addNewMembers": "Add new members"
+  },
+  "Snackbar": {
+    "changesSaved": "Changes saved"
   }
 }

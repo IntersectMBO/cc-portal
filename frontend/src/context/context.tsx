@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ModalProvider } from "./modal";
 import { DecodedToken, FetchUserData } from "@/lib/requests";
+import { SnackbarProvider } from "./snackbar";
 
 interface AppContextType {
   userSession: DecodedToken | null;
@@ -56,7 +57,9 @@ export function AppContextProvider({ session, children }) {
     <AppContext.Provider
       value={{ userSession, setUserSession, user, resetState, logout }}
     >
-      <ModalProvider>{children}</ModalProvider>
+      <ModalProvider>
+        <SnackbarProvider>{children}</SnackbarProvider>
+      </ModalProvider>
     </AppContext.Provider>
   );
 }
