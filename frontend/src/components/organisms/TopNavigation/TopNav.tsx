@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 
 import { Box, Grid } from "@mui/material";
 
@@ -7,7 +7,7 @@ import { NAV_ITEMS } from "@consts";
 import { Link } from "@atoms";
 import { useAppContext } from "@context";
 import { TopNavWrapper } from "./TopNavWrapper";
-import AuthButton from "@/components/molecules/AuthButton";
+import UserProfileButton from "@/components/molecules/UserProfileButton";
 
 export const TopNav = () => {
   const { userSession, user } = useAppContext();
