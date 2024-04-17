@@ -107,7 +107,7 @@ export class IpfsService {
       this.configService.getOrThrow('IPFS_SERVICE_URL') + '/ipfs/' + cid;
     try {
       const response = await axios.get(apiLink);
-      if (!response.data) {
+      if (response.status == 404) {
         throw new NotFoundException(`Document with cid: ${cid} not found`);
       }
       return IpfsMapper.ipfsServiceDtoToIpfsMetadataDto(response.data);
