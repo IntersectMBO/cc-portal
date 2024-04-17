@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { ConstitutionRedisService } from 'src/redis/service/constitution-redis.service';
 import { ConstitutionResponse } from '../api/response/constitution.response';
 import { ConstitutionMapper } from '../mapper/constitution.mapper';
-import { CreateConstitutionRequest } from '../api/request/create-constitution.request';
-import { CreateConstitutionDto } from '../dto/create-constitution.dto';
 import { ConstitutionDto } from 'src/redis/dto/constitution.dto';
+import { IpfsService } from 'src/ipfs/services/ipfs.service';
 
 @Injectable()
 export class ConstitutionFacade {
   constructor(
     private readonly constitutionRedisService: ConstitutionRedisService,
+    private readonly ipfsService: IpfsService,
   ) {}
 
   async getCurrentConstitutionFile(): Promise<ConstitutionResponse> {
@@ -23,29 +23,39 @@ export class ConstitutionFacade {
     return ConstitutionMapper.dtoToResponse(constitutionDto);
   }
 
-  //TODO Import Ipfs Service and replace this
-  private retrieveFromIpfsService():
-    | import('src/redis/dto/constitution.dto').ConstitutionDto
-    | PromiseLike<import('src/redis/dto/constitution.dto').ConstitutionDto> {
-    throw new Error('Function not implemented.');
+  async getConstitutionByCid(cid: string): Promise<ConstitutionResponse> {
+    const ipfsDto = await this.ipfsService.getFileFromIpfsService(cid);
+    const constitutionDto = new ConstitutionDto(
+      ipfsDto.version,
+      ipfsDto.cid,
+      ipfsDto.content,
+    );
+    return ConstitutionMapper.dtoToResponse(constitutionDto);
+  }
+
+  private async retrieveFromIpfsService(): Promise<ConstitutionDto> {
+    const ipfsDto = await this.ipfsService.findLastRecord();
+    return new ConstitutionDto(ipfsDto.version, ipfsDto.cid, ipfsDto.content);
   }
 
   async storeConstitutionFile(
-    request: CreateConstitutionRequest,
+    file: Express.Multer.File,
   ): Promise<ConstitutionResponse> {
-    const constitutionDto = await this.storeIntoIpfs(
-      ConstitutionMapper.createConstitutionRequestToDto(request),
-    );
+    const constitutionDto = await this.storeIntoIpfs(file);
     await this.constitutionRedisService.saveConstitutionFile(constitutionDto);
 
     return ConstitutionMapper.dtoToResponse(constitutionDto);
   }
 
-  //TODO Import Ipfs Service and replace this
   private async storeIntoIpfs(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    dto: CreateConstitutionDto,
+    file: Express.Multer.File,
   ): Promise<ConstitutionDto> {
-    throw new Error('Function not implemented.');
+    const ipfsDto = await this.ipfsService.addFileToIpfsService(file);
+    const constitutionDto = new ConstitutionDto(
+      ipfsDto.version,
+      ipfsDto.cid,
+      ipfsDto.content,
+    );
+    return constitutionDto;
   }
 }
