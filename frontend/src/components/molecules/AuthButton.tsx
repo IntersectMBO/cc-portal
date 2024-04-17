@@ -30,8 +30,9 @@ export default function AuthButton({ user }: { user: FetchUserData }) {
   };
 
   const signOut = async () => {
-    logout();
-    handleClose();
+    openModal({
+      type: "signOutModal",
+    });
   };
   return (
     <div>
