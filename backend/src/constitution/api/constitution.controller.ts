@@ -50,7 +50,7 @@ export class ConstitutionController {
     status: 404,
     description: 'Constitution file with {cid} not found',
   })
-  @Get('version/:cid')
+  @Get('cid/:cid')
   async getSpecificConstitution(
     @Param('cid') cid: string,
   ): Promise<ConstitutionResponse> {
