@@ -1,9 +1,8 @@
 import React from "react";
 
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { UsersListItem } from "./UsersListItem";
 import { UserListItem } from "../types";
-import { Typography } from "@atoms";
 import { NotFound } from "../NotFound";
 
 export function UsersList({ usersList }: { usersList: UserListItem[] }) {

@@ -77,7 +77,9 @@ export const AddMemberModal = () => {
               items={permissionsList}
               control={control}
               errors={errors}
-              {...register("permissions")}
+              {...register("permissions", {
+                required: "Permission is required",
+              })}
             />
           )}
 
