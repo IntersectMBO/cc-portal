@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
 import { IpfsService } from './services/ipfs.service';
-import { IpfsController } from './api/ipfs.controller';
-import { Ipfs } from './entities/ipfs.entity';
+import { IpfsMetadata } from './entities/ipfs-metadata.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { IpfsFacade } from './facade/ipfs.facade';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Ipfs])],
-  providers: [IpfsFacade, IpfsService],
-  controllers: [IpfsController],
+  imports: [TypeOrmModule.forFeature([IpfsMetadata])],
+  providers: [IpfsService],
+  controllers: [],
   exports: [IpfsService],
 })
 export class IpfsModule {}

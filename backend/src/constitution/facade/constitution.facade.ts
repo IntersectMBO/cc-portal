@@ -24,7 +24,7 @@ export class ConstitutionFacade {
   }
 
   async getConstitutionByCid(cid: string): Promise<ConstitutionResponse> {
-    const ipfsDto = await this.ipfsService.getDocFromIpfsService(cid);
+    const ipfsDto = await this.ipfsService.getFileFromIpfsService(cid);
     const constitutionDto = new ConstitutionDto(
       ipfsDto.version,
       ipfsDto.cid,
@@ -50,7 +50,7 @@ export class ConstitutionFacade {
   private async storeIntoIpfs(
     file: Express.Multer.File,
   ): Promise<ConstitutionDto> {
-    const ipfsDto = await this.ipfsService.addDocToIpfsService(file);
+    const ipfsDto = await this.ipfsService.addFileToIpfsService(file);
     const constitutionDto = new ConstitutionDto(
       ipfsDto.version,
       ipfsDto.cid,

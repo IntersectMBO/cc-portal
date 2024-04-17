@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class SeedValues1713254345757 implements MigrationInterface {
+export class SeeValues1713355623341 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `begin;
@@ -31,7 +31,14 @@ export class SeedValues1713254345757 implements MigrationInterface {
               from roles
               inner join permissions on permissions.code 
               in ('manage_cc_members', 'add_constitution_version', 'add_new_admin')
-              where roles.code = 'super_admin' or roles.code = 'admin';
+              where roles.code = 'super_admin';
+  
+              insert into role_permissions(role_id, permission_id)
+              select roles.id, permissions.id
+              from roles
+              inner join permissions on permissions.code 
+              in ('manage_cc_members', 'add_constitution_version')
+              where roles.code = 'admin';
       
               commit;`,
     );
