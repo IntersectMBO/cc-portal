@@ -1,6 +1,5 @@
 export class Constants {
   public static readonly PREFIX_CONSTITUTION = 'constitution';
-  public static readonly SUFFIX_CURRENT_CONSTITUTION = 'current';
 
   public static readonly PREFIX_CONSTITUTION_DIFF = 'constitution_diff';
 

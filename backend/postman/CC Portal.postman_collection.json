@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "aec582c9-802c-4f73-b9ec-5efde00f5781",
+		"_postman_id": "111fe66d-c6ff-45a1-9663-b674dd976e29",
 		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20133713"
@@ -353,6 +353,83 @@
 								"api",
 								"email",
 								"send-test-email"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Constitution",
+			"item": [
+				{
+					"name": "Upload document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/aca/Documents/profile.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base-url}}/api/constitution/to-ipfs",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"to-ipfs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get document by cid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/bafkreihu5g6qrlivg6ydq6j26q3vfyci5y2jxeapgz5obnnjv4bsxo76bu",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"bafkreihu5g6qrlivg6ydq6j26q3vfyci5y2jxeapgz5obnnjv4bsxo76bu"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get current file",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution"
 							]
 						}
 					},

@@ -3,18 +3,16 @@ import { RedisModule } from 'src/redis/redis.module';
 import { ConstitutionController } from './api/constitution.controller';
 import { ConstitutionFacade } from './facade/constitution.facade';
 import { ConstitutionService } from './services/constitution.service';
-import { IpfsUploadService } from '../ipfs-upload/services/ipfs-upload.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Ipfs } from '../ipfs-upload/entities/ipfs.entity';
 import { Repository } from 'typeorm';
+import { IpfsModule } from 'src/ipfs/ipfs.module';
 
 @Module({
-  imports: [RedisModule, TypeOrmModule.forFeature([Ipfs])],
+  imports: [IpfsModule, RedisModule],
   controllers: [ConstitutionController],
   providers: [
     ConstitutionFacade,
     ConstitutionService,
-    IpfsUploadService,
+    ,
     TextDecoder,
     Repository,
   ],

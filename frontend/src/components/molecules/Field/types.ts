@@ -35,7 +35,12 @@ export type TextAreaFieldProps = TextAreaProps & {
   layoutStyles?: BoxProps;
 };
 
+export interface SeletItem {
+  [key: string]: string;
+}
+
 export interface MultipleSelectProps extends Omit<InputFieldProps, "onChange"> {
-  items: string[];
-  onChange: (options: string[]) => void;
+  items: SeletItem[];
+  onChange: (...event: any[]) => void;
+  multiple?: boolean;
 }
