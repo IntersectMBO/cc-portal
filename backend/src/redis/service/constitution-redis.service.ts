@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-
 import { Constants } from '../util/constants';
 import { RedisRepository } from '../repository/redis.repo';
 import { ConstitutionDto } from '../dto/constitution.dto';
@@ -11,46 +10,20 @@ export class ConstitutionRedisService {
     @Inject(RedisRepository) private readonly redisRepository: RedisRepository,
   ) {}
 
-  /**
-   * This function saves a consitution file within Redis, by default it also sets saved constitution file as a current constitution
-   * @param constitution constitution document that is to be cached
-   * @param current default set to true, pass false as a parameter if saved constitution file is not a current consititution
-   */
-  async saveConstitutionFile(
-    constitution: ConstitutionDto,
-    current: boolean = true,
-  ): Promise<void> {
+  async saveConstitutionFile(constitution: ConstitutionDto): Promise<void> {
     const constitutionJson = JSON.stringify(constitution);
-
-    if (current) {
-      await this.redisRepository.set(
-        Constants.PREFIX_CONSTITUTION,
-        Constants.SUFFIX_CURRENT_CONSTITUTION,
-        constitutionJson,
-      );
-    }
 
     await this.redisRepository.set(
       Constants.PREFIX_CONSTITUTION,
-      constitution.version,
+      constitution.cid,
       constitutionJson,
     );
   }
 
-  async getConstitutionFileCurrent(): Promise<ConstitutionDto | null> {
+  async getConstitutionFileByCid(cid: string): Promise<ConstitutionDto | null> {
     const constitution = await this.redisRepository.get(
       Constants.PREFIX_CONSTITUTION,
-      Constants.SUFFIX_CURRENT_CONSTITUTION,
-    );
-    return JSON.parse(constitution);
-  }
-
-  async getConstitutionFileByVersion(
-    version: string,
-  ): Promise<ConstitutionDto | null> {
-    const constitution = await this.redisRepository.get(
-      Constants.PREFIX_CONSTITUTION,
-      version,
+      cid,
     );
     return JSON.parse(constitution);
   }
