@@ -35,6 +35,9 @@ export class IpfsService {
       return ipfsContent;
     } catch (error) {
       this.logger.error(`Error when adding to IPFS: ${error}`);
+      if (error.status == 409) {
+        throw error;
+      }
       throw new InternalServerErrorException(
         `Error when add file to the IPSF service`,
       );

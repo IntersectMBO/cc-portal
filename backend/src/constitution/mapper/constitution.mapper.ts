@@ -58,6 +58,7 @@ export class ConstitutionMapper {
     constitutionResponse.cid = ipfsMetadataDto.cid;
     constitutionResponse.title = ipfsMetadataDto.title;
     constitutionResponse.version = ipfsMetadataDto.version;
+    constitutionResponse.createdDate = ipfsMetadataDto.createdDate;
 
     return constitutionResponse;
   }

@@ -78,12 +78,20 @@ export class ConstitutionController {
     type: ConstitutionResponse,
   })
   @ApiResponse({
-    status: 400,
-    description: 'Bad Request',
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden resource"',
   })
   @ApiResponse({
     status: 409,
     description: 'File is already uploaded',
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'File is required',
   })
   @Permissions(PermissionEnum.ADD_CONSTITUTION)
   @UseGuards(JwtAuthGuard, PermissionGuard)
