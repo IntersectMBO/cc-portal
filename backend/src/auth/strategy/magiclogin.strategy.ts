@@ -22,8 +22,7 @@ export class MagicLoginStrategy extends PassportStrategy(
       jwtOptions: {
         expiresIn: configService.getOrThrow('MAGIC_LOGIN_LINK_EXPIRES_IN'),
       },
-      callbackUrl:
-        configService.getOrThrow('BASE_URL') + '/api/auth/login/callback',
+      callbackUrl: configService.getOrThrow('FE_LOGIN_CALLBACK_URL'),
       sendMagicLink: async (destination: string, href: string) => {
         const emailDto: EmailDto = EmailMapper.loginEmail(destination, href);
         this.authFacade.sendEmail(emailDto);
