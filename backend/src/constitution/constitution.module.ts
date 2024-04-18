@@ -9,13 +9,7 @@ import { IpfsModule } from 'src/ipfs/ipfs.module';
 @Module({
   imports: [IpfsModule, RedisModule],
   controllers: [ConstitutionController],
-  providers: [
-    ConstitutionFacade,
-    ConstitutionService,
-    ,
-    TextDecoder,
-    Repository,
-  ],
+  providers: [ConstitutionFacade, ConstitutionService, Repository],
   exports: [],
 })
 export class ConstitutionModule {}

@@ -26,7 +26,6 @@ export class IpfsMapper {
     ipfsMetadata.blake2b = ipfsContent.blake2b;
     ipfsMetadata.title = ipfsContent.title;
     ipfsMetadata.contentType = ipfsContent.contentType;
-    ipfsMetadata.content = ipfsContent.contents;
     ipfsMetadata.version = ipfsContent.version;
 
     return ipfsMetadata;

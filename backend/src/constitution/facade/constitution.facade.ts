@@ -48,14 +48,6 @@ export class ConstitutionFacade {
     return await this.getConstitutionFileByCid(currentConstitutionMetadata.cid);
   }
 
-  async getAllConstitutionMetadata(): Promise<ConstitutionMetadataResponse[]> {
-    const constitutionMetadataArray = await this.ipfsService.findAllMetadata();
-
-    return constitutionMetadataArray.map((metadataDto) =>
-      ConstitutionMapper.ipfsMetadataDtoToConstitutionResponse(metadataDto),
-    );
-  }
-
   async getConstitutionFileByCid(cid: string): Promise<ConstitutionResponse> {
     let constitutionDto =
       await this.constitutionRedisService.getConstitutionFileByCid(cid);
@@ -119,5 +111,13 @@ export class ConstitutionFacade {
       );
       throw new InternalServerErrorException('Failed to generate diff');
     }
+  }
+
+  async getAllConstitutionMetadata(): Promise<ConstitutionMetadataResponse[]> {
+    const constitutionMetadataArray = await this.ipfsService.findAllMetadata();
+
+    return constitutionMetadataArray.map((metadataDto) =>
+      ConstitutionMapper.ipfsMetadataDtoToConstitutionResponse(metadataDto),
+    );
   }
 }
