@@ -7,7 +7,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { User, UserStatusEnum } from '../entities/user.entity';
+import { User } from '../entities/user.entity';
+import { UserStatusEnum } from '../enums/user-status.enum';
 import { EntityManager, Repository } from 'typeorm';
 import { Role } from '../entities/role.entity';
 import { UserDto } from '../dto/user.dto';

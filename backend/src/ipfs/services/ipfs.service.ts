@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { IpfsMetadataDto } from '../dto/ipfs-metadata.dto';
 import axios from 'axios';
 import { Blob } from 'buffer';
 import * as blake from 'blakejs';
+import { IpfsContentDto } from '../dto/ipfs-content.dto';
 
 @Injectable()
 export class IpfsService {
@@ -25,9 +27,23 @@ export class IpfsService {
     private readonly configService: ConfigService,
   ) {}
 
-  async addFileToIpfsService(
+  async addToIpfs(file: Express.Multer.File): Promise<IpfsContentDto> {
+    try {
+      const ipfsContent = await this.sendFileToIpfsService(file);
+      const metadata = IpfsMapper.ipfsContentToMetadata(ipfsContent);
+      await this.saveMetadata(metadata);
+      return ipfsContent;
+    } catch (error) {
+      this.logger.error(`Error when adding to IPFS: ${error}`);
+      throw new InternalServerErrorException(
+        `Error when add file to the IPSF service`,
+      );
+    }
+  }
+
+  private async sendFileToIpfsService(
     file: Express.Multer.File,
-  ): Promise<IpfsMetadataDto> {
+  ): Promise<IpfsContentDto> {
     const contentType = file.mimetype;
     const fileObj = Object.values(file.buffer);
     const fileBuffer = Buffer.from(fileObj);
@@ -41,36 +57,28 @@ export class IpfsService {
         'Content-Type': 'multipart/form-data',
       },
     };
-    try {
-      const response = await axios.post(apiLink, formData, requestConfig);
-      const cid = response.data.cid;
-      const content = response.data.content;
-      const blake2b = await this.generateBlake2bHash(content);
-      const title = await this.generateTitle();
-      const newVersion = Math.floor(Date.now() / 1000).toString(); // timestamp
-      const insertData: IpfsMetadataDto = {
-        cid: cid,
-        blake2b: blake2b,
-        title: title,
-        contentType: contentType,
-        content: content,
-        version: newVersion,
-      };
-      const result = await this.insertCid(insertData);
-      return IpfsMapper.ipfsEntityToDto(result);
-    } catch (error) {
-      this.logger.error(error);
-      throw new Error(`Error when add file to the IPSF service: ` + error);
-    }
+    const response = await axios.post(apiLink, formData, requestConfig);
+    const cid = response.data.cid;
+    const content = response.data.content;
+    const blake2b = await this.generateBlake2bHash(content);
+    const title = await this.generateTitle();
+    const newVersion = Math.floor(Date.now() / 1000).toString(); // timestamp
+    return {
+      cid: cid,
+      blake2b: blake2b,
+      title: title,
+      contentType: contentType,
+      contents: content,
+      version: newVersion,
+    };
   }
 
-  private async insertCid(ipfsDto: IpfsMetadataDto): Promise<IpfsMetadata> {
-    const existing = await this.findByCid(ipfsDto.cid);
+  private async saveMetadata(metadata: IpfsMetadata): Promise<IpfsMetadata> {
+    const existing = await this.findMetadataByCid(metadata.cid);
     if (existing) {
       throw new ConflictException(`Document already uploaded`);
     }
-    const created = this.ipfsMetadataRepository.create(ipfsDto);
-    return await this.ipfsMetadataRepository.save(created);
+    return await this.ipfsMetadataRepository.save(metadata);
   }
 
   private async generateBlake2bHash(data: string): Promise<string> {
@@ -87,22 +95,7 @@ export class IpfsService {
     return title.toString();
   }
 
-  async findLastRecord(): Promise<IpfsMetadataDto> {
-    const lastRecord = await this.ipfsMetadataRepository.findOne({
-      where: { cid: Not(IsNull()) },
-      order: { createdAt: 'DESC' },
-    });
-    return IpfsMapper.ipfsEntityToDto(lastRecord);
-  }
-
-  private async findByCid(cid: string): Promise<IpfsMetadata> {
-    const existingDoc = await this.ipfsMetadataRepository.findOne({
-      where: { cid: cid },
-    });
-    return existingDoc;
-  }
-
-  async getFileFromIpfsService(cid: string): Promise<IpfsMetadataDto> {
+  async getFromIpfs(cid: string): Promise<IpfsContentDto> {
     const apiLink =
       this.configService.getOrThrow('IPFS_SERVICE_URL') + '/ipfs/' + cid;
     try {
@@ -110,17 +103,36 @@ export class IpfsService {
       if (response.status == 404) {
         throw new NotFoundException(`Document with cid: ${cid} not found`);
       }
-      return IpfsMapper.ipfsServiceDtoToIpfsMetadataDto(response.data);
+      const ipfsData = response.data;
+      const ipfsMetadata = await this.findMetadataByCid(cid);
+      return IpfsMapper.ipfsDataAndMetadataToContentDto(ipfsData, ipfsMetadata);
     } catch (error) {
-      this.logger.error(error);
-      throw new Error(`Error when get file from IPFS service: ` + error);
+      this.logger.error(`Error when getting data from IPFS: ${error}`);
+      throw new InternalServerErrorException(
+        `Error when getting file from IPFS service`,
+      );
     }
   }
 
-  async getAllFiles(): Promise<IpfsMetadataDto[]> {
+  private async findMetadataByCid(cid: string): Promise<IpfsMetadata> {
+    const existingDoc = await this.ipfsMetadataRepository.findOne({
+      where: { cid: cid },
+    });
+    return existingDoc;
+  }
+
+  async findCurrentMetadata(): Promise<IpfsMetadataDto> {
+    const lastRecord = await this.ipfsMetadataRepository.findOne({
+      where: { cid: Not(IsNull()) },
+      order: { createdAt: 'DESC' },
+    });
+    return IpfsMapper.ipfsMetadataToDto(lastRecord);
+  }
+
+  async findAllMetadata(): Promise<IpfsMetadataDto[]> {
     const allFiles = await this.ipfsMetadataRepository.find();
     const results: IpfsMetadataDto[] = allFiles.map((x) =>
-      IpfsMapper.ipfsEntityToDto(x),
+      IpfsMapper.ipfsMetadataToDto(x),
     );
     return results;
   }

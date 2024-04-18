@@ -125,3 +125,6 @@ infra/terraform/.terraform*
 # local env files
 .env
 .envrc
+
+# ipfs blockstore and datastore
+.ipfs
