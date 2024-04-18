@@ -1,5 +1,116 @@
 {
-	"Index": {
-		"title": "Web App Boilerplate"
-	}
+  "Index": {
+    "title": "Web App Boilerplate",
+    "hero": {
+      "headline": "CoCreate future of CC Portal by Intersect Cardano",
+      "description": "Lorem ipsum dolor sit amet consectetur. Facilisi neque felis egestas magna tempus.Lorem ipsum dolor sit amet consectetur. Facilisi neque felis egestas magna tempus.",
+      "seeConstitution": "See Constitution",
+      "signIn": "Sign In",
+      "constitutionalCommitteePortal": "Constitutional Committee Portal"
+    }
+  },
+  "Constitution": {
+    "title": "Cardano Constituition"
+  },
+  "Navigation": {
+    "addNewMember": "Add new member",
+    "uploadNewVersion": "Upload new version",
+    "editProfile": "Edit Profile",
+    "signOut": "Sign Out"
+  },
+  "Footer": {
+    "copyright": "© 2024 Intersect MBO",
+    "signOut": "Sign Out"
+  },
+  "Modals": {
+    "common": {
+      "confirm": "Confirm",
+      "close": "Close"
+    },
+    "signIn": {
+      "headline": "Sign In",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "fields": {
+        "email": {
+          "label": "Email address",
+          "placeholder": "Text here"
+        }
+      },
+      "alerts": {
+        "success": "Magic link successfully sent",
+        "error": "Error sending magic link"
+      }
+    },
+    "signUp": {
+      "headline": "Sign Up",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "fields": {
+        "username": {
+          "label": "Username",
+          "placeholder": "Text here"
+        },
+        "hotAddress": {
+          "label": "Hot address",
+          "placeholder": "Text here"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Enter a description",
+          "helpfulText": "This is a hint text to help user."
+        },
+        "upload": "Upload profile photo"
+      }
+    },
+    "signOut": {
+      "headline": "Sign Out",
+      "description": "Are you sure you want to Sign out?"
+    },
+    "deleteRole": {
+      "headline": "Delete role",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "fields": {
+        "delete": {
+          "label": "Write DELETE",
+          "placeholder": "Write DELETE"
+        }
+      }
+    },
+    "addMember": {
+      "headline": "Add member",
+      "fields": {
+        "email": {
+          "label": "Email address",
+          "placeholder": "Email address"
+        },
+        "role": {
+          "label": "Role",
+          "placeholder": "Role"
+        },
+        "permissions": {
+          "label": "Permissions",
+          "placeholder": "Permissions"
+        }
+      },
+      "alerts": {
+        "success": "New member successfully added",
+        "error": "Error adding new member"
+      }
+    },
+    "uploadConstitution": {
+      "headline": "Upload new version of Constitution",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "upload": "Upload Constitution"
+    }
+  },
+  "AdminDashboard": {
+    "role": "Role",
+    "status": "Status"
+  },
+  "NotFound": {
+    "noMembersFound": "No members found",
+    "addNewMembers": "Add new members"
+  },
+  "Snackbar": {
+    "changesSaved": "Changes saved"
+  }
 }

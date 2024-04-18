@@ -12,12 +12,7 @@ import { Role } from './role.entity';
 import { CommonEntity } from '../../common/entities/common.entity';
 import { Permission } from './permission.entity';
 import { HotAddress } from './hotaddress.entity';
-
-export enum UserStatusEnum {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  PENDING = 'pending',
-}
+import { UserStatusEnum } from '../enums/user-status.enum';
 
 @Entity('users')
 export class User extends CommonEntity {

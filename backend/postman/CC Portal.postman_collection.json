@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "aec582c9-802c-4f73-b9ec-5efde00f5781",
+		"_postman_id": "111fe66d-c6ff-45a1-9663-b674dd976e29",
 		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20133713"
@@ -248,7 +248,7 @@
 					"response": []
 				},
 				{
-					"name": "Register callback",
+					"name": "Register Callback",
 					"event": [
 						{
 							"listen": "test",
@@ -316,7 +316,7 @@
 					"response": []
 				},
 				{
-					"name": "Login callback",
+					"name": "Login Callback",
 					"event": [
 						{
 							"listen": "test",
@@ -411,6 +411,131 @@
 								"api",
 								"email",
 								"send-test-email"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Constitution",
+			"item": [
+				{
+					"name": "Upload Document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/aca/Projects/helia-examples/examples/helia-vite/README.md"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base-url}}/api/constitution",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current Document",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/current",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Document By CID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/cid/bafkreif5qv3lf2qpisr2mad3t33eunm76slligitgr333uwfjw2c5leefi",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"cid",
+								"bafkreif5qv3lf2qpisr2mad3t33eunm76slligitgr333uwfjw2c5leefi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Constitution Documents",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Diff Document",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/diff?base=A&target=B",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"diff"
+							],
+							"query": [
+								{
+									"key": "base",
+									"value": "A"
+								},
+								{
+									"key": "target",
+									"value": "B"
+								}
 							]
 						}
 					},

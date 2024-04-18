@@ -1,5 +1,5 @@
 import { Timestamp } from 'typeorm';
-import { UserStatusEnum } from '../entities/user.entity';
+import { UserStatusEnum } from '../enums/user-status.enum';
 
 export class UserDto {
   id: string;

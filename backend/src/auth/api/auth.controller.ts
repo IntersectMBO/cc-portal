@@ -152,7 +152,7 @@ export class AuthController {
   @Get('login/callback')
   async callback(@Req() req): Promise<TokenResponse> {
     const user = req.user;
-    return await this.authFacade.generateTokens(user);
+    return await this.authFacade.login(user);
   }
 
   @ApiOperation({ summary: 'Refresh access token with refresh token' })
