@@ -10,10 +10,15 @@ import {
   ParseFilePipeBuilder,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ConstitutionResponse } from './response/constitution.response';
 import { ConstitutionFacade } from '../facade/constitution.facade';
-import { CreateConstitutionRequest } from './request/create-constitution.request';
 import { Permissions } from 'src/auth/guard/permission.decorator';
 import { PermissionEnum } from 'src/users/enums/permission.enum';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
@@ -58,7 +63,15 @@ export class ConstitutionController {
   }
 
   @ApiOperation({ summary: 'Store constitution file' })
-  @ApiBody({ type: CreateConstitutionRequest })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'file' },
+      },
+    },
+  })
+  @ApiConsumes('multipart/form-data')
   @ApiResponse({
     status: 200,
     description: 'Constitution file stored successfully.',

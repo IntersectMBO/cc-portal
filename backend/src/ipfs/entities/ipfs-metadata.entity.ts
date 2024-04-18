@@ -31,12 +31,6 @@ export class IpfsMetadata extends CommonEntity {
   title: string;
 
   @Column({
-    name: 'content',
-    type: 'text',
-  })
-  content: string;
-
-  @Column({
     name: 'version',
     type: 'varchar',
   })

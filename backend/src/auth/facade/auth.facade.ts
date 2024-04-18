@@ -3,6 +3,7 @@ import { UserDto } from 'src/users/dto/user.dto';
 import { TokenResponse } from '../api/response/token.response';
 import { UserMapper } from 'src/users/mapper/userMapper.mapper';
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -10,7 +11,7 @@ import {
 import { AuthService } from '../service/auth.service';
 import { EmailService } from 'src/email/service/email.service';
 import { EmailDto } from 'src/email/dto/email.dto';
-import { UserStatusEnum } from 'src/users/entities/user.entity';
+import { UserStatusEnum } from 'src/users/enums/user-status.enum';
 import { CreateUserRequest } from 'src/users/api/request/create-user.request';
 import { RoleEnum } from 'src/users/enums/role.enum';
 
@@ -48,6 +49,14 @@ export class AuthFacade {
       throw new NotFoundException(`User with ${email} not found`);
     }
     return user;
+  }
+
+  async login(userDto: UserDto): Promise<TokenResponse> {
+    const existingUser = await this.usersService.findOne(userDto.id);
+    if (existingUser.status !== UserStatusEnum.ACTIVE) {
+      throw new BadRequestException(`User is not active`);
+    }
+    return this.generateTokens(userDto);
   }
 
   async generateTokens(userDto: UserDto): Promise<TokenResponse> {

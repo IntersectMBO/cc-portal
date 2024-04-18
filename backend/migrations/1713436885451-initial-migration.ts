@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitialMigration1713081921886 implements MigrationInterface {
-  name = 'InitialMigration1713081921886';
+export class InitialMigration1713436885451 implements MigrationInterface {
+  name = 'InitialMigration1713436885451';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -26,7 +26,7 @@ export class InitialMigration1713081921886 implements MigrationInterface {
       `CREATE TABLE "roles" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "code" "public"."roles_code_enum" NOT NULL, CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "ipfs" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "cid" character varying NOT NULL, "content_type" character varying NOT NULL, CONSTRAINT "PK_af553336f95ba7f14152e2048ee" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "ipfs_metadata" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "cid" character varying NOT NULL, "blake2b" character varying NOT NULL, "content_type" character varying NOT NULL, "title" character varying NOT NULL, "version" character varying NOT NULL, CONSTRAINT "PK_b786201a24f60a130e0f62027af" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "user_permissions" ("user_id" uuid NOT NULL, "permission_id" uuid NOT NULL, CONSTRAINT "PK_a537c48b1f80e8626a71cb56589" PRIMARY KEY ("user_id", "permission_id"))`,
@@ -99,7 +99,7 @@ export class InitialMigration1713081921886 implements MigrationInterface {
       `DROP INDEX "public"."IDX_3495bd31f1862d02931e8e8d2e"`,
     );
     await queryRunner.query(`DROP TABLE "user_permissions"`);
-    await queryRunner.query(`DROP TABLE "ipfs"`);
+    await queryRunner.query(`DROP TABLE "ipfs_metadata"`);
     await queryRunner.query(`DROP TABLE "roles"`);
     await queryRunner.query(`DROP TYPE "public"."roles_code_enum"`);
     await queryRunner.query(`DROP TABLE "users"`);
