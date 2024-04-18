@@ -140,7 +140,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddress: 'updated_hot_address',
+      hotAddresses: ['updated_hot_address', 'newone'],
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id: string = 'mockedId';
@@ -149,7 +149,7 @@ describe('UsersService', () => {
     // Verifying the result
     expect(result.name).toBe(updateUserDto.name);
     expect(result.description).toBe(updateUserDto.description);
-    expect(result.hotAddresses).toEqual([updateUserDto.hotAddress]);
+    expect(result.hotAddresses).toEqual(updateUserDto.hotAddresses);
     expect(result.profilePhoto).toBe('mocked_file_url');
     expect(mockUserRepository.save).toHaveBeenCalled();
   });
@@ -158,7 +158,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddress: 'updated_hot_address',
+      hotAddresses: ['updated_hot_address', 'newone'],
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id = 'mock_Id';
@@ -176,7 +176,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddress: 'updated_hot_address',
+      hotAddresses: ['updated_hot_address', 'newone'],
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id = 'mocked_id';

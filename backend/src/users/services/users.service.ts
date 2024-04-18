@@ -177,15 +177,8 @@ export class UsersService {
       user.hotAddresses.push(hotAddress);
     }
 
-    try {
-      const updatedUser = await this.entityManager.transaction(() => {
-        return this.userRepository.save(user);
-      });
-      return UserMapper.userToDto(updatedUser);
-    } catch (e) {
-      this.logger.error(`error when updating the user  : ${e.message}`);
-      throw new InternalServerErrorException('update user failed');
-    }
+    const updatedUser = await this.userRepository.save(user);
+    return UserMapper.userToDto(updatedUser);
   }
 
   private async findEntityByIdWithAddresses(id: string): Promise<User> {
@@ -211,32 +204,6 @@ export class UsersService {
       throw new ConflictException(`Address ${hotAddress} already assigned`);
     }
   }
-
-  // async deleteProfilePhoto(id: string): Promise<string> {
-  //   const user = await this.findEntityById(id);
-  //   if (!user) {
-  //     throw new NotFoundException(`user with id ${id} not found`);
-  //   }
-  //   if (!user.profilePhoto) {
-  //     throw new ConflictException(`user does not have profile photo`);
-  //   }
-  //   const fileName = this.extractFileNameFromUrl(user.profilePhoto);
-  //   console.log(fileName);
-  //   try {
-  //     await this.entityManager.transaction(async () => {
-  //       // const userData = this.userRepository.create(user);
-  //       await this.s3Service.deleteFile(UploadContext.PROFILE_PHOTO, fileName);
-  //       user.profilePhoto = null;
-  //       return await this.userRepository.save(user);
-  //     });
-  //     return 'Image successfully removed';
-  //   } catch (e) {
-  //     this.logger.error(
-  //       `error when removing image from the user  : ${e.message}`,
-  //     );
-  //     throw new InternalServerErrorException('removing picture failed');
-  //   }
-  // }
 
   async updateUserStatus(
     id: string,

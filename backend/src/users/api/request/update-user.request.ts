@@ -18,10 +18,8 @@ export class UpdateUserRequest {
   @Matches(/^[a-zA-Z0-9_.\s]+$/, {
     message: `Name can't contain special characters & symbols`,
   })
-  @ValidateIf((e) => e.name !== '')
   @IsString()
-  @IsOptional()
-  name?: string;
+  name: string;
 
   @ApiProperty({
     description: 'Description of the user',
@@ -40,13 +38,13 @@ export class UpdateUserRequest {
     description: 'Hot address of the user',
     example: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
   })
-  @MinLength(2, { message: `Minimum character length is 2` })
-  @MaxLength(255, { message: `Maximum character length is 255` })
-  //needs check
+  @IsOptional()
+  @IsString({ each: true, message: 'Hot address must be a string' })
+  @MinLength(2, { message: `Minimum character length is 2`, each: true })
+  @MaxLength(255, { message: `Maximum character length is 255`, each: true })
   @Matches(/^[a-zA-Z0-9_.:\-\/]+$/, {
     message: `Hot address can contain :, -, /`,
+    each: true,
   })
-  @IsString()
-  @IsOptional()
-  hotAddress?: string;
+  hotAddress: string;
 }

@@ -62,7 +62,6 @@ export class UsersController {
 
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a user' })
-  @ApiBody({ type: UpdateUserRequest })
   @ApiResponse({
     status: 200,
     description: 'User updated successfully.',
@@ -91,10 +90,7 @@ export class UsersController {
     description: 'identification number of the user',
     type: String,
   })
-  @ApiBody({
-    type: UpdateUserRequest,
-    description: 'Data to update the user with',
-  })
+  @ApiBody({ type: UpdateUserRequest })
   @ApiConsumes('multipart/form-data')
   @HttpCode(200)
   @UseInterceptors(FileInterceptor('file'))
