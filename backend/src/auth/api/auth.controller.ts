@@ -21,7 +21,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { RefreshTokenRequest } from './request/refresh-token.request';
-import { CreateUserRequest } from 'src/users/api/request/create-user.request';
 import { MagicRegisterStrategy } from '../strategy/magicregister.strategy';
 import { PermissionGuard } from '../guard/permission.guard';
 import { Permissions } from '../guard/permission.decorator';
@@ -42,7 +41,7 @@ export class AuthController {
   ) {}
 
   @ApiOperation({ summary: 'Register a user. Sending email with a magic link' })
-  @ApiBody({ type: CreateUserRequest })
+  @ApiBody({ type: CreateCCMemberRequest })
   @ApiResponse({
     status: 201,
     description: `{ "success": "true" }`,
@@ -71,7 +70,7 @@ export class AuthController {
   @ApiOperation({
     summary: 'Register an admin. Sending email with a magic link',
   })
-  @ApiBody({ type: CreateUserRequest })
+  @ApiBody({ type: CreateAdminRequest })
   @ApiResponse({
     status: 201,
     description: `{ "success": "true" }`,

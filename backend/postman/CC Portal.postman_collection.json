@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "111fe66d-c6ff-45a1-9663-b674dd976e29",
+		"_postman_id": "7d15a02b-739e-487c-af61-5cdea4c49f81",
 		"name": "CC Portal develop",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20133713"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -28,38 +27,19 @@
 					"response": []
 				},
 				{
-					"name": "Get All Roles",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base-url}}/api/users/roles",
-							"host": [
-								"{{base-url}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"roles"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get User By Id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base-url}}/api/users/id",
+							"raw": "{{base-url}}/api/users/{{userId}}",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"id"
+								"{{userId}}"
 							]
 						}
 					},
@@ -68,49 +48,80 @@
 				{
 					"name": "Update User",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"sofija\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
 							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Andjela",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/milossekuloski/git-repos/cc-portal/backend/postman/1712183767053-valentines-day.png"
+								},
+								{
+									"key": "hot_address",
+									"value": "andjelahot",
+									"type": "text"
+								}
+							]
 						},
 						"url": {
-							"raw": "{{base-url}}/api/users/id",
+							"raw": "{{base-url}}/api/users/{{userId}}",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"id"
+								"{{userId}}"
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Version",
-			"item": [
+				},
 				{
-					"name": "Get Version",
+					"name": "Remove image from user",
 					"request": {
-						"method": "GET",
-						"header": [],
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base-url}}/api/version",
+							"raw": "{{base-url}}/api/users/{{userId}}/profile-photo",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
-								"version"
+								"users",
+								"{{userId}}",
+								"profile-photo"
 							]
 						}
 					},
@@ -478,6 +489,52 @@
 									"key": "target",
 									"value": "B"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Get All Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/roles",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Version",
+			"item": [
+				{
+					"name": "Get Version",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/version",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"version"
 							]
 						}
 					},
