@@ -133,14 +133,6 @@ export class UsersService {
     return results;
   }
 
-  async findOne(id: string): Promise<UserDto> {
-    const user = await this.findEntityById(id);
-    if (!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
-    }
-    return UserMapper.userToDto(user);
-  }
-
   async findById(id: string): Promise<UserDto> {
     const user = await this.findEntityById(id);
     return UserMapper.userToDto(user);

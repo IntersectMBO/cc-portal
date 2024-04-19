@@ -31,7 +31,7 @@ export class UsersFacade {
   }
 
   async findOne(id: string): Promise<UserResponse> {
-    const user = await this.usersService.findOne(id);
+    const user = await this.usersService.findById(id);
     return UserMapper.mapUserDtoToResponse(user);
   }
 

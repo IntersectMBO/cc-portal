@@ -52,7 +52,7 @@ export class AuthFacade {
   }
 
   async login(userDto: UserDto): Promise<TokenResponse> {
-    const existingUser = await this.usersService.findOne(userDto.id);
+    const existingUser = await this.usersService.findById(userDto.id);
     if (existingUser.status !== UserStatusEnum.ACTIVE) {
       throw new BadRequestException(`User is not active`);
     }
