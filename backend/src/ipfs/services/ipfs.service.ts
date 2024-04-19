@@ -28,20 +28,18 @@ export class IpfsService {
   ) {}
 
   async addToIpfs(file: Express.Multer.File): Promise<IpfsContentDto> {
+    let ipfsContent: IpfsContentDto;
     try {
-      const ipfsContent = await this.sendFileToIpfsService(file);
-      const metadata = IpfsMapper.ipfsContentToMetadata(ipfsContent);
-      await this.saveMetadata(metadata);
-      return ipfsContent;
+      ipfsContent = await this.sendFileToIpfsService(file);
     } catch (error) {
       this.logger.error(`Error when adding to IPFS: ${error}`);
-      if (error.status == 409) {
-        throw error;
-      }
       throw new InternalServerErrorException(
         `Error when add file to the IPSF service`,
       );
     }
+    const metadata = IpfsMapper.ipfsContentToMetadata(ipfsContent);
+    await this.saveMetadata(metadata);
+    return ipfsContent;
   }
 
   private async sendFileToIpfsService(
