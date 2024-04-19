@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Box } from "@mui/material";
-import { Typography } from "../atoms/Typography";
+import { Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 
 export const Footer = () => {

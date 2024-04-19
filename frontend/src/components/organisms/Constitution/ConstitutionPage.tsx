@@ -1,17 +1,13 @@
 import { Grid } from "@mui/material";
 import { ConstitutionPageProps } from "../types";
 
-export default function ConstitutionPage({
-  content,
-  key,
-}: ConstitutionPageProps) {
+export default function ConstitutionPage({ content }: ConstitutionPageProps) {
   return (
     <Grid
       data-testid="constitution-page"
       item
       xxs={12}
       lg={6}
-      key={key}
       sx={{
         px: { xxs: 4, md: 7 },
         py: { xxs: 2, md: 6 },

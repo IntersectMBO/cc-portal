@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { UserStatusEnum } from '../../entities/user.entity';
+import { UserStatusEnum } from '../../enums/user-status.enum';
 import { Timestamp } from 'typeorm';
 
 export class UserResponse {
@@ -42,8 +42,8 @@ export class UserResponse {
     description: 'Profile photo of the user',
     example: 'path/to/image.jpg',
   })
-  @Expose({ name: 'profile_photo' })
-  profilePhoto: string;
+  @Expose({ name: 'profile_photo_url' })
+  profilePhotoUrl: string;
 
   @ApiProperty({
     description: 'Status of user',
