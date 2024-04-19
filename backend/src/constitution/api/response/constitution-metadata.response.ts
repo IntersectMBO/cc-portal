@@ -22,4 +22,12 @@ export class ConstitutionMetadataResponse {
   })
   @Expose({ name: 'version' })
   version: string;
+
+  @ApiProperty({
+    name: 'created_date',
+    description: 'Date of uploaded document',
+    example: '01.01.2024.',
+  })
+  @Expose({ name: 'created_date' })
+  createdDate: string;
 }

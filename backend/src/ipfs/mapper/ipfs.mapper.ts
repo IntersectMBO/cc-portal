@@ -1,6 +1,7 @@
 import { IpfsContentDto } from '../dto/ipfs-content.dto';
 import { IpfsMetadataDto } from '../dto/ipfs-metadata.dto';
 import { IpfsMetadata } from '../entities/ipfs-metadata.entity';
+import { format } from 'date-fns';
 
 export class IpfsMapper {
   static ipfsMetadataToDto(ipfsEntity: IpfsMetadata): IpfsMetadataDto {
@@ -10,6 +11,10 @@ export class IpfsMapper {
     ipfsMetadataDto.cid = ipfsEntity.cid;
     ipfsMetadataDto.title = ipfsEntity.title;
     ipfsMetadataDto.version = ipfsEntity.version;
+    ipfsMetadataDto.createdDate = format(
+      ipfsEntity.createdAt.toString(),
+      'dd.MM.yyyy',
+    );
     return ipfsMetadataDto;
   }
 
