@@ -162,7 +162,10 @@ export class UsersService {
     user.profilePhotoUrl = fileUrl;
 
     if (updateUserDto.hotAddress) {
-      await this.checkUniqueUserHotAddress(updateUserDto.hotAddress);
+      await this.checkUniqueUserHotAddress(
+        user.hotAddresses,
+        updateUserDto.hotAddress,
+      );
 
       const hotAddress = new HotAddress();
       hotAddress.address = updateUserDto.hotAddress;
@@ -186,13 +189,15 @@ export class UsersService {
     return user;
   }
 
-  private async checkUniqueUserHotAddress(hotAddress: string) {
-    const existingUserHotAddress = await this.hotAddressRepository.findOne({
-      where: {
-        address: hotAddress,
-      },
-    });
-    if (existingUserHotAddress) {
+  private async checkUniqueUserHotAddress(
+    existingAddresses: HotAddress[],
+    hotAddress: string,
+  ) {
+    const includes = existingAddresses
+      .map((x) => x.address)
+      .includes(hotAddress);
+
+    if (includes) {
       throw new ConflictException(`Address ${hotAddress} already assigned`);
     }
   }
