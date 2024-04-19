@@ -167,7 +167,7 @@ export class UsersService {
 
     user.name = updateUserDto.name;
     user.description = updateUserDto.description;
-    user.profilePhoto = fileUrl;
+    user.profilePhotoUrl = fileUrl;
 
     if (updateUserDto.hotAddress) {
       await this.checkUniqueUserHotAddress(updateUserDto.hotAddress);
@@ -217,7 +217,7 @@ export class UsersService {
 
   async removeProfilePhoto(id: string): Promise<UserDto> {
     const user = await this.findEntityById(id);
-    user.profilePhoto = null;
+    user.profilePhotoUrl = null;
     await this.userRepository.save(user);
     return UserMapper.userToDto(user);
   }

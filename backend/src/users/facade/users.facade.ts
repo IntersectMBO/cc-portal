@@ -64,14 +64,14 @@ export class UsersFacade {
   }
   async deleteProfilePhoto(userId: string): Promise<UserResponse> {
     const userDto = await this.usersService.findById(userId);
-    if (!userDto.profilePhoto) {
+    if (!userDto.profilePhotoUrl) {
       throw new ConflictException(`user does not have profile photo`);
     }
 
     const user = await this.usersService.removeProfilePhoto(userId);
 
-    const fileName = S3Service.extractFileNameFromUrl(userDto.profilePhoto);
-    await this.s3Service.deleteFile(UploadContext.PROFILE_PHOTO, fileName);
+    const fileName = S3Service.extractFileNameFromUrl(userDto.profilePhotoUrl);
+    await this.s3Service.deleteFile(fileName);
 
     return UserMapper.mapUserDtoToResponse(user);
   }

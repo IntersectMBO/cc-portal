@@ -42,8 +42,8 @@ export class UserResponse {
     description: 'Profile photo of the user',
     example: 'path/to/image.jpg',
   })
-  @Expose({ name: 'profile_photo' })
-  profilePhoto: string;
+  @Expose({ name: 'profile_photo_url' })
+  profilePhotoUrl: string;
 
   @ApiProperty({
     description: 'Status of user',

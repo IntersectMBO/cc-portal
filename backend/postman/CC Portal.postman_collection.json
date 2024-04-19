@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "111fe66d-c6ff-45a1-9663-b674dd976e29",
+		"_postman_id": "7d15a02b-739e-487c-af61-5cdea4c49f81",
 		"name": "CC Portal develop",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20133713"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -28,38 +27,19 @@
 					"response": []
 				},
 				{
-					"name": "Get All Roles",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base-url}}/api/users/roles",
-							"host": [
-								"{{base-url}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"roles"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get User By Id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base-url}}/api/users/id",
+							"raw": "{{base-url}}/api/users/{{userId}}",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"id"
+								"{{userId}}"
 							]
 						}
 					},
@@ -69,17 +49,16 @@
 					"name": "Update User",
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5YWI0NWY0MS1mMTk5LTQzODYtYmRhMC00MThiMDBhZGQ3YTUiLCJlbWFpbCI6ImFuZGplbGFsYXVzQGdtYWlsLmNvbSIsInJvbGUiOiJzdXBlcl9hZG1pbiIsInBlcm1pc3Npb25zIjpbIm1hbmFnZV9jY19tZW1iZXJzIiwiYWRkX2NvbnN0aXR1dGlvbl92ZXJzaW9uIiwiYWRkX25ld19hZG1pbiJdLCJpYXQiOjE3MTI2MTU3MjQsImV4cCI6MTcxMjYxNjAyNH0.t0bBqeIGg-H5nWkqdnx9Z6rn1bdbtFgoOi7Pauu0WVU",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
@@ -96,30 +75,24 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/Users/cc-portal/backend/postman/1712183767053-valentines-day.png",
-									"disabled": true
+									"src": "/Users/milossekuloski/git-repos/cc-portal/backend/postman/1712183767053-valentines-day.png"
 								},
 								{
-									"key": "hot_addresses",
+									"key": "hot_address",
 									"value": "andjelahot",
-									"type": "text"
-								},
-								{
-									"key": "hot_addresses",
-									"value": "andjelahot2",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{base-url}}/api/users/id",
+							"raw": "{{base-url}}/api/users/{{userId}}",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"id"
+								"{{userId}}"
 							]
 						}
 					},
@@ -129,50 +102,26 @@
 					"name": "Remove image from user",
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5YWI0NWY0MS1mMTk5LTQzODYtYmRhMC00MThiMDBhZGQ3YTUiLCJlbWFpbCI6ImFuZGplbGFsYXVzQGdtYWlsLmNvbSIsInJvbGUiOiJzdXBlcl9hZG1pbiIsInBlcm1pc3Npb25zIjpbIm1hbmFnZV9jY19tZW1iZXJzIiwiYWRkX2NvbnN0aXR1dGlvbl92ZXJzaW9uIiwiYWRkX25ld19hZG1pbiJdLCJpYXQiOjE3MTI2MTU3MjQsImV4cCI6MTcxMjYxNjAyNH0.t0bBqeIGg-H5nWkqdnx9Z6rn1bdbtFgoOi7Pauu0WVU",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
-						"method": "PATCH",
-						"header": [],
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base-url}}/api/users/remove-image/id",
+							"raw": "{{base-url}}/api/users/{{userId}}/profile-photo",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"remove-image",
-								"id"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Version",
-			"item": [
-				{
-					"name": "Get Version",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base-url}}/api/version",
-							"host": [
-								"{{base-url}}"
-							],
-							"path": [
-								"api",
-								"version"
+								"{{userId}}",
+								"profile-photo"
 							]
 						}
 					},
@@ -540,6 +489,52 @@
 									"key": "target",
 									"value": "B"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Get All Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/roles",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Version",
+			"item": [
+				{
+					"name": "Get Version",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/version",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"version"
 							]
 						}
 					},

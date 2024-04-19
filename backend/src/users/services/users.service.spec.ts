@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { NotFoundException } from '@nestjs/common';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User, UserStatusEnum } from '../entities/user.entity';
+import { User } from '../entities/user.entity';
 import { Role } from '../entities/role.entity';
 import { EntityManager } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
@@ -12,6 +12,7 @@ import { Permission } from '../entities/permission.entity';
 import { UserDto } from '../dto/user.dto';
 import { HotAddress } from '../entities/hotaddress.entity';
 import { ConflictException } from '@nestjs/common/exceptions/conflict.exception';
+import { UserStatusEnum } from '../enums/user-status.enum';
 const mockS3Service = {
   uploadFileMinio: jest.fn().mockResolvedValue('mocked_file_name'),
   createBucketIfNotExists: jest.fn().mockResolvedValue('new_bucket'),
@@ -24,7 +25,7 @@ const mockUser: UserDto = {
   email: 'mockedEmail',
   hotAddresses: [],
   description: 'mockedDescription',
-  profilePhoto: 'mockedProfilePhoto',
+  profilePhotoUrl: 'mockedProfilePhoto',
   status: UserStatusEnum.ACTIVE,
   role: 'role1',
   permissions: ['permission1', 'permission2'],
@@ -36,7 +37,7 @@ const user: User = {
   name: 'John Doe',
   email: 'mockedEmail',
   description: 'mockedDescription',
-  profilePhoto: 'mockedProfilePhoto',
+  profilePhotoUrl: 'mockedProfilePhoto',
   status: UserStatusEnum.ACTIVE,
   role: null,
   permissions: null,
@@ -140,7 +141,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddresses: ['updated_hot_address', 'newone'],
+      hotAddress: 'updated_hot_address',
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id: string = 'mockedId';
@@ -149,8 +150,8 @@ describe('UsersService', () => {
     // Verifying the result
     expect(result.name).toBe(updateUserDto.name);
     expect(result.description).toBe(updateUserDto.description);
-    expect(result.hotAddresses).toEqual(updateUserDto.hotAddresses);
-    expect(result.profilePhoto).toBe('mocked_file_url');
+    expect(result.hotAddresses).toContain(updateUserDto.hotAddress);
+    expect(result.profilePhotoUrl).toBe('mocked_file_url');
     expect(mockUserRepository.save).toHaveBeenCalled();
   });
 
@@ -158,7 +159,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddresses: ['updated_hot_address', 'newone'],
+      hotAddress: 'updated_hot_address',
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id = 'mock_Id';
@@ -176,7 +177,7 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUserDto = {
       name: 'John Doe',
       description: 'Updated description',
-      hotAddresses: ['updated_hot_address', 'newone'],
+      hotAddress: 'updated_hot_address',
     };
     const mockFile: any = { fieldname: 'profilePhoto' };
     const id = 'mocked_id';

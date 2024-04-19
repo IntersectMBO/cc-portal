@@ -48,7 +48,7 @@ export class User extends CommonEntity {
     type: 'varchar',
     nullable: true,
   })
-  profilePhoto: string;
+  profilePhotoUrl: string;
 
   @Column({
     name: 'status',

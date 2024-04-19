@@ -43,9 +43,8 @@ export class S3Service {
     return await this.client.presignedUrl('GET', this.bucketName, fullName);
   }
 
-  async deleteFile(context: UploadContext, fileName: string) {
-    const fullName = this.getFullFileName(context, fileName);
-    await this.client.removeObject(this.bucketName, fullName);
+  async deleteFile(fileName: string) {
+    await this.client.removeObject(this.bucketName, fileName);
   }
 
   private getFullFileName(context: UploadContext, fileName: string): string {

@@ -15,7 +15,7 @@ export class UserMapper {
     userDto.name = user.name;
     userDto.email = user.email;
     userDto.description = user.description;
-    userDto.profilePhoto = user.profilePhoto;
+    userDto.profilePhotoUrl = user.profilePhotoUrl;
     userDto.status = user.status;
     userDto.hotAddresses = user.hotAddresses?.map(
       (hotAddress) => hotAddress.address,
@@ -63,7 +63,7 @@ export class UserMapper {
     const updateUserDto = new UpdateUserDto();
     updateUserDto.name = updateUserRequest.name;
     updateUserDto.description = updateUserRequest.description;
-    updateUserDto.hotAddresses = updateUserRequest.hotAddresses;
+    updateUserDto.hotAddress = updateUserRequest.hotAddress;
     return updateUserDto;
   }
 
@@ -74,7 +74,7 @@ export class UserMapper {
     userResponse.email = userDto.email;
     userResponse.hotAddresses = userDto.hotAddresses;
     userResponse.description = userDto.description;
-    userResponse.profilePhoto = userDto.profilePhoto;
+    userResponse.profilePhotoUrl = userDto.profilePhotoUrl;
     userResponse.status = userDto.status;
     userResponse.role = userDto.role;
     userResponse.permissions = userDto.permissions;

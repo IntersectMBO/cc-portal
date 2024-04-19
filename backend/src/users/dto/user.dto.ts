@@ -6,7 +6,7 @@ export class UserDto {
   name: string;
   email: string;
   description: string;
-  profilePhoto: string;
+  profilePhotoUrl: string;
   status: UserStatusEnum;
   hotAddresses: string[];
   role: string;
