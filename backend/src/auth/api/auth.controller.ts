@@ -47,7 +47,8 @@ export class AuthController {
     description: `{ "success": "true" }`,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  @ApiResponse({ status: 404, description: 'Not Found' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Conflict' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @HttpCode(201)
   @Post('register-user')
@@ -75,7 +76,8 @@ export class AuthController {
     description: `{ "success": "true" }`,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  @ApiResponse({ status: 404, description: 'Not Found' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Conflict' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @HttpCode(201)
   @Post('register-admin')
@@ -129,7 +131,7 @@ export class AuthController {
   @HttpCode(201)
   @Post('login')
   async login(@Req() req, @Res() res, @Body() loginRequest: LoginRequest) {
-    await this.authFacade.validateUser(loginRequest.destination);
+    await this.authFacade.checkLoginAbility(loginRequest.destination);
     return this.loginStrategy.send(req, res);
   }
 
