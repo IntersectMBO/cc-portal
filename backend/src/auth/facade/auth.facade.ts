@@ -43,6 +43,7 @@ export class AuthFacade {
     return user;
   }
 
+  // validateUser checks user by email
   async validateUser(email: string): Promise<UserDto> {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
@@ -51,12 +52,21 @@ export class AuthFacade {
     return user;
   }
 
-  async login(userDto: UserDto): Promise<TokenResponse> {
-    const existingUser = await this.usersService.findOne(userDto.id);
-    if (existingUser.status !== UserStatusEnum.ACTIVE) {
+  async login(userDto: UserDto): Promise<TokenResponse | null> {
+    const checkLoginAbility = await this.checkLoginAbility(userDto.email);
+    if (checkLoginAbility) {
+      return this.generateTokens(userDto);
+    }
+    return null;
+  }
+
+  // checkLoginAbility checks whether the user can login according to his status
+  async checkLoginAbility(email: string): Promise<boolean> {
+    const user = await this.validateUser(email);
+    if (user.status !== UserStatusEnum.ACTIVE) {
       throw new BadRequestException(`User is not active`);
     }
-    return this.generateTokens(userDto);
+    return true;
   }
 
   async generateTokens(userDto: UserDto): Promise<TokenResponse> {
