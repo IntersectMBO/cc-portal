@@ -132,7 +132,7 @@ export class AuthController {
   @HttpCode(201)
   @Post('login')
   async login(@Req() req, @Res() res, @Body() loginRequest: LoginRequest) {
-    await this.authFacade.validateUser(loginRequest.destination);
+    await this.authFacade.checkLoginAbility(loginRequest.destination);
     return this.loginStrategy.send(req, res);
   }
 
