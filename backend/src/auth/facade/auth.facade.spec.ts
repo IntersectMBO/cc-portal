@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthFacade } from './auth.facade';
 import { UsersService } from '../../users/services/users.service';
 import { AuthService } from '../service/auth.service';
-import { User, UserStatusEnum } from '../../users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { Permission } from 'src/users/entities/permission.entity';
 import { UserDto } from 'src/users/dto/user.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -17,6 +17,7 @@ import { CreateUserRequest } from 'src/users/api/request/create-user.request';
 import { Role } from 'src/users/entities/role.entity';
 import { TokenResponse } from '../api/response/token.response';
 import { EmailService } from '../../email/service/email.service';
+import { UserStatusEnum } from '../../users/enums/user-status.enum';
 
 describe('AuthFacade', () => {
   let facade: AuthFacade;
@@ -80,7 +81,7 @@ describe('AuthFacade', () => {
     name: '',
     email: 'user@example.com',
     description: '',
-    profilePhoto: '',
+    profilePhotoUrl: '',
     status: UserStatusEnum.PENDING,
     hotAddresses: [],
     role: mockRoles[2].code,
@@ -94,7 +95,7 @@ describe('AuthFacade', () => {
     name: '',
     email: 'admin@example.com',
     description: '',
-    profilePhoto: '',
+    profilePhotoUrl: '',
     status: UserStatusEnum.PENDING,
     hotAddresses: [],
     role: mockRoles[0].code,
@@ -109,7 +110,7 @@ describe('AuthFacade', () => {
       name: 'Sofija Dokmanovic',
       email: 'sofija@example.com',
       description: 'Lorem ipsum dolor sit amet',
-      profilePhoto: 'https://example.com/profile.jpg',
+      profilePhotoUrl: 'https://example.com/profile.jpg',
       status: UserStatusEnum.PENDING,
       hotAddresses: ['sofija123', 'sofija234'],
       role: mockRoles[0].code,
@@ -122,7 +123,7 @@ describe('AuthFacade', () => {
       name: 'Ivan Ivanovic',
       email: 'ivan@example.com',
       description: 'Lorem ipsum dolor sit amet 2',
-      profilePhoto: 'https://example2.com/profile.jpg',
+      profilePhotoUrl: 'https://example2.com/profile.jpg',
       status: UserStatusEnum.ACTIVE,
       hotAddresses: ['ivan1', 'ivan2'],
       role: mockRoles[2].code,
@@ -191,7 +192,7 @@ describe('AuthFacade', () => {
           name: '',
           email: createUserDto.destination,
           description: '',
-          profilePhoto: '',
+          profilePhotoUrl: '',
           status: UserStatusEnum.PENDING,
           hotAddresses: [],
           role: userRole.code,
@@ -331,7 +332,7 @@ describe('AuthFacade', () => {
         name: 'Sofija Dokmanovic',
         email: 'sofija@example.com',
         description: 'Lorem ipsum dolor sit amet',
-        profilePhoto: 'https://example.com/profile.jpg',
+        profilePhotoUrl: 'https://example.com/profile.jpg',
         status: UserStatusEnum.PENDING,
         hotAddresses: ['sofija123', 'sofija234'],
         role: mockRoles[0].code,
@@ -354,7 +355,7 @@ describe('AuthFacade', () => {
         name: 'Sofija Dokmanovic',
         email: 'sofija@example.com',
         description: 'Lorem ipsum dolor sit amet',
-        profilePhoto: 'https://example.com/profile.jpg',
+        profilePhotoUrl: 'https://example.com/profile.jpg',
         status: UserStatusEnum.PENDING,
         hotAddresses: ['sofija123', 'sofija234'],
         role: mockRoles[0].code,
@@ -380,7 +381,7 @@ describe('AuthFacade', () => {
         name: 'Sofija Dokmanovic',
         email: 'sofija@example.com',
         description: 'Lorem ipsum dolor sit amet',
-        profilePhoto: 'https://example.com/profile.jpg',
+        profilePhotoUrl: 'https://example.com/profile.jpg',
         status: UserStatusEnum.ACTIVE,
         hotAddresses: ['sofija123', 'sofija234'],
         role: mockRoles[0].code,
@@ -415,7 +416,7 @@ describe('AuthFacade', () => {
         name: 'Ivan Ivanovic',
         email: 'ivan@example.com',
         description: 'Lorem ipsum dolor sit amet 2',
-        profilePhoto: 'https://example2.com/profile.jpg',
+        profilePhotoUrl: 'https://example2.com/profile.jpg',
         status: UserStatusEnum.ACTIVE,
         hotAddresses: ['ivan1', 'ivan2'],
         role: mockRoles[2].code,
