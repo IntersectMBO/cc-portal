@@ -11,9 +11,9 @@ import {
 import { AuthService } from '../service/auth.service';
 import { EmailService } from '../../email/service/email.service';
 import { EmailDto } from 'src/email/dto/email.dto';
-import { UserStatusEnum } from 'src/users/enums/user-status.enum';
+import { UserStatusEnum } from '../../users/enums/user-status.enum';
 import { CreateUserRequest } from 'src/users/api/request/create-user.request';
-import { RoleEnum } from 'src/users/enums/role.enum';
+import { RoleEnum } from '../../users/enums/role.enum';
 
 @Injectable()
 export class AuthFacade {

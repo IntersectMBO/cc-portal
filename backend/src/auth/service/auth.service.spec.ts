@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 import { UserDto } from 'src/users/dto/user.dto';
 import * as jwt from 'jsonwebtoken';
-import { UserStatusEnum } from '../../users/entities/user.entity';
+import { UserStatusEnum } from '../../users/enums/user-status.enum';
 import { UnauthorizedException } from '@nestjs/common';
 import { Role } from '../../users/entities/role.entity';
 
@@ -42,7 +42,7 @@ describe('AuthService', () => {
     name: 'John Doe',
     email: 'john@example.com',
     description: 'Lorem ipsum',
-    profilePhoto: 'path/to/photo.jpg',
+    profilePhotoUrl: 'path/to/photo.jpg',
     status: UserStatusEnum.ACTIVE,
     hotAddresses: ['address1', 'address2'],
     role: mockRoles[2].code,
