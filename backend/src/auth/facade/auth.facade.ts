@@ -52,21 +52,17 @@ export class AuthFacade {
     return user;
   }
 
-  async login(userDto: UserDto): Promise<TokenResponse | null> {
-    const checkLoginAbility = await this.checkLoginAbility(userDto.email);
-    if (checkLoginAbility) {
-      return this.generateTokens(userDto);
-    }
-    return null;
+  async login(userDto: UserDto): Promise<TokenResponse> {
+    await this.checkLoginAbility(userDto.email);
+    return this.generateTokens(userDto);
   }
 
   // checkLoginAbility checks whether the user can login according to his status
-  async checkLoginAbility(email: string): Promise<boolean> {
+  async checkLoginAbility(email: string): Promise<void> {
     const user = await this.validateUser(email);
     if (user.status !== UserStatusEnum.ACTIVE) {
       throw new BadRequestException(`User is not active`);
     }
-    return true;
   }
 
   async generateTokens(userDto: UserDto): Promise<TokenResponse> {
