@@ -6,13 +6,30 @@ import {
   Param,
   HttpCode,
   ParseUUIDPipe,
+  UseInterceptors,
+  UploadedFile,
+  HttpStatus,
+  ParseFilePipeBuilder,
+  UseGuards,
+  Request,
+  Delete,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
 import { UserResponse } from './response/user.response';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RoleResponse } from './response/role.response';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { UserPathGuard } from 'src/auth/guard/users-path.guard';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -31,19 +48,6 @@ export class UsersController {
     return await this.usersFacade.findAll();
   }
 
-  @ApiOperation({ summary: 'Get all roles' })
-  @ApiResponse({
-    status: 200,
-    description: 'Roles',
-    isArray: true,
-    type: RoleResponse,
-  })
-  @ApiResponse({ status: 404, description: 'Role not found' })
-  @Get('roles')
-  async getAllRoles(): Promise<RoleResponse[]> {
-    return await this.usersFacade.getAllRoles();
-  }
-
   @ApiOperation({ summary: 'Find one user by ID' })
   @ApiResponse({
     status: 200,
@@ -56,8 +60,8 @@ export class UsersController {
     return await this.usersFacade.findOne(id);
   }
 
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a user' })
-  @ApiBody({ type: UpdateUserRequest })
   @ApiResponse({
     status: 200,
     description: 'User updated successfully.',
@@ -68,6 +72,10 @@ export class UsersController {
     description: 'Bad Request',
   })
   @ApiResponse({
+    status: 400,
+    description: 'provided id does not match the requested one',
+  })
+  @ApiResponse({
     status: 404,
     description: 'user with {id} not found',
   })
@@ -76,12 +84,52 @@ export class UsersController {
     description: 'User with requested email address already exists',
   })
   @ApiResponse({ status: 500, description: 'Internal server error.' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'identification number of the user',
+    type: String,
+  })
+  @ApiBody({ type: UpdateUserRequest })
+  @ApiConsumes('multipart/form-data')
   @HttpCode(200)
+  @UseInterceptors(FileInterceptor('file'))
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, UserPathGuard)
   async update(
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: /(jpg|jpeg|png|gif)$/,
+        })
+        .addMaxSizeValidator({
+          maxSize: 3145728,
+        })
+        .build({
+          fileIsRequired: false,
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    file: Express.Multer.File,
+    @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
-    return await this.usersFacade.update(id, updateUserRequest);
+    return await this.usersFacade.update(file, id, updateUserRequest);
+  }
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Delete photo of user' })
+  @ApiResponse({ status: 200, description: 'Photo successfully removed' })
+  @ApiResponse({ status: 404, description: 'User with id not found' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'identifactor of user',
+  })
+  @Delete(':id/profile-photo')
+  @UseGuards(JwtAuthGuard, UserPathGuard)
+  async remove(@Request() req: any, @Param('id', ParseUUIDPipe) id: string) {
+    const user = await this.usersFacade.deleteProfilePhoto(id);
+    return user;
   }
 }

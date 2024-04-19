@@ -3,6 +3,7 @@ import { UserDto } from 'src/users/dto/user.dto';
 import { TokenResponse } from '../api/response/token.response';
 import { UserMapper } from '../../users/mapper/userMapper.mapper';
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -10,7 +11,7 @@ import {
 import { AuthService } from '../service/auth.service';
 import { EmailService } from '../../email/service/email.service';
 import { EmailDto } from 'src/email/dto/email.dto';
-import { UserStatusEnum } from '../../users/entities/user.entity';
+import { UserStatusEnum } from 'src/users/enums/user-status.enum';
 import { CreateUserRequest } from 'src/users/api/request/create-user.request';
 import { RoleEnum } from 'src/users/enums/role.enum';
 
@@ -42,12 +43,26 @@ export class AuthFacade {
     return user;
   }
 
+  // validateUser checks user by email
   async validateUser(email: string): Promise<UserDto> {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
       throw new NotFoundException(`User with ${email} not found`);
     }
     return user;
+  }
+
+  async login(userDto: UserDto): Promise<TokenResponse> {
+    await this.checkLoginAbility(userDto.email);
+    return this.generateTokens(userDto);
+  }
+
+  // checkLoginAbility checks whether the user can login according to his status
+  async checkLoginAbility(email: string): Promise<void> {
+    const user = await this.validateUser(email);
+    if (user.status !== UserStatusEnum.ACTIVE) {
+      throw new BadRequestException(`User is not active`);
+    }
   }
 
   async generateTokens(userDto: UserDto): Promise<TokenResponse> {

@@ -7,6 +7,7 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - '5432:5432'
+
   cache:
     image: redis/redis-stack:latest
     restart: always
@@ -14,6 +15,24 @@ services:
       - '6379:6379'
     volumes:
       - cache:/data
+  s3:
+    image: minio/minio
+    container_name: minio_local_cc
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      MINIO_ROOT_USER: bloxico
+      MINIO_ROOT_PASSWORD: bloxico2
+    command: ['server', '/data', '--console-address', ':9001']
+    volumes:
+      - s3_data:/data
+    networks:
+      - bloxico_local
+
 volumes:
   cache:
     driver: local
+  s3_data:
+networks:
+  bloxico_local:

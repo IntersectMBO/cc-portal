@@ -21,7 +21,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { RefreshTokenRequest } from './request/refresh-token.request';
-import { CreateUserRequest } from 'src/users/api/request/create-user.request';
 import { MagicRegisterStrategy } from '../strategy/magicregister.strategy';
 import { PermissionGuard } from '../guard/permission.guard';
 import { Permissions } from '../guard/permission.decorator';
@@ -42,13 +41,14 @@ export class AuthController {
   ) {}
 
   @ApiOperation({ summary: 'Register a user. Sending email with a magic link' })
-  @ApiBody({ type: CreateUserRequest })
+  @ApiBody({ type: CreateCCMemberRequest })
   @ApiResponse({
     status: 201,
     description: `{ "success": "true" }`,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  @ApiResponse({ status: 404, description: 'Not Found' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Conflict' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @HttpCode(201)
   @Post('register-user')
@@ -70,13 +70,14 @@ export class AuthController {
   @ApiOperation({
     summary: 'Register an admin. Sending email with a magic link',
   })
-  @ApiBody({ type: CreateUserRequest })
+  @ApiBody({ type: CreateAdminRequest })
   @ApiResponse({
     status: 201,
     description: `{ "success": "true" }`,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  @ApiResponse({ status: 404, description: 'Not Found' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Conflict' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @HttpCode(201)
   @Post('register-admin')
@@ -130,7 +131,7 @@ export class AuthController {
   @HttpCode(201)
   @Post('login')
   async login(@Req() req, @Res() res, @Body() loginRequest: LoginRequest) {
-    await this.authFacade.validateUser(loginRequest.destination);
+    await this.authFacade.checkLoginAbility(loginRequest.destination);
     return this.loginStrategy.send(req, res);
   }
 
@@ -153,7 +154,7 @@ export class AuthController {
   @Get('login/callback')
   async callback(@Req() req): Promise<TokenResponse> {
     const user = req.user;
-    return await this.authFacade.generateTokens(user);
+    return await this.authFacade.login(user);
   }
 
   @ApiOperation({ summary: 'Refresh access token with refresh token' })

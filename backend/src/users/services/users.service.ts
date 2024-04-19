@@ -7,7 +7,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { User, UserStatusEnum } from '../entities/user.entity';
+import { User } from '../entities/user.entity';
+import { UserStatusEnum } from '../enums/user-status.enum';
 import { EntityManager, Repository } from 'typeorm';
 import { Role } from '../entities/role.entity';
 import { UserDto } from '../dto/user.dto';
@@ -15,8 +16,10 @@ import { UserMapper } from '../mapper/userMapper.mapper';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { Permission } from '../entities/permission.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
+// import { S3Service } from '../../s3/service/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
+import { HotAddress } from '../entities/hotaddress.entity';
 
 @Injectable()
 export class UsersService {
@@ -29,8 +32,11 @@ export class UsersService {
     private readonly roleRepository: Repository<Role>,
     @InjectRepository(Permission)
     private readonly permissionRepository: Repository<Permission>,
+    @InjectRepository(HotAddress)
+    private readonly hotAddressRepository: Repository<HotAddress>,
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
+    // private s3Service: S3Service,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
@@ -127,15 +133,12 @@ export class UsersService {
     return results;
   }
 
-  async findOne(id: string): Promise<UserDto> {
-    const user = await this.findById(id);
-    if (!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
-    }
+  async findById(id: string): Promise<UserDto> {
+    const user = await this.findEntityById(id);
     return UserMapper.userToDto(user);
   }
 
-  private async findById(id: string): Promise<User> {
+  private async findEntityById(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: {
         id: id,
@@ -147,41 +150,71 @@ export class UsersService {
     return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserDto> {
-    const user = await this.findById(id);
-    if (!user) {
-      throw new NotFoundException(`user with id ${id} not found`);
-    }
+  async update(
+    fileUrl: string,
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserDto> {
+    const user = await this.findEntityByIdWithAddresses(id);
+
     user.name = updateUserDto.name;
+    user.description = updateUserDto.description;
+    user.profilePhotoUrl = fileUrl;
 
-    let updatedUser: User;
-    try {
-      updatedUser = await this.entityManager.transaction(() => {
-        const userData = this.userRepository.create(user);
-        return this.userRepository.save(userData);
-      });
-    } catch (e) {
-      this.logger.error(`error when updating the user  : ${e.message}`);
-      throw new InternalServerErrorException('update user failed');
+    if (updateUserDto.hotAddress) {
+      await this.checkUniqueUserHotAddress(
+        user.hotAddresses,
+        updateUserDto.hotAddress,
+      );
+
+      const hotAddress = new HotAddress();
+      hotAddress.address = updateUserDto.hotAddress;
+      user.hotAddresses.push(hotAddress);
     }
 
+    const updatedUser = await this.userRepository.save(user);
     return UserMapper.userToDto(updatedUser);
   }
 
-  /*async toggleWhitelist(id: string, whitelisted: boolean): Promise<UserDto> {
-    const user = await this.findById(id);
-    user.whitelisted = whitelisted;
-    await this.userRepository.save(user);
+  private async findEntityByIdWithAddresses(id: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: ['hotAddresses'],
+    });
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return user;
+  }
 
-    return UserMapper.userToDto(user);
-  }*/
+  private async checkUniqueUserHotAddress(
+    existingAddresses: HotAddress[],
+    hotAddress: string,
+  ) {
+    const includes = existingAddresses
+      .map((x) => x.address)
+      .includes(hotAddress);
+
+    if (includes) {
+      throw new ConflictException(`Address ${hotAddress} already assigned`);
+    }
+  }
 
   async updateUserStatus(
     id: string,
     userStatus: UserStatusEnum,
   ): Promise<UserDto> {
-    const user = await this.findById(id);
+    const user = await this.findEntityById(id);
     user.status = userStatus;
+    await this.userRepository.save(user);
+    return UserMapper.userToDto(user);
+  }
+
+  async removeProfilePhoto(id: string): Promise<UserDto> {
+    const user = await this.findEntityById(id);
+    user.profilePhotoUrl = null;
     await this.userRepository.save(user);
     return UserMapper.userToDto(user);
   }

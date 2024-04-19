@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "aec582c9-802c-4f73-b9ec-5efde00f5781",
+		"_postman_id": "7d15a02b-739e-487c-af61-5cdea4c49f81",
 		"name": "CC Portal develop",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20133713"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -28,38 +27,19 @@
 					"response": []
 				},
 				{
-					"name": "Get All Roles",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base-url}}/api/users/roles",
-							"host": [
-								"{{base-url}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"roles"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get User By Id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base-url}}/api/users/id",
+							"raw": "{{base-url}}/api/users/{{userId}}",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"id"
+								"{{userId}}"
 							]
 						}
 					},
@@ -68,49 +48,80 @@
 				{
 					"name": "Update User",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"sofija\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
 							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Andjela",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/milossekuloski/git-repos/cc-portal/backend/postman/1712183767053-valentines-day.png"
+								},
+								{
+									"key": "hot_address",
+									"value": "andjelahot",
+									"type": "text"
+								}
+							]
 						},
 						"url": {
-							"raw": "{{base-url}}/api/users/id",
+							"raw": "{{base-url}}/api/users/{{userId}}",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"id"
+								"{{userId}}"
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Version",
-			"item": [
+				},
 				{
-					"name": "Get Version",
+					"name": "Remove image from user",
 					"request": {
-						"method": "GET",
-						"header": [],
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base-url}}/api/version",
+							"raw": "{{base-url}}/api/users/{{userId}}/profile-photo",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
-								"version"
+								"users",
+								"{{userId}}",
+								"profile-photo"
 							]
 						}
 					},
@@ -190,7 +201,7 @@
 					"response": []
 				},
 				{
-					"name": "Register callback",
+					"name": "Register Callback",
 					"event": [
 						{
 							"listen": "test",
@@ -258,7 +269,7 @@
 					"response": []
 				},
 				{
-					"name": "Login callback",
+					"name": "Login Callback",
 					"event": [
 						{
 							"listen": "test",
@@ -353,6 +364,177 @@
 								"api",
 								"email",
 								"send-test-email"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Constitution",
+			"item": [
+				{
+					"name": "Upload Document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/aca/Projects/helia-examples/examples/helia-vite/README.md"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base-url}}/api/constitution",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current Document",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/current",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Document By CID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/cid/bafkreif5qv3lf2qpisr2mad3t33eunm76slligitgr333uwfjw2c5leefi",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"cid",
+								"bafkreif5qv3lf2qpisr2mad3t33eunm76slligitgr333uwfjw2c5leefi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Constitution Documents",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Diff Document",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/diff?base=A&target=B",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"diff"
+							],
+							"query": [
+								{
+									"key": "base",
+									"value": "A"
+								},
+								{
+									"key": "target",
+									"value": "B"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Get All Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/roles",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Version",
+			"item": [
+				{
+					"name": "Get Version",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/version",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"version"
 							]
 						}
 					},

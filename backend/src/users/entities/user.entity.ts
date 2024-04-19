@@ -12,12 +12,7 @@ import { Role } from './role.entity';
 import { CommonEntity } from '../../common/entities/common.entity';
 import { Permission } from './permission.entity';
 import { HotAddress } from './hotaddress.entity';
-
-export enum UserStatusEnum {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  PENDING = 'pending',
-}
+import { UserStatusEnum } from '../enums/user-status.enum';
 
 @Entity('users')
 export class User extends CommonEntity {
@@ -49,11 +44,11 @@ export class User extends CommonEntity {
   description: string;
 
   @Column({
-    name: 'profile_photo',
+    name: 'profile_photo_url',
     type: 'varchar',
     nullable: true,
   })
-  profilePhoto: string;
+  profilePhotoUrl: string;
 
   @Column({
     name: 'status',
@@ -63,7 +58,9 @@ export class User extends CommonEntity {
   })
   status: UserStatusEnum;
 
-  @OneToMany(() => HotAddress, (hotAddress) => hotAddress.user)
+  @OneToMany(() => HotAddress, (hotAddress) => hotAddress.user, {
+    cascade: true,
+  })
   hotAddresses: HotAddress[];
 
   @ManyToOne(() => Role, (role) => role.users, {

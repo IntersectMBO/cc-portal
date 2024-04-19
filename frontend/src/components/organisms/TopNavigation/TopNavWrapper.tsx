@@ -1,13 +1,12 @@
 "use client";
 import React from "react";
 
-import { AppBar, Box, Grid } from "@mui/material";
+import { AppBar } from "@mui/material";
 
-import { IMAGES, PATHS, NAV_ITEMS } from "@/constants";
-import { Link } from "@/components/atoms";
+import { IMAGES, PATHS } from "@consts";
 import NextLink from "next/link";
 
-export const TopNav = () => {
+export const TopNavWrapper = ({ children }) => {
   return (
     <AppBar
       component="nav"
@@ -30,17 +29,7 @@ export const TopNav = () => {
       <NextLink data-testid="logo-button" href={PATHS.home}>
         <img height={35} src={IMAGES.logoSign} />
       </NextLink>
-      <Box>
-        {NAV_ITEMS.map((navItem) => (
-          <Grid item key={navItem.label}>
-            <Link
-              data-testid={navItem.dataTestId}
-              label={navItem.label}
-              href={navItem.href}
-            />
-          </Grid>
-        ))}
-      </Box>
+      {children}
     </AppBar>
   );
 };

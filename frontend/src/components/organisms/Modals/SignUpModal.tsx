@@ -1,18 +1,31 @@
+"use client";
 import {
   ModalContents,
   ModalHeader,
   ModalWrapper,
   Typography,
   UploadFileButton,
+  Button,
 } from "@atoms";
 import { IMAGES } from "@consts";
+import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { ModalActions } from "@atoms";
-import { Field } from "@molecules";
+import { useForm } from "react-hook-form";
+import { ControlledField } from "../ControlledField";
 
 export const SignUpModal = () => {
   const t = useTranslations("Modals");
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log("Form submitted:", data);
+  };
   const handleUpload = (file: File) => {
     console.log("uploaded file", file);
   };
@@ -20,36 +33,50 @@ export const SignUpModal = () => {
   return (
     <ModalWrapper dataTestId="sign-up-modal" icon={IMAGES.pastelAddMember}>
       <ModalHeader>{t("signUp.headline")}</ModalHeader>
-      <ModalContents>
-        <Typography variant="body1" fontWeight={500}>
-          {t("signUp.description")}
-        </Typography>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <ModalContents>
+          <Typography variant="body1" fontWeight={500}>
+            {t("signUp.description")}
+          </Typography>
 
-        <Field.Input
-          placeholder={t("signUp.fields.username.placeholder")}
-          label={t("signUp.fields.username.label")}
-          value=""
-        />
-        <Field.Input
-          placeholder={t("signUp.fields.hotAddress.placeholder")}
-          label={t("signUp.fields.hotAddress.label")}
-          value=""
-        />
-        <Field.TextArea
-          placeholder={t("signUp.fields.description.placeholder")}
-          label={t("signUp.fields.description.label")}
-          helpfulText={t("signUp.fields.description.helpfulText")}
-          value=""
-        />
-        <UploadFileButton
-          fullWidth={false}
-          size="large"
-          onChange={handleUpload}
-        >
-          {t("signUp.fields.upload")}
-        </UploadFileButton>
-        <ModalActions onConfirm={() => console.log("confirm")} />
-      </ModalContents>
+          <ControlledField.Input
+            placeholder={t("signUp.fields.username.placeholder")}
+            label={t("signUp.fields.username.label")}
+            errors={errors}
+            control={control}
+            {...register("username", { required: "Username is required" })}
+          />
+          <ControlledField.Input
+            placeholder={t("signUp.fields.hotAddress.placeholder")}
+            label={t("signUp.fields.hotAddress.label")}
+            errors={errors}
+            control={control}
+            {...register("hotAddress")}
+          />
+          <ControlledField.TextArea
+            placeholder={t("signUp.fields.description.placeholder")}
+            label={t("signUp.fields.description.label")}
+            helpfulText={t("signUp.fields.description.helpfulText")}
+            errors={errors}
+            control={control}
+            {...register("description")}
+          />
+          <UploadFileButton
+            fullWidth={false}
+            size="large"
+            onChange={handleUpload}
+          >
+            {t("signUp.fields.upload")}
+          </UploadFileButton>
+          <Box
+            sx={{
+              display: "flex",
+            }}
+          >
+            <Button type="submit">{t("common.confirm")}</Button>
+          </Box>
+        </ModalContents>
+      </form>
     </ModalWrapper>
   );
 };

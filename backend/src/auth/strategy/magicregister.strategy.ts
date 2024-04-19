@@ -22,8 +22,8 @@ export class MagicRegisterStrategy extends PassportStrategy(
       jwtOptions: {
         expiresIn: configService.getOrThrow('MAGIC_REGISTER_LINK_EXPIRES_IN'),
       },
-      callbackUrl:
-        configService.getOrThrow('BASE_URL') + '/api/auth/register/callback',
+      callbackUrl: configService.getOrThrow('FE_REGISTER_CALLBACK_URL'),
+
       sendMagicLink: async (destination: string, href: string) => {
         const emailDto: EmailDto = EmailMapper.registrationEmail(
           destination,

@@ -12,8 +12,15 @@
   "Constitution": {
     "title": "Cardano Constituition"
   },
+  "Navigation": {
+    "addNewMember": "Add new member",
+    "uploadNewVersion": "Upload new version",
+    "editProfile": "Edit Profile",
+    "signOut": "Sign Out"
+  },
   "Footer": {
-    "copyright": "© 2024 Intersect MBO"
+    "copyright": "© 2024 Intersect MBO",
+    "signOut": "Sign Out"
   },
   "Modals": {
     "common": {
@@ -28,6 +35,10 @@
           "label": "Email address",
           "placeholder": "Text here"
         }
+      },
+      "alerts": {
+        "success": "Magic link successfully sent",
+        "error": "Error sending magic link"
       }
     },
     "signUp": {
@@ -59,8 +70,8 @@
       "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
       "fields": {
         "delete": {
-          "label": "Write delete",
-          "placeholder": "Write delete"
+          "label": "Write DELETE",
+          "placeholder": "Write DELETE"
         }
       }
     },
@@ -79,6 +90,10 @@
           "label": "Permissions",
           "placeholder": "Permissions"
         }
+      },
+      "alerts": {
+        "success": "New member successfully added",
+        "error": "Error adding new member"
       }
     },
     "uploadConstitution": {
@@ -90,5 +105,12 @@
   "AdminDashboard": {
     "role": "Role",
     "status": "Status"
+  },
+  "NotFound": {
+    "noMembersFound": "No members found",
+    "addNewMembers": "Add new members"
+  },
+  "Snackbar": {
+    "changesSaved": "Changes saved"
   }
 }
