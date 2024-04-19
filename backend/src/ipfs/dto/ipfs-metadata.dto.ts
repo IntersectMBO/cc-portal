@@ -8,4 +8,5 @@ export class IpfsMetadataDto {
   title?: string;
   contentType?: string;
   version?: string;
+  createdDate?: string;
 }

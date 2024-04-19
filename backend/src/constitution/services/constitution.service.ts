@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Change, diffWords } from 'diff';
+import { Change, diffSentences } from 'diff';
 
 @Injectable()
 export class ConstitutionService {
   constructor() {}
 
   diffConstitutions(currentFile: string, oldFile: string): Change[] {
-    const diff = diffWords(currentFile, oldFile);
+    const diff = diffSentences(currentFile, oldFile);
     return diff;
   }
 }

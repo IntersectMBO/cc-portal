@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEmail, IsEnum, MaxLength } from 'class-validator';
+import {
+  ArrayMinSize,
+  ArrayUnique,
+  IsArray,
+  IsEmail,
+  IsEnum,
+  MaxLength,
+} from 'class-validator';
 import { PermissionEnum } from 'src/users/enums/permission.enum';
 
 export class CreateAdminRequest {
@@ -17,5 +24,7 @@ export class CreateAdminRequest {
   })
   @IsArray()
   @IsEnum(PermissionEnum, { each: true })
-  permissions: string[] = [];
+  @ArrayMinSize(1, { message: 'At least one permission is required' })
+  @ArrayUnique({ message: 'Permissions must be unique' })
+  permissions: string[];
 }
