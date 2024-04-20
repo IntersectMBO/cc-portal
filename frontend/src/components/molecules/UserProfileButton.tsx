@@ -55,7 +55,7 @@ export default function UserProfileButton({
           <img
             width={20}
             height={20}
-            src={user?.profile_photo || IMAGES.avatar}
+            src={user?.profile_photo_url || IMAGES.avatar}
           />
         }
         endIcon={<img width={20} height={20} src={ICONS.chevronDown} />}

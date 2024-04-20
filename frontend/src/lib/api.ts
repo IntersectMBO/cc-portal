@@ -26,9 +26,10 @@ export async function login(email: FormDataEntryValue): Promise<LoginResponse> {
     const res: LoginResponse = await axiosInstance.post("/api/auth/login", {
       destination: email,
     });
+    console.log("LOGIN SUCCESS");
     return res;
   } catch (error) {
-    console.log("error login admin");
+    throw error;
   }
 }
 
@@ -139,5 +140,19 @@ export async function registerAdmin(email: string, permissions: Permissions[]) {
     return res;
   } catch (error) {
     console.log("error register admin");
+  }
+}
+
+export async function editUser(id: string, data: FormData) {
+  try {
+    const token = getAccessToken();
+    const response = await axiosInstance.patch(`/api/users/${id}`, data, {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
   }
 }

@@ -11,8 +11,11 @@ export function UsersListItem({
   email,
   role,
   status,
-  profile_photo,
-}: Pick<UserListItem, "name" | "email" | "role" | "status" | "profile_photo">) {
+  profile_photo_url,
+}: Pick<
+  UserListItem,
+  "name" | "email" | "role" | "status" | "profile_photo_url"
+>) {
   return (
     <Grid item mb={3}>
       <Card variant="default">
@@ -22,7 +25,7 @@ export function UsersListItem({
               <Grid item xxs={12} lg="auto" mb={{ xxs: 2, lg: 0 }}>
                 <Grid container flexWrap="nowrap">
                   <Grid item>
-                    <UserAvatar src={profile_photo} />
+                    <UserAvatar src={profile_photo_url} />
                   </Grid>
                   <Grid item>
                     <UserBasicInfo name={name} email={email} />

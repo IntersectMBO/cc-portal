@@ -1,5 +1,5 @@
 "use client";
-import { useModal } from "@context";
+import { useAppContext, useModal } from "@context";
 import {
   ModalContents,
   ModalHeader,
@@ -14,20 +14,45 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
 import { SignupModalState } from "../types";
+import { editUser } from "@/lib/api";
+import { useEffect } from "react";
+import { createFormDataObject } from "@utils";
+import { useSnackbar } from "@/context/snackbar";
 
 export const SignUpModal = () => {
   const { state } = useModal<SignupModalState>();
-  const t = useTranslations("Modals");
+  const { userSession, user, fetchUserData } = useAppContext();
+  const { addSuccessAlert, addErrorAlert } = useSnackbar();
 
+  const t = useTranslations("Modals");
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
   } = useForm();
+  console.log("USER", user);
 
-  const onSubmit = (data) => {
-    console.log("Form submitted:", data);
+  useEffect(() => {
+    // Populate form fields with user data when the component mounts
+    if (user) {
+      setValue("name", user.name || "");
+      setValue("hotAddress", user.hot_addresses || "");
+      setValue("description", user.description || "");
+    }
+  }, [user, setValue]);
+
+  const onSubmit = async (data) => {
+    console.log("data", data);
+    try {
+      const formData = createFormDataObject(data);
+      await editUser(userSession.userId, formData);
+      await fetchUserData(userSession.userId);
+      addSuccessAlert(t("signUp.alerts.success"));
+    } catch (error) {
+      addErrorAlert(t("signUp.alerts.error"));
+    }
   };
 
   return (
@@ -44,7 +69,7 @@ export const SignUpModal = () => {
             label={t("signUp.fields.username.label")}
             errors={errors}
             control={control}
-            {...register("username", { required: "Username is required" })}
+            {...register("name", { required: "Username is required" })}
           />
           <ControlledField.Input
             placeholder={t("signUp.fields.hotAddress.placeholder")}

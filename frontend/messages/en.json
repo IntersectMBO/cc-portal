@@ -59,6 +59,10 @@
           "helpfulText": "This is a hint text to help user."
         },
         "upload": "Upload profile photo"
+      },
+      "alerts": {
+        "success": "Profile successfully updated",
+        "error": "Error updating profile"
       }
     },
     "signOut": {
