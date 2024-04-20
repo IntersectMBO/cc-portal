@@ -17,6 +17,7 @@ interface AppContextType {
   user: FetchUserData | null;
   resetState: () => void;
   logout: () => void;
+  fetchUserData: (userId: string) => Promise<void>;
 }
 
 // Create a new Context object. This will be used to provide and consume the context.
@@ -30,12 +31,12 @@ export function AppContextProvider({ session, children }) {
   const [user, setUser] = useState<FetchUserData | null>();
   const router = useRouter();
 
-  useEffect(() => {
-    async function fetchUserData(userId: string) {
-      const userData = await getUser(userId);
-      setUser(userData);
-    }
+  async function fetchUserData(userId: string) {
+    const userData = await getUser(userId);
+    setUser(userData);
+  }
 
+  useEffect(() => {
     if (userSession?.userId) {
       fetchUserData(userSession.userId);
     }
@@ -55,7 +56,14 @@ export function AppContextProvider({ session, children }) {
   // Any child components will be able to access these values via the useAppContext hook.
   return (
     <AppContext.Provider
-      value={{ userSession, setUserSession, user, resetState, logout }}
+      value={{
+        userSession,
+        setUserSession,
+        user,
+        resetState,
+        logout,
+        fetchUserData,
+      }}
     >
       <ModalProvider>
         <SnackbarProvider>{children}</SnackbarProvider>
