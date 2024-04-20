@@ -32,7 +32,6 @@ export const SignUpModal = () => {
     control,
     setValue,
   } = useForm();
-  console.log("USER", user);
 
   useEffect(() => {
     // Populate form fields with user data when the component mounts
@@ -44,7 +43,6 @@ export const SignUpModal = () => {
   }, [user, setValue]);
 
   const onSubmit = async (data) => {
-    console.log("data", data);
     try {
       const formData = createFormDataObject(data);
       await editUser(userSession.userId, formData);

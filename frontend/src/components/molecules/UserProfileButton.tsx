@@ -7,11 +7,12 @@ import { useModal } from "@context";
 import { FetchUserData } from "@/lib/requests";
 import { useTranslations } from "next-intl";
 import { Grid } from "@mui/material";
+import { UserAvatar } from "@molecules";
 
 export default function UserProfileButton({
   user,
 }: {
-  user: Pick<FetchUserData, "name" | "profile_photo">;
+  user: Pick<FetchUserData, "name" | "profile_photo_url">;
 }) {
   const { openModal } = useModal();
   const t = useTranslations("Navigation");
@@ -52,10 +53,10 @@ export default function UserProfileButton({
         onClick={handleClick}
         sx={{ minWidth: 170 }}
         startIcon={
-          <img
+          <UserAvatar
+            src={user?.profile_photo_url || IMAGES.avatar}
             width={20}
             height={20}
-            src={user?.profile_photo_url || IMAGES.avatar}
           />
         }
         endIcon={<img width={20} height={20} src={ICONS.chevronDown} />}
