@@ -6,4 +6,5 @@ export const ICONS = {
   chevronDown: "/icons/ChevronDown.svg",
   edit: "/icons/Edit.svg",
   logout: "/icons/Logout.svg",
+  help: "/icons/Help.svg",
 };
