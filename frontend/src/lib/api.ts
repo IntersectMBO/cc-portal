@@ -9,6 +9,7 @@ import {
   LoginResponse,
   Permissions,
 } from "./requests";
+import { ConstitutionMetadata } from "@/components/organisms";
 
 // Function to decode the user token stored in the authentication cookie
 export async function decodeUserToken(): Promise<DecodedToken | undefined> {
@@ -151,6 +152,19 @@ export async function editUser(id: string, data: FormData) {
         Authorization: `bearer ${token}`,
       },
     });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getConstitutionMetadata(): Promise<
+  ConstitutionMetadata[]
+> {
+  try {
+    const response: ConstitutionMetadata[] = await axiosInstance.get(
+      "/api/constitution"
+    );
     return response;
   } catch (error) {
     throw error;

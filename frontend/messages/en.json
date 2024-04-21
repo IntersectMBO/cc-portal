@@ -10,7 +10,12 @@
     }
   },
   "Constitution": {
-    "title": "Cardano Constituition"
+    "title": "Cardano Constituition",
+    "drawer": {
+      "compare": "Compare",
+      "latestRevisions": "Latest Revisions",
+      "tableOfContents": "Table of contents"
+    }
   },
   "Navigation": {
     "addNewMember": "Add new member",

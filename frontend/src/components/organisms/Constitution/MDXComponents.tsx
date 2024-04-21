@@ -1,8 +1,16 @@
+import { Card } from "@/components/molecules";
 import { customPalette, ICONS } from "@/constants";
-import { Typography } from "@atoms";
-import { Collapse, Grid } from "@mui/material";
+import { Button, Typography } from "@atoms";
+import { Box, Collapse, Grid } from "@mui/material";
+import { ReactNode } from "react";
 
-export const Heading1 = ({ children, id }) => (
+export const Heading1 = ({
+  children,
+  id,
+}: {
+  children: ReactNode;
+  id: string;
+}) => (
   <Typography
     id={id}
     sx={{ marginTop: "24px", marginBottom: "24px" }}
@@ -13,7 +21,13 @@ export const Heading1 = ({ children, id }) => (
   </Typography>
 );
 
-export const Heading2 = ({ children, id }) => (
+export const Heading2 = ({
+  children,
+  id,
+}: {
+  children: ReactNode;
+  id: string;
+}) => (
   <Typography
     id={id}
     sx={{ marginTop: "24px", marginBottom: "24px" }}
@@ -24,24 +38,59 @@ export const Heading2 = ({ children, id }) => (
   </Typography>
 );
 
-export const Paragraph = ({ children }) => (
+export const Paragraph = ({ children }: { children: ReactNode }) => (
   <Typography sx={{ lineHeight: "18px" }} variant="caption">
     {children}
   </Typography>
 );
 
-export const TableOfContent = ({ children, onClick, isOpen }) => {
+export const NavTitle = ({
+  label,
+  onClick,
+  isActive,
+}: {
+  label: string;
+  onClick: () => void;
+  isActive: boolean;
+}) => {
+  return (
+    <Grid item>
+      <Button
+        sx={{ px: 2, py: 0.75 }}
+        onClick={onClick}
+        variant={isActive ? "outlined" : "text"}
+      >
+        <Typography fontWeight={400} variant="body1" sx={{ marginRight: 1 }}>
+          {label}
+        </Typography>
+      </Button>
+    </Grid>
+  );
+};
+
+export const NavDrawer = ({
+  children,
+  onClick,
+  isOpen,
+  left = 0,
+  top = 90,
+}: {
+  children: ReactNode;
+  onClick: () => void;
+  isOpen: boolean;
+  left: number;
+  top: number;
+}) => {
   return (
     <Grid
       position="fixed"
-      left={0}
-      top={90}
+      left={left}
+      top={top}
       item
-      width={isOpen ? 400 : 100}
       px={2}
       py={2}
       sx={{
-        height: "80vh",
+        height: { xs: "90vh", md: "80vh" },
         backgroundColor: customPalette.arcticWhite,
         "& ol.toc-level-1": {
           paddingInlineStart: 0,
@@ -71,10 +120,30 @@ export const TableOfContent = ({ children, onClick, isOpen }) => {
         sx={{ paddingLeft: { xs: 1, md: 3 }, paddingRight: { xs: 1, md: 3 } }}
         in={isOpen}
         timeout="auto"
-        unmountOnExit
+        easing="enter"
+        orientation="horizontal"
+        collapsedSize={20}
       >
-        {children}
+        {isOpen && <>{children}</>}
       </Collapse>
     </Grid>
   );
 };
+
+export const NavCard = ({ onClick, title, description, buttonLabel }) => (
+  <Box mb={2}>
+    <Card sx={{ padding: 3 }}>
+      <Grid container justifyContent="space-between">
+        <Grid item>
+          <Typography variant="body1">{title}</Typography>
+          <Typography variant="caption">{description}</Typography>
+        </Grid>
+        <Grid item>
+          <Button onClick={onClick} variant="outlined">
+            {buttonLabel}
+          </Button>
+        </Grid>
+      </Grid>
+    </Card>
+  </Box>
+);
