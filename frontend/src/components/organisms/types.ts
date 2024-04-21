@@ -8,6 +8,13 @@ export interface ConstitutionMetadata {
   created_date: string;
 }
 
+export interface ConstitutionMetadata {
+  cid: string;
+  title: string;
+  version: string;
+  created_date: string;
+}
+
 export interface ConstitutionProps {
   constitution: MDXRemoteSerializeResult;
   metadata: ConstitutionMetadata[];
@@ -25,4 +32,9 @@ export interface UserListItem extends FetchUserData {}
 
 export interface SignupModalState {
   showCloseButton?: boolean;
+}
+
+export interface CompareConstitutionModalState {
+  base: string;
+  target: string;
 }

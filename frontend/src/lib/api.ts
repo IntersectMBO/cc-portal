@@ -170,3 +170,17 @@ export async function getConstitutionMetadata(): Promise<
     throw error;
   }
 }
+
+export async function fetchConstitutionsDiff(
+  base: string,
+  target: string
+): Promise<any> {
+  try {
+    const response: any = await axiosInstance.get(
+      `/api/constitution/diff?base=${base}&target=${target}`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}

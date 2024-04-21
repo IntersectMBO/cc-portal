@@ -14,12 +14,23 @@ import {
 } from "./MDXComponents";
 import { ConstitutionProps } from "../types";
 import { useTranslations } from "next-intl";
+import { useModal } from "@/context";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [tab, setTab] = useState("revisions");
+  const { openModal } = useModal();
   const t = useTranslations("Constitution");
 
+  const onCompare = (target) => {
+    openModal({
+      type: "compareConstitutionModal",
+      state: {
+        base: "bafkreidrfo5cdyssi7civwzefmmsaqcahgoiohesr577ogq2gqghhw7kte", //TODO
+        target,
+      },
+    });
+  };
   const MDXComponents = {
     nav: ({ children }) => (
       <NavDrawer
@@ -51,10 +62,10 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
         {tab === "revisions" ? (
           <Grid container direction="column">
             <Grid item justifyContent={"flex-end"} direction="column">
-              {metadata.map(({ title, created_date }) => {
+              {metadata.map(({ title, created_date, cid }) => {
                 return (
                   <NavCard
-                    onClick={() => console.log("click")}
+                    onClick={() => onCompare(cid)}
                     title={title}
                     description={created_date}
                     buttonLabel={t("drawer.compare")}
