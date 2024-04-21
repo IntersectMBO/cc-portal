@@ -3,7 +3,7 @@ import React from "react";
 
 import { AppBar } from "@mui/material";
 
-import { IMAGES, PATHS } from "@consts";
+import { IMAGES, PATHS, customPalette } from "@consts";
 import NextLink from "next/link";
 
 export const TopNavWrapper = ({ children }) => {
@@ -11,7 +11,7 @@ export const TopNavWrapper = ({ children }) => {
     <AppBar
       component="nav"
       sx={{
-        backgroundColor: "white",
+        backgroundColor: customPalette.arcticWhite,
         borderColor: "lightblue",
         borderRadius: 0,
         boxShadow: 0,

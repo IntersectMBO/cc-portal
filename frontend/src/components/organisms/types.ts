@@ -1,19 +1,8 @@
-import { CompileMDXResult } from "next-mdx-remote/rsc";
-import { UserStatus } from "@atoms";
-import { FetchUserData, Permissions, UserRole } from "@/lib/requests";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { FetchUserData, UserRole } from "@/lib/requests";
 
 export interface ConstitutionProps {
-  constitution: CompileMDXResult;
-}
-
-export interface PaginationButtonProps {
-  handleClick: () => void;
-  disabled: boolean;
-  type: "prev" | "next";
-}
-
-export interface ConstitutionPageProps {
-  content: string[];
+  constitution: MDXRemoteSerializeResult;
 }
 
 export interface HeroProps {
