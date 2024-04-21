@@ -7,6 +7,7 @@ import { RoleResponse } from '../api/response/role.response';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
 import { S3Service } from 'src/s3/service/s3.service';
 import { UploadContext } from 'src/s3/enums/upload-context';
+import { SearchQueryDto } from '../dto/search-query.dto';
 @Injectable()
 export class UsersFacade {
   constructor(
@@ -74,5 +75,16 @@ export class UsersFacade {
     await this.s3Service.deleteFile(fileName);
 
     return UserMapper.mapUserDtoToResponse(user);
+  }
+
+  async searchUsers(
+    searchQuery: SearchQueryDto,
+    isAdmin: boolean,
+  ): Promise<UserResponse[]> {
+    const users = await this.usersService.searchUsers(searchQuery, isAdmin);
+    const results: UserResponse[] = users.map((x) =>
+      UserMapper.mapUserDtoToResponse(x),
+    );
+    return results;
   }
 }
