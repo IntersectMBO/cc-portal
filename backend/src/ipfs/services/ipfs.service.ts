@@ -34,7 +34,7 @@ export class IpfsService {
     } catch (error) {
       this.logger.error(`Error when adding to IPFS: ${error}`);
       throw new InternalServerErrorException(
-        `Error when add file to the IPSF service`,
+        `Error when add file to the IPFS service`,
       );
     }
     const metadata = IpfsMapper.ipfsContentToMetadata(ipfsContent);
