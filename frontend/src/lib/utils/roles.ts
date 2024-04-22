@@ -2,12 +2,28 @@ import { rolesList } from "@consts";
 import { UserRole } from "@/lib/requests";
 
 /**
- * Checks if the given role is an admin role.
+ * Checks if the given role is an admin or super admin role.
  * @param role The role to check.
  * @returns True if the role is "super_admin" or "admin", otherwise false.
  */
+export const isAnyAdminRole = (role: UserRole | undefined): boolean =>
+  isSuperAdminRole(role) || isAdminRole(role);
+
+/**
+ * Checks if the given role is an admin role.
+ * @param role The role to check.
+ * @returns True if the role is "admin", otherwise false.
+ */
 export const isAdminRole = (role: UserRole | undefined): boolean =>
-  role === "super_admin" || role === "admin";
+  role === "admin";
+
+/**
+ * Checks if the given role is a super admin role.
+ * @param role The role to check.
+ * @returns True if the role is "super_admin", otherwise false.
+ */
+export const isSuperAdminRole = (role: UserRole | undefined): boolean =>
+  role === "super_admin";
 
 /**
  * Checks if the given role is a user role.

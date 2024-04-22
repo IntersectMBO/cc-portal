@@ -6,5 +6,6 @@ export * from "./UsersList";
 export * from "./ControlledField";
 export * from "./NotFound";
 export * from "./PermissionChecker";
+export * from "./Constitution";
 
 export * from "./types";

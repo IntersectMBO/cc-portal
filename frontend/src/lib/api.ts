@@ -9,6 +9,7 @@ import {
   LoginResponse,
   Permissions,
 } from "./requests";
+import { ConstitutionMetadata } from "@/components/organisms";
 
 // Function to decode the user token stored in the authentication cookie
 export async function decodeUserToken(): Promise<DecodedToken | undefined> {
@@ -26,9 +27,10 @@ export async function login(email: FormDataEntryValue): Promise<LoginResponse> {
     const res: LoginResponse = await axiosInstance.post("/api/auth/login", {
       destination: email,
     });
+    console.log("LOGIN SUCCESS");
     return res;
   } catch (error) {
-    console.log("error login admin");
+    throw error;
   }
 }
 
@@ -139,5 +141,46 @@ export async function registerAdmin(email: string, permissions: Permissions[]) {
     return res;
   } catch (error) {
     console.log("error register admin");
+  }
+}
+
+export async function editUser(id: string, data: FormData) {
+  try {
+    const token = getAccessToken();
+    const response = await axiosInstance.patch(`/api/users/${id}`, data, {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getConstitutionMetadata(): Promise<
+  ConstitutionMetadata[]
+> {
+  try {
+    const response: ConstitutionMetadata[] = await axiosInstance.get(
+      "/api/constitution"
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function fetchConstitutionsDiff(
+  base: string,
+  target: string
+): Promise<any> {
+  try {
+    const response: any = await axiosInstance.get(
+      `/api/constitution/diff?base=${base}&target=${target}`
+    );
+    return response;
+  } catch (error) {
+    throw error;
   }
 }

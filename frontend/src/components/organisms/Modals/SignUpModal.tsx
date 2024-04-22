@@ -1,33 +1,57 @@
 "use client";
+import { useAppContext, useModal } from "@context";
 import {
   ModalContents,
   ModalHeader,
   ModalWrapper,
   Typography,
-  UploadFileButton,
   Button,
+  ModalActions,
 } from "@atoms";
 import { IMAGES } from "@consts";
 import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
+import { SignupModalState } from "../types";
+import { editUser } from "@/lib/api";
+import { useEffect } from "react";
+import { createFormDataObject } from "@utils";
+import { useSnackbar } from "@/context/snackbar";
 
 export const SignUpModal = () => {
-  const t = useTranslations("Modals");
+  const { state, closeModal } = useModal<SignupModalState>();
+  const { userSession, user, fetchUserData } = useAppContext();
+  const { addSuccessAlert, addErrorAlert } = useSnackbar();
 
+  const t = useTranslations("Modals");
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form submitted:", data);
-  };
-  const handleUpload = (file: File) => {
-    console.log("uploaded file", file);
+  useEffect(() => {
+    // Populate form fields with user data when the component mounts
+    if (user) {
+      setValue("name", user.name || "");
+      setValue("hotAddress", user.hot_addresses || "");
+      setValue("description", user.description || "");
+    }
+  }, [user, setValue]);
+
+  const onSubmit = async (data) => {
+    try {
+      const formData = createFormDataObject(data);
+      await editUser(userSession.userId, formData);
+      await fetchUserData(userSession.userId);
+      closeModal();
+      addSuccessAlert(t("signUp.alerts.success"));
+    } catch (error) {
+      addErrorAlert(t("signUp.alerts.error"));
+    }
   };
 
   return (
@@ -44,7 +68,7 @@ export const SignUpModal = () => {
             label={t("signUp.fields.username.label")}
             errors={errors}
             control={control}
-            {...register("username", { required: "Username is required" })}
+            {...register("name", { required: "Username is required" })}
           />
           <ControlledField.Input
             placeholder={t("signUp.fields.hotAddress.placeholder")}
@@ -61,19 +85,26 @@ export const SignUpModal = () => {
             control={control}
             {...register("description")}
           />
-          <UploadFileButton
+
+          <ControlledField.Upload
             fullWidth={false}
             size="large"
-            onChange={handleUpload}
+            errors={errors}
+            control={control}
+            {...register("file")}
           >
             {t("signUp.fields.upload")}
-          </UploadFileButton>
+          </ControlledField.Upload>
           <Box
             sx={{
               display: "flex",
             }}
           >
-            <Button type="submit">{t("common.confirm")}</Button>
+            {state.showCloseButton ? (
+              <ModalActions />
+            ) : (
+              <Button type="submit">{t("common.confirm")}</Button>
+            )}
           </Box>
         </ModalContents>
       </form>

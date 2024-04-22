@@ -16,7 +16,7 @@ export const ModalActions = ({ onClose }: Props) => {
     <Box
       sx={{
         display: "flex",
-        gap: "38px",
+        gap: 2,
       }}
     >
       <Button type="submit">{t("common.confirm")}</Button>
