@@ -15,10 +15,10 @@ import { UserResponse } from './response/user.response';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RoleResponse } from './response/role.response';
 import { UpdateRoleAndPermissionsRequest } from './request/update-role-and-permissions.request';
-import { Roles } from 'src/auth/guard/role.decorator';
-import { RoleEnum } from '../enums/role.enum';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
-import { RoleGuard } from 'src/auth/guard/role.guard';
+import { PermissionGuard } from 'src/auth/guard/permission.guard';
+import { Permissions } from 'src/auth/guard/permission.decorator';
+import { PermissionEnum } from '../enums/permission.enum';
 
 @ApiTags('Users')
 @Controller('users')
@@ -106,8 +106,8 @@ export class UsersController {
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @HttpCode(200)
   @Post(':id/role-permissions')
-  @Roles(RoleEnum.SUPER_ADMIN)
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Permissions(PermissionEnum.MANAGE_PERMISSIONS)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   async updateUserRoleAndPermissions(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
