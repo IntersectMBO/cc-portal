@@ -8,8 +8,9 @@ import { PATHS } from "@consts";
 import { registerAuthCallback, decodeUserToken } from "@/lib/api";
 import { useAppContext, useModal } from "@context";
 import { SignupModalState } from "@organisms";
+import { isAnyAdminRole } from "@utils";
 
-export default function VerifyRegister({ searchParams }) {
+export default function VerifyRegister({ params: { locale }, searchParams }) {
   const router = useRouter();
   const { setUserSession } = useAppContext();
   const { openModal } = useModal<SignupModalState>();
@@ -20,7 +21,12 @@ export default function VerifyRegister({ searchParams }) {
         await registerAuthCallback(token);
         const session = await decodeUserToken();
         setUserSession(session);
-        router.push(PATHS.home);
+        if (isAnyAdminRole(session.role)) {
+          router.push(`/${locale}/${PATHS.admin.dashboard}`);
+        } else {
+          router.push(PATHS.home);
+        }
+
         openModal({
           type: "signUpModal",
           state: {

@@ -20,7 +20,7 @@ import { createFormDataObject } from "@utils";
 import { useSnackbar } from "@/context/snackbar";
 
 export const SignUpModal = () => {
-  const { state } = useModal<SignupModalState>();
+  const { state, closeModal } = useModal<SignupModalState>();
   const { userSession, user, fetchUserData } = useAppContext();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
 
@@ -47,6 +47,7 @@ export const SignUpModal = () => {
       const formData = createFormDataObject(data);
       await editUser(userSession.userId, formData);
       await fetchUserData(userSession.userId);
+      closeModal();
       addSuccessAlert(t("signUp.alerts.success"));
     } catch (error) {
       addErrorAlert(t("signUp.alerts.error"));

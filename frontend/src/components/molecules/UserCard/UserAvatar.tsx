@@ -18,9 +18,11 @@ export const UserAvatar = ({
     sx={{
       "& img": {
         borderRadius: "50%",
+        width: width,
+        height: height,
       },
     }}
   >
-    <img src={src ? src : IMAGES.avatar} width={width} height={height} />
+    <img src={src ? src : IMAGES.avatar} />
   </Grid>
 );
