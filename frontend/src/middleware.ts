@@ -2,7 +2,7 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { defaultLocale, locales, PATHS } from "@consts";
-import { isAdminProtectedRoute, isAdminRole } from "@utils";
+import { isAdminProtectedRoute, isAnyAdminRole } from "@utils";
 import { decodeUserToken } from "./lib/api";
 
 // Export the middleware configuration to define supported locales and the default locale.
@@ -25,7 +25,7 @@ export async function middleware(req: NextRequest) {
   if (isAdminProtectedRoute(req)) {
     if (decodedToken) {
       const { role } = decodedToken;
-      if (isAdminRole(role)) {
+      if (isAnyAdminRole(role)) {
         return response;
       }
     }

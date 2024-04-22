@@ -2,13 +2,13 @@
 import React from "react";
 import { ModalWrapper, ModalHeader, ModalContents, ModalActions } from "@atoms";
 import { useForm, useWatch } from "react-hook-form";
-import { IMAGES, permissionsList, addMemberRoleList } from "@consts";
+import { getRoleDropdownList, IMAGES, permissionsList } from "@consts";
 import { useTranslations } from "next-intl";
 import { ControlledField } from "@organisms";
 import { Permissions, UserRole } from "@/lib/requests";
 import { isAdminRole } from "@utils";
 import { registerAdmin, registerUser } from "@/lib/api";
-import { useModal } from "@context";
+import { useAppContext, useModal } from "@context";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/context/snackbar";
 import { SeletItem } from "@/components/molecules";
@@ -23,6 +23,8 @@ export const AddMemberModal = () => {
   const { closeModal } = useModal();
   const router = useRouter();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
+  const { userSession } = useAppContext();
+  const roleList = getRoleDropdownList(userSession.role);
 
   const {
     register,
@@ -64,7 +66,7 @@ export const AddMemberModal = () => {
           <ControlledField.Select
             placeholder={t("addMember.fields.role.placeholder")}
             label={t("addMember.fields.role.label")}
-            items={addMemberRoleList as SeletItem[]}
+            items={roleList as SeletItem[]}
             control={control}
             errors={errors}
             multiple={false}
