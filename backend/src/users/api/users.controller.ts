@@ -43,18 +43,6 @@ import { RoleGuard } from 'src/auth/guard/role.guard';
 export class UsersController {
   constructor(private readonly usersFacade: UsersFacade) {}
 
-  // @ApiOperation({ summary: 'Get all users' })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: 'Users',
-  //   isArray: true,
-  //   type: UserResponse,
-  // })
-  // @Get()
-  // async findAll(): Promise<UserResponse[]> {
-  //   return await this.usersFacade.findAll();
-  // }
-
   @ApiOperation({ summary: 'Find one user by ID' })
   @ApiResponse({
     status: 200,
