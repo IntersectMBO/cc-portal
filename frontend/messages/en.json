@@ -10,7 +10,12 @@
     }
   },
   "Constitution": {
-    "title": "Cardano Constituition"
+    "title": "Cardano Constituition",
+    "drawer": {
+      "compare": "Compare",
+      "latestRevisions": "Latest Revisions",
+      "tableOfContents": "Table of contents"
+    }
   },
   "Navigation": {
     "addNewMember": "Add new member",
@@ -110,6 +115,9 @@
       "headline": "Upload new version of Constitution",
       "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
       "upload": "Upload Constitution"
+    },
+    "compareConstitution": {
+      "headline": "Compare revisions"
     }
   },
   "AdminDashboard": {

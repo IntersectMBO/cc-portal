@@ -11,6 +11,7 @@ import {
 } from "@organisms";
 import { SignUpModal } from "@/components/organisms/Modals/SignUpModal";
 import { SignOutModal } from "@/components/organisms/Modals/SignOutModal";
+import { CompareConstitutionModal } from "@/components/organisms/Modals/CompareConstitutionModal";
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -30,7 +31,8 @@ export type ModalType =
   | "addMember"
   | "signOutModal"
   | "uploadConstitution"
-  | "deleteRole";
+  | "deleteRole"
+  | "compareConstitutionModal";
 
 const modals: Record<ModalType, ContextModal> = {
   none: {
@@ -54,6 +56,9 @@ const modals: Record<ModalType, ContextModal> = {
   },
   deleteRole: {
     component: <DeleteRole />,
+  },
+  compareConstitutionModal: {
+    component: <CompareConstitutionModal />,
   },
 };
 
