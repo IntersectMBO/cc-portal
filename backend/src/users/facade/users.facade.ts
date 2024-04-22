@@ -35,19 +35,18 @@ export class UsersFacade {
     return UserMapper.mapUserDtoToResponse(user);
   }
 
-  async update(
-    file: Express.Multer.File,
-    id: string,
-    updateUserRequest: UpdateUserRequest,
-  ) {
+  async update(id: string, updateUserRequest: UpdateUserRequest) {
     const updateUserDto =
       UserMapper.mapUpdateUserRequestToDto(updateUserRequest);
-
-    const fileUrl = await this.storeProfilePhotoIfExists(file, id);
-    const user = await this.usersService.update(fileUrl, id, updateUserDto);
+    const user = await this.usersService.update(id, updateUserDto);
     return UserMapper.mapUserDtoToResponse(user);
   }
 
+  async updateProfilePhoto(file: Express.Multer.File, id: string) {
+    const fileUrl = await this.storeProfilePhotoIfExists(file, id);
+    const user = await this.usersService.updateProfilePhoto(fileUrl, id);
+    return UserMapper.mapUserDtoToResponse(user);
+  }
   private async storeProfilePhotoIfExists(
     file: Express.Multer.File,
     id: string,

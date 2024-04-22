@@ -91,12 +91,52 @@ export class UsersController {
     type: String,
   })
   @ApiBody({ type: UpdateUserRequest })
-  @ApiConsumes('multipart/form-data')
   @HttpCode(200)
-  @UseInterceptors(FileInterceptor('file'))
   @Patch(':id')
   @UseGuards(JwtAuthGuard, UserPathGuard)
   async update(
+    @Request() req: any,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateUserRequest: UpdateUserRequest,
+  ): Promise<UserResponse> {
+    return await this.usersFacade.update(id, updateUserRequest);
+  }
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Update a users photo' })
+  @ApiResponse({
+    status: 200,
+    description: 'Users photo updated successfully.',
+    type: UserResponse,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'provided id does not match the requested one',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'user with {id} not found',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User with requested email address already exists',
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'identification number of the user',
+    type: String,
+  })
+  @ApiConsumes('multipart/form-data')
+  @HttpCode(200)
+  @UseInterceptors(FileInterceptor('file'))
+  @Patch('photo/:id')
+  @UseGuards(JwtAuthGuard, UserPathGuard)
+  async updateProfilePhoto(
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
@@ -113,9 +153,8 @@ export class UsersController {
     file: Express.Multer.File,
     @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateUserRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
-    return await this.usersFacade.update(file, id, updateUserRequest);
+    return await this.usersFacade.updateProfilePhoto(file, id);
   }
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Delete photo of user' })

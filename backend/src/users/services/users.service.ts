@@ -150,16 +150,11 @@ export class UsersService {
     return user;
   }
 
-  async update(
-    fileUrl: string,
-    id: string,
-    updateUserDto: UpdateUserDto,
-  ): Promise<UserDto> {
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserDto> {
     const user = await this.findEntityByIdWithAddresses(id);
 
     user.name = updateUserDto.name;
     user.description = updateUserDto.description;
-    user.profilePhotoUrl = fileUrl;
 
     if (updateUserDto.hotAddress) {
       await this.checkUniqueUserHotAddress(
@@ -171,6 +166,13 @@ export class UsersService {
       hotAddress.address = updateUserDto.hotAddress;
       user.hotAddresses.push(hotAddress);
     }
+
+    const updatedUser = await this.userRepository.save(user);
+    return UserMapper.userToDto(updatedUser);
+  }
+  async updateProfilePhoto(fileUrl: string, id: string): Promise<UserDto> {
+    const user = await this.findEntityByIdWithAddresses(id);
+    user.profilePhotoUrl = fileUrl;
 
     const updatedUser = await this.userRepository.save(user);
     return UserMapper.userToDto(updatedUser);
