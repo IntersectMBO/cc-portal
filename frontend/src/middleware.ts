@@ -14,7 +14,13 @@ const intlMiddleware = createMiddleware({
 // Define and export a config object to specify which paths the middleware should apply to.
 // This ensures the internationalization logic only runs for specified routes.
 export const config = {
-  matcher: ["/", "/constitution", "/(de|en)/:path*"], // Apply middleware to the root path and any path prefixed with supported locales.
+  matcher: [
+    "/",
+    "/constitution",
+    "/admin",
+    "/admin/dashboard",
+    "/(de|en)/:path*",
+  ], // Apply middleware to the root path and any path prefixed with supported locales.
 };
 
 export async function middleware(req: NextRequest) {
