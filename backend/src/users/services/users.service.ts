@@ -9,7 +9,13 @@ import {
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { UserStatusEnum } from '../enums/user-status.enum';
-import { EntityManager, Repository } from 'typeorm';
+import {
+  EntityManager,
+  FindOptionsWhere,
+  ILike,
+  Not,
+  Repository,
+} from 'typeorm';
 import { Role } from '../entities/role.entity';
 import { UserDto } from '../dto/user.dto';
 import { UserMapper } from '../mapper/userMapper.mapper';
@@ -20,6 +26,8 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { RoleDto } from '../dto/role.dto';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
 import { HotAddress } from '../entities/hotaddress.entity';
+import { RoleEnum } from '../enums/role.enum';
+import { SearchQueryDto } from '../dto/search-query.dto';
 
 @Injectable()
 export class UsersService {
@@ -222,6 +230,27 @@ export class UsersService {
   async getAllRoles(): Promise<RoleDto[]> {
     const roles = await this.roleRepository.find();
     const results: RoleDto[] = roles.map((role) => RoleMapper.roleToDto(role));
+    return results;
+  }
+
+  async searchUsers(
+    searchQuery: SearchQueryDto,
+    isAdmin: boolean,
+  ): Promise<UserDto[]> {
+    const { searchPhrase, sortOrder } = searchQuery;
+
+    const conditions: FindOptionsWhere<User> | FindOptionsWhere<User>[] = {
+      ...(isAdmin
+        ? { role: { code: Not(RoleEnum.SUPER_ADMIN) } }
+        : { role: { code: RoleEnum.USER } }),
+      ...(searchPhrase ? { name: ILike(`%${searchPhrase}%`) } : {}),
+    };
+
+    const users = await this.userRepository.find({
+      where: conditions,
+      order: { createdAt: sortOrder },
+    });
+    const results: UserDto[] = users.map((user) => UserMapper.userToDto(user));
     return results;
   }
 }

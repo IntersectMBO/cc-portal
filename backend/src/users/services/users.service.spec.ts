@@ -71,6 +71,7 @@ const mockRoleRepository = {
   create: jest.fn().mockReturnValue({}),
   save: jest.fn().mockResolvedValue({}),
   findOne: jest.fn().mockResolvedValue({}),
+  find: jest.fn().mockResolvedValue({}),
 };
 const mockPermRepository = {
   create: jest.fn().mockReturnValue({}),
@@ -148,10 +149,11 @@ describe('UsersService', () => {
     // Executing the update function
     const result = await service.update(mockFile, id, updateUserDto);
     // Verifying the result
+    console.log(result);
     expect(result.name).toBe(updateUserDto.name);
     expect(result.description).toBe(updateUserDto.description);
     expect(result.hotAddresses).toContain(updateUserDto.hotAddress);
-    expect(result.profilePhotoUrl).toBe('mocked_file_url');
+    expect(result.profilePhotoUrl).toBe(mockFile);
     expect(mockUserRepository.save).toHaveBeenCalled();
   });
 
@@ -191,5 +193,9 @@ describe('UsersService', () => {
     await expect(
       service.update(mockFile, id, updateUserDto),
     ).rejects.toThrowError(NotFoundException);
+  });
+
+  it('should return an array of CC Members', async () => {
+    //
   });
 });
