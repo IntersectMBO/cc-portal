@@ -124,6 +124,10 @@ export class UsersController {
     status: 409,
     description: 'User with requested email address already exists',
   })
+  @ApiResponse({
+    status: 422,
+    description: 'File is required',
+  })
   @ApiResponse({ status: 500, description: 'Internal server error.' })
   @ApiParam({
     name: 'id',
@@ -134,7 +138,7 @@ export class UsersController {
   @ApiConsumes('multipart/form-data')
   @HttpCode(200)
   @UseInterceptors(FileInterceptor('file'))
-  @Patch('photo/:id')
+  @Patch(':id/profile-photo')
   @UseGuards(JwtAuthGuard, UserPathGuard)
   async updateProfilePhoto(
     @UploadedFile(
@@ -146,7 +150,7 @@ export class UsersController {
           maxSize: 3145728,
         })
         .build({
-          fileIsRequired: false,
+          fileIsRequired: true,
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
         }),
     )

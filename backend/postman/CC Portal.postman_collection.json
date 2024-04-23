@@ -60,29 +60,13 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "Andjela",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "",
-									"type": "text"
-								},
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/Users/milossekuloski/git-repos/cc-portal/backend/postman/1712183767053-valentines-day.png"
-								},
-								{
-									"key": "hot_address",
-									"value": "andjelahot",
-									"type": "text"
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Andjy\",\n    \"description\":\"\",\n    \"hotAddress\":\"newone\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
 							"raw": "{{base-url}}/api/users/{{userId}}",
@@ -93,6 +77,45 @@
 								"api",
 								"users",
 								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User's Photo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/milossekuloski/git-repos/cc-portal/backend/postman/1712183767053-valentines-day.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base-url}}/api/users/{{userId}}/profile-photo",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{userId}}",
+								"profile-photo"
 							]
 						}
 					},
