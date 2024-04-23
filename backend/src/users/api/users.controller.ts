@@ -185,6 +185,14 @@ export class UsersController {
 
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a users photo' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'file' },
+      },
+    },
+  })
   @ApiResponse({
     status: 200,
     description: 'Users photo updated successfully.',
