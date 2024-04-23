@@ -1,7 +1,7 @@
-import { UsersService } from 'src/users/services/users.service';
+import { UsersService } from '../../users/services/users.service';
 import { UserDto } from 'src/users/dto/user.dto';
 import { TokenResponse } from '../api/response/token.response';
-import { UserMapper } from 'src/users/mapper/userMapper.mapper';
+import { UserMapper } from '../../users/mapper/userMapper.mapper';
 import {
   BadRequestException,
   Injectable,
@@ -9,9 +9,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
-import { EmailService } from 'src/email/service/email.service';
+import { EmailService } from '../../email/service/email.service';
 import { EmailDto } from 'src/email/dto/email.dto';
-import { UserStatusEnum } from 'src/users/enums/user-status.enum';
+import { UserStatusEnum } from '../../users/enums/user-status.enum';
 import { CreateUserRequest } from 'src/users/api/request/create-user.request';
 import { RoleEnum } from 'src/users/enums/role.enum';
 

@@ -32,7 +32,8 @@ export interface FetchUserData {
   name: string | null;
   email: string;
   description: string | null;
-  profile_photo: string | null;
+  hot_addresses?: string | null;
+  profile_photo_url: string | null;
   status: UserAuthStatus;
   role: UserRole;
   permissions: Permissions;

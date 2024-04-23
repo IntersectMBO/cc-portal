@@ -20,7 +20,7 @@ const PermissionChecker: React.FC<PermissionCheckerProps> = ({
   requiredPermission,
   children,
 }) => {
-  const hasPermission = permissions.includes(requiredPermission);
+  const hasPermission = permissions?.includes(requiredPermission);
 
   return <>{hasPermission && children}</>;
 };

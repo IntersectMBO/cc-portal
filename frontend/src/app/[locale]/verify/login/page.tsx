@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { PATHS } from "@consts";
 import { loginAuthCallback, decodeUserToken } from "@/lib/api";
-import { isAdminRole } from "@utils";
+import { isAnyAdminRole } from "@utils";
 import { useAppContext } from "@context";
 
 export default function VerifyLogin({ params: { locale }, searchParams }) {
@@ -19,7 +19,7 @@ export default function VerifyLogin({ params: { locale }, searchParams }) {
         const session = await decodeUserToken();
         setUserSession(session);
 
-        if (isAdminRole(response.user.role)) {
+        if (isAnyAdminRole(response.user.role)) {
           router.push(`/${locale}/${PATHS.admin.dashboard}`);
         } else {
           router.push(PATHS.constitution);

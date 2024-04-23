@@ -106,6 +106,14 @@
 								}
 							]
 						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{base-url}}/api/users/{{userId}}/profile-photo",
 							"host": [

@@ -71,6 +71,7 @@ const mockRoleRepository = {
   create: jest.fn().mockReturnValue({}),
   save: jest.fn().mockResolvedValue({}),
   findOne: jest.fn().mockResolvedValue({}),
+  find: jest.fn().mockResolvedValue({}),
 };
 const mockPermRepository = {
   create: jest.fn().mockReturnValue({}),

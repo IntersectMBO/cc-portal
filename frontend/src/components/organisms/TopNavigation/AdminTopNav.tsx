@@ -25,7 +25,7 @@ export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
         <Box>
           <Grid container gap={2}>
             <PermissionChecker
-              permissions={userSession.permissions}
+              permissions={userSession?.permissions}
               requiredPermission="manage_cc_members"
             >
               <Button onClick={addMember} variant="outlined">
@@ -33,7 +33,7 @@ export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               </Button>
             </PermissionChecker>
             <PermissionChecker
-              permissions={userSession.permissions}
+              permissions={userSession?.permissions}
               requiredPermission="add_constitution_version"
             >
               <Button type="submit"> {t("uploadNewVersion")}</Button>

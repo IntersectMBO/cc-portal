@@ -14,7 +14,7 @@ export type ButtonProps = Omit<MUIButtonProps, "size"> & {
 
 export type TypographyProps = Pick<
   MUITypographyProps,
-  "color" | "lineHeight" | "sx" | "align"
+  "color" | "lineHeight" | "sx" | "align" | "id"
 > & {
   children?: React.ReactNode;
   fontSize?: number;
