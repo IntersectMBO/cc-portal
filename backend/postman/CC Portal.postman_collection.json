@@ -1,31 +1,14 @@
 {
 	"info": {
-		"_postman_id": "7d15a02b-739e-487c-af61-5cdea4c49f81",
+		"_postman_id": "f70e79f8-7bd3-4c94-b850-9957120d9789",
 		"name": "CC Portal develop",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20133713"
 	},
 	"item": [
 		{
 			"name": "User",
 			"item": [
-				{
-					"name": "Get All Users",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base-url}}/api/users",
-							"host": [
-								"{{base-url}}"
-							],
-							"path": [
-								"api",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Get User By Id",
 					"request": {
@@ -106,14 +89,6 @@
 								}
 							]
 						},
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{accessToken}}",
-								"type": "text"
-							}
-						],
 						"url": {
 							"raw": "{{base-url}}/api/users/{{userId}}/profile-photo",
 							"host": [
@@ -153,6 +128,72 @@
 								"users",
 								"{{userId}}",
 								"profile-photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search CC Member",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/users/cc-member/search?phrase=test&sort_order=DESC",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"cc-member",
+								"search"
+							],
+							"query": [
+								{
+									"key": "phrase",
+									"value": "test"
+								},
+								{
+									"key": "sort_order",
+									"value": "DESC"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Admin / Super Admin",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/api/users/{{userId}}/search-admin?phrase=test&sort_order=DESC",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{userId}}",
+								"search-admin"
+							],
+							"query": [
+								{
+									"key": "phrase",
+									"value": "test"
+								},
+								{
+									"key": "sort_order",
+									"value": "DESC"
+								}
 							]
 						}
 					},
