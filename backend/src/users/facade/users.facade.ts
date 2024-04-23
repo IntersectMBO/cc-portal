@@ -5,16 +5,29 @@ import { UserResponse } from '../api/response/user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { RoleResponse } from '../api/response/role.response';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
+import { PaginationDto } from 'src/pagination/dto/pagination.dto';
+import { PageOptionsDto } from 'src/pagination/dto/page-options.dto';
+import { PageMetaDto } from 'src/pagination/dto/page-meta.dto';
+import { UserDto } from '../dto/user.dto';
+
 @Injectable()
 export class UsersFacade {
   constructor(private readonly usersService: UsersService) {}
 
-  async findAll(): Promise<UserResponse[]> {
-    const users = await this.usersService.findAll();
-    const results: UserResponse[] = users.map((x) =>
-      UserMapper.mapUserDtoToResponse(x),
+  async findAll(
+    pageOptionsDto: PageOptionsDto,
+  ): Promise<PaginationDto<UserResponse>> {
+    const userCountDto = await this.usersService.findAll(pageOptionsDto);
+
+    const userDto = userCountDto.userDto;
+    const itemCount = userCountDto.itemCount;
+
+    const userResponse = userDto.map((userDto: UserDto) =>
+      UserMapper.mapUserDtoToResponse(userDto),
     );
-    return results;
+
+    const pageMetaDto = new PageMetaDto({ itemCount, pageOptionsDto });
+    return new PaginationDto(userResponse, pageMetaDto);
   }
 
   async getAllRoles(): Promise<RoleResponse[]> {

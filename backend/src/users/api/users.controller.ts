@@ -6,29 +6,45 @@ import {
   Param,
   HttpCode,
   ParseUUIDPipe,
+  Query,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
 import { UserResponse } from './response/user.response';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RoleResponse } from './response/role.response';
+import { PageOptionsDto } from '../../pagination/dto/page-options.dto';
+import { PaginationDto } from '../../pagination/dto/pagination.dto';
+import { Order } from 'src/pagination/enums/order.enum';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersFacade: UsersFacade) {}
 
-  @ApiOperation({ summary: 'Get all users' })
+  @ApiOperation({ summary: 'Get all users and page metadata' })
   @ApiResponse({
     status: 200,
-    description: 'Users',
+    description: 'Users in pages',
     isArray: true,
-    type: UserResponse,
+    type: PaginationDto<UserResponse>,
   })
   @ApiResponse({ status: 404, description: 'User not found' })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  async findAll(): Promise<UserResponse[]> {
-    return await this.usersFacade.findAll();
+  async findAll(
+    // @Query() pageOptionsDto: PageOptionsDto,
+    @Query('page') page: number = 1,
+    @Query('take') take: number = 12,
+    @Query('order') order: Order = Order.ASC,
+  ): Promise<PaginationDto<UserResponse>> {
+    const pageOptionsDto = new PageOptionsDto();
+    pageOptionsDto.page = page;
+    pageOptionsDto.take = take;
+    pageOptionsDto.order = order;
+    return await this.usersFacade.findAll(pageOptionsDto);
   }
 
   @ApiOperation({ summary: 'Get all roles' })

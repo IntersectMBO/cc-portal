@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { User, UserStatusEnum } from '../entities/user.entity';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, Not, Repository } from 'typeorm';
 import { Role } from '../entities/role.entity';
 import { UserDto } from '../dto/user.dto';
 import { UserMapper } from '../mapper/userMapper.mapper';
@@ -17,6 +17,9 @@ import { Permission } from '../entities/permission.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { RoleDto } from '../dto/role.dto';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
+import { PageOptionsDto } from '../../pagination/dto/page-options.dto';
+import { UserCountDto } from '../dto/user-count.dto';
+import { RoleEnum } from '../enums/role.enum';
 
 @Injectable()
 export class UsersService {
@@ -120,11 +123,27 @@ export class UsersService {
     return UserMapper.userToDto(user);
   }
 
-  async findAll(): Promise<UserDto[]> {
-    const users = await this.userRepository.find();
-    const results: UserDto[] = users.map((x) => UserMapper.userToDto(x));
+  async findAll(pageOptionsDto: PageOptionsDto): Promise<UserCountDto> {
+    const { skip, take, order } = pageOptionsDto;
 
-    return results;
+    const users = await this.userRepository.find({
+      where: {
+        role: { code: Not(RoleEnum.SUPER_ADMIN) },
+      },
+      order: { createdAt: order },
+      skip: skip,
+      take: take,
+    });
+
+    const userDto = users.map((x) => UserMapper.userToDto(x));
+
+    const itemCount = await this.userRepository.count();
+
+    const userCountDto = new UserCountDto();
+    userCountDto.userDto = userDto;
+    userCountDto.itemCount = itemCount;
+
+    return userCountDto;
   }
 
   async findOne(id: string): Promise<UserDto> {
