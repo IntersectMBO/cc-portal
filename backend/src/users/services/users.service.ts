@@ -244,7 +244,7 @@ export class UsersService {
     const conditions: FindOptionsWhere<User> | FindOptionsWhere<User>[] = {
       ...(isAdmin
         ? { role: { code: Not(RoleEnum.SUPER_ADMIN) } }
-        : { role: { code: RoleEnum.USER } }),
+        : { role: { code: RoleEnum.USER }, status: UserStatusEnum.ACTIVE }),
       ...(searchPhrase ? { name: ILike(`%${searchPhrase}%`) } : {}),
     };
 
