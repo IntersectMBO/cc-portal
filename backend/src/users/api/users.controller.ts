@@ -87,7 +87,6 @@ export class UsersController {
   })
   @ApiBody({ type: UpdateUserRequest })
   @HttpCode(200)
-  @UseInterceptors(FileInterceptor('file'))
   @Patch(':id')
   @UseGuards(JwtAuthGuard, UserPathGuard)
   async update(
@@ -235,7 +234,7 @@ export class UsersController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: /(jpg|jpeg|png|gif)$/,
+          fileType: 'jpeg',
         })
         .addMaxSizeValidator({
           maxSize: 3145728,
