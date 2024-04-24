@@ -7,7 +7,7 @@ import { CompareConstitutionModalState } from "../types";
 import { ModalWrapper, ModalHeader, ModalContents, Button } from "@atoms";
 import { IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
-import styled from "styled-components";
+import { styled } from "@mui/material/styles";
 
 export const CompareConstitutionModal = () => {
   const t = useTranslations("Modals");
@@ -90,32 +90,35 @@ export const CompareConstitutionModal = () => {
   );
 };
 
-const DiffContainer = styled.div`
+const DiffContainer = styled("div")`
   display: flex;
   font-family: monospace;
   font-size: 14px;
   line-height: 1.6;
 `;
 
-const DiffPane = styled.div`
+const DiffPane = styled("div")`
   flex: 1;
   padding: 8px;
 `;
 
-const DiffLine = styled.div`
+const DiffLine = styled("div")<{
+  changed: boolean;
+  bgColor: string;
+}>`
   display: flex;
   align-items: center;
   background-color: ${(props) => (props.changed ? props.bgColor : "white")};
   width: 350px;
 `;
 
-const OldTextBox = styled.span`
+const OldTextBox = styled("span")`
   flex: 1;
   white-space: pre-wrap;
   padding-left: 8px;
 `;
 
-const NewTextBox = styled.span`
+const NewTextBox = styled("span")`
   flex: 1;
   white-space: pre-wrap;
   padding-right: 8px;
