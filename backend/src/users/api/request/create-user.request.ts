@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsEmail, IsEnum, MaxLength } from 'class-validator';
-import { PermissionEnum } from 'src/users/enums/permission.enum';
+import { PermissionEnum } from '../../enums/permission.enum';
 
 export class CreateUserRequest {
   @ApiProperty({

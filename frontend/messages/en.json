@@ -10,10 +10,28 @@
     }
   },
   "Constitution": {
-    "title": "Cardano Constituition"
+    "title": "Cardano Constituition",
+    "drawer": {
+      "compare": "Compare",
+      "latestRevisions": "Latest Revisions",
+      "tableOfContents": "Table of contents"
+    }
+  },
+  "Navigation": {
+    "addNewMember": "Add new member",
+    "uploadNewVersion": "Upload new version",
+    "editProfile": "Edit Profile",
+    "signOut": "Sign Out"
   },
   "Footer": {
-    "copyright": "© 2024 Intersect MBO"
+    "copyright": "© 2024 Intersect MBO",
+    "signOut": "Sign Out",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of service",
+    "AreYouCCMember": "Are you CC member?",
+    "signIn": "Sign In",
+    "help": "Help",
+    "feedback": "Feedback"
   },
   "Modals": {
     "common": {
@@ -28,6 +46,10 @@
           "label": "Email address",
           "placeholder": "Text here"
         }
+      },
+      "alerts": {
+        "success": "Magic link successfully sent",
+        "error": "Error sending magic link"
       }
     },
     "signUp": {
@@ -48,6 +70,10 @@
           "helpfulText": "This is a hint text to help user."
         },
         "upload": "Upload profile photo"
+      },
+      "alerts": {
+        "success": "Profile successfully updated",
+        "error": "Error updating profile"
       }
     },
     "signOut": {
@@ -59,8 +85,8 @@
       "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
       "fields": {
         "delete": {
-          "label": "Write delete",
-          "placeholder": "Write delete"
+          "label": "Write DELETE",
+          "placeholder": "Write DELETE"
         }
       }
     },
@@ -79,16 +105,30 @@
           "label": "Permissions",
           "placeholder": "Permissions"
         }
+      },
+      "alerts": {
+        "success": "New member successfully added",
+        "error": "Error adding new member"
       }
     },
     "uploadConstitution": {
       "headline": "Upload new version of Constitution",
       "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
       "upload": "Upload Constitution"
+    },
+    "compareConstitution": {
+      "headline": "Compare revisions"
     }
   },
   "AdminDashboard": {
     "role": "Role",
     "status": "Status"
+  },
+  "NotFound": {
+    "noMembersFound": "No members found",
+    "addNewMembers": "Add new members"
+  },
+  "Snackbar": {
+    "changesSaved": "Changes saved"
   }
 }

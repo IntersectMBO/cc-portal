@@ -7,10 +7,15 @@ import { Role } from './entities/role.entity';
 import { UsersFacade } from './facade/users.facade';
 import { Permission } from './entities/permission.entity';
 import { HotAddress } from './entities/hotaddress.entity';
+import { S3Module } from 'src/s3/s3.module';
+import { RoleController } from './api/role.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Role, Permission, HotAddress])],
-  controllers: [UsersController],
+  imports: [
+    TypeOrmModule.forFeature([User, Role, Permission, HotAddress]),
+    S3Module,
+  ],
+  controllers: [UsersController, RoleController],
   providers: [UsersFacade, UsersService],
   exports: [UsersService],
 })

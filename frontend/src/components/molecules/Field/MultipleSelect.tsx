@@ -18,6 +18,9 @@ export const MultipleSelect = ({
   placeholder,
   items,
   onChange,
+  multiple,
+  required,
+  name,
   ...rest
 }: MultipleSelectProps) => {
   return (
@@ -36,6 +39,9 @@ export const MultipleSelect = ({
         onChange={onChange}
         placeholder={placeholder}
         items={items}
+        multiple={multiple}
+        required={required}
+        name={name}
       />
       <FormHelpfulText
         helpfulText={helpfulText}

@@ -1,7 +1,7 @@
 import { RoleEnum } from 'src/users/enums/role.enum';
 import { PermissionEnum } from 'src/users/enums/permission.enum';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEnum } from 'class-validator';
+import { ArrayUnique, IsArray, IsEnum } from 'class-validator';
 
 export class UpdateRoleAndPermissionsRequest {
   @ApiProperty({
@@ -18,5 +18,6 @@ export class UpdateRoleAndPermissionsRequest {
   })
   @IsArray()
   @IsEnum(PermissionEnum, { each: true })
+  @ArrayUnique({ message: 'Permissions must be unique' })
   newPermissions?: string[] = [];
 }

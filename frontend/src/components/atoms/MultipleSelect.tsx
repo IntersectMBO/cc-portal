@@ -1,4 +1,3 @@
-"use client";
 import * as React from "react";
 import { Theme, useTheme } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
@@ -6,7 +5,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { customPalette, ICONS } from "@consts";
 import { MultipleSelectProps } from "../molecules";
-import { Checkbox, Icon } from "@mui/material";
+import { Checkbox } from "@mui/material";
 import { Input } from "./Input";
 import { Typography } from "./Typography";
 
@@ -22,13 +21,13 @@ const MenuProps = {
 };
 
 function getStyles(
-  item: string,
+  itemValue: string,
   selectedValue: readonly string[],
   theme: Theme
 ) {
   return {
     fontWeight:
-      selectedValue.indexOf(item) === -1
+      selectedValue.indexOf(itemValue) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
@@ -38,6 +37,9 @@ export function MultipleSelect({
   placeholder,
   items,
   onChange,
+  multiple = true,
+  required,
+  name,
 }: MultipleSelectProps) {
   const theme = useTheme();
   const [selectedValue, setSelectedValue] = React.useState<string[]>([]);
@@ -48,7 +50,38 @@ export function MultipleSelect({
     } = event;
     const formattedValue = typeof value === "string" ? value.split(",") : value;
     setSelectedValue(formattedValue);
-    onChange(formattedValue);
+    onChange(event);
+  };
+
+  const renderValue = () => {
+    if (!multiple) {
+      if (selectedValue.length === 0) {
+        return (
+          <Typography
+            fontWeight={400}
+            variant="body1"
+            color={customPalette.inputPlaceholder}
+          >
+            {placeholder}
+          </Typography>
+        );
+      }
+      const selectedOption = items.find(
+        (item) => item.value === selectedValue[0]
+      );
+      if (selectedOption) {
+        return <Typography variant="body2">{selectedOption.label}</Typography>;
+      }
+    }
+    return (
+      <Typography
+        fontWeight={400}
+        variant="body1"
+        color={customPalette.inputPlaceholder}
+      >
+        {placeholder}
+      </Typography>
+    );
   };
 
   return (
@@ -58,34 +91,30 @@ export function MultipleSelect({
       }}
     >
       <Select
-        multiple
+        name={name}
+        multiple={multiple}
         displayEmpty
         value={selectedValue}
         onChange={handleChange}
         input={<Input />}
         IconComponent={() => <img src={ICONS.arrowDown} />}
-        renderValue={() => (
-          <Typography
-            fontWeight={400}
-            variant="body1"
-            color={customPalette.inputPlaceholder}
-          >
-            {placeholder}
-          </Typography>
-        )}
+        renderValue={renderValue}
         MenuProps={MenuProps}
+        required={required}
       >
         <MenuItem disabled value="">
           {placeholder}
         </MenuItem>
         {items.map((item) => (
           <MenuItem
-            key={item}
-            value={item}
-            style={getStyles(item, selectedValue, theme)}
+            key={item.value}
+            value={item.value}
+            style={getStyles(item.value, selectedValue, theme)}
           >
-            <Checkbox checked={selectedValue.indexOf(item) > -1} />
-            <Typography variant="body2">{item}</Typography>
+            {multiple && (
+              <Checkbox checked={selectedValue.indexOf(item.value) > -1} />
+            )}
+            <Typography variant="body2">{item.label}</Typography>
           </MenuItem>
         ))}
       </Select>
