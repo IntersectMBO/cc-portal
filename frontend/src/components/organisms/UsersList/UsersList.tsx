@@ -6,7 +6,7 @@ import { UserListItem } from "../types";
 import { NotFound } from "../NotFound";
 
 export function UsersList({ usersList }: { usersList: UserListItem[] }) {
-  if (usersList.length === 0) {
+  if (usersList?.length === 0 || usersList === undefined) {
     return <NotFound title="noMembersFound" description="addNewMembers" />;
   }
   return (
