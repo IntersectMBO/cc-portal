@@ -144,16 +144,14 @@ describe('UsersService', () => {
       description: 'Updated description',
       hotAddress: 'updated_hot_address',
     };
-    const mockFile: any = { fieldname: 'profilePhoto' };
     const id: string = 'mockedId';
     // Executing the update function
-    const result = await service.update(mockFile, id, updateUserDto);
+    const result = await service.update(id, updateUserDto);
     // Verifying the result
-    console.log(result);
     expect(result.name).toBe(updateUserDto.name);
     expect(result.description).toBe(updateUserDto.description);
     expect(result.hotAddresses).toContain(updateUserDto.hotAddress);
-    expect(result.profilePhotoUrl).toBe(mockFile);
+    expect(result.profilePhotoUrl).toBe('mockedProfilePhoto');
     expect(mockUserRepository.save).toHaveBeenCalled();
   });
 
@@ -163,16 +161,15 @@ describe('UsersService', () => {
       description: 'Updated description',
       hotAddress: 'updated_hot_address',
     };
-    const mockFile: any = { fieldname: 'profilePhoto' };
     const id = 'mock_Id';
 
     // Mocking findOne function to return undefined
     mockUserRepository.findOne.mockResolvedValue(undefined);
 
     // Executing the update function and expecting it to throw NotFoundException
-    await expect(
-      service.update(mockFile, id, updateUserDto),
-    ).rejects.toThrowError(NotFoundException);
+    await expect(service.update(id, updateUserDto)).rejects.toThrowError(
+      NotFoundException,
+    );
   });
 
   it('should throw NotFoundException if save operation fails', async () => {
@@ -181,7 +178,6 @@ describe('UsersService', () => {
       description: 'Updated description',
       hotAddress: 'updated_hot_address',
     };
-    const mockFile: any = { fieldname: 'profilePhoto' };
     const id = 'mocked_id';
 
     // Mocking save operation to throw an error
@@ -190,12 +186,8 @@ describe('UsersService', () => {
     );
 
     // Executing the update function and expecting it to throw InternalServerErrorException
-    await expect(
-      service.update(mockFile, id, updateUserDto),
-    ).rejects.toThrowError(NotFoundException);
-  });
-
-  it('should return an array of CC Members', async () => {
-    //
+    await expect(service.update(id, updateUserDto)).rejects.toThrowError(
+      NotFoundException,
+    );
   });
 });

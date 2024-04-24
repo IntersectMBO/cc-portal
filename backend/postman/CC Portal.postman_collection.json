@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0364f8d5-7855-4ce9-a2a8-7caaa536c85d",
+		"_postman_id": "f70e79f8-7bd3-4c94-b850-9957120d9789",
 		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20133713"
@@ -9,24 +9,6 @@
 		{
 			"name": "User",
 			"item": [
-				{
-					"name": "Get All Users",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base-url}}/api/users",
-							"host": [
-								"{{base-url}}"
-							],
-							"path": [
-								"api",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Get User By Id",
 					"request": {
@@ -61,29 +43,13 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "Andjela",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "",
-									"type": "text"
-								},
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/Users/milossekuloski/git-repos/cc-portal/backend/postman/1712183767053-valentines-day.png"
-								},
-								{
-									"key": "hot_address",
-									"value": "andjelahot",
-									"type": "text"
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Andjy\",\n    \"description\":\"\",\n    \"hotAddress\":\"newone\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
 							"raw": "{{base-url}}/api/users/{{userId}}",
@@ -94,6 +60,45 @@
 								"api",
 								"users",
 								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User's Photo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/milossekuloski/git-repos/cc-portal/backend/postman/1712183767053-valentines-day.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base-url}}/api/users/{{userId}}/profile-photo",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{userId}}",
+								"profile-photo"
 							]
 						}
 					},
