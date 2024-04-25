@@ -38,6 +38,7 @@ export class UpdateUserRequest {
     description: 'Hot address of the user',
     example: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
   })
+  @ValidateIf((e) => e.hotAddress !== '')
   @IsOptional()
   @IsString({ each: true, message: 'Hot address must be a string' })
   @MinLength(2, { message: `Minimum character length is 2`, each: true })

@@ -67,12 +67,8 @@ export class UsersController {
     description: 'Bad Request',
   })
   @ApiResponse({
-    status: 400,
-    description: 'provided id does not match the requested one',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'user with {id} not found',
+    status: 401,
+    description: 'Unauthorized',
   })
   @ApiResponse({
     status: 409,
@@ -87,7 +83,6 @@ export class UsersController {
   })
   @ApiBody({ type: UpdateUserRequest })
   @HttpCode(200)
-  @UseInterceptors(FileInterceptor('file'))
   @Patch(':id')
   @UseGuards(JwtAuthGuard, UserPathGuard)
   async update(
@@ -235,7 +230,7 @@ export class UsersController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: /(jpg|jpeg|png|gif)$/,
+          fileType: 'jpeg',
         })
         .addMaxSizeValidator({
           maxSize: 3145728,
@@ -255,7 +250,8 @@ export class UsersController {
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Delete photo of user' })
   @ApiResponse({ status: 200, description: 'Photo successfully removed' })
-  @ApiResponse({ status: 404, description: 'User with id not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 409, description: 'User does not have profile photo' })
   @ApiParam({
     name: 'id',
     type: String,

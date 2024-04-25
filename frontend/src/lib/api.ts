@@ -171,13 +171,10 @@ export async function getConstitutionMetadata(): Promise<
   }
 }
 
-export async function fetchConstitutionsDiff(
-  base: string,
-  target: string
-): Promise<any> {
+export async function getConstitutionByCid(cid: string) {
   try {
     const response: any = await axiosInstance.get(
-      `/api/constitution/diff?base=${base}&target=${target}`
+      `/api/constitution/cid/${cid}`
     );
     return response;
   } catch (error) {
