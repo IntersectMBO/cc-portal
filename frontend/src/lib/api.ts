@@ -181,3 +181,23 @@ export async function getConstitutionByCid(cid: string) {
     throw error;
   }
 }
+
+export async function uploadConstitution(file: File) {
+  try {
+    const formData = new FormData();
+    formData.append("file", file); // Append the file to FormData
+
+    // Make a POST request to the server with the FormData containing the file
+    const response = await axiosInstance.post("/api/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    console.log("File uploaded successfully:", response.data);
+    return response.data; // Return response data if needed
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error; // Optionally re-throw the error to handle it elsewhere
+  }
+}
