@@ -7,6 +7,8 @@ import { ButtonProps, FormErrorMessageProps } from "./types";
 
 interface UploadFileButtonProps extends Omit<ButtonProps, "onChange"> {
   onChange: (file: File) => void;
+  register: any;
+  control: any;
 }
 export const UploadFileButton = ({
   onChange,
@@ -14,6 +16,8 @@ export const UploadFileButton = ({
   errorMessage,
   errorStyles,
   name,
+  register,
+  control,
   ...buttonProps
 }: UploadFileButtonProps & FormErrorMessageProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -29,9 +33,10 @@ export const UploadFileButton = ({
   return (
     <label htmlFor="btn-upload">
       <input
-        accept="image/*"
+        accept=".md"
         id="btn-upload"
         name={name}
+        {...register("file")}
         style={{ display: "none" }}
         type="file"
         onChange={fileChange}

@@ -13,6 +13,7 @@ import { ModalActions } from "@atoms";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { uploadConstitution } from "@/lib/api";
+import { createFormDataObject } from "@utils";
 
 export const UploadConstitution = () => {
   const t = useTranslations("Modals");
@@ -30,13 +31,14 @@ export const UploadConstitution = () => {
     setUploadFile(file);
   };
 
-  const onSubmit = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
+  const onSubmit = async (data) => {
+    event.preventDefault();
     try {
-      await uploadConstitution(file);
+      const formData = createFormDataObject(data);
+      await uploadConstitution(formData);
     } catch (error) {
       console.log(error);
+      throw error;
     }
   };
 
@@ -57,6 +59,8 @@ export const UploadConstitution = () => {
           </Typography>
           <UploadFileButton
             fullWidth={false}
+            register={register}
+            control={control}
             size="large"
             onChange={handleUpload}
           >
