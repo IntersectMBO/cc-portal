@@ -26,7 +26,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
     openModal({
       type: "compareConstitutionModal",
       state: {
-        base: metadata.at(-1).cid,
+        base: metadata[0].cid,
         target,
       },
     });
@@ -66,12 +66,12 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                 return (
                   <NavCard
                     onClick={() => {
-                      metadata.at(-1).cid === cid ? null : onCompare(cid);
+                      metadata[0].cid === cid ? null : onCompare(cid);
                     }}
                     title={title}
                     description={created_date}
                     buttonLabel={
-                      metadata.at(-1).cid === cid
+                      metadata[0].cid === cid
                         ? t("drawer.latest")
                         : t("drawer.compare")
                     }
