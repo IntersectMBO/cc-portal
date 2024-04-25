@@ -76,7 +76,7 @@ export const CompareConstitutionModal = () => {
     <ModalWrapper
       dataTestId="compare-constitution-modal"
       icon={IMAGES.pastelSignIn}
-      variant="modal"
+      variant="wide"
       scrollable
     >
       <ModalHeader>{t("compareConstitution.headline")}</ModalHeader>

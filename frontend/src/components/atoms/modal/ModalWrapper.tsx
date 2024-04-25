@@ -4,7 +4,7 @@ import { SxProps, styled } from "@mui/material/styles";
 
 import { customPalette } from "@consts";
 
-type ModalVariant = "modal" | "popup";
+type ModalVariant = "modal" | "popup" | "wide";
 interface Props {
   variant?: ModalVariant;
   onClose?: () => void;
@@ -62,7 +62,7 @@ export const BaseWrapper = styled("div")<{
     if (variant === "modal") {
       return `
         width: 80vw;
-        max-width: fit-content;
+        max-width: 510px;
         padding: 24px;
       `;
     }
@@ -70,6 +70,13 @@ export const BaseWrapper = styled("div")<{
       return `
         width: 320px;
         height: 320px;
+      `;
+    }
+    if (variant === "wide") {
+      return `
+        width: 80vw;
+        max-width: fit-content;
+        padding: 24px;
       `;
     }
   }}
