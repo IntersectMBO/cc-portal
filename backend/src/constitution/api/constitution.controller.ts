@@ -93,8 +93,8 @@ export class ConstitutionController {
     status: 422,
     description: 'File is required',
   })
-  @Permissions(PermissionEnum.ADD_CONSTITUTION)
-  @UseGuards(JwtAuthGuard, PermissionGuard)
+  // @Permissions(PermissionEnum.ADD_CONSTITUTION)
+  // @UseGuards(JwtAuthGuard, PermissionGuard)
   @UseInterceptors(FileInterceptor('file'))
   @Post()
   async storeConstitutionFile(
