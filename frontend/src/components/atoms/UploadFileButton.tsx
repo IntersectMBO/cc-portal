@@ -29,7 +29,7 @@ export const UploadFileButton = ({
   return (
     <label htmlFor="btn-upload">
       <input
-        accept="image/*"
+        accept=".md"
         id="btn-upload"
         name={name}
         style={{ display: "none" }}
