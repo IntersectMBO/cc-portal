@@ -126,6 +126,17 @@ export async function getUsersAdmin(userId: string): Promise<FetchUserData[]> {
   }
 }
 
+export async function getMembers(): Promise<any[]> {
+  try {
+    const res: FetchUserData[] = await axiosInstance.get(
+      "/api/users/cc-member/search"
+    );
+    return res;
+  } catch (error) {
+    console.log("error get members", error);
+  }
+}
+
 export async function registerUser(email: string) {
   try {
     const token = getAccessToken();
@@ -174,11 +185,12 @@ export async function editUser(id: string, data: FormData) {
     const token = getAccessToken();
     const response = await axiosInstance.patch(`/api/users/${id}`, data, {
       headers: {
-        Authorization: `bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     return response;
   } catch (error) {
+    console.log("ERROREDIT", error, "ERROREDIT");
     throw error;
   }
 }
@@ -216,6 +228,18 @@ export async function uploadConstitution(data: FormData) {
         Authorization: `Bearer ${token}`,
       },
     });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function uploadUserPhoto(userId: string, data: FormData) {
+  try {
+    const response = await axiosInstance.patch(
+      `/api/users/${userId}/profile-photo`,
+      data
+    );
     return response.data;
   } catch (error) {
     throw error;
