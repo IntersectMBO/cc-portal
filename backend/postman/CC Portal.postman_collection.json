@@ -198,6 +198,41 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update User Role And Permissions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"newRole\": \"admin\",\n    \"newPermissions\": [\"add_new_admin\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/users/{{userId}}/role-permissions",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{userId}}",
+								"role-permissions"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

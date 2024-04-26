@@ -25,8 +25,9 @@ import { CreateUserDto } from '../dto/create-user.dto';
 // import { S3Service } from '../../s3/service/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
-import { HotAddress } from '../entities/hotaddress.entity';
+import { UpdateRoleAndPermissionsRequest } from '../api/request/update-role-and-permissions.request';
 import { RoleEnum } from '../enums/role.enum';
+import { HotAddress } from '../entities/hotaddress.entity';
 import { SearchQueryDto } from '../dto/search-query.dto';
 
 @Injectable()
@@ -235,6 +236,37 @@ export class UsersService {
     return results;
   }
 
+  async updateUserRoleAndPermissions(
+    id: string,
+    updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
+  ): Promise<UserDto> {
+    const user = await this.findEntityById(id);
+
+    const role = await this.findRoleByCode(
+      updateRoleAndPermissionsRequest.newRole,
+    );
+
+    user.role = role;
+
+    if (updateRoleAndPermissionsRequest.newRole === RoleEnum.USER) {
+      if (updateRoleAndPermissionsRequest.newPermissions.length !== 0) {
+        throw new BadRequestException(`User role can not have a permissions.`);
+      }
+      user.permissions = [];
+    } else {
+      if (updateRoleAndPermissionsRequest.newPermissions) {
+        const newPermissions = await this.getUserPermissions(
+          updateRoleAndPermissionsRequest.newPermissions,
+        );
+
+        user.permissions = newPermissions;
+      }
+    }
+
+    await this.userRepository.save(user);
+
+    return UserMapper.userToDto(user);
+  }
   async searchUsers(
     searchQuery: SearchQueryDto,
     isAdmin: boolean,

@@ -5,6 +5,7 @@ import { UserResponse } from '../api/response/user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { RoleResponse } from '../api/response/role.response';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
+import { UpdateRoleAndPermissionsRequest } from '../api/request/update-role-and-permissions.request';
 import { S3Service } from 'src/s3/service/s3.service';
 import { UploadContext } from 'src/s3/enums/upload-context';
 import { SearchQueryDto } from '../dto/search-query.dto';
@@ -43,6 +44,16 @@ export class UsersFacade {
     return UserMapper.mapUserDtoToResponse(user);
   }
 
+  async updateUserRoleAndPermissions(
+    id: string,
+    updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
+  ): Promise<UserResponse> {
+    const user = await this.usersService.updateUserRoleAndPermissions(
+      id,
+      updateRoleAndPermissionsRequest,
+    );
+    return UserMapper.mapUserDtoToResponse(user);
+  }
   async updateProfilePhoto(file: Express.Multer.File, id: string) {
     const fileUrl = await this.storeProfilePhotoIfExists(file, id);
     const user = await this.usersService.updateProfilePhoto(fileUrl, id);

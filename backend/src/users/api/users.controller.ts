@@ -6,11 +6,12 @@ import {
   Param,
   HttpCode,
   ParseUUIDPipe,
+  Post,
+  UseGuards,
   UseInterceptors,
   UploadedFile,
   HttpStatus,
   ParseFilePipeBuilder,
-  UseGuards,
   Request,
   Delete,
   Query,
@@ -18,6 +19,10 @@ import {
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
 import { UserResponse } from './response/user.response';
+import { UpdateRoleAndPermissionsRequest } from './request/update-role-and-permissions.request';
+import { PermissionGuard } from 'src/auth/guard/permission.guard';
+import { Permissions } from 'src/auth/guard/permission.decorator';
+import { PermissionEnum } from '../enums/permission.enum';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -93,6 +98,31 @@ export class UsersController {
     return await this.usersFacade.update(id, updateUserRequest);
   }
 
+  @ApiOperation({
+    summary: 'Update user role and permissions by superadmin',
+  })
+  @ApiBody({ type: UpdateRoleAndPermissionsRequest })
+  @ApiResponse({
+    status: 200,
+    description: 'User updated successfully.',
+    type: UserResponse,
+  })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @HttpCode(200)
+  @Post(':id/role-permissions')
+  @Permissions(PermissionEnum.MANAGE_PERMISSIONS)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  async updateUserRoleAndPermissions(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
+  ): Promise<UserResponse> {
+    return await this.usersFacade.updateUserRoleAndPermissions(
+      id,
+      updateRoleAndPermissionsRequest,
+    );
+  }
   // Search endpoint for CC Members
   // Returns all registered CC Members
   @ApiOperation({ summary: 'List of CC Members' })
