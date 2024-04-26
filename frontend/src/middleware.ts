@@ -17,6 +17,7 @@ export const config = {
   matcher: [
     "/",
     "/constitution",
+    "/members",
     "/admin",
     "/admin/dashboard",
     "/(de|en)/:path*",

@@ -7,4 +7,10 @@ export const NAV_ITEMS = [
     label: "Constitution",
     newTabLink: null,
   },
+  {
+    dataTestId: "members",
+    href: PATHS.members,
+    label: "Members",
+    newTabLink: null,
+  },
 ];
