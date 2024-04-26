@@ -183,6 +183,21 @@ export async function getConstitutionByCid(cid: string) {
   }
 }
 
+export async function uploadConstitution(data: FormData) {
+  try {
+    const token = getAccessToken();
+
+    const response = await axiosInstance.post("/api/constitution", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function uploadUserPhoto(userId: string, data: FormData) {
   try {
     const response = await axiosInstance.patch(
