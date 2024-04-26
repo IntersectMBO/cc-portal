@@ -12,7 +12,6 @@ export default async function AdminDashboard({ params: { locale } }) {
   unstable_setRequestLocale(locale); // Sets the locale for the request. Use cautiously due to its unstable nature.
   // const { userSession } = useAppContext();
   const users = await getUsersAdmin('dc8734c4-2095-4be3-9bc8-77e063bec817');
-  console.log(users);
   return (
     <main>
       <Suspense fallback={<Loading />}>

@@ -100,9 +100,9 @@ export class ConstitutionController {
   async storeConstitutionFile(
     @UploadedFile(
       new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: 'text/markdown',
-        })
+        // .addFileTypeValidator({
+        //   fileType: 'text/markdown',
+        // })
         .addMaxSizeValidator({
           maxSize: 5242880, // 5MB
         })
