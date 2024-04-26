@@ -101,6 +101,17 @@ export async function getUsers(): Promise<FetchUserData[]> {
   }
 }
 
+export async function getMembers(): Promise<any[]> {
+  try {
+    const res: FetchUserData[] = await axiosInstance.get(
+      "/api/users/cc-member/search"
+    );
+    return res;
+  } catch (error) {
+    console.log("error get members", error);
+  }
+}
+
 export async function registerUser(email: string) {
   try {
     const token = getAccessToken();

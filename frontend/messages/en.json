@@ -18,6 +18,13 @@
       "latest": "Latest"
     }
   },
+  "Members": {
+    "title": "Active Members",
+    "card": {
+      "joined": "Joined",
+      "latestUpdates": "Latest updates"
+    }
+  },
   "Navigation": {
     "addNewMember": "Add new member",
     "uploadNewVersion": "Upload new version",
