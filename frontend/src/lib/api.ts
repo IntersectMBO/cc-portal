@@ -149,11 +149,12 @@ export async function editUser(id: string, data: FormData) {
     const token = getAccessToken();
     const response = await axiosInstance.patch(`/api/users/${id}`, data, {
       headers: {
-        Authorization: `bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     return response;
   } catch (error) {
+    console.log("ERROREDIT", error, "ERROREDIT");
     throw error;
   }
 }
@@ -191,6 +192,18 @@ export async function uploadConstitution(data: FormData) {
         Authorization: `Bearer ${token}`,
       },
     });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function uploadUserPhoto(userId: string, data: FormData) {
+  try {
+    const response = await axiosInstance.patch(
+      `/api/users/${userId}/profile-photo`,
+      data
+    );
     return response.data;
   } catch (error) {
     throw error;
