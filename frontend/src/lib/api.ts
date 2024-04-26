@@ -184,16 +184,15 @@ export async function getConstitutionByCid(cid: string) {
 
 export async function uploadConstitution(data: FormData) {
   try {
-    const response = await axiosInstance.post("/api/upload", data, {
+    const token = getAccessToken();
+
+    const response = await axiosInstance.post("/api/constitution", data, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log("File uploaded successfully:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error uploading file:", error);
     throw error;
   }
 }

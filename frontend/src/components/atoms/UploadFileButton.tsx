@@ -16,8 +16,6 @@ export const UploadFileButton = ({
   errorMessage,
   errorStyles,
   name,
-  register,
-  control,
   ...buttonProps
 }: UploadFileButtonProps & FormErrorMessageProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -36,7 +34,6 @@ export const UploadFileButton = ({
         accept=".md"
         id="btn-upload"
         name={name}
-        {...register("file")}
         style={{ display: "none" }}
         type="file"
         onChange={fileChange}
