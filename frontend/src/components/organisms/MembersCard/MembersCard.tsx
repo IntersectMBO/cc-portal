@@ -29,6 +29,8 @@ export const MembersCard = ({
         backgroundColor: "transparent",
         padding: 3,
         paddingBottom: 4,
+        maxWidth: "450px",
+        height: "386px",
       }}
     >
       <Box textAlign="center" data-testid="members-photo" pb={3}>
