@@ -7,8 +7,6 @@ import { ButtonProps, FormErrorMessageProps } from "./types";
 
 interface UploadFileButtonProps extends Omit<ButtonProps, "onChange"> {
   onChange: (file: File) => void;
-  register: any;
-  control: any;
 }
 export const UploadFileButton = ({
   onChange,
