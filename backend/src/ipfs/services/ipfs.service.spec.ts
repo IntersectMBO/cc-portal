@@ -5,7 +5,10 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { IpfsMetadata } from '../entities/ipfs-metadata.entity';
 import { IpfsContentDto } from '../dto/ipfs-content.dto';
 import axios from 'axios';
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { IpfsMapper } from '../mapper/ipfs.mapper';
 import { IpfsMetadataDto } from '../dto/ipfs-metadata.dto';
 import { format } from 'date-fns';
@@ -64,6 +67,7 @@ describe('IpfsService', () => {
     save: jest.fn(),
     count: jest.fn(),
     findOne: jest.fn(),
+    find: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -92,86 +96,120 @@ describe('IpfsService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should add a file to IPFS', async () => {
-    const mockSendFileToIpfsService = jest
-      .spyOn<any, any>(service, 'sendFileToIpfsService')
-      .mockResolvedValueOnce(mockIpfsContentDto);
+  describe('Add file to IPFS', () => {
+    it('should add a file to IPFS', async () => {
+      const mockSendFileToIpfsService = jest
+        .spyOn<any, any>(service, 'sendFileToIpfsService')
+        .mockResolvedValueOnce(mockIpfsContentDto);
 
-    const result = await service.addToIpfs(mockFile);
+      const result = await service.addToIpfs(mockFile);
 
-    expect(mockSendFileToIpfsService).toHaveBeenCalled();
-    expect(result).toEqual(mockIpfsContentDto);
-  });
-
-  it('should throw an error when trying to add file to IPFS', async () => {
-    const mockEmptyFile = {
-      fieldname: 'file',
-      originalname: 'constitution_001.txt.md',
-      encoding: '7bit',
-      mimetype: 'text/markdown',
-      buffer: Buffer.from([]),
-      // File size is zero
-      size: 0,
-    } as Express.Multer.File;
-    const mockSendFileToIpfsService = jest
-      .spyOn<any, any>(service, 'sendFileToIpfsService')
-      .mockResolvedValueOnce(mockIpfsContentDto);
-
-    try {
-      await service.addToIpfs(mockEmptyFile);
-    } catch (err) {
-      expect(mockSendFileToIpfsService).toHaveBeenCalledWith(mockEmptyFile);
-      expect(err).toBeInstanceOf(InternalServerErrorException);
-      expect(err.message).toBe(`Error when add file to the IPFS service`);
-    }
-  });
-
-  it('should return file from IPFS', async () => {
-    const cid = mockIpfsContentDto.cid;
-    // Mock the axios.get method
-    jest.spyOn(axios, 'get').mockResolvedValueOnce({
-      data: mockIpfsContentDto,
-      status: 200,
+      expect(mockSendFileToIpfsService).toHaveBeenCalled();
+      expect(result).toEqual(mockIpfsContentDto);
     });
 
-    const mockFindMetadataByCid = jest
-      .spyOn<any, any>(service, 'findMetadataByCid')
-      .mockResolvedValueOnce(mockIpfsMetadata);
+    it('should throw an error when trying to add file to IPFS', async () => {
+      const mockEmptyFile = {
+        fieldname: 'file',
+        originalname: 'constitution_001.txt.md',
+        encoding: '7bit',
+        mimetype: 'text/markdown',
+        buffer: Buffer.from([]),
+        // File size is zero
+        size: 0,
+      } as Express.Multer.File;
+      const mockSendFileToIpfsService = jest
+        .spyOn<any, any>(service, 'sendFileToIpfsService')
+        .mockResolvedValueOnce(mockIpfsContentDto);
 
-    const result = await service.getFromIpfs(cid);
-
-    expect(result).toEqual(
-      IpfsMapper.ipfsDataAndMetadataToContentDto(result, mockIpfsMetadata),
-    );
-    expect(mockFindMetadataByCid).toHaveBeenCalledWith(cid);
+      try {
+        await service.addToIpfs(mockEmptyFile);
+      } catch (err) {
+        expect(mockSendFileToIpfsService).toHaveBeenCalledWith(mockEmptyFile);
+        expect(err).toBeInstanceOf(InternalServerErrorException);
+        expect(err.message).toBe(`Error when add file to the IPFS service`);
+      }
+    });
   });
 
-  it('should throw an error when getting file from IPFS', async () => {
-    const cid = '';
-    jest
-      .spyOn<any, any>(service, 'findMetadataByCid')
-      .mockResolvedValueOnce(() => undefined);
+  describe('Get file from IPFS', () => {
+    it('should return file from IPFS', async () => {
+      const cid = mockIpfsContentDto.cid;
+      // Mock the axios.get method
+      jest.spyOn(axios, 'get').mockResolvedValueOnce({
+        data: mockIpfsContentDto,
+        status: 200,
+      });
 
-    // Mock the axios.get method
-    jest.spyOn(axios, 'get').mockResolvedValueOnce({
-      data: null,
+      const mockFindMetadataByCid = jest
+        .spyOn<any, any>(service, 'findMetadataByCid')
+        .mockResolvedValueOnce(mockIpfsMetadata);
+
+      const result = await service.getFromIpfs(cid);
+
+      expect(result).toEqual(
+        IpfsMapper.ipfsDataAndMetadataToContentDto(result, mockIpfsMetadata),
+      );
+      expect(mockFindMetadataByCid).toHaveBeenCalledWith(cid);
     });
 
-    try {
-      await service.getFromIpfs(cid);
-    } catch (err) {
-      expect(err).toBeInstanceOf(InternalServerErrorException);
-    }
+    it('should throw an error when getting file from IPFS', async () => {
+      const cid = '';
+      jest
+        .spyOn<any, any>(service, 'findMetadataByCid')
+        .mockResolvedValueOnce(() => undefined);
+
+      // Mock the axios.get method
+      jest.spyOn(axios, 'get').mockResolvedValueOnce({
+        data: null,
+      });
+
+      try {
+        await service.getFromIpfs(cid);
+      } catch (err) {
+        expect(err).toBeInstanceOf(InternalServerErrorException);
+      }
+    });
   });
 
-  it('should return current version of the file from IPFS', async () => {
-    jest
-      .spyOn(mockIpfsMetadataRepository, 'findOne')
-      .mockResolvedValue(mockIpfsMetadata);
+  describe('Get current verison', () => {
+    it('should return the current version of the file from IPFS', async () => {
+      jest
+        .spyOn(mockIpfsMetadataRepository, 'findOne')
+        .mockResolvedValue(mockIpfsMetadata);
 
-    const result = await service.findCurrentMetadata();
+      const result = await service.findCurrentMetadata();
 
-    expect(result).toMatchObject(mockIpfsMetadataDto);
-    expect(mockIpfsMetadataRepository.findOne).toHaveBeenCalled();
+      expect(result).toMatchObject(mockIpfsMetadataDto);
+      expect(mockIpfsMetadataRepository.findOne).toHaveBeenCalled();
+    });
+
+    it('should return 404 when finding the current version of the file from IPFS', async () => {
+      jest.spyOn(mockIpfsMetadataRepository, 'findOne').mockResolvedValue(null);
+      try {
+        await service.findCurrentMetadata();
+      } catch (err) {
+        expect(err).toBeInstanceOf(NotFoundException);
+        expect(err.status).toBe(404);
+        expect(err.message).toBe('Constitution not found');
+      }
+    });
+  });
+
+  describe('Get all files from IPFS', () => {
+    it('should return all files from IPFS', async () => {
+      jest
+        .spyOn(mockIpfsMetadataRepository, 'find')
+        .mockResolvedValue([mockIpfsMetadata]);
+      const result = await service.findAllMetadata();
+
+      expect(result).toEqual([mockIpfsMetadataDto]);
+    });
+    it('should return an empty array of files from IPFS', async () => {
+      jest.spyOn(mockIpfsMetadataRepository, 'find').mockResolvedValue([]);
+      const result = await service.findAllMetadata();
+
+      expect(result).toEqual([]);
+    });
   });
 });
