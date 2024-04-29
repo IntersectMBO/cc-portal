@@ -5,8 +5,8 @@ import { UserResponse } from '../api/response/user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { RoleResponse } from '../api/response/role.response';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
-import { S3Service } from 'src/s3/service/s3.service';
-import { UploadContext } from 'src/s3/enums/upload-context';
+import { S3Service } from '../../s3/service/s3.service';
+import { UploadContext } from '../../s3/enums/upload-context';
 import { SearchQueryDto } from '../dto/search-query.dto';
 @Injectable()
 export class UsersFacade {
