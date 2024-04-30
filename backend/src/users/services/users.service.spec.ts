@@ -13,25 +13,12 @@ import { HotAddress } from '../entities/hotaddress.entity';
 import { ConflictException } from '@nestjs/common/exceptions/conflict.exception';
 import { UserStatusEnum } from '../enums/user-status.enum';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { SearchQueryDto, SortOrder } from '../dto/search-query.dto';
 const mockS3Service = {
   uploadFileMinio: jest.fn().mockResolvedValue('mocked_file_name'),
   createBucketIfNotExists: jest.fn().mockResolvedValue('new_bucket'),
   getFileUrl: jest.fn().mockResolvedValue('mocked_file_url'),
 };
-
-/*const mockUser: UserDto = {
-  id: 'mockedId',
-  name: 'John Doe',
-  email: 'mockedEmail',
-  hotAddresses: [],
-  description: 'mockedDescription',
-  profilePhotoUrl: 'mockedProfilePhoto',
-  status: UserStatusEnum.ACTIVE,
-  role: 'role1',
-  permissions: ['permission1', 'permission2'],
-  createdAt: null,
-  updatedAt: null,
-};*/
 
 const user: User = {
   id: 'mockedId',
@@ -120,7 +107,7 @@ let mockRoles: Role[] = [
   },
 ];
 
-let mockUsers: User[] = [
+const mockUsers: User[] = [
   {
     id: 'mockedId',
     name: 'John Doe',
@@ -451,7 +438,7 @@ describe('UsersService', () => {
       }
     });
     it('should return an empty list all users', async () => {
-      mockUsers = [];
+      mockUserRepository.find.mockResolvedValueOnce([]);
       const result = await service.findAll();
       expect(result.length).toBe(0);
     });
@@ -588,7 +575,48 @@ describe('UsersService', () => {
     });
   });
 
-  it('should return an array of CC Members', async () => {
-    //
+  describe('Search users', () => {
+    it('should return an array of CC Members', async () => {
+      const searchQuery: SearchQueryDto = new SearchQueryDto(
+        'John',
+        SortOrder.DESC,
+      );
+
+      mockUserRepository.find.mockResolvedValue([mockUsers[0]]);
+
+      const foundUser = await service.searchUsers(searchQuery, false);
+
+      expect(foundUser[0].name).toEqual(user.name);
+      expect(foundUser.length).toEqual(1);
+      expect(mockUserRepository.find).toHaveBeenCalled();
+    });
+
+    it('should return an empty array of users', async () => {
+      const searchQuer: SearchQueryDto = new SearchQueryDto(
+        'NotExistingUser',
+        SortOrder.DESC,
+      );
+
+      mockUserRepository.find.mockResolvedValueOnce([]);
+
+      const foundUser = await service.searchUsers(searchQuer, false);
+      expect(foundUser).toEqual([]);
+      expect(foundUser.length).toEqual(0);
+      expect(mockUserRepository.find).toHaveBeenCalled();
+    });
+
+    it('should return an array with users and admins', async () => {
+      const searchQuer: SearchQueryDto = new SearchQueryDto(
+        'John',
+        SortOrder.DESC,
+      );
+      mockUserRepository.find.mockResolvedValue(mockUsers);
+
+      const foundUser = await service.searchUsers(searchQuer, true);
+      expect(foundUser[0].name).toEqual(mockUsers[0].name);
+      expect(foundUser[1].name).toEqual(mockUsers[1].name);
+      expect(foundUser.length).toEqual(2);
+      expect(mockUserRepository.find).toHaveBeenCalled();
+    });
   });
 });

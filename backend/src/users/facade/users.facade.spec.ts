@@ -8,6 +8,7 @@ import { Permission } from '../entities/permission.entity';
 import { S3Service } from '../../s3/service/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { Role } from '../entities/role.entity';
+import { SearchQueryDto, SortOrder } from '../dto/search-query.dto';
 
 describe('UsersFacade', () => {
   let facade: UsersFacade;
@@ -149,6 +150,7 @@ describe('UsersFacade', () => {
       }
       return foundUser;
     }),
+    searchUsers: jest.fn(),
   };
 
   const mockS3Service = {};
@@ -219,6 +221,53 @@ describe('UsersFacade', () => {
       mockRoles = [];
       const result = await facade.getAllRoles();
       expect(result.length).toBe(0);
+    });
+  });
+
+  describe('Search users', () => {
+    it('should return an array of CC Members', async () => {
+      const searchQuery: SearchQueryDto = new SearchQueryDto(
+        'John',
+        SortOrder.DESC,
+      );
+      const expectedResult = mockUsers;
+      mockUserService.searchUsers.mockResolvedValueOnce(expectedResult);
+      const foundUser = await facade.searchUsers(searchQuery, false);
+      expect(foundUser).toEqual(expectedResult);
+      expect(mockUserService.searchUsers).toHaveBeenCalledWith(
+        searchQuery,
+        false,
+      );
+    });
+
+    it('should return an array of Admin users', async () => {
+      const searchQuery: SearchQueryDto = new SearchQueryDto(
+        'John',
+        SortOrder.DESC,
+      );
+      const expectedResult = mockUsers;
+      mockUserService.searchUsers.mockResolvedValueOnce(expectedResult);
+      const foundUser = await facade.searchUsers(searchQuery, true);
+      expect(foundUser).toEqual(mockUsers);
+      expect(mockUserService.searchUsers).toHaveBeenCalledWith(
+        searchQuery,
+        true,
+      );
+    });
+
+    it('should return an empty array', async () => {
+      const searchQuery: SearchQueryDto = new SearchQueryDto(
+        'NotExistingUser',
+        SortOrder.DESC,
+      );
+      const expectedResult = [];
+      mockUserService.searchUsers.mockResolvedValueOnce(expectedResult);
+      const foundUser = await facade.searchUsers(searchQuery, true);
+      expect(foundUser).toEqual(expectedResult);
+      expect(mockUserService.searchUsers).toHaveBeenCalledWith(
+        searchQuery,
+        true,
+      );
     });
   });
 });
