@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  // Query,
   UseGuards,
   UseInterceptors,
   Post,
@@ -24,8 +23,6 @@ import { PermissionEnum } from 'src/users/enums/permission.enum';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { PermissionGuard } from 'src/auth/guard/permission.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-// import { ConstitutionDiffResponse } from './response/constitution-diff.response';
-// import { CompareConstitutionsRequest } from './request/compare-constitution.request';
 import { ConstitutionMetadataResponse } from './response/constitution-metadata.response';
 
 @ApiTags('Constitution')
@@ -115,26 +112,6 @@ export class ConstitutionController {
   ): Promise<ConstitutionResponse> {
     return await this.constitutionFacade.storeConstitutionFile(file);
   }
-
-  // Currently, the diff will be rendered by frontend, that's why this code is commented
-  // @Get('diff')
-  // @ApiOperation({
-  //   summary: 'Compare two constitution versions in a git diff fashion',
-  // })
-  // @ApiResponse({ status: 200 })
-  // @ApiResponse({ status: 404, description: 'Base or Target CID not found' })
-  // async compareTwoConstitutionVersions(
-  //   @Query('base') base: string,
-  //   @Query('target') target: string,
-  // ): Promise<ConstitutionDiffResponse> {
-  //   const compareConstitutionRequest = new CompareConstitutionsRequest();
-
-  //   compareConstitutionRequest.base = base;
-  //   compareConstitutionRequest.target = target;
-  //   return this.constitutionFacade.compareTwoConstitutionVersions(
-  //     compareConstitutionRequest,
-  //   );
-  // }
 
   @Get()
   @ApiOperation({
