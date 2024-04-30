@@ -127,6 +127,9 @@ export class IpfsService {
       where: { cid: Not(IsNull()) },
       order: { createdAt: 'DESC' },
     });
+    if (!lastRecord) {
+      throw new NotFoundException('Constitution not found');
+    }
     return IpfsMapper.ipfsMetadataToDto(lastRecord);
   }
 

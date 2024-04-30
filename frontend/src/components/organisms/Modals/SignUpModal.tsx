@@ -14,10 +14,10 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
 import { SignupModalState } from "../types";
-import { editUser } from "@/lib/api";
+import { editUser, uploadUserPhoto } from "@/lib/api";
 import { useEffect } from "react";
-import { createFormDataObject } from "@utils";
 import { useSnackbar } from "@/context/snackbar";
+
 
 export const SignUpModal = () => {
   const { state, closeModal } = useModal<SignupModalState>();
@@ -42,10 +42,25 @@ export const SignUpModal = () => {
     }
   }, [user, setValue]);
 
+  const uploadImage = async (imageFile) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", imageFile);
+
+      await uploadUserPhoto(userSession.userId, formData);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error;
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
-      const formData = createFormDataObject(data);
-      await editUser(userSession.userId, formData);
+      const { file, ...userData } = data;
+      if (file) {
+        await uploadImage(file);
+      }
+      await editUser(userSession.userId, userData);
       await fetchUserData(userSession.userId);
       closeModal();
       addSuccessAlert(t("signUp.alerts.success"));

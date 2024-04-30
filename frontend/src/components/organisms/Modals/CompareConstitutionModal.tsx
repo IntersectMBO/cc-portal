@@ -7,7 +7,7 @@ import { CompareConstitutionModalState } from "../types";
 import { ModalWrapper, ModalHeader, ModalContents, Button } from "@atoms";
 import { IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
-import { styled } from "@mui/material/styles";
+import DiffViewer from "react-diff-viewer";
 
 export const CompareConstitutionModal = () => {
   const t = useTranslations("Modals");
@@ -16,8 +16,8 @@ export const CompareConstitutionModal = () => {
     closeModal,
   } = useModal<CompareConstitutionModalState>();
 
-  const [oldValue, setOldValue] = useState("");
-  const [newValue, setNewValue] = useState("");
+  const [currentVersion, setCurrentVersion] = useState("");
+  const [targetVersion, setTargetVersion] = useState("");
 
   useEffect(() => {
     async function fetchVersions({
@@ -27,8 +27,8 @@ export const CompareConstitutionModal = () => {
       try {
         const currentVersion = await getConstitutionByCid(base);
         const targetVersion = await getConstitutionByCid(target);
-        setOldValue(currentVersion.contents);
-        setNewValue(targetVersion.contents);
+        setCurrentVersion(currentVersion.contents);
+        setTargetVersion(targetVersion.contents);
       } catch (error) {
         console.error("Error fetching version:", error);
       }
@@ -39,39 +39,6 @@ export const CompareConstitutionModal = () => {
     }
   }, [base, target]);
 
-  const renderDiff = () => {
-    const oldLines = oldValue.split("\n");
-    const newLines = newValue.split("\n");
-    const maxLength = Math.max(oldLines.length, newLines.length);
-
-    return (
-      <DiffContainer>
-        <DiffPane>
-          {Array.from({ length: maxLength }).map((_, index) => (
-            <DiffLine
-              key={index}
-              changed={oldLines[index] !== newLines[index]}
-              bgColor="#ffe6e6"
-            >
-              <NewTextBox>{newLines[index] || ""}</NewTextBox>
-            </DiffLine>
-          ))}
-        </DiffPane>
-        <DiffPane>
-          {Array.from({ length: maxLength }).map((_, index) => (
-            <DiffLine
-              key={index}
-              changed={oldLines[index] !== newLines[index]}
-              bgColor="#e6ffe6"
-            >
-              <OldTextBox>{oldLines[index] || ""}</OldTextBox>
-            </DiffLine>
-          ))}
-        </DiffPane>
-      </DiffContainer>
-    );
-  };
-
   return (
     <ModalWrapper
       dataTestId="compare-constitution-modal"
@@ -81,7 +48,33 @@ export const CompareConstitutionModal = () => {
     >
       <ModalHeader>{t("compareConstitution.headline")}</ModalHeader>
       <ModalContents>
-        {oldValue && newValue ? renderDiff() : <p>Loading...</p>}
+        {currentVersion && targetVersion ? (
+          <DiffViewer
+            oldValue={targetVersion}
+            newValue={currentVersion}
+            splitView={true}
+            disableWordDiff
+            styles={{
+              diffContainer: {
+                fontSize: "14px",
+                lineHeight: "1.6",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                padding: "10px",
+              },
+              line: {
+                fontSize: "inherit",
+              },
+              gutter: {
+                background: "#f7f7f7",
+                color: "#666",
+                padding: "0 8px",
+              },
+            }}
+          />
+        ) : (
+          <p>Loading...</p>
+        )}
         <Button variant="outlined" onClick={closeModal}>
           {t("common.close")}
         </Button>
@@ -89,37 +82,3 @@ export const CompareConstitutionModal = () => {
     </ModalWrapper>
   );
 };
-
-const DiffContainer = styled("div")`
-  display: flex;
-  font-family: monospace;
-  font-size: 14px;
-  line-height: 1.6;
-`;
-
-const DiffPane = styled("div")`
-  flex: 1;
-  padding: 8px;
-`;
-
-const DiffLine = styled("div")<{
-  changed: boolean;
-  bgColor: string;
-}>`
-  display: flex;
-  align-items: center;
-  background-color: ${(props) => (props.changed ? props.bgColor : "white")};
-  width: 350px;
-`;
-
-const OldTextBox = styled("span")`
-  flex: 1;
-  white-space: pre-wrap;
-  padding-left: 8px;
-`;
-
-const NewTextBox = styled("span")`
-  flex: 1;
-  white-space: pre-wrap;
-  padding-right: 8px;
-`;

@@ -8,4 +8,5 @@ export const ICONS = {
   logout: "/icons/Logout.svg",
   help: "/icons/Help.svg",
   menuIcon: "/icons/MenuIcon.svg",
+  arrowUpRight: "/icons/ArrowUpRight.svg",
 };
