@@ -523,7 +523,6 @@ describe('UsersService', () => {
         description: 'Updated description',
         hotAddress: 'updated_hot_address',
       };
-      const mockFile: any = { fieldname: 'profilePhoto' };
       const id: string = 'mockedId';
       // Executing the update function
       const result = await service.update(id, updateUserDto);
@@ -531,7 +530,6 @@ describe('UsersService', () => {
       expect(result.name).toBe(updateUserDto.name);
       expect(result.description).toBe(updateUserDto.description);
       expect(result.hotAddresses).toContain(updateUserDto.hotAddress);
-      expect(result.profilePhotoUrl).toBe(mockFile);
       expect(mockUserRepository.save).toHaveBeenCalled();
     });
 
@@ -560,15 +558,44 @@ describe('UsersService', () => {
       };
       const id = 'mocked_id';
 
-      // Mocking save operation to throw an error
-      mockUserRepository.save.mockRejectedValue(
-        new Error('Save operation failed'),
-      );
-
       // Executing the update function and expecting it to throw InternalServerErrorException
       await expect(service.update(id, updateUserDto)).rejects.toThrowError(
         NotFoundException,
       );
+    });
+  });
+
+  describe('Update users profile photo', () => {
+    it('should update user profile photo', async () => {
+      const fileUrl = 'photo-url';
+      const mockUser = mockUsers[0];
+      // mock private function mockFindEntityByIdWithAddresses
+      const mockFindEntityByIdWithAddresses = jest
+        .spyOn<any, any>(service, 'findEntityByIdWithAddresses')
+        .mockResolvedValueOnce(mockUser);
+      const result = await service.updateProfilePhoto(fileUrl, mockUser.id);
+      expect(mockFindEntityByIdWithAddresses).toHaveBeenCalledWith(mockUser.id);
+      expect(mockUserRepository.save).toHaveBeenCalled();
+      expect(result.profilePhotoUrl).toEqual(fileUrl);
+      expect(mockUserRepository.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ...mockUser,
+          profilePhotoUrl: fileUrl,
+        }),
+      );
+    });
+
+    it(`should throw NotFoundException if user not found`, async () => {
+      const id = 'notExistingId';
+      const fileUrl = 'photo-url';
+
+      // Mocking findOne function to return undefined
+      mockUserRepository.findOne.mockResolvedValueOnce(undefined);
+
+      // Executing the update function and expecting it to throw NotFoundException
+      await expect(
+        service.updateProfilePhoto(fileUrl, id),
+      ).rejects.toThrowError(NotFoundException);
     });
   });
 

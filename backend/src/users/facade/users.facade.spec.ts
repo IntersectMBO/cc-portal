@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersFacade } from './users.facade';
 import { UsersService } from '../services/users.service';
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { UserStatusEnum } from '../enums/user-status.enum';
 import { UserDto } from '../dto/user.dto';
 import { Permission } from '../entities/permission.entity';
@@ -9,6 +9,8 @@ import { S3Service } from '../../s3/service/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { Role } from '../entities/role.entity';
 import { SearchQueryDto, SortOrder } from '../dto/search-query.dto';
+import { UpdateUserRequest } from '../api/request/update-user.request';
+import { UserResponse } from '../api/response/user.response';
 
 describe('UsersFacade', () => {
   let facade: UsersFacade;
@@ -125,6 +127,14 @@ describe('UsersFacade', () => {
     },
   ];
 
+  const mockFile = {
+    fieldname: 'file',
+    originalname: 'profile.jpeg',
+    encoding: '7bit',
+    mimetype: 'image/jpeg',
+    buffer: Buffer.from('one,two,three'),
+  } as Express.Multer.File;
+
   const mockUserService = {
     findAll: jest.fn().mockImplementation(() => {
       if (!mockUsers2 || mockUsers2.length === 0) {
@@ -150,10 +160,15 @@ describe('UsersFacade', () => {
       }
       return foundUser;
     }),
+    update: jest.fn(),
+    updateProfilePhoto: jest.fn(),
+    removeProfilePhoto: jest.fn(),
     searchUsers: jest.fn(),
   };
 
-  const mockS3Service = {};
+  const mockS3Service = {
+    deleteFile: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -221,6 +236,126 @@ describe('UsersFacade', () => {
       mockRoles = [];
       const result = await facade.getAllRoles();
       expect(result.length).toBe(0);
+    });
+  });
+
+  describe(`Update user`, () => {
+    it(`should return updated user`, async () => {
+      const userId = mockUsers[1].id;
+      const updateUserRequest = {
+        name: 'updatedName',
+      } as UpdateUserRequest;
+      const expectedUserDto: UserDto = {
+        ...mockUsers[1],
+        ...updateUserRequest,
+      };
+      const expectedUserResponse: UserResponse = { ...expectedUserDto };
+
+      mockUserService.update.mockResolvedValueOnce(expectedUserDto);
+
+      const result = await facade.update(userId, updateUserRequest);
+
+      expect(mockUserService.update).toHaveBeenCalledWith(
+        userId,
+        updateUserRequest,
+      );
+      expect(result).toEqual(expectedUserResponse);
+    });
+
+    it('should handle errors from the UsersService', async () => {
+      const userId = 'notExistingUserId';
+      const updateUserRequest = {
+        name: 'updatedName',
+      } as UpdateUserRequest;
+
+      mockUserService.update.mockRejectedValueOnce(new NotFoundException());
+
+      await expect(facade.update(userId, updateUserRequest)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe(`Update user's profile photo`, () => {
+    it('should update profile photo', async () => {
+      const userId = mockUsers[1].id;
+
+      // mock private function mockFindEntityByIdWithAddresses
+      jest
+        .spyOn<any, string>(facade, 'storeProfilePhotoIfExists')
+        .mockResolvedValueOnce('profile.jpeg');
+
+      const expectedUserDto: UserDto = {
+        ...mockUsers[1],
+      };
+      expectedUserDto.profilePhotoUrl = mockFile.originalname;
+      const expectedUserResponse: UserResponse = expectedUserDto;
+
+      mockUserService.updateProfilePhoto.mockResolvedValueOnce(expectedUserDto);
+
+      const result = await facade.updateProfilePhoto(mockFile, userId);
+
+      expect(result).toEqual(expectedUserResponse);
+      expect(mockUserService.updateProfilePhoto).toHaveBeenCalled();
+    });
+
+    it('should throw NotFoundException if user not found', async () => {
+      const userId = 'notExistingUserId';
+      // mock private function mockFindEntityByIdWithAddresses
+      jest
+        .spyOn<any, string>(facade, 'storeProfilePhotoIfExists')
+        .mockResolvedValueOnce('profile.jpeg');
+
+      mockUserService.updateProfilePhoto.mockRejectedValueOnce(
+        new NotFoundException(),
+      );
+
+      await expect(facade.updateProfilePhoto(mockFile, userId)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('Remove profile photo', () => {
+    it('should remove profile photo', async () => {
+      const user = mockUsers[1];
+      user.profilePhotoUrl = 'profile.jpg';
+
+      const expectedUserDto = {
+        ...user,
+        ...{ profilePhotoUrl: null },
+      };
+
+      mockUserService.removeProfilePhoto.mockResolvedValueOnce(expectedUserDto);
+      const expectedUserResponse: UserResponse = { ...expectedUserDto };
+
+      const result = await facade.deleteProfilePhoto(user.id);
+
+      expect(result).toEqual(expectedUserResponse);
+      expect(result.profilePhotoUrl).toBeNull();
+      expect(mockUserService.removeProfilePhoto).toHaveBeenCalledWith(user.id);
+    });
+
+    it('should throw ConflictException', async () => {
+      const user = mockUsers[1];
+      user.profilePhotoUrl = null;
+      try {
+        await facade.deleteProfilePhoto(user.id);
+      } catch (error) {
+        console.log(error);
+        expect(error).toBeInstanceOf(ConflictException);
+        expect(error.status).toEqual(409);
+        expect(error.message).toEqual('user does not have profile photo');
+      }
+    });
+
+    it('should throw NotFoundException if user not found', async () => {
+      const userId = 'notExistingUserId';
+      mockUserService.findById.mockRejectedValueOnce(new NotFoundException());
+
+      await expect(facade.deleteProfilePhoto(userId)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
