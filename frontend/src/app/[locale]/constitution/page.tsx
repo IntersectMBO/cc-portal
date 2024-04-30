@@ -13,7 +13,7 @@ export default async function ConstitutionPage({ params: { locale } }) {
   return (
     <main>
       <TopNav />
-      <Constitution constitution={constitution} metadata={metadata} />
+      <Constitution constitution={constitution} metadata={metadata.reverse()} />
       <Footer />
     </main>
   );

@@ -19,6 +19,8 @@ export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       type: "addMember",
     });
 
+  const addVersion = () => openModal({ type: "uploadConstitution" });
+
   return (
     <TopNavWrapper>
       {isLoggedIn && (
@@ -36,7 +38,10 @@ export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               permissions={userSession?.permissions}
               requiredPermission="add_constitution_version"
             >
-              <Button type="submit"> {t("uploadNewVersion")}</Button>
+              <Button type="submit" onClick={addVersion}>
+                {" "}
+                {t("uploadNewVersion")}
+              </Button>
             </PermissionChecker>
           </Grid>
         </Box>

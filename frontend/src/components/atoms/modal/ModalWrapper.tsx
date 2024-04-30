@@ -4,7 +4,7 @@ import { SxProps, styled } from "@mui/material/styles";
 
 import { customPalette } from "@consts";
 
-type ModalVariant = "modal" | "popup";
+type ModalVariant = "modal" | "popup" | "wide";
 interface Props {
   variant?: ModalVariant;
   onClose?: () => void;
@@ -12,6 +12,7 @@ interface Props {
   dataTestId?: string;
   sx?: SxProps;
   icon?: string;
+  scrollable?: boolean;
 }
 
 export const ModalWrapper = ({
@@ -20,6 +21,7 @@ export const ModalWrapper = ({
   dataTestId = "modal",
   sx,
   icon,
+  scrollable,
 }: Props) => {
   return (
     <BaseWrapper
@@ -27,6 +29,7 @@ export const ModalWrapper = ({
       variant={variant}
       data-testid={dataTestId}
       sx={sx}
+      scrollable={scrollable}
     >
       {variant !== "popup" && (
         <img width={64} data-testid="modal-icon" alt="icon" src={icon} />
@@ -40,6 +43,7 @@ export const ModalWrapper = ({
 export const BaseWrapper = styled("div")<{
   variant: ModalVariant;
   backgroundColor: string;
+  scrollable: boolean;
 }>`
   box-shadow: 1px 2px 11px 0px #00123d5e;
   max-height: 90vh;
@@ -51,6 +55,8 @@ export const BaseWrapper = styled("div")<{
   background: ${({ backgroundColor }) => backgroundColor};
   border-radius: 24px;
   transform: translate(-50%, -50%);
+  overflow-y: ${({ scrollable }) => scrollable && "scroll"};
+  overflow-x: hidden;
 
   ${({ variant }) => {
     if (variant === "modal") {
@@ -64,6 +70,13 @@ export const BaseWrapper = styled("div")<{
       return `
         width: 320px;
         height: 320px;
+      `;
+    }
+    if (variant === "wide") {
+      return `
+        width: 80vw;
+        max-width: fit-content;
+        padding: 24px;
       `;
     }
   }}

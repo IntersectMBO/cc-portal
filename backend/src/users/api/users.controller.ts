@@ -67,12 +67,8 @@ export class UsersController {
     description: 'Bad Request',
   })
   @ApiResponse({
-    status: 400,
-    description: 'provided id does not match the requested one',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'user with {id} not found',
+    status: 401,
+    description: 'Unauthorized',
   })
   @ApiResponse({
     status: 409,
@@ -86,46 +82,15 @@ export class UsersController {
     type: String,
   })
   @ApiBody({ type: UpdateUserRequest })
-  @ApiConsumes('multipart/form-data')
   @HttpCode(200)
-  @UseInterceptors(FileInterceptor('file'))
   @Patch(':id')
   @UseGuards(JwtAuthGuard, UserPathGuard)
   async update(
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: /(jpg|jpeg|png|gif)$/,
-        })
-        .addMaxSizeValidator({
-          maxSize: 3145728,
-        })
-        .build({
-          fileIsRequired: false,
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
-    )
-    file: Express.Multer.File,
     @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
-    return await this.usersFacade.update(file, id, updateUserRequest);
-  }
-  @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Delete photo of user' })
-  @ApiResponse({ status: 200, description: 'Photo successfully removed' })
-  @ApiResponse({ status: 404, description: 'User with id not found' })
-  @ApiParam({
-    name: 'id',
-    type: String,
-    description: 'identifactor of user',
-  })
-  @Delete(':id/profile-photo')
-  @UseGuards(JwtAuthGuard, UserPathGuard)
-  async remove(@Request() req: any, @Param('id', ParseUUIDPipe) id: string) {
-    const user = await this.usersFacade.deleteProfilePhoto(id);
-    return user;
+    return await this.usersFacade.update(id, updateUserRequest);
   }
 
   // Search endpoint for CC Members
@@ -180,6 +145,7 @@ export class UsersController {
     status: 401,
     description: 'Unauthorized',
   })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiParam({
     name: 'id',
     type: String,
@@ -211,5 +177,90 @@ export class UsersController {
     }
     const searchQuery = new SearchQueryDto(searchPhrase, sortOrder);
     return await this.usersFacade.searchUsers(searchQuery, true);
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Update a users photo' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'file' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Users photo updated successfully.',
+    type: UserResponse,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'provided id does not match the requested one',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'user with {id} not found',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User with requested email address already exists',
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'File is required',
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'identification number of the user',
+    type: String,
+  })
+  @ApiConsumes('multipart/form-data')
+  @HttpCode(200)
+  @UseInterceptors(FileInterceptor('file'))
+  @Patch(':id/profile-photo')
+  @UseGuards(JwtAuthGuard, UserPathGuard)
+  async updateProfilePhoto(
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'jpeg',
+        })
+        .addMaxSizeValidator({
+          maxSize: 3145728,
+        })
+        .build({
+          fileIsRequired: true,
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    file: Express.Multer.File,
+    @Request() req: any,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<UserResponse> {
+    return await this.usersFacade.updateProfilePhoto(file, id);
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Delete photo of user' })
+  @ApiResponse({ status: 200, description: 'Photo successfully removed' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 409, description: 'User does not have profile photo' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'identifactor of user',
+  })
+  @Delete(':id/profile-photo')
+  @UseGuards(JwtAuthGuard, UserPathGuard)
+  async remove(@Request() req: any, @Param('id', ParseUUIDPipe) id: string) {
+    const user = await this.usersFacade.deleteProfilePhoto(id);
+    return user;
   }
 }

@@ -14,7 +14,15 @@
     "drawer": {
       "compare": "Compare",
       "latestRevisions": "Latest Revisions",
-      "tableOfContents": "Table of contents"
+      "tableOfContents": "Table of contents",
+      "latest": "Latest"
+    }
+  },
+  "Members": {
+    "title": "Active Members",
+    "card": {
+      "joined": "Joined",
+      "latestUpdates": "Latest updates"
     }
   },
   "Navigation": {
@@ -114,7 +122,11 @@
     "uploadConstitution": {
       "headline": "Upload new version of Constitution",
       "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
-      "upload": "Upload Constitution"
+      "upload": "Upload Constitution",
+      "alerts": {
+        "success": "Upload success",
+        "error": "Upload failed"
+      }
     },
     "compareConstitution": {
       "headline": "Compare revisions"
