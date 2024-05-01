@@ -166,7 +166,7 @@ export class AppService implements OnModuleInit {
     const ret1 = this.helia.pins.add(cid);
     ret1.next().then((res) => console.log('Ret: ' + res.value));
 
-    const content = fileBuffer.toString("utf-8");
+    const content = fileBuffer.toString('utf-8');
 
     return IpfsMapper.ipfsToIpfsDto(cid.toString(), content);
   }
