@@ -8,6 +8,7 @@ import { ModalWrapper, ModalHeader, ModalContents, Button } from "@atoms";
 import { IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
 import ReactDiffViewer from "react-diff-viewer-continued";
+import { Card, Loading } from "@molecules";
 
 export const CompareConstitutionModal = () => {
   const t = useTranslations("Modals");
@@ -45,35 +46,40 @@ export const CompareConstitutionModal = () => {
       icon={IMAGES.pastelSignIn}
       variant="wide"
       scrollable
+      sx={{
+        maxWidth: { xs: "fit-content", lg: 1072 },
+        width: { xs: "fit-content", lg: 1072 },
+      }}
     >
       <ModalHeader>{t("compareConstitution.headline")}</ModalHeader>
       <ModalContents>
         {currentVersion && targetVersion ? (
-          <ReactDiffViewer
-            oldValue={targetVersion}
-            newValue={currentVersion}
-            splitView={true}
-            disableWordDiff
-            styles={{
-              diffContainer: {
-                fontSize: "14px",
-                lineHeight: "1.6",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                padding: "10px",
-              },
-              line: {
-                fontSize: "inherit",
-              },
-              gutter: {
-                background: "#f7f7f7",
-                color: "#666",
-                padding: "0 8px",
-              },
-            }}
-          />
+          <Card sx={{ padding: "32px 24px" }}>
+            <ReactDiffViewer
+              oldValue={targetVersion}
+              newValue={currentVersion}
+              hideLineNumbers={true}
+              splitView={true}
+              disableWordDiff
+              styles={{
+                diffContainer: {
+                  fontSize: "16px",
+                  lineHeight: "1.6",
+                  borderRadius: "4px",
+                },
+                line: {
+                  fontSize: "inherit",
+                },
+                gutter: {
+                  background: "#f7f7f7",
+                  color: "#666",
+                  padding: "0 8px",
+                },
+              }}
+            />
+          </Card>
         ) : (
-          <p>Loading...</p>
+          <Loading />
         )}
         <Button variant="outlined" onClick={closeModal}>
           {t("common.close")}
