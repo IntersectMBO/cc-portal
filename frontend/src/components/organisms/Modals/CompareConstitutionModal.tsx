@@ -3,12 +3,19 @@
 import { useEffect, useState } from "react";
 import { getConstitutionByCid } from "@/lib/api";
 import { useModal } from "@/context";
-import { CompareConstitutionModalState } from "../types";
-import { ModalWrapper, ModalHeader, ModalContents, Button } from "@atoms";
-import { IMAGES } from "@consts";
+import { CompareConstitutionModalState, ConstitutionMetadata } from "../types";
+import {
+  ModalWrapper,
+  ModalHeader,
+  ModalContents,
+  Button,
+  Typography,
+} from "@atoms";
+import { customPalette, IMAGES, poppins } from "@consts";
 import { useTranslations } from "next-intl";
 import ReactDiffViewer from "react-diff-viewer-continued";
 import { Card, Loading } from "@molecules";
+import { Box } from "@mui/material";
 
 export const CompareConstitutionModal = () => {
   const t = useTranslations("Modals");
@@ -24,10 +31,10 @@ export const CompareConstitutionModal = () => {
     async function fetchVersions({
       base,
       target,
-    }: CompareConstitutionModalState) {
+    }: Pick<CompareConstitutionModalState, "base" | "target">) {
       try {
-        const currentVersion = await getConstitutionByCid(base);
-        const targetVersion = await getConstitutionByCid(target);
+        const currentVersion = await getConstitutionByCid(base.cid);
+        const targetVersion = await getConstitutionByCid(target.cid);
         setCurrentVersion(currentVersion.contents);
         setTargetVersion(targetVersion.contents);
       } catch (error) {
@@ -39,6 +46,15 @@ export const CompareConstitutionModal = () => {
       fetchVersions({ base, target });
     }
   }, [base, target]);
+
+  const TitleBlock = ({ title, created_date }: ConstitutionMetadata) => (
+    <Box mb={3}>
+      <Typography sx={{ marginBottom: 0.5 }} variant="body1">
+        {title}
+      </Typography>
+      <Typography variant="caption">{created_date}</Typography>
+    </Box>
+  );
 
   return (
     <ModalWrapper
@@ -61,19 +77,22 @@ export const CompareConstitutionModal = () => {
               hideLineNumbers={true}
               splitView={true}
               disableWordDiff
+              leftTitle={<TitleBlock {...target} />}
+              rightTitle={<TitleBlock {...base} />}
               styles={{
+                variables: {
+                  light: {
+                    diffViewerBackground: "white",
+                    diffViewerTitleBackground: "white",
+                    codeFoldBackground: "white",
+                    emptyLineBackground: "white",
+                    diffViewerColor: customPalette.textBlack,
+                  },
+                },
                 diffContainer: {
                   fontSize: "16px",
                   lineHeight: "1.6",
                   borderRadius: "4px",
-                },
-                line: {
-                  fontSize: "inherit",
-                },
-                gutter: {
-                  background: "#f7f7f7",
-                  color: "#666",
-                  padding: "0 8px",
                 },
               }}
             />
