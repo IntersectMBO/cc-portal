@@ -342,7 +342,6 @@ describe('UsersFacade', () => {
       try {
         await facade.deleteProfilePhoto(user.id);
       } catch (error) {
-        console.log(error);
         expect(error).toBeInstanceOf(ConflictException);
         expect(error.status).toEqual(409);
         expect(error.message).toEqual('user does not have profile photo');
