@@ -94,6 +94,9 @@ export const CompareConstitutionModal = () => {
                   lineHeight: "1.6",
                   borderRadius: "4px",
                 },
+                contentText: {
+                  fontFamily: poppins.style.fontFamily,
+                },
               }}
             />
           </Card>
