@@ -7,7 +7,7 @@ import { CompareConstitutionModalState } from "../types";
 import { ModalWrapper, ModalHeader, ModalContents, Button } from "@atoms";
 import { IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
-import DiffViewer from "react-diff-viewer";
+import ReactDiffViewer from "react-diff-viewer-continued";
 
 export const CompareConstitutionModal = () => {
   const t = useTranslations("Modals");
@@ -49,7 +49,7 @@ export const CompareConstitutionModal = () => {
       <ModalHeader>{t("compareConstitution.headline")}</ModalHeader>
       <ModalContents>
         {currentVersion && targetVersion ? (
-          <DiffViewer
+          <ReactDiffViewer
             oldValue={targetVersion}
             newValue={currentVersion}
             splitView={true}
