@@ -8,11 +8,10 @@ export interface ConstitutionMetadata {
   created_date: string;
 }
 
-export interface ConstitutionMetadata {
+export interface ConstitutionByCid {
   cid: string;
-  title: string;
   version: string;
-  created_date: string;
+  contents: string;
 }
 
 export interface ConstitutionProps {
@@ -35,6 +34,6 @@ export interface SignupModalState {
 }
 
 export interface CompareConstitutionModalState {
-  base: string;
-  target: string;
+  base: ConstitutionMetadata;
+  target: ConstitutionMetadata;
 }

@@ -9,7 +9,10 @@ import {
   LoginResponse,
   Permissions,
 } from "./requests";
-import { ConstitutionMetadata } from "@/components/organisms";
+import {
+  ConstitutionByCid,
+  ConstitutionMetadata,
+} from "@/components/organisms";
 
 // Function to decode the user token stored in the authentication cookie
 export async function decodeUserToken(): Promise<DecodedToken | undefined> {
@@ -193,7 +196,9 @@ export async function getConstitutionMetadata(): Promise<
   }
 }
 
-export async function getConstitutionByCid(cid: string) {
+export async function getConstitutionByCid(
+  cid: string
+): Promise<ConstitutionByCid> {
   try {
     const response: any = await axiosInstance.get(
       `/api/constitution/cid/${cid}`

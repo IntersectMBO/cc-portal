@@ -12,7 +12,7 @@ import {
   Paragraph,
   NavCard,
 } from "./MDXComponents";
-import { ConstitutionProps } from "../types";
+import { ConstitutionMetadata, ConstitutionProps } from "../types";
 import { useTranslations } from "next-intl";
 import { useModal } from "@/context";
 
@@ -22,11 +22,11 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const { openModal } = useModal();
   const t = useTranslations("Constitution");
 
-  const onCompare = (target) => {
+  const onCompare = (target: Omit<ConstitutionMetadata, "version">) => {
     openModal({
       type: "compareConstitutionModal",
       state: {
-        base: metadata[0].cid,
+        base: metadata[0],
         target,
       },
     });
@@ -66,7 +66,9 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                 return (
                   <NavCard
                     onClick={() => {
-                      metadata[0].cid === cid ? null : onCompare(cid);
+                      metadata[0].cid === cid
+                        ? null
+                        : onCompare({ title, created_date, cid });
                     }}
                     title={title}
                     description={created_date}
