@@ -1,5 +1,4 @@
 import { decodeUserToken } from "@/lib/api";
-import { Box } from "@mui/material";
 import { AdminFooter, AdminTopNav, Footer } from "@organisms";
 import React from "react";
 
@@ -9,7 +8,7 @@ async function AdminLayout({ children }) {
   return (
     <>
       {<AdminTopNav isLoggedIn={!!user} />}
-      <Box mb={10}>{children}</Box>
+      {children}
       {user ? <AdminFooter /> : <Footer showSignIn={false} />}
     </>
   );
