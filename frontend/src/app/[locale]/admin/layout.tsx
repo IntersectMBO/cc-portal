@@ -9,7 +9,7 @@ async function AdminLayout({ children }) {
     <>
       {<AdminTopNav isLoggedIn={!!user} />}
       {children}
-      {user ? <AdminFooter /> : <Footer />}
+      {user ? <AdminFooter /> : <Footer showSignIn={false} />}
     </>
   );
 }
