@@ -19,10 +19,17 @@ export const UserBasicInfo = ({
     }}
     px={{ xxs: 1, lg: 3 }}
   >
-    <Typography sx={{ marginBottom: 0.5 }} variant="body1">
+    <Typography
+      sx={{
+        marginBottom: 0.5,
+        minHeight: 24,
+        width: "100%",
+      }}
+      variant="body1"
+    >
       {name}
     </Typography>
-    <Grid container gap={1}>
+    <Grid container gap={1} flexWrap="nowrap">
       <img src={IMAGES.mail} width={20} height={20} />
       <Typography variant="body2" fontWeight={400}>
         {email}
