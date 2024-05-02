@@ -95,12 +95,22 @@ export async function getUser(id: string): Promise<FetchUserData> {
   }
 }
 
-export async function getUsers(): Promise<FetchUserData[]> {
+export async function getUsersAdmin(): Promise<FetchUserData[]> {
   try {
-    const res: FetchUserData[] = await axiosInstance.get("/api/users");
+    const token = getAccessToken();
+    const { userId } = await decodeUserToken();
+
+    const res: FetchUserData[] = await axiosInstance.get(
+      `/api/users/${userId}/search-admin`,
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      }
+    );
     return res;
   } catch (error) {
-    console.log("error get users", error);
+    console.log("error get users admin", error);
   }
 }
 
