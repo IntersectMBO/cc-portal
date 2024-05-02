@@ -2,7 +2,6 @@
 // which is particularly relevant for Next.js applications that support server-side rendering (SSR).
 "use client";
 
-import { PATHS } from "@consts";
 import { getUser, logout as removeCookies } from "@/lib/api";
 import { useRouter } from "next/navigation";
 // Import createContext and useContext hooks from React to create and consume the context.
@@ -16,7 +15,7 @@ interface AppContextType {
   setUserSession: (userSession: DecodedToken | null) => void;
   user: FetchUserData | null;
   resetState: () => void;
-  logout: () => void;
+  logout: (redirectUrl: string) => void;
   fetchUserData: (userId: string) => Promise<void>;
 }
 
@@ -47,10 +46,11 @@ export function AppContextProvider({ session, children }) {
     setUserSession(null);
   };
 
-  const logout = async () => {
+  const logout = async (redirectUrl: string) => {
     removeCookies();
     resetState();
-    router.push(PATHS.home);
+    router.push(redirectUrl);
+    router.refresh();
   };
   // Render the provider component of your context, passing in the values or functions as the value prop.
   // Any child components will be able to access these values via the useAppContext hook.
