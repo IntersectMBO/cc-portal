@@ -8,6 +8,7 @@ import {
   AddMemberModal,
   UploadConstitution,
   DeleteRole,
+  AddReasoningModal,
 } from "@organisms";
 import { SignUpModal } from "@/components/organisms/Modals/SignUpModal";
 import { SignOutModal } from "@/components/organisms/Modals/SignOutModal";
@@ -32,7 +33,8 @@ export type ModalType =
   | "signOutModal"
   | "uploadConstitution"
   | "deleteRole"
-  | "compareConstitutionModal";
+  | "compareConstitutionModal"
+  | "addReasoning";
 
 const modals: Record<ModalType, ContextModal> = {
   none: {
@@ -59,6 +61,9 @@ const modals: Record<ModalType, ContextModal> = {
   },
   compareConstitutionModal: {
     component: <CompareConstitutionModal />,
+  },
+  addReasoning: {
+    component: <AddReasoningModal />,
   },
 };
 

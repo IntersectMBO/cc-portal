@@ -130,6 +130,24 @@
     },
     "compareConstitution": {
       "headline": "Compare revisions"
+    },
+    "addReasoning": {
+      "headline": "Add reasoning",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "fields": {
+        "title": {
+          "label": "Title",
+          "placeholder": "Text here"
+        },
+        "reasoning": {
+          "label": "Reasoning",
+          "placeholder": "Enter reasoning"
+        }
+      },
+      "alerts": {
+        "success": "New reasoning successfully added",
+        "error": "Error adding new reasoning"
+      }
     }
   },
   "AdminDashboard": {
