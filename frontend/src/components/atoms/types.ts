@@ -69,3 +69,5 @@ export type InfoTextProps = {
 };
 
 export type UserStatus = "pending" | "active" | "inactive";
+
+export type Vote = "yes" | "no" | "abstain";
