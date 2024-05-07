@@ -148,6 +148,16 @@
         "success": "New reasoning successfully added",
         "error": "Error adding new reasoning"
       }
+    },
+    "reasoningLink": {
+      "headline": "Reasoning link",
+      "description": "Attach this link to your vote",
+      "hash": "Hash",
+      "reasoningLink": "Reasoning link",
+      "alerts": {
+        "success": "New reasoning link successfully added",
+        "error": "Error adding new reasoning link"
+      }
     }
   },
   "AdminDashboard": {
