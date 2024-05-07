@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { UserResponse } from 'src/users/api/response/user.response';
+import { UserResponse } from '../../../users/api/response/user.response';
 
 export class TokenResponse {
   @Expose({ name: 'user' })

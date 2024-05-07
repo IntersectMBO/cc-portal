@@ -4,8 +4,18 @@ import { Card } from "@molecules";
 import { Grid } from "@mui/material";
 import { UserAvatar, UserBasicInfo, UserRole, UserStatus } from "@molecules";
 import { UserStatus as UserStatusType } from "@atoms";
+import { UserListItem } from "../types";
 
-export function UsersListItem({ name, email, roles, status }) {
+export function UsersListItem({
+  name,
+  email,
+  role,
+  status,
+  profile_photo_url,
+}: Pick<
+  UserListItem,
+  "name" | "email" | "role" | "status" | "profile_photo_url"
+>) {
   return (
     <Grid item mb={3}>
       <Card variant="default">
@@ -15,7 +25,7 @@ export function UsersListItem({ name, email, roles, status }) {
               <Grid item xxs={12} lg="auto" mb={{ xxs: 2, lg: 0 }}>
                 <Grid container flexWrap="nowrap">
                   <Grid item>
-                    <UserAvatar />
+                    <UserAvatar src={profile_photo_url} />
                   </Grid>
                   <Grid item>
                     <UserBasicInfo name={name} email={email} />
@@ -23,7 +33,7 @@ export function UsersListItem({ name, email, roles, status }) {
                 </Grid>
               </Grid>
               <Grid item px={{ xxs: 0, lg: 3 }}>
-                <UserRole roles={roles} />
+                <UserRole roles={[role]} />
               </Grid>
             </Grid>
           </Grid>

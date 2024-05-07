@@ -1,12 +1,12 @@
 import { Timestamp } from 'typeorm';
-import { UserStatusEnum } from '../entities/user.entity';
+import { UserStatusEnum } from '../enums/user-status.enum';
 
 export class UserDto {
   id: string;
   name: string;
   email: string;
   description: string;
-  profilePhoto: string;
+  profilePhotoUrl: string;
   status: UserStatusEnum;
   hotAddresses: string[];
   role: string;

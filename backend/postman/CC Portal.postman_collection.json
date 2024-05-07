@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "aec582c9-802c-4f73-b9ec-5efde00f5781",
+		"_postman_id": "f70e79f8-7bd3-4c94-b850-9957120d9789",
 		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20133713"
@@ -10,56 +10,19 @@
 			"name": "User",
 			"item": [
 				{
-					"name": "Get All Users",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base-url}}/api/users",
-							"host": [
-								"{{base-url}}"
-							],
-							"path": [
-								"api",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Roles",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base-url}}/api/users/roles",
-							"host": [
-								"{{base-url}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"roles"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get User By Id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base-url}}/api/users/id",
+							"raw": "{{base-url}}/api/users/{{userId}}",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"id"
+								"{{userId}}"
 							]
 						}
 					},
@@ -68,11 +31,20 @@
 				{
 					"name": "Update User",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"sofija\"\n}",
+							"raw": "{\n    \"name\":\"Andjy\",\n    \"description\":\"\",\n    \"hotAddress\":\"newone\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -80,37 +52,148 @@
 							}
 						},
 						"url": {
-							"raw": "{{base-url}}/api/users/id",
+							"raw": "{{base-url}}/api/users/{{userId}}",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"id"
+								"{{userId}}"
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Version",
-			"item": [
+				},
 				{
-					"name": "Get Version",
+					"name": "Update User's Photo",
 					"request": {
-						"method": "GET",
-						"header": [],
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/milossekuloski/git-repos/cc-portal/backend/postman/1712183767053-valentines-day.png"
+								}
+							]
+						},
 						"url": {
-							"raw": "{{base-url}}/api/version",
+							"raw": "{{base-url}}/api/users/{{userId}}/profile-photo",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
-								"version"
+								"users",
+								"{{userId}}",
+								"profile-photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove image from user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/api/users/{{userId}}/profile-photo",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{userId}}",
+								"profile-photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search CC Member",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/users/cc-member/search?phrase=test&sort_order=DESC",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"cc-member",
+								"search"
+							],
+							"query": [
+								{
+									"key": "phrase",
+									"value": "test"
+								},
+								{
+									"key": "sort_order",
+									"value": "DESC"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Admin / Super Admin",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/api/users/{{userId}}/search-admin?phrase=test&sort_order=DESC",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{userId}}",
+								"search-admin"
+							],
+							"query": [
+								{
+									"key": "phrase",
+									"value": "test"
+								},
+								{
+									"key": "sort_order",
+									"value": "DESC"
+								}
 							]
 						}
 					},
@@ -190,7 +273,7 @@
 					"response": []
 				},
 				{
-					"name": "Register callback",
+					"name": "Register Callback",
 					"event": [
 						{
 							"listen": "test",
@@ -258,7 +341,7 @@
 					"response": []
 				},
 				{
-					"name": "Login callback",
+					"name": "Login Callback",
 					"event": [
 						{
 							"listen": "test",
@@ -353,6 +436,177 @@
 								"api",
 								"email",
 								"send-test-email"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Constitution",
+			"item": [
+				{
+					"name": "Upload Document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/aca/Projects/helia-examples/examples/helia-vite/README.md"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base-url}}/api/constitution",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current Document",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/current",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Document By CID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/cid/bafkreif5qv3lf2qpisr2mad3t33eunm76slligitgr333uwfjw2c5leefi",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"cid",
+								"bafkreif5qv3lf2qpisr2mad3t33eunm76slligitgr333uwfjw2c5leefi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Constitution Documents",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Diff Document",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/diff?base=A&target=B",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"diff"
+							],
+							"query": [
+								{
+									"key": "base",
+									"value": "A"
+								},
+								{
+									"key": "target",
+									"value": "B"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Get All Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/roles",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Version",
+			"item": [
+				{
+					"name": "Get Version",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/version",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"version"
 							]
 						}
 					},

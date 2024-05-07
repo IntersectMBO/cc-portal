@@ -1,34 +1,39 @@
-import { CompileMDXResult } from "next-mdx-remote/rsc";
-import { UserStatus } from "@atoms";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { FetchUserData, UserRole } from "@/lib/requests";
+
+export interface ConstitutionMetadata {
+  cid: string;
+  title: string;
+  version: string;
+  created_date: string;
+}
+
+export interface ConstitutionByCid {
+  cid: string;
+  version: string;
+  contents: string;
+}
 
 export interface ConstitutionProps {
-  constitution: CompileMDXResult;
-}
-
-export interface PaginationButtonProps {
-  handleClick: () => void;
-  disabled: boolean;
-  type: "prev" | "next";
-}
-
-export interface ConstitutionPageProps {
-  content: string[];
-  key: number;
+  constitution: MDXRemoteSerializeResult;
+  metadata: ConstitutionMetadata[];
 }
 
 export interface HeroProps {
   children: React.ReactElement;
 }
 
-export type UserRole = "admin" | "user" | null;
-
 export interface HeroActionsProps {
-  role: UserRole;
+  role?: UserRole;
 }
 
-export interface UsersListProps {
-  name: string;
-  email: string;
-  roles: string[];
-  status: UserStatus;
+export interface UserListItem extends FetchUserData {}
+
+export interface SignupModalState {
+  showCloseButton?: boolean;
+}
+
+export interface CompareConstitutionModalState {
+  base: ConstitutionMetadata;
+  target: ConstitutionMetadata;
 }
