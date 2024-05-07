@@ -1,6 +1,7 @@
-import { Card } from "@/components/molecules";
+import { Card, CopyCard } from "@/components/molecules";
 import { customPalette, ICONS } from "@/constants";
-import { Button, Typography } from "@atoms";
+import { getShortenedGovActionId } from "@utils";
+import { Button, CopyButton, Typography } from "@atoms";
 import { Box, Collapse, Grid } from "@mui/material";
 import { ReactNode } from "react";
 
@@ -130,13 +131,23 @@ export const NavDrawer = ({
   );
 };
 
-export const NavCard = ({ onClick, title, description, buttonLabel }) => (
+export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
   <Box mb={2}>
     <Card sx={{ padding: 3 }}>
       <Grid container justifyContent="space-between">
         <Grid item>
-          <Typography variant="body1">{title}</Typography>
-          <Typography variant="caption">{description}</Typography>
+          <Typography variant="body1">
+            {title}
+            <span>({description})</span>
+          </Typography>
+          <Grid container alignItems="center">
+            <Grid item mr={1}>
+              <Typography variant="caption">
+                {getShortenedGovActionId(hash)}
+              </Typography>
+            </Grid>
+            <CopyButton size={14} text={hash} />
+          </Grid>
         </Grid>
         <Grid item>
           <Button onClick={onClick} variant="outlined">
