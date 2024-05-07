@@ -341,7 +341,7 @@ describe('AuthFacade', () => {
         updatedAt: null,
       };
 
-      const result = await facade.updateStatus(userDto);
+      const result = await facade.activateUser(userDto);
 
       expect(result.status).toEqual(UserStatusEnum.ACTIVE);
       expect(mockUserService.updateUserStatus).toHaveBeenCalled();
@@ -365,7 +365,7 @@ describe('AuthFacade', () => {
       };
 
       try {
-        await facade.updateStatus(userDto);
+        await facade.activateUser(userDto);
       } catch (e) {
         expect(e).toBeInstanceOf(NotFoundException);
         expect(e.message).toBe('User with this ID not found');

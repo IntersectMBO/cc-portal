@@ -4,8 +4,8 @@ import { TokenResponse } from '../api/response/token.response';
 import { UserMapper } from '../../users/mapper/userMapper.mapper';
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
@@ -35,20 +35,18 @@ export class AuthFacade {
     return user;
   }
 
-  async updateStatus(userDto: UserDto): Promise<UserDto> {
-    const user = await this.usersService.updateUserStatus(
-      userDto.id,
-      UserStatusEnum.ACTIVE,
-    );
+  async activateUser(userDto: UserDto): Promise<UserDto> {
+    const user = await this.usersService.findByEmail(userDto.email);
+    if (user.status !== UserStatusEnum.PENDING) {
+      throw new ConflictException(`Unable to activate account`);
+    }
+    await this.usersService.updateUserStatus(userDto.id, UserStatusEnum.ACTIVE);
     return user;
   }
 
   // validateUser checks user by email
   async validateUser(email: string): Promise<UserDto> {
     const user = await this.usersService.findByEmail(email);
-    if (!user) {
-      throw new NotFoundException(`User with ${email} not found`);
-    }
     return user;
   }
 
