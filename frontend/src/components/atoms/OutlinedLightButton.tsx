@@ -8,15 +8,9 @@ import { BoxOwnProps } from "@mui/system";
 
 interface Props extends BoxOwnProps {
   children: React.ReactNode;
-  dataTestid?: string;
 }
 
-export const OutlinedLightButton = ({
-  children,
-  dataTestid,
-  mt,
-  ...props
-}: Props) => {
+export const OutlinedLightButton = ({ children, mt, ...props }: Props) => {
   return (
     <Box display="flex" mt={mt}>
       <Box
@@ -25,11 +19,12 @@ export const OutlinedLightButton = ({
         border={1}
         borderColor={customPalette.lightBlue}
         borderRadius={100}
+        display="flex"
+        flexWrap="nowrap"
+        gap={1}
         {...props}
       >
-        <Typography data-testid={dataTestid} variant="caption">
-          {children}
-        </Typography>
+        {children}
       </Box>
     </Box>
   );
