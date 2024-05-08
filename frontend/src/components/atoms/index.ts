@@ -19,5 +19,6 @@ export * from "./Chip";
 export * from "./CopyButton";
 export * from "./Tooltip";
 export * from "./VotePill";
+export * from "./OutlinedLightButton";
 
 export * from "./types";
