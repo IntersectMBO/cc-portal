@@ -19,7 +19,7 @@ export const CopyCard = ({
 }: Props) => {
   return (
     <Box
-      border={`1px solid ${customPalette.neutralGray}`}
+      border={`1px solid ${customPalette.lightBlue}`}
       borderRadius="12px"
       px={1.5}
       py={1}
