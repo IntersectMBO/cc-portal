@@ -36,11 +36,14 @@ export class AuthFacade {
   }
 
   async activateUser(userDto: UserDto): Promise<UserDto> {
-    const user = await this.usersService.findByEmail(userDto.email);
-    if (user.status !== UserStatusEnum.PENDING) {
-      throw new ConflictException(`Unable to activate account`);
+    const targetUser = await this.usersService.findByEmail(userDto.email);
+    if (targetUser.status !== UserStatusEnum.PENDING) {
+      throw new ConflictException(`Unable to activate user`);
     }
-    await this.usersService.updateUserStatus(userDto.id, UserStatusEnum.ACTIVE);
+    const user = await this.usersService.updateUserStatus(
+      userDto.id,
+      UserStatusEnum.ACTIVE,
+    );
     return user;
   }
 
