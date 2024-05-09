@@ -158,6 +158,27 @@
         "success": "New reasoning link successfully added",
         "error": "Error adding new reasoning link"
       }
+    },
+    "previewReasoning": {
+      "headline": "Reasoning",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "governanceActionCategory": "Governance Action Category",
+      "governanceActionId": "Governance Action Id",
+      "voted": "Voted",
+      "submissionDate": "Submission date",
+      "expiryDate": "Expiry date",
+      "addNewReasoning": "Add new reasoning",
+      "tooltips": {
+        "expiryDate": {
+          "heading": "Expiry Date",
+          "paragraphOne": "The date when the governance action will expiry if it doesn’t reach ratification thresholds.",
+          "paragraphTwo": "IMPORTANT: If the governance action is ratified before the expiry date it will be considered ratified and it will not be available to vote on afterwards."
+        },
+        "submissionDate": {
+          "heading": "Submission Date",
+          "paragraphOne": "The date when the governance action was submitted on-chain."
+        }
+      }
     }
   },
   "AdminDashboard": {
@@ -177,5 +198,9 @@
   "Snackbar": {
     "changesSaved": "Changes saved",
     "copiedToClipboard": "Copied to clipboard"
+  },
+  "GovernanceAction": {
+    "Link": "Link",
+    "Hash": "Hash"
   }
 }

@@ -198,5 +198,9 @@
   "Snackbar": {
     "changesSaved": "Changes saved",
     "copiedToClipboard": "Copied to clipboard"
+  },
+  "GovernanceAction": {
+    "Link": "Link",
+    "Hash": "Hash"
   }
 }
