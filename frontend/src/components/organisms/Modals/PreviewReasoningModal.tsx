@@ -15,6 +15,8 @@ import { useTranslations } from "next-intl";
 import { useModal } from "@context";
 import { Box } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { Tabs } from "@organisms";
+import { Reasoning } from "@/components/molecules/Reasoning";
 
 export const PreviewReasoningModal = () => {
   const t = useTranslations("Modals");
@@ -23,6 +25,43 @@ export const PreviewReasoningModal = () => {
   const onClick = () => {
     closeModal();
   };
+  const reasonings = [
+    {
+      title: "Reasoning title 1",
+      description:
+        "Lorem ipsum dolor sit amet consectetur. Neque eleifend sed sit elementum vulputate. At diam orci mauris sit in nulla. Dui id urna aliquet et tempor est mattis. Sit ornare.",
+      link: "wandjksc.com",
+      hash: "sdfsdgsdbhs",
+    },
+    {
+      title: "Reasoning title 2",
+      description:
+        "Lorem ipsum dolor sit amet consectetur. Neque eleifend sed sit elementum vulputate. At diam orci mauris sit in nulla. Dui id urna aliquet et tempor est mattis. Sit ornare.",
+      link: "wandjksc.com",
+      hash: "sdfsdgsdbhs",
+    },
+    {
+      title: "Reasoning title 3",
+      description:
+        "Lorem ipsum dolor sit amet consectetur. Neque eleifend sed sit elementum vulputate. At diam orci mauris sit in nulla. Dui id urna aliquet et tempor est mattis. Sit ornare.",
+      link: "wandjksc.com",
+      hash: "sdfsdgsdbhs",
+    },
+  ];
+
+  const tabs2 = reasonings.map((item) => {
+    return {
+      label: item.title,
+      Component: (
+        <Reasoning
+          title={item.title}
+          description={item.description}
+          link={item.link}
+          hash={item.hash}
+        />
+      ),
+    };
+  });
 
   return (
     <ModalWrapper dataTestId="preview-reasoning-modal" sx={{ padding: 0 }}>
@@ -52,28 +91,35 @@ export const PreviewReasoningModal = () => {
           borderTopRightRadius: 20,
           backgroundColor: "rgba(255, 255, 255, 0.3)",
         }}
-        py={{ xs: 3, md: 4 }}
-        px={{ xs: 2.25, md: 3 }}
+        pt={1.5}
         pb={3}
+        px={{ xs: 2.25, md: 3 }}
       >
-        <Box data-testid="governance-action-type">
+        <Tabs tabs={tabs2} />
+        <Box mt={3} data-testid="governance-action-type">
           <Typography color="neutralGray" variant="caption">
             {t("previewReasoning.governanceActionCategory")}
           </Typography>
-          <OutlinedLightButton
-            dataTestid="type" //todo proposalTypeNoEmptySpaces
-          >
-            Category 1 {/**todo getProposalTypeLabel */}
+          <OutlinedLightButton>
+            <Typography
+              data-testid={`${"proposalTypeNoEmptySpaces"}-type`} //todo proposalTypeNoEmptySpaces
+              variant="caption"
+            >
+              Category 1 {/**todo getProposalTypeLabel */}
+            </Typography>
           </OutlinedLightButton>
         </Box>
         <Box mt={3}>
           <Typography color="neutralGray" variant="caption">
             {t("previewReasoning.governanceActionId")}
           </Typography>
-          <OutlinedLightButton
-            dataTestid="id" //todo getFullGovActionId
-          >
-            govaction_7778...8675 {/** todo getShortenedGovActionId */}
+          <OutlinedLightButton>
+            <Typography
+              data-testid={`${"proposalTypeNoEmptySpaces"}-id`} //todo
+              variant="caption"
+            >
+              govaction_7778...8675 {/** todo getShortenedGovActionId */}
+            </Typography>
           </OutlinedLightButton>
         </Box>
         <Box mt={3}>
