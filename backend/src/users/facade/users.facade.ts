@@ -7,7 +7,7 @@ import { RoleResponse } from '../api/response/role.response';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
 import { PaginationDto } from '../../pagination/dto/pagination.dto';
 import { PageOptionsDto } from '../../pagination/dto/page-options.dto';
-import { PageMetaDto } from '../../pagination/dto/page-meta.dto';
+import { PageMetaResponse } from '../../pagination/response/page-meta.response';
 import { UserDto } from '../dto/user.dto';
 
 import { S3Service } from '../../s3/service/s3.service';
@@ -28,12 +28,15 @@ export class UsersFacade {
     const userDto = userCountDto.userDto;
     const itemCount = userCountDto.itemCount;
 
-    const userResponse = userDto.map((userDto: UserDto) =>
+    const userResponse: UserResponse[] = userDto.map((userDto: UserDto) =>
       UserMapper.mapUserDtoToResponse(userDto),
     );
 
-    const pageMetaDto = new PageMetaDto({ itemCount, pageOptionsDto });
-    return new PaginationDto(userResponse, pageMetaDto);
+    const pageMetaResponse = new PageMetaResponse({
+      itemCount,
+      pageOptionsDto,
+    });
+    return new PaginationDto(userResponse, pageMetaResponse);
   }
 
   async getAllRoles(): Promise<RoleResponse[]> {
@@ -92,11 +95,22 @@ export class UsersFacade {
   async searchUsers(
     searchQuery: SearchQueryDto,
     isAdmin: boolean,
-  ): Promise<UserResponse[]> {
-    const users = await this.usersService.searchUsers(searchQuery, isAdmin);
-    const results: UserResponse[] = users.map((x) =>
-      UserMapper.mapUserDtoToResponse(x),
+    pageOptionsDto: PageOptionsDto,
+  ): Promise<PaginationDto<UserResponse>> {
+    const userCountDto = await this.usersService.searchUsers(
+      searchQuery,
+      isAdmin,
+      pageOptionsDto,
     );
-    return results;
+
+    const userDto = userCountDto.userDto;
+    const itemCount = userCountDto.itemCount;
+
+    const userResponse: UserResponse[] = userDto.map((userDto: UserDto) =>
+      UserMapper.mapUserDtoToResponse(userDto),
+    );
+    const pageMetaDto = new PageMetaResponse({ itemCount, pageOptionsDto });
+
+    return new PaginationDto(userResponse, pageMetaDto);
   }
 }

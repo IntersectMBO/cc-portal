@@ -33,14 +33,14 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../../auth/jwt/jwt-auth.guard';
 import { UserPathGuard } from '../../auth/guard/users-path.guard';
-import { SearchQueryDto, SortOrder } from '../dto/search-query.dto';
+import { SearchQueryDto } from '../dto/search-query.dto';
 import { SortOrderPipe } from '../pipe/sort-order.pipe';
 import { SearchPhrasePipe } from '../pipe/search-phrase.pipe';
 import { RoleEnum } from '../enums/role.enum';
 import { Roles } from '../../auth/guard/role.decorator';
 import { RoleGuard } from '../../auth/guard/role.guard';
 import { PaginationDto } from '../../pagination/dto/pagination.dto';
-import { Order } from '../../pagination/enums/order.enum';
+import { SortOrder } from '../../pagination/enums/sort-order.enum';
 import { PageOptionsDto } from '../../pagination/dto/page-options.dto';
 @ApiTags('Users')
 @Controller('users')
@@ -51,23 +51,23 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'Users in pages',
-    isArray: true,
     type: PaginationDto<UserResponse>,
   })
   @ApiResponse({ status: 404, description: 'User not found' })
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   async findAll(
-    // @Query() pageOptionsDto: PageOptionsDto,
     @Query('page') page: number = 1,
     @Query('take') take: number = 12,
-    @Query('order') order: Order = Order.ASC,
+    @Query('order') order: SortOrder = SortOrder.ASC,
   ): Promise<PaginationDto<UserResponse>> {
     const pageOptionsDto = new PageOptionsDto();
     pageOptionsDto.page = page;
     pageOptionsDto.take = take;
     pageOptionsDto.order = order;
     return await this.usersFacade.findAll(pageOptionsDto);
+  }
+
   @ApiOperation({ summary: 'Find one user by ID' })
   @ApiResponse({
     status: 200,
@@ -125,10 +125,22 @@ export class UsersController {
     status: 200,
     description: 'Users',
     isArray: true,
-    type: UserResponse,
+    type: PaginationDto<UserResponse>,
   })
   @ApiQuery({
-    name: 'sort_order',
+    name: 'page',
+    required: false,
+    description: 'Page that is selected by user, accepts numbers',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'take',
+    required: false,
+    description: 'Number of users shown on a page.',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'order',
     required: false,
     description:
       'Sort order parameter - can be either ASC (Ascending) or DESC (Descending)',
@@ -140,16 +152,25 @@ export class UsersController {
     description: 'A search phrase related to user name, does not accept * or ;',
     type: String,
   })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('cc-member/search')
-  async searchCCMemeber(
+  async searchCCMember(
     @Query('phrase', SearchPhrasePipe) searchPhrase: string,
-    @Query('sort_order', SortOrderPipe) sortOrder: SortOrder,
-  ) {
-    if (!sortOrder) {
-      sortOrder = SortOrder.DESC;
-    }
-    const searchQuery = new SearchQueryDto(searchPhrase, sortOrder);
-    return await this.usersFacade.searchUsers(searchQuery, false);
+    @Query('page') page: number = 1,
+    @Query('take') take: number = 12,
+    @Query('order', SortOrderPipe) order: SortOrder = SortOrder.DESC,
+  ): Promise<PaginationDto<UserResponse>> {
+    const pageOptionsDto = new PageOptionsDto();
+    pageOptionsDto.page = page;
+    pageOptionsDto.take = take;
+    pageOptionsDto.order = order;
+
+    const searchQuery = new SearchQueryDto(searchPhrase /*, sortOrder*/);
+    return await this.usersFacade.searchUsers(
+      searchQuery,
+      false,
+      pageOptionsDto,
+    );
   }
 
   // Search endpoint for admins and super admin
@@ -177,7 +198,19 @@ export class UsersController {
     description: 'Identifactor of the user',
   })
   @ApiQuery({
-    name: 'sort_order',
+    name: 'page',
+    required: false,
+    description: 'Page that is selected by user, accepts numbers',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'take',
+    required: false,
+    description: 'Number of users shown on a page.',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'order',
     required: false,
     description:
       'Sort order parameter - can be either ASC (Ascending) or DESC (Descending)',
@@ -191,17 +224,26 @@ export class UsersController {
   })
   @Roles(RoleEnum.ADMIN, RoleEnum.SUPER_ADMIN)
   @UseGuards(JwtAuthGuard, UserPathGuard, RoleGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id/search-admin')
   async searchAdmin(
     @Param('id', ParseUUIDPipe) id: string,
     @Query('phrase', SearchPhrasePipe) searchPhrase: string,
-    @Query('sort_order', SortOrderPipe) sortOrder: SortOrder,
-  ): Promise<UserResponse[]> {
-    if (!sortOrder) {
-      sortOrder = SortOrder.DESC;
-    }
-    const searchQuery = new SearchQueryDto(searchPhrase, sortOrder);
-    return await this.usersFacade.searchUsers(searchQuery, true);
+    @Query('page') page: number = 1,
+    @Query('take') take: number = 12,
+    @Query('order') order: SortOrder = SortOrder.DESC,
+  ): Promise<PaginationDto<UserResponse>> {
+    const pageOptionsDto = new PageOptionsDto();
+    pageOptionsDto.page = page;
+    pageOptionsDto.take = take;
+    pageOptionsDto.order = order;
+
+    const searchQuery = new SearchQueryDto(searchPhrase);
+    return await this.usersFacade.searchUsers(
+      searchQuery,
+      true,
+      pageOptionsDto,
+    );
   }
 
   @ApiBearerAuth('JWT-auth')

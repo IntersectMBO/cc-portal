@@ -256,8 +256,9 @@ export class UsersService {
   async searchUsers(
     searchQuery: SearchQueryDto,
     isAdmin: boolean,
-  ): Promise<UserDto[]> {
-    const { searchPhrase, sortOrder } = searchQuery;
+    pageOptionsDto: PageOptionsDto,
+  ): Promise<UserCountDto> {
+    const { searchPhrase } = searchQuery;
 
     const conditions: FindOptionsWhere<User> | FindOptionsWhere<User>[] = {
       ...(isAdmin
@@ -266,11 +267,21 @@ export class UsersService {
       ...(searchPhrase ? { name: ILike(`%${searchPhrase}%`) } : {}),
     };
 
+    const { skip, take, order } = pageOptionsDto;
+
     const users = await this.userRepository.find({
       where: conditions,
-      order: { createdAt: sortOrder },
+      order: { createdAt: order },
+      skip: skip,
+      take: take,
     });
-    const results: UserDto[] = users.map((user) => UserMapper.userToDto(user));
-    return results;
+    const userDto: UserDto[] = users.map((user) => UserMapper.userToDto(user));
+    const itemCount = await this.userRepository.count();
+
+    const userCountDto = new UserCountDto();
+    userCountDto.userDto = userDto;
+    userCountDto.itemCount = itemCount;
+
+    return userCountDto;
   }
 }
