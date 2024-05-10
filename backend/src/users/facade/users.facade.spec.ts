@@ -8,9 +8,10 @@ import { Permission } from '../entities/permission.entity';
 import { S3Service } from '../../s3/service/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { Role } from '../entities/role.entity';
-import { SearchQueryDto, SortOrder } from '../dto/search-query.dto';
+import { SearchQueryDto } from '../dto/search-query.dto';
 import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UserResponse } from '../api/response/user.response';
+import { SortOrder } from 'src/util/pagination/enums/sort-order.enum';
 
 describe('UsersFacade', () => {
   let facade: UsersFacade;
@@ -98,7 +99,7 @@ describe('UsersFacade', () => {
     },
   ];
 
-  let mockUsers2: UserDto[] = [
+  const mockUsers2: UserDto[] = [
     {
       id: '1',
       name: 'Sofija Dokmanovic',
@@ -208,20 +209,6 @@ describe('UsersFacade', () => {
         expect(e).toBeInstanceOf(NotFoundException);
         expect(e.message).toBe(`User with id ${id} not found`);
       }
-    });
-  });
-
-  describe('Fetch all users', () => {
-    it('should return an array of users', async () => {
-      const users = await facade.findAll();
-
-      expect(mockUserService.findAll).toHaveBeenCalled();
-      expect(users).toMatchObject(mockUsers2);
-    });
-    it('should not return an array of users', async () => {
-      mockUsers2 = [];
-      const result = await facade.findAll();
-      expect(result.length).toBe(0);
     });
   });
 
@@ -362,6 +349,8 @@ describe('UsersFacade', () => {
     it('should return an array of CC Members', async () => {
       const searchQuery: SearchQueryDto = new SearchQueryDto(
         'John',
+        0,
+        10,
         SortOrder.DESC,
       );
       const expectedResult = mockUsers;
@@ -377,6 +366,8 @@ describe('UsersFacade', () => {
     it('should return an array of Admin users', async () => {
       const searchQuery: SearchQueryDto = new SearchQueryDto(
         'John',
+        0,
+        10,
         SortOrder.DESC,
       );
       const expectedResult = mockUsers;
@@ -391,7 +382,9 @@ describe('UsersFacade', () => {
 
     it('should return an empty array', async () => {
       const searchQuery: SearchQueryDto = new SearchQueryDto(
-        'NotExistingUser',
+        'John',
+        0,
+        10,
         SortOrder.DESC,
       );
       const expectedResult = [];

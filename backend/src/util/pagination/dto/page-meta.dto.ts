@@ -1,6 +1,6 @@
 export class PageMetaDto {
   page: number;
-  take: number;
+  perPage: number;
   itemCount: number;
   pageCount: number;
   hasPreviousPage: boolean;

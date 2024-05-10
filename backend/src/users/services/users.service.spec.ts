@@ -13,7 +13,9 @@ import { HotAddress } from '../entities/hotaddress.entity';
 import { ConflictException } from '@nestjs/common/exceptions/conflict.exception';
 import { UserStatusEnum } from '../enums/user-status.enum';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { SearchQueryDto, SortOrder } from '../dto/search-query.dto';
+import { SearchQueryDto } from '../dto/search-query.dto';
+import { UsersPaginatedDto } from '../dto/users-paginated.dto';
+import { SortOrder } from 'src/util/pagination/enums/sort-order.enum';
 const mockS3Service = {
   uploadFileMinio: jest.fn().mockResolvedValue('mocked_file_name'),
   createBucketIfNotExists: jest.fn().mockResolvedValue('new_bucket'),
@@ -416,33 +418,7 @@ describe('UsersService', () => {
       );
     });
   });
-
-  describe('Fetch all users GET /api/users', () => {
-    it('should return all users', async () => {
-      const users = await service.findAll();
-      for (const value of users) {
-        expect(value).toMatchObject({
-          id: value.id,
-          name: value.name,
-          email: value.email,
-          description: value.description,
-          profilePhotoUrl: value.profilePhotoUrl,
-          status: value.status,
-          hotAddresses: value.hotAddresses,
-          role: value.role,
-          permissions: value.permissions,
-          createdAt: value.createdAt,
-          updatedAt: value.updatedAt,
-        });
-      }
-    });
-    it('should return an empty list all users', async () => {
-      mockUserRepository.find.mockResolvedValueOnce([]);
-      const result = await service.findAll();
-      expect(result.length).toBe(0);
-    });
-  });
-
+  //TODO This is a bad description - why would user service test know the api where it has been referenced on the upper layers?
   describe('Fetch all roles GET /api/users/roles', () => {
     it('should return all roles', async () => {
       const roles = await service.getAllRoles();
@@ -603,43 +579,57 @@ describe('UsersService', () => {
     it('should return an array of CC Members', async () => {
       const searchQuery: SearchQueryDto = new SearchQueryDto(
         'John',
+        0,
+        10,
         SortOrder.DESC,
       );
 
       mockUserRepository.find.mockResolvedValue([mockUsers[0]]);
 
-      const foundUser = await service.searchUsers(searchQuery, false);
+      const userPaginatedDto = await service.searchUsers(searchQuery, false);
 
-      expect(foundUser[0].name).toEqual(user.name);
-      expect(foundUser.length).toEqual(1);
+      expect(userPaginatedDto.userDtos[0].name).toEqual(user.name);
+      expect(userPaginatedDto.userDtos.length).toEqual(1);
       expect(mockUserRepository.find).toHaveBeenCalled();
     });
 
     it('should return an empty array of users', async () => {
       const searchQuer: SearchQueryDto = new SearchQueryDto(
         'NotExistingUser',
+        0,
+        10,
         SortOrder.DESC,
       );
 
       mockUserRepository.find.mockResolvedValueOnce([]);
 
-      const foundUser = await service.searchUsers(searchQuer, false);
-      expect(foundUser).toEqual([]);
-      expect(foundUser.length).toEqual(0);
+      const usersPaginatedDto: UsersPaginatedDto = await service.searchUsers(
+        searchQuer,
+        false,
+      );
+      expect(usersPaginatedDto.userDtos).toEqual([]);
+      expect(usersPaginatedDto.userDtos.length).toEqual(0);
       expect(mockUserRepository.find).toHaveBeenCalled();
     });
 
+    //TODO list-of-cc-members Make sure that tests are working
     it('should return an array with users and admins', async () => {
       const searchQuer: SearchQueryDto = new SearchQueryDto(
         'John',
+        0,
+        10,
         SortOrder.DESC,
       );
       mockUserRepository.find.mockResolvedValue(mockUsers);
 
-      const foundUser = await service.searchUsers(searchQuer, true);
-      expect(foundUser[0].name).toEqual(mockUsers[0].name);
-      expect(foundUser[1].name).toEqual(mockUsers[1].name);
-      expect(foundUser.length).toEqual(2);
+      const usersPaginatedDto: UsersPaginatedDto = await service.searchUsers(
+        searchQuer,
+        true,
+      );
+
+      expect(usersPaginatedDto.userDtos[0].name).toEqual(mockUsers[0].name);
+      expect(usersPaginatedDto.userDtos[1].name).toEqual(mockUsers[1].name);
+      expect(usersPaginatedDto.userDtos.length).toEqual(2);
       expect(mockUserRepository.find).toHaveBeenCalled();
     });
   });

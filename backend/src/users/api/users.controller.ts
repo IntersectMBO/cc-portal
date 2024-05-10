@@ -6,7 +6,6 @@ import {
   Param,
   HttpCode,
   ParseUUIDPipe,
-  ClassSerializerInterceptor,
   UseInterceptors,
   UploadedFile,
   HttpStatus,
@@ -39,34 +38,12 @@ import { SearchPhrasePipe } from '../pipe/search-phrase.pipe';
 import { RoleEnum } from '../enums/role.enum';
 import { Roles } from '../../auth/guard/role.decorator';
 import { RoleGuard } from '../../auth/guard/role.guard';
-import { PaginationDto } from '../../pagination/dto/pagination.dto';
-import { SortOrder } from '../../pagination/enums/sort-order.enum';
-import { PageOptionsDto } from '../../pagination/dto/page-options.dto';
+import { PaginationResponse } from '../../util/pagination/response/pagination.response';
+import { SortOrder } from '../../util/pagination/enums/sort-order.enum';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersFacade: UsersFacade) {}
-
-  @ApiOperation({ summary: 'Get all users and page metadata' })
-  @ApiResponse({
-    status: 200,
-    description: 'Users in pages',
-    type: PaginationDto<UserResponse>,
-  })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Get()
-  async findAll(
-    @Query('page') page: number = 1,
-    @Query('take') take: number = 12,
-    @Query('order') order: SortOrder = SortOrder.ASC,
-  ): Promise<PaginationDto<UserResponse>> {
-    const pageOptionsDto = new PageOptionsDto();
-    pageOptionsDto.page = page;
-    pageOptionsDto.take = take;
-    pageOptionsDto.order = order;
-    return await this.usersFacade.findAll(pageOptionsDto);
-  }
 
   @ApiOperation({ summary: 'Find one user by ID' })
   @ApiResponse({
@@ -125,7 +102,7 @@ export class UsersController {
     status: 200,
     description: 'Users',
     isArray: true,
-    type: PaginationDto<UserResponse>,
+    type: PaginationResponse<UserResponse>,
   })
   @ApiQuery({
     name: 'page',
@@ -134,7 +111,7 @@ export class UsersController {
     type: Number,
   })
   @ApiQuery({
-    name: 'take',
+    name: 'perPage',
     required: false,
     description: 'Number of users shown on a page.',
     type: Number,
@@ -152,29 +129,19 @@ export class UsersController {
     description: 'A search phrase related to user name, does not accept * or ;',
     type: String,
   })
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get('cc-member/search')
   async searchCCMember(
     @Query('phrase', SearchPhrasePipe) searchPhrase: string,
     @Query('page') page: number = 1,
-    @Query('take') take: number = 12,
+    @Query('perPage') perPage: number = 12,
     @Query('order', SortOrderPipe) order: SortOrder = SortOrder.DESC,
-  ): Promise<PaginationDto<UserResponse>> {
-    const pageOptionsDto = new PageOptionsDto();
-    pageOptionsDto.page = page;
-    pageOptionsDto.take = take;
-    pageOptionsDto.order = order;
-
-    const searchQuery = new SearchQueryDto(searchPhrase /*, sortOrder*/);
-    return await this.usersFacade.searchUsers(
-      searchQuery,
-      false,
-      pageOptionsDto,
-    );
+  ): Promise<PaginationResponse<UserResponse>> {
+    const searchQuery = new SearchQueryDto(searchPhrase, page, perPage, order);
+    return await this.usersFacade.searchUsers(searchQuery, false);
   }
 
   // Search endpoint for admins and super admin
-  // Returns all registered users except super admin
+  // Returns all registered users except super admin 
   @ApiOperation({ summary: 'List of Admins and CC Members' })
   @ApiBearerAuth('JWT-auth')
   @ApiResponse({
@@ -204,7 +171,7 @@ export class UsersController {
     type: Number,
   })
   @ApiQuery({
-    name: 'take',
+    name: 'perPage',
     required: false,
     description: 'Number of users shown on a page.',
     type: Number,
@@ -224,26 +191,17 @@ export class UsersController {
   })
   @Roles(RoleEnum.ADMIN, RoleEnum.SUPER_ADMIN)
   @UseGuards(JwtAuthGuard, UserPathGuard, RoleGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id/search-admin')
   async searchAdmin(
     @Param('id', ParseUUIDPipe) id: string,
     @Query('phrase', SearchPhrasePipe) searchPhrase: string,
     @Query('page') page: number = 1,
-    @Query('take') take: number = 12,
+    @Query('perPage') perPage: number = 12,
     @Query('order') order: SortOrder = SortOrder.DESC,
-  ): Promise<PaginationDto<UserResponse>> {
-    const pageOptionsDto = new PageOptionsDto();
-    pageOptionsDto.page = page;
-    pageOptionsDto.take = take;
-    pageOptionsDto.order = order;
+  ): Promise<PaginationResponse<UserResponse>> {
+    const searchQuery = new SearchQueryDto(searchPhrase, page, perPage, order);
 
-    const searchQuery = new SearchQueryDto(searchPhrase);
-    return await this.usersFacade.searchUsers(
-      searchQuery,
-      true,
-      pageOptionsDto,
-    );
+    return await this.usersFacade.searchUsers(searchQuery, true);
   }
 
   @ApiBearerAuth('JWT-auth')

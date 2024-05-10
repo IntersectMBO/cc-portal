@@ -26,6 +26,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix('/api');
   //TODO add env variable related to current environment (DEV/STAGE/PROD) and only allow * origin for NON PROD environments
+  //TODO list-of-cc-members this configurations sets ClassSeriazelInterceptor as a global class interceptor on the whole API level - no need to declare this on each API call
   app.useGlobalInterceptors(
     new ClassSerializerInterceptor(app.get(Reflector), {
       excludeExtraneousValues: true,

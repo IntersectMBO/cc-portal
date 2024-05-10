@@ -12,7 +12,7 @@ export class PageMetaResponse {
     description: 'Number of users per page',
     example: 12,
   })
-  take: number;
+  perPage: number;
 
   @ApiProperty({
     description: 'Total number of users',
@@ -40,9 +40,9 @@ export class PageMetaResponse {
 
   constructor({ pageOptionsDto, itemCount }: PageParameters) {
     this.page = pageOptionsDto.page;
-    this.take = pageOptionsDto.take;
+    this.perPage = pageOptionsDto.perPage;
     this.itemCount = itemCount;
-    this.pageCount = Math.ceil(this.itemCount / this.take);
+    this.pageCount = Math.ceil(this.itemCount / this.perPage);
     this.hasPreviousPage = this.page > 1;
     this.hasNextPage = this.page < this.pageCount;
   }

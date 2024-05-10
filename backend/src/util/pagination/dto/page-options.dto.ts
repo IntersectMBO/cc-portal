@@ -4,6 +4,7 @@ import { IsEnum, IsInt, IsOptional, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class PageOptionsDto {
+  //TODO list-of-cc-members do we need ApiPropertyOptional here if it is not being part of an API on Swagger? If not needed, remove ApiPropertyOptional
   @ApiPropertyOptional({ enum: SortOrder, default: SortOrder.ASC })
   @IsEnum(SortOrder)
   @IsOptional()
@@ -27,9 +28,9 @@ export class PageOptionsDto {
   @IsInt()
   @Min(1)
   @IsOptional()
-  take?: number = 12;
+  perPage?: number = 12;
 
   get skip(): number {
-    return (this.page - 1) * this.take;
+    return (this.page - 1) * this.perPage;
   }
 }

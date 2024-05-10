@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PageMetaResponse } from '../response/page-meta.response';
+import { PageMetaResponse } from './page-meta.response';
 import { IsArray } from 'class-validator';
 
-export class PaginationDto<T> {
+export class PaginationResponse<T> {
   @IsArray()
   @ApiProperty({ type: () => [Object] })
   data: T[];

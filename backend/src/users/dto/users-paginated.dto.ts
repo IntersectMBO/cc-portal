@@ -1,6 +1,6 @@
 import { UserDto } from './user.dto';
 
-export class UserCountDto {
-  userDto: UserDto[];
+export class UsersPaginatedDto {
+  userDtos: UserDto[];
   itemCount: number;
 }

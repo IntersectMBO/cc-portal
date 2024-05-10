@@ -25,8 +25,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 // import { S3Service } from '../../s3/service/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
-import { PageOptionsDto } from '../../pagination/dto/page-options.dto';
-import { UserCountDto } from '../dto/user-count.dto';
+import { UsersPaginatedDto } from '../dto/users-paginated.dto';
 import { HotAddress } from '../entities/hotaddress.entity';
 import { RoleEnum } from '../enums/role.enum';
 import { SearchQueryDto } from '../dto/search-query.dto';
@@ -136,29 +135,6 @@ export class UsersService {
     return UserMapper.userToDto(user);
   }
 
-  async findAll(pageOptionsDto: PageOptionsDto): Promise<UserCountDto> {
-    const { skip, take, order } = pageOptionsDto;
-
-    const users = await this.userRepository.find({
-      where: {
-        role: { code: Not(RoleEnum.SUPER_ADMIN) },
-      },
-      order: { createdAt: order },
-      skip: skip,
-      take: take,
-    });
-
-    const userDto = users.map((x) => UserMapper.userToDto(x));
-
-    const itemCount = await this.userRepository.count();
-
-    const userCountDto = new UserCountDto();
-    userCountDto.userDto = userDto;
-    userCountDto.itemCount = itemCount;
-
-    return userCountDto;
-  }
-
   async findById(id: string): Promise<UserDto> {
     const user = await this.findEntityById(id);
     return UserMapper.userToDto(user);
@@ -256,8 +232,7 @@ export class UsersService {
   async searchUsers(
     searchQuery: SearchQueryDto,
     isAdmin: boolean,
-    pageOptionsDto: PageOptionsDto,
-  ): Promise<UserCountDto> {
+  ): Promise<UsersPaginatedDto> {
     const { searchPhrase } = searchQuery;
 
     const conditions: FindOptionsWhere<User> | FindOptionsWhere<User>[] = {
@@ -267,21 +242,30 @@ export class UsersService {
       ...(searchPhrase ? { name: ILike(`%${searchPhrase}%`) } : {}),
     };
 
-    const { skip, take, order } = pageOptionsDto;
+    const { skip, perPage, order } = searchQuery.pageOptions;
 
-    const users = await this.userRepository.find({
+    const findOptions = {
       where: conditions,
       order: { createdAt: order },
       skip: skip,
-      take: take,
-    });
-    const userDto: UserDto[] = users.map((user) => UserMapper.userToDto(user));
-    const itemCount = await this.userRepository.count();
+      take: perPage,
+    };
 
-    const userCountDto = new UserCountDto();
-    userCountDto.userDto = userDto;
-    userCountDto.itemCount = itemCount;
+    //TODO list-of-cc-members See line 265, i have put findOptions there on purpose as a count() parameter, if it doesn't work, use countOptions;
+    //If it does work, remove countOptions variable
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const countOptions = {
+      where: conditions,
+    };
 
-    return userCountDto;
+    const users = await this.userRepository.find(findOptions);
+    const userDtos: UserDto[] = users.map((user) => UserMapper.userToDto(user));
+    const itemCount = await this.userRepository.count(findOptions);
+
+    const usersPaginatedDto = new UsersPaginatedDto();
+    usersPaginatedDto.userDtos = userDtos;
+    usersPaginatedDto.itemCount = itemCount;
+
+    return usersPaginatedDto;
   }
 }
