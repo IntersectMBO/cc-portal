@@ -130,6 +130,55 @@
     },
     "compareConstitution": {
       "headline": "Compare revisions"
+    },
+    "addReasoning": {
+      "headline": "Add reasoning",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "fields": {
+        "title": {
+          "label": "Title",
+          "placeholder": "Text here"
+        },
+        "reasoning": {
+          "label": "Reasoning",
+          "placeholder": "Enter reasoning"
+        }
+      },
+      "alerts": {
+        "success": "New reasoning successfully added",
+        "error": "Error adding new reasoning"
+      }
+    },
+    "reasoningLink": {
+      "headline": "Reasoning link",
+      "description": "Attach this link to your vote",
+      "hash": "Hash",
+      "reasoningLink": "Reasoning link",
+      "alerts": {
+        "success": "New reasoning link successfully added",
+        "error": "Error adding new reasoning link"
+      }
+    },
+    "previewReasoning": {
+      "headline": "Reasoning",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "governanceActionCategory": "Governance Action Category",
+      "governanceActionId": "Governance Action Id",
+      "voted": "Voted",
+      "submissionDate": "Submission date",
+      "expiryDate": "Expiry date",
+      "addNewReasoning": "Add new reasoning",
+      "tooltips": {
+        "expiryDate": {
+          "heading": "Expiry Date",
+          "paragraphOne": "The date when the governance action will expiry if it doesn’t reach ratification thresholds.",
+          "paragraphTwo": "IMPORTANT: If the governance action is ratified before the expiry date it will be considered ratified and it will not be available to vote on afterwards."
+        },
+        "submissionDate": {
+          "heading": "Submission Date",
+          "paragraphOne": "The date when the governance action was submitted on-chain."
+        }
+      }
     }
   },
   "AdminDashboard": {
@@ -147,6 +196,11 @@
     }
   },
   "Snackbar": {
-    "changesSaved": "Changes saved"
+    "changesSaved": "Changes saved",
+    "copiedToClipboard": "Copied to clipboard"
+  },
+  "GovernanceAction": {
+    "Link": "Link",
+    "Hash": "Hash"
   }
 }

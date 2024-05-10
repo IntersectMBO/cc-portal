@@ -93,7 +93,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
         <Typography
           color="#8E908E"
           sx={{
-            bottom: errorMessage ? 52.5 : 35,
+            bottom: errorMessage ? 35 : 14,
             position: "absolute",
             right: 15,
           }}

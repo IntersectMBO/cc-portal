@@ -8,10 +8,13 @@ import {
   AddMemberModal,
   UploadConstitution,
   DeleteRole,
+  AddReasoningModal,
+  ReasoningLinkModal,
 } from "@organisms";
 import { SignUpModal } from "@/components/organisms/Modals/SignUpModal";
 import { SignOutModal } from "@/components/organisms/Modals/SignOutModal";
 import { CompareConstitutionModal } from "@/components/organisms/Modals/CompareConstitutionModal";
+import { PreviewReasoningModal } from "@/components/organisms/Modals/PreviewReasoningModal";
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -32,7 +35,10 @@ export type ModalType =
   | "signOutModal"
   | "uploadConstitution"
   | "deleteRole"
-  | "compareConstitutionModal";
+  | "compareConstitutionModal"
+  | "addReasoningModal"
+  | "reasoningLinkModal"
+  | "previewReasoningModal";
 
 const modals: Record<ModalType, ContextModal> = {
   none: {
@@ -59,6 +65,15 @@ const modals: Record<ModalType, ContextModal> = {
   },
   compareConstitutionModal: {
     component: <CompareConstitutionModal />,
+  },
+  addReasoningModal: {
+    component: <AddReasoningModal />,
+  },
+  reasoningLinkModal: {
+    component: <ReasoningLinkModal />,
+  },
+  previewReasoningModal: {
+    component: <PreviewReasoningModal />,
   },
 };
 
