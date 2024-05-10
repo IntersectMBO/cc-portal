@@ -1,65 +1,24 @@
-FROM node:18-alpine AS base
+FROM node:alpine AS builder
+ENV NODE_ENV=production
 
-# Install dependencies only when needed
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
+# Add a work directory
 WORKDIR /app
+# Cache and Install dependencies
+COPY package.json .
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+RUN npm install --production
+# Copy app files
 COPY . .
 
-# Disabled telemetry during the build.
-ENV NEXT_TELEMETRY_DISABLED 1
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL $NEXT_PUBLIC_API_URL
 
-RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+ARG NEXT_PUBLIC_ENV
+ENV NEXT_PUBLIC_ENV $NEXT_PUBLIC_ENV
 
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
+# Build the app
+RUN npm run build --production
 
-ENV NODE_ENV production
-
-# Disabled telemetry during runtime.
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
 
 EXPOSE 3000
-
-ENV PORT 3000
-# set hostname to localhost
-ENV HOSTNAME "0.0.0.0"
-
-# server.js is created by next build from the standalone output
-CMD ["node", "server.js"]
+CMD npm run start
