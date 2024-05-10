@@ -70,6 +70,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                         ? null
                         : onCompare({ title, created_date, cid });
                     }}
+                    hash={cid}
                     title={title}
                     description={created_date}
                     buttonLabel={

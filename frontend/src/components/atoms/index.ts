@@ -16,5 +16,9 @@ export * from "./MultipleSelect";
 export * from "./UploadFileButton";
 export * from "./StatusPill";
 export * from "./Chip";
+export * from "./CopyButton";
+export * from "./Tooltip";
+export * from "./VotePill";
+export * from "./OutlinedLightButton";
 
 export * from "./types";

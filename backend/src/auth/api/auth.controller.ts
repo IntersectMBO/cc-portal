@@ -115,7 +115,7 @@ export class AuthController {
   @Get('register/callback')
   async callbackRegister(@Req() req): Promise<TokenResponse> {
     let user = req.user;
-    user = await this.authFacade.updateStatus(user);
+    user = await this.authFacade.activateUser(user);
     return await this.authFacade.generateTokens(user);
   }
 

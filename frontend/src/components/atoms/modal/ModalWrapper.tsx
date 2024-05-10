@@ -31,7 +31,7 @@ export const ModalWrapper = ({
       sx={sx}
       scrollable={scrollable}
     >
-      {variant !== "popup" && (
+      {variant !== "popup" && icon && (
         <img width={64} data-testid="modal-icon" alt="icon" src={icon} />
       )}
 
