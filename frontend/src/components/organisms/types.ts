@@ -37,3 +37,10 @@ export interface CompareConstitutionModalState {
   base: ConstitutionMetadata;
   target: ConstitutionMetadata;
 }
+
+export interface ReasoningI {
+  title: string;
+  description: string;
+  link: string;
+  hash: string;
+}
