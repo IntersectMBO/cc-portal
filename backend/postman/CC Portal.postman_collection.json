@@ -139,7 +139,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base-url}}/api/users/cc-member/search?phrase=test&sort_order=DESC",
+							"raw": "{{base-url}}/api/users/cc-member/search?phrase=user&order=DESC&page=1&perPage=3",
 							"host": [
 								"{{base-url}}"
 							],
@@ -152,11 +152,19 @@
 							"query": [
 								{
 									"key": "phrase",
-									"value": "test"
+									"value": "user"
 								},
 								{
-									"key": "sort_order",
+									"key": "order",
 									"value": "DESC"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "3"
 								}
 							]
 						}
@@ -175,7 +183,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{base-url}}/api/users/{{userId}}/search-admin?phrase=test&sort_order=DESC",
+							"raw": "{{base-url}}/api/users/{{userId}}/search-admin?phrase=user&order=DESC&page=1&perPage=3",
 							"host": [
 								"{{base-url}}"
 							],
@@ -188,11 +196,19 @@
 							"query": [
 								{
 									"key": "phrase",
-									"value": "test"
+									"value": "user"
 								},
 								{
-									"key": "sort_order",
+									"key": "order",
 									"value": "DESC"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "3"
 								}
 							]
 						}

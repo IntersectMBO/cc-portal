@@ -164,6 +164,7 @@ const mockUserRepository = {
     }
     return mockUsers;
   }),
+  count: jest.fn().mockResolvedValue(mockUsers.length),
 };
 const mockRoleRepository = {
   create: jest.fn().mockReturnValue({}),
@@ -594,7 +595,7 @@ describe('UsersService', () => {
     });
 
     it('should return an empty array of users', async () => {
-      const searchQuer: SearchQueryDto = new SearchQueryDto(
+      const searchQuery: SearchQueryDto = new SearchQueryDto(
         'NotExistingUser',
         0,
         10,
@@ -604,7 +605,7 @@ describe('UsersService', () => {
       mockUserRepository.find.mockResolvedValueOnce([]);
 
       const usersPaginatedDto: UsersPaginatedDto = await service.searchUsers(
-        searchQuer,
+        searchQuery,
         false,
       );
       expect(usersPaginatedDto.userDtos).toEqual([]);
@@ -612,9 +613,8 @@ describe('UsersService', () => {
       expect(mockUserRepository.find).toHaveBeenCalled();
     });
 
-    //TODO list-of-cc-members Make sure that tests are working
     it('should return an array with users and admins', async () => {
-      const searchQuer: SearchQueryDto = new SearchQueryDto(
+      const searchQuery: SearchQueryDto = new SearchQueryDto(
         'John',
         0,
         10,
@@ -623,7 +623,7 @@ describe('UsersService', () => {
       mockUserRepository.find.mockResolvedValue(mockUsers);
 
       const usersPaginatedDto: UsersPaginatedDto = await service.searchUsers(
-        searchQuer,
+        searchQuery,
         true,
       );
 

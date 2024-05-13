@@ -251,13 +251,6 @@ export class UsersService {
       take: perPage,
     };
 
-    //TODO list-of-cc-members See line 265, i have put findOptions there on purpose as a count() parameter, if it doesn't work, use countOptions;
-    //If it does work, remove countOptions variable
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const countOptions = {
-      where: conditions,
-    };
-
     const users = await this.userRepository.find(findOptions);
     const userDtos: UserDto[] = users.map((user) => UserMapper.userToDto(user));
     const itemCount = await this.userRepository.count(findOptions);

@@ -141,7 +141,7 @@ export class UsersController {
   }
 
   // Search endpoint for admins and super admin
-  // Returns all registered users except super admin 
+  // Returns all registered users except super admin
   @ApiOperation({ summary: 'List of Admins and CC Members' })
   @ApiBearerAuth('JWT-auth')
   @ApiResponse({
