@@ -37,7 +37,7 @@ export class RoleResponse {
     format: 'date-time',
     description: 'Time of creating a role',
   })
-  @Expose({ name: 'created_at' })
+  @Expose({ name: 'createdAt' })
   createdAt: Timestamp;
 
   @ApiProperty({
@@ -46,6 +46,6 @@ export class RoleResponse {
     format: 'date-time',
     description: 'Time of updating a role',
   })
-  @Expose({ name: 'updated_at' })
+  @Expose({ name: 'updatedAt' })
   updatedAt: Timestamp;
 }

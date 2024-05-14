@@ -27,7 +27,7 @@ export class UserResponse {
     example: ['sofija@example.com', 'newyork@example.com'],
     type: [String],
   })
-  @Expose({ name: 'hot_addresses' })
+  @Expose({ name: 'hotAddresses' })
   hotAddresses: string[];
 
   @ApiProperty({
@@ -42,7 +42,7 @@ export class UserResponse {
     description: 'Profile photo of the user',
     example: 'path/to/image.jpg',
   })
-  @Expose({ name: 'profile_photo_url' })
+  @Expose({ name: 'profilePhotoUrl' })
   profilePhotoUrl: string;
 
   @ApiProperty({
@@ -69,7 +69,7 @@ export class UserResponse {
     format: 'date-time',
     description: 'Time of creating a user',
   })
-  @Expose({ name: 'created_at' })
+  @Expose({ name: 'createdAt' })
   createdAt: Timestamp;
 
   @ApiProperty({
@@ -78,6 +78,6 @@ export class UserResponse {
     format: 'date-time',
     description: 'Time of updating a user',
   })
-  @Expose({ name: 'updated_at' })
+  @Expose({ name: 'updatedAt' })
   updatedAt: Timestamp;
 }
