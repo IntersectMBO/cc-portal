@@ -89,8 +89,11 @@ export class UsersFacade {
     );
 
     const pageOptionsDto = searchQuery.pageOptions;
-    const pageMetaDto = new PageMetaResponse({ itemCount, pageOptionsDto });
+    const pageMetaResponse = new PageMetaResponse({
+      itemCount,
+      pageOptionsDto,
+    });
 
-    return new PaginationResponse(usersResponse, pageMetaDto);
+    return new PaginationResponse(usersResponse, pageMetaResponse);
   }
 }

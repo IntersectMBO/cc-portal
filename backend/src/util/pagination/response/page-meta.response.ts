@@ -13,7 +13,7 @@ export class PageMetaResponse {
   page: number;
 
   @ApiProperty({
-    description: 'Number of users per page',
+    description: 'Number of items per page',
     example: 12,
   })
   @Expose({
@@ -22,7 +22,7 @@ export class PageMetaResponse {
   perPage: number;
 
   @ApiProperty({
-    description: 'Total number of users',
+    description: 'Total number of items',
     example: 30,
   })
   @Expose({
