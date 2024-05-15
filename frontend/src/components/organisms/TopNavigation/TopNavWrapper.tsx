@@ -1,12 +1,17 @@
 "use client";
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { AppBar } from "@mui/material";
 
-import { IMAGES, PATHS, customPalette } from "@consts";
+import { IMAGES, customPalette } from "@consts";
 import NextLink from "next/link";
 
-export const TopNavWrapper = ({ children }) => {
+interface Props {
+  children: ReactNode;
+  homeRedirectionPath: string;
+}
+
+export const TopNavWrapper = ({ children, homeRedirectionPath }: Props) => {
   return (
     <AppBar
       component="nav"
@@ -26,7 +31,7 @@ export const TopNavWrapper = ({ children }) => {
         },
       }}
     >
-      <NextLink data-testid="logo-button" href={PATHS.home}>
+      <NextLink data-testid="logo-button" href={homeRedirectionPath}>
         <img height={35} src={IMAGES.logoSign} />
       </NextLink>
       {children}
