@@ -6,7 +6,7 @@ WORKDIR /app
 # Cache and Install dependencies
 COPY package.json .
 
-RUN npm install --production
+RUN npm install --production=false
 # Copy app files
 COPY . .
 
@@ -17,8 +17,7 @@ ARG NEXT_PUBLIC_ENV
 ENV NEXT_PUBLIC_ENV $NEXT_PUBLIC_ENV
 
 # Build the app
-RUN npm run build --production
-
+RUN npm run build
 
 EXPOSE 3000
 CMD npm run start
