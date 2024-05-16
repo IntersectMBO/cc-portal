@@ -38,6 +38,10 @@ export interface CompareConstitutionModalState {
   target: ConstitutionMetadata;
 }
 
+export interface SignOutModalState {
+  homeRedirectionPath: string;
+}
+
 export interface ReasoningI {
   title: string;
   description: string;

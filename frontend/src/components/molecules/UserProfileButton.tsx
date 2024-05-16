@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import Menu from "@mui/material/Menu";
-import { ICONS, IMAGES } from "@consts";
+import { ICONS, IMAGES, PATHS } from "@consts";
 import { Button } from "../atoms";
 import { useModal } from "@context";
 import { FetchUserData } from "@/lib/requests";
@@ -39,6 +39,9 @@ export default function UserProfileButton({
   const signOut = async () => {
     openModal({
       type: "signOutModal",
+      state: {
+        homeRedirectionPath: PATHS.home,
+      },
     });
   };
 

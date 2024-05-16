@@ -1,26 +1,28 @@
 "use client";
 
 import { ModalContents, ModalHeader, ModalWrapper, Typography } from "@atoms";
-import { IMAGES, PATHS } from "@consts";
+import { IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
 import { ModalActions } from "@atoms";
 import { useAppContext, useModal } from "@context";
 import { FormEvent } from "react";
-import { isAnyAdminRole } from "@utils";
+import { useRouter } from "next/navigation";
+import { SignOutModalState } from "../types";
 
 export const SignOutModal = () => {
   const t = useTranslations("Modals");
   const { logout, user } = useAppContext();
-  const { closeModal } = useModal();
+  const {
+    closeModal,
+    state: { homeRedirectionPath },
+  } = useModal<SignOutModalState>();
+  const router = useRouter();
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
     closeModal();
-    if (isAnyAdminRole(user.role)) {
-      logout(PATHS.admin.home);
-    } else {
-      logout(PATHS.home);
-    }
+    logout(homeRedirectionPath);
+    router.refresh();
   };
 
   return (
