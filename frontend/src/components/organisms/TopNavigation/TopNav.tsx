@@ -3,7 +3,7 @@ import React from "react";
 
 import { Box, Grid } from "@mui/material";
 
-import { NAV_ITEMS } from "@consts";
+import { NAV_ITEMS, PATHS } from "@consts";
 import { Link } from "@atoms";
 import { useAppContext } from "@context";
 import { TopNavWrapper } from "./TopNavWrapper";
@@ -33,7 +33,7 @@ export const TopNav = () => {
   };
 
   return (
-    <TopNavWrapper>
+    <TopNavWrapper homeRedirectionPath={PATHS.home}>
       <Box>{userSession ? renderAuthNavItems() : getNavItems()}</Box>
     </TopNavWrapper>
   );
