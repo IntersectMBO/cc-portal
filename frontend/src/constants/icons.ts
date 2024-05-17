@@ -9,4 +9,5 @@ export const ICONS = {
   help: "/icons/Help.svg",
   menuIcon: "/icons/MenuIcon.svg",
   arrowUpRight: "/icons/ArrowUpRight.svg",
+  copyIcon: "/icons/Copy.svg",
 };
