@@ -143,7 +143,7 @@ describe('S3Service', () => {
     it('should handle URLs without query parameters', () => {
       const url = 'https://example.com/path/to/anotherfile.pdf';
       const fileName = S3Service.extractFileNameFromUrl(url);
-      console.log(fileName);
+      //console.log(fileName);
 
       expect(fileName).toBe('anotherfile.pdf');
     });
@@ -152,7 +152,7 @@ describe('S3Service', () => {
       const url =
         'https://example.com/path/to/фајл%20са%20специјалним%20именом.jpg';
       const fileName = S3Service.extractFileNameFromUrl(url);
-      console.log(fileName);
+      //console.log(fileName);
 
       expect(fileName).toBe('фајл са специјалним именом.jpg');
     });
