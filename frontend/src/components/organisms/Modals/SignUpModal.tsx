@@ -18,7 +18,6 @@ import { editUser, uploadUserPhoto } from "@/lib/api";
 import { useEffect } from "react";
 import { useSnackbar } from "@/context/snackbar";
 
-
 export const SignUpModal = () => {
   const { state, closeModal } = useModal<SignupModalState>();
   const { userSession, user, fetchUserData } = useAppContext();
@@ -71,11 +70,11 @@ export const SignUpModal = () => {
 
   return (
     <ModalWrapper dataTestId="sign-up-modal" icon={IMAGES.pastelAddMember}>
-      <ModalHeader>{t("signUp.headline")}</ModalHeader>
+      <ModalHeader>{state.title}</ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
           <Typography variant="body1" fontWeight={500}>
-            {t("signUp.description")}
+            {state.description}
           </Typography>
 
           <ControlledField.Input

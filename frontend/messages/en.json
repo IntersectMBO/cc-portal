@@ -84,6 +84,10 @@
         "error": "Error updating profile"
       }
     },
+    "editProfile": {
+      "headline": "Edit profile",
+      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget."
+    },
     "signOut": {
       "headline": "Sign Out",
       "description": "Are you sure you want to Sign out?"
