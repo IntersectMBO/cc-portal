@@ -3,7 +3,7 @@ import React from "react";
 
 import { AppBar, Box, Grid } from "@mui/material";
 
-import { IMAGES, PATHS, NAV_ITEMS, customPalette } from "@consts";
+import { ICONS, PATHS, NAV_ITEMS, customPalette } from "@consts";
 import { Link } from "@/components/atoms";
 import NextLink from "next/link";
 
@@ -19,7 +19,7 @@ export const TopNav = () => {
         justifyContent: "space-between",
         alignItems: "center",
         flexDirection: "row",
-        position: "relative",
+        position: "fixed",
         py: { xxs: 2, sm: 3 },
         px: { xxs: 2, sm: 5 },
         "& img": {
@@ -28,7 +28,7 @@ export const TopNav = () => {
       }}
     >
       <NextLink data-testid="logo-button" href={PATHS.home}>
-        <img height={35} src={IMAGES.logoSign} />
+        <img height={35} src={ICONS.logoSign} />
       </NextLink>
       <Box>
         {NAV_ITEMS.map((navItem) => (
