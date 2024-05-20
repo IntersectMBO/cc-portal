@@ -37,20 +37,24 @@ export function Tabs({ tabs }: { tabs: TabsI[] }) {
             },
           }}
         >
-          {tabs.map(({ label }, i) => (
-            <Tab
-              label={
-                <Typography
-                  variant="body2"
-                  color={primaryBlue.c300}
-                  sx={{ textTransform: "none" }}
-                >
-                  {label}
-                </Typography>
-              }
-              key={i}
-            />
-          ))}
+          {tabs.map(({ label }, i) => {
+            const isSelected = value === i;
+            return (
+              <Tab
+                label={
+                  <Typography
+                    variant="body2"
+                    color={primaryBlue.c300}
+                    sx={{ textTransform: "none" }}
+                    fontWeight={isSelected ? 700 : 500}
+                  >
+                    {label}
+                  </Typography>
+                }
+                key={i}
+              />
+            );
+          })}
         </MUITabs>
       </Box>
       {tabs.map(({ Component }, i) => (
