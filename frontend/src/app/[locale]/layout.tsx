@@ -8,8 +8,8 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import { Footer, TopNav } from "@organisms";
-import { poppins, locales } from "@consts";
-import { CssBaseline } from "@mui/material";
+import { poppins, locales, ICONS } from "@consts";
+import { Box, CssBaseline } from "@mui/material";
 import { RenderModal } from "@atoms";
 
 export function generateStaticParams() {
@@ -19,8 +19,8 @@ export function generateStaticParams() {
 
 // Define common metadata for the application.
 export const metadata = {
-  title: "Cardano Constitution",
-  description: "Cardano Constitution",
+  title: "Constitutional Committee Portal",
+  description: "Constitutional Committee Portal",
 };
 
 async function RootLayout({ children, params: { locale } }) {
@@ -41,7 +41,7 @@ async function RootLayout({ children, params: { locale } }) {
     <html lang={locale}>
       <head>
         <title>{metadata.title}</title>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href={ICONS.favicon} sizes="any" />
       </head>
       {/* Apply font class and suppress hydration warning. */}
       <body className={poppins.className} suppressHydrationWarning={true}>
@@ -55,7 +55,7 @@ async function RootLayout({ children, params: { locale } }) {
                 <CssBaseline />
                 <TopNav />
                 <RenderModal />
-                {children}
+                <Box mt="80px">{children} </Box>
                 <Footer />
               </ThemeProvider>
             </AppRouterCacheProvider>

@@ -1,4 +1,4 @@
 export const PATHS = {
   home: "/",
-  constitution: "/constitution",
+  constitution: "/interim-constitution",
 };
