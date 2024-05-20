@@ -70,7 +70,8 @@
         },
         "hotAddress": {
           "label": "Hot address",
-          "placeholder": "Text here"
+          "placeholder": "Text here",
+          "tooltip": "At least one hot address is required for on-chain activity data to be tracked and displayed on the portal"
         },
         "description": {
           "label": "Description",

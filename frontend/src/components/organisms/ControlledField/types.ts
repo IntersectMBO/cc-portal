@@ -48,5 +48,4 @@ export type ControlledSelectProps = Omit<
   ControlledGenericProps;
 
 export type ControlledUploadProps = Omit<ButtonProps, "onChange" | "value"> &
-  ControlledGenericProps &
-  Pick<HTMLInputElement, "accept">;
+  ControlledGenericProps & { accept?: string };
