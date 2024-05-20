@@ -15,7 +15,7 @@ export default function UserProfileButton({
   user: Pick<FetchUserData, "name" | "profile_photo_url">;
 }) {
   const { openModal } = useModal();
-  const t = useTranslations("Navigation");
+  const t = useTranslations();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -31,6 +31,8 @@ export default function UserProfileButton({
       type: "signUpModal",
       state: {
         showCloseButton: true,
+        title: t("Modals.editProfile.headline"),
+        description: t("Modals.editProfile.description"),
       },
     });
     handleClose();
@@ -91,7 +93,7 @@ export default function UserProfileButton({
             onClick={editProfile}
             startIcon={<img width={20} height={20} src={ICONS.edit} />}
           >
-            {t("editProfile")}
+            {t("Navigation.editProfile")}
           </Button>
           <Button
             size="medium"
@@ -99,7 +101,7 @@ export default function UserProfileButton({
             onClick={signOut}
             startIcon={<img width={20} height={20} src={ICONS.logout} />}
           >
-            {t("signOut")}
+            {t("Navigation.signOut")}
           </Button>
         </Grid>
       </Menu>

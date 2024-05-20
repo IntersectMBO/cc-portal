@@ -9,11 +9,13 @@ import { registerAuthCallback, decodeUserToken } from "@/lib/api";
 import { useAppContext, useModal } from "@context";
 import { SignupModalState } from "@organisms";
 import { isAnyAdminRole } from "@utils";
+import { useTranslations } from "next-intl";
 
 export default function VerifyRegister({ params: { locale }, searchParams }) {
   const router = useRouter();
   const { setUserSession } = useAppContext();
   const { openModal } = useModal<SignupModalState>();
+  const t = useTranslations("Modals");
 
   useEffect(() => {
     const verifyToken = async (token: string) => {
@@ -31,6 +33,8 @@ export default function VerifyRegister({ params: { locale }, searchParams }) {
           type: "signUpModal",
           state: {
             showCloseButton: false,
+            title: t("signUp.headline"),
+            description: t("signUp.description"),
           },
         });
       } catch (error) {

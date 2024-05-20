@@ -45,6 +45,7 @@ export const UploadConstitution = () => {
             control={control}
             size="large"
             errors={errors}
+            accept=".md"
             {...register("file", {
               required: "Required",
               validate: {

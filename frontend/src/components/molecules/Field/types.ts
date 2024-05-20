@@ -7,12 +7,13 @@ import {
   TextAreaProps,
   TypographyProps,
 } from "@atoms";
+import { ReactElement } from "react";
 
 export type InputFieldProps = InputProps &
   FormErrorMessageProps & {
     helpfulText?: string;
     helpfulTextStyle?: MUITypographyProps;
-    label?: string;
+    label?: string | ReactElement;
     labelStyles?: TypographyProps;
     layoutStyles?: BoxProps;
   };
