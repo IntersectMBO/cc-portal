@@ -16,7 +16,7 @@ const intlMiddleware = createMiddleware({
 export const config = {
   matcher: [
     "/",
-    "/constitution",
+    "/interim-constitution",
     "/members",
     "/admin",
     "/admin/dashboard",
