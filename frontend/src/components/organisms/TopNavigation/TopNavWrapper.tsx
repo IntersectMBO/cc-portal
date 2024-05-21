@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 
 import { AppBar } from "@mui/material";
 
-import { IMAGES, customPalette } from "@consts";
+import { ICONS, customPalette } from "@consts";
 import NextLink from "next/link";
 
 interface Props {
@@ -23,7 +23,7 @@ export const TopNavWrapper = ({ children, homeRedirectionPath }: Props) => {
         justifyContent: "space-between",
         alignItems: "center",
         flexDirection: "row",
-        position: "relative",
+        position: "fixed",
         py: { xxs: 2, sm: 3 },
         px: { xxs: 2, sm: 5 },
         "& img": {
@@ -32,7 +32,7 @@ export const TopNavWrapper = ({ children, homeRedirectionPath }: Props) => {
       }}
     >
       <NextLink data-testid="logo-button" href={homeRedirectionPath}>
-        <img height={35} src={IMAGES.logoSign} />
+        <img height={35} src={ICONS.logoSign} />
       </NextLink>
       {children}
     </AppBar>
