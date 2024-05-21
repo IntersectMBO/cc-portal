@@ -12,5 +12,5 @@ export const IMAGES = {
   pastelSignOut: "/images/PastelSignOut.png",
   avatar: "/images/Avatar.png",
   mail: "/images/Mail.png",
-  favicon: "/images/Favicon.png",
+  favicon: "/images/Favicon.ico",
 };

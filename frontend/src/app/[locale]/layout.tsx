@@ -41,7 +41,7 @@ async function RootLayout({ children, params: { locale } }) {
     <html lang={locale}>
       <head>
         <title>{metadata.title}</title>
-        <link rel="icon" href={IMAGES.favicon} sizes="any" />
+        <link rel="icon" href={IMAGES.favicon} type="image/x-icon" />
       </head>
       {/* Apply font class and suppress hydration warning. */}
       <body className={poppins.className} suppressHydrationWarning={true}>
