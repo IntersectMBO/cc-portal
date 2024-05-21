@@ -10,7 +10,7 @@ export function MembersCardList({ members }: { members: UserListItem[] }) {
   const t = useTranslations("Members");
 
   if (members?.length === 0 || members === undefined) {
-    return <NotFound title="noMembersFound" description="addNewMembers" />;
+    return <NotFound title="members.title" description="members.description" />;
   }
 
   return (

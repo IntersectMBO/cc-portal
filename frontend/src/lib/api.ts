@@ -9,7 +9,10 @@ import {
   LoginResponse,
   Permissions,
 } from "./requests";
-import { ConstitutionMetadata } from "@/components/organisms";
+import {
+  ConstitutionByCid,
+  ConstitutionMetadata,
+} from "@/components/organisms";
 
 // Function to decode the user token stored in the authentication cookie
 export async function decodeUserToken(): Promise<DecodedToken | undefined> {
@@ -92,12 +95,22 @@ export async function getUser(id: string): Promise<FetchUserData> {
   }
 }
 
-export async function getUsers(): Promise<FetchUserData[]> {
+export async function getUsersAdmin(): Promise<FetchUserData[]> {
   try {
-    const res: FetchUserData[] = await axiosInstance.get("/api/users");
+    const token = getAccessToken();
+    const { userId } = await decodeUserToken();
+
+    const res: FetchUserData[] = await axiosInstance.get(
+      `/api/users/${userId}/search-admin`,
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      }
+    );
     return res;
   } catch (error) {
-    console.log("error get users", error);
+    console.log("error get users admin", error);
   }
 }
 
@@ -183,7 +196,9 @@ export async function getConstitutionMetadata(): Promise<
   }
 }
 
-export async function getConstitutionByCid(cid: string) {
+export async function getConstitutionByCid(
+  cid: string
+): Promise<ConstitutionByCid> {
   try {
     const response: any = await axiosInstance.get(
       `/api/constitution/cid/${cid}`

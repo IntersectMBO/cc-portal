@@ -15,6 +15,10 @@ export const AdminFooter = () => {
       sx={{
         alignItems: "center",
         display: "flex",
+        position: "fixed",
+        bottom: 0,
+        width: "100%",
+        backgroundColor: "white",
         justifyContent: "space-between",
         px: { xxs: 2, sm: 6, md: 8, xl: 10 },
         py: 3,

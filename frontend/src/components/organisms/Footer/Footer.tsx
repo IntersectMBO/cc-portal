@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { useAppContext, useModal } from "@context";
 import { ICONS } from "@/constants";
 
-export const Footer = () => {
+export const Footer = ({ showSignIn = true }: { showSignIn?: boolean }) => {
   const t = useTranslations("Footer");
   const { userSession } = useAppContext();
   const { openModal } = useModal();
@@ -34,7 +34,7 @@ export const Footer = () => {
             {t("termsOfService")}
           </Typography>
 
-          {!userSession && (
+          {!userSession && showSignIn && (
             <Typography fontWeight={400} variant="caption">
               {t("AreYouCCMember")}
               <MUITypography

@@ -137,8 +137,14 @@
     "status": "Status"
   },
   "NotFound": {
-    "noMembersFound": "No members found",
-    "addNewMembers": "Add new members"
+    "members": {
+      "title": "No members found",
+      "description": "Add new members"
+    },
+    "constitution": {
+      "title": "No Constitution available",
+      "description": "There is currently no Constitution uploaded. Please check back later for updates"
+    }
   },
   "Snackbar": {
     "changesSaved": "Changes saved"
