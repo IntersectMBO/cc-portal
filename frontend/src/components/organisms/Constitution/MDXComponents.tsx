@@ -114,8 +114,12 @@ export const NavDrawer = ({
         item
         container
         justifyContent={isOpen ? "flex-end" : "center"}
+        pr={isOpen ? 3 : 0}
       >
-        <img src={ICONS.menuIcon} onClick={onClick} />
+        <img
+          src={isOpen ? ICONS.arrowLeft : ICONS.arrowRight}
+          onClick={onClick}
+        />
       </Grid>
       <Collapse
         sx={{ paddingLeft: { xs: 1, md: 3 }, paddingRight: { xs: 1, md: 3 } }}
