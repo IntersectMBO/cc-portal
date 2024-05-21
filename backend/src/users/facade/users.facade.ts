@@ -11,7 +11,7 @@ import { UserDto } from '../dto/user.dto';
 
 import { S3Service } from '../../s3/service/s3.service';
 import { UploadContext } from '../../s3/enums/upload-context';
-import { SearchQueryDto } from '../dto/search-query.dto';
+import { SearchQueryDto } from '../../util/pagination/dto/search-query.dto';
 @Injectable()
 export class UsersFacade {
   constructor(

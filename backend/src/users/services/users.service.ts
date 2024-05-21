@@ -13,6 +13,7 @@ import {
   EntityManager,
   FindOptionsWhere,
   ILike,
+  In,
   Not,
   Repository,
 } from 'typeorm';
@@ -28,7 +29,7 @@ import { RoleMapper } from '../mapper/roleMapper.mapper';
 import { UsersPaginatedDto } from '../dto/users-paginated.dto';
 import { HotAddress } from '../entities/hotaddress.entity';
 import { RoleEnum } from '../enums/role.enum';
-import { SearchQueryDto } from '../dto/search-query.dto';
+import { SearchQueryDto } from '../../util/pagination/dto/search-query.dto';
 
 @Injectable()
 export class UsersService {
@@ -133,6 +134,21 @@ export class UsersService {
       throw new NotFoundException(`User with email address ${email} not found`);
     }
     return UserMapper.userToDto(user);
+  }
+
+  async findMultipleByIds(ids: string[]): Promise<UserDto[]> {
+    const users = await this.findMultipleEntitiesByIds(ids);
+    return users.map((user) => {
+      return UserMapper.userToDto(user);
+    });
+  }
+
+  private async findMultipleEntitiesByIds(ids: string[]): Promise<User[]> {
+    return await this.userRepository.find({
+      where: {
+        id: In(ids),
+      },
+    });
   }
 
   async findById(id: string): Promise<UserDto> {

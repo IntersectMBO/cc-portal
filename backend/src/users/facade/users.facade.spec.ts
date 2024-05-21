@@ -8,7 +8,7 @@ import { Permission } from '../entities/permission.entity';
 import { S3Service } from '../../s3/service/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { Role } from '../entities/role.entity';
-import { SearchQueryDto } from '../dto/search-query.dto';
+import { SearchQueryDto } from '../dto/sear../../util/pagination/dto/search-query.dto
 import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UserResponse } from '../api/response/user.response';
 import { SortOrder } from 'src/util/pagination/enums/sort-order.enum';

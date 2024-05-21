@@ -13,7 +13,7 @@ import { HotAddress } from '../entities/hotaddress.entity';
 import { ConflictException } from '@nestjs/common/exceptions/conflict.exception';
 import { UserStatusEnum } from '../enums/user-status.enum';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { SearchQueryDto } from '../dto/search-query.dto';
+import { SearchQueryDto } from '../../util/pagination/dto/search-query.dto';
 import { UsersPaginatedDto } from '../dto/users-paginated.dto';
 import { SortOrder } from 'src/util/pagination/enums/sort-order.enum';
 const mockS3Service = {

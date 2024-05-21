@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { SortOrder } from '../../util/pagination/enums/sort-order.enum';
+import { SortOrder } from '../enums/sort-order.enum';
 
 @Injectable()
 export class SortOrderPipe implements PipeTransform {
