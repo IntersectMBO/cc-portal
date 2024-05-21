@@ -197,7 +197,7 @@ export class UsersController {
     @Query('phrase', SearchPhrasePipe) searchPhrase: string,
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 12,
-    @Query('order') order: SortOrder = SortOrder.DESC,
+    @Query('order', SortOrderPipe) order: SortOrder = SortOrder.DESC,
   ): Promise<PaginationResponse<UserResponse>> {
     const searchQuery = new SearchQueryDto(searchPhrase, page, perPage, order);
 
