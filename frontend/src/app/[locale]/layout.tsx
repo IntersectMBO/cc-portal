@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
-import { poppins, locales, ICONS } from "@consts";
+import { poppins, locales, IMAGES } from "@consts";
 import { Box, CssBaseline } from "@mui/material";
 import { RenderModal } from "@atoms";
 import { decodeUserToken } from "@/lib/api";
@@ -42,7 +42,7 @@ async function RootLayout({ children, params: { locale } }) {
     <html lang={locale}>
       <head>
         <title>{metadata.title}</title>
-        <link rel="icon" href={ICONS.favicon} sizes="any" />
+        <link rel="icon" href={IMAGES.favicon} type="image/x-icon" />
       </head>
       {/* Apply font class and suppress hydration warning. */}
       <body className={poppins.className} suppressHydrationWarning={true}>
