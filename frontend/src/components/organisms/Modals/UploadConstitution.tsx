@@ -8,10 +8,14 @@ import { useForm } from "react-hook-form";
 import { createFormDataObject } from "@utils";
 import { useSnackbar } from "@/context/snackbar";
 import { uploadConstitution } from "@/lib/api";
+import { useModal } from "@context";
+import { useState } from "react";
 
 export const UploadConstitution = () => {
+  const { closeModal } = useModal();
   const t = useTranslations("Modals");
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const {
     register,
@@ -22,11 +26,15 @@ export const UploadConstitution = () => {
 
   const onSubmit = async (data) => {
     try {
+      setSubmitting(true);
       const formData = createFormDataObject(data);
       await uploadConstitution(formData);
       addSuccessAlert(t("uploadConstitution.alerts.success"));
+      closeModal();
     } catch (error) {
       addErrorAlert(t("uploadConstitution.alerts.error"));
+    } finally {
+      setSubmitting(false);
     }
   };
   return (
@@ -56,7 +64,7 @@ export const UploadConstitution = () => {
           >
             {t("uploadConstitution.upload")}
           </ControlledField.Upload>
-          <ModalActions />
+          <ModalActions isSubmitting={isSubmitting} />
         </ModalContents>
       </form>
     </ModalWrapper>
