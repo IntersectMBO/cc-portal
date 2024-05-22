@@ -100,7 +100,7 @@ export async function getUsersAdmin(): Promise<FetchUserData[]> {
     const token = getAccessToken();
     const { userId } = await decodeUserToken();
 
-    const res: FetchUserData[] = await axiosInstance.get(
+    const res: { data: FetchUserData[] } = await axiosInstance.get(
       `/api/users/${userId}/search-admin`,
       {
         headers: {
@@ -108,7 +108,7 @@ export async function getUsersAdmin(): Promise<FetchUserData[]> {
         },
       }
     );
-    return res;
+    return res.data;
   } catch (error) {
     console.log("error get users admin", error);
   }
@@ -116,10 +116,10 @@ export async function getUsersAdmin(): Promise<FetchUserData[]> {
 
 export async function getMembers(): Promise<any[]> {
   try {
-    const res: FetchUserData[] = await axiosInstance.get(
+    const res: { data: FetchUserData[] } = await axiosInstance.get(
       "/api/users/cc-member/search"
     );
-    return res;
+    return res.data;
   } catch (error) {
     console.log("error get members", error);
   }
