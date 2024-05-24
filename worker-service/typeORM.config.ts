@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
-import { Vote } from 'src/vote/entities/vote.entity';
+import { Vote } from './src/vote/entities/vote.entity';
 import { DataSource } from 'typeorm';
 
 config();
