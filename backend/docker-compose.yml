@@ -1,4 +1,11 @@
 services:
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: cc-portal-backend:latest
+    restart: unless-stopped
   psql:
     image: postgres:10
     environment:
