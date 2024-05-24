@@ -11,10 +11,10 @@ export class VoteFacade {
     private readonly configService: ConfigService,
   ) {}
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async syncVotesTable() {
-    const inputData = await this.getUserData();
-    this.producer.voteProducer(inputData);
+    // const inputData = await this.getUserData();
+    this.producer.voteFlowProducer();
   }
 
   async getUserData() {
