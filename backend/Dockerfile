@@ -19,7 +19,8 @@ EXPOSE 1337
 RUN npm run build
 
 # Start the application
-CMD [ "npm", "run", "start:prod" ]
+# Removed start:prod because dist/main doesn't exist
+CMD [ "npm", "run", "start:dev" ] 
 # Build the application
 
 
