@@ -99,6 +99,8 @@ services:
       POSTGRES_DB: cc-portal
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: postgres
+    volumes:
+      - "psql-data:/var/lib/postgresql/data/"
     ports:
       - "5432:5432"
     networks:
@@ -140,10 +142,8 @@ services:
 
 volumes:
   cache:
-    driver: local
   s3_data:
-    driver: local
   ipfs_data:
-    driver: local
+  psql-data:
 networks:
   bloxico_local:
