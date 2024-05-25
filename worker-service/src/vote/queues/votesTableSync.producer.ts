@@ -1,29 +1,31 @@
-import { InjectFlowProducer, InjectQueue } from '@nestjs/bullmq';
-import { Injectable } from '@nestjs/common';
 import { FlowProducer, Queue } from 'bullmq';
 import {
-  FLOW_NAME_EXTRACT_VOTE_DATA,
+  JOB_NAME_VOTE_SYNC,
+  QUEUE_NAME_VOTES_TABLE_SYNC,
   JOB_NAME_FILTER_VOTE_DATA,
   JOB_NAME_QWERTY,
-  JOB_NAME_VOTE_SYNC,
-  QUEUE_NAME_DB_SYNC,
-} from '../common/constants';
-// import { randomUUID } from 'crypto';
+  FLOW_NAME_EXTRACT_VOTE_DATA,
+} from '../../common/constants';
+import { InjectQueue, InjectFlowProducer } from '@nestjs/bullmq';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class VoteProducer {
+export class VotesTableSyncProducer {
   constructor(
-    @InjectQueue(QUEUE_NAME_DB_SYNC) private readonly dbSyncQueue: Queue,
+    @InjectQueue(QUEUE_NAME_VOTES_TABLE_SYNC)
+    private readonly votesTableSyncQueue: Queue,
     @InjectFlowProducer(FLOW_NAME_EXTRACT_VOTE_DATA)
-    private readonly flowProducer: FlowProducer,
+    private readonly extractVoteDataFlow: FlowProducer,
   ) {}
 
   // I have added a `delay` option in job `opts` so it is easier to see the sequence of jobs' executions
-  async voteFlowProducer() {
-    const job = await this.flowProducer.add({
+  async syncVotesTable() {
+    await this.votesTableSyncQueue.clean(0, 1000, 'delayed');
+    await this.votesTableSyncQueue.clean(0, 1000, 'wait');
+    await this.extractVoteDataFlow.add({
       name: JOB_NAME_VOTE_SYNC,
       data: {},
-      queueName: QUEUE_NAME_DB_SYNC,
+      queueName: QUEUE_NAME_VOTES_TABLE_SYNC,
       opts: {
         delay: 2000,
         removeOnComplete: { age: 3600, count: 5 },
@@ -35,7 +37,7 @@ export class VoteProducer {
         {
           name: JOB_NAME_FILTER_VOTE_DATA,
           data: { idx: 0, foo: 'bar' },
-          queueName: QUEUE_NAME_DB_SYNC,
+          queueName: QUEUE_NAME_VOTES_TABLE_SYNC,
           opts: {
             delay: 2000,
             removeOnComplete: { age: 3600, count: 5 },
@@ -47,9 +49,8 @@ export class VoteProducer {
             {
               name: JOB_NAME_QWERTY,
               data: { firstName: 'Dule', age: 23 },
-              queueName: QUEUE_NAME_DB_SYNC,
+              queueName: QUEUE_NAME_VOTES_TABLE_SYNC,
               opts: {
-                delay: 2000,
                 removeOnComplete: { age: 3600, count: 5 },
                 removeOnFail: { age: 24 * 3 * 3600 },
                 attempts: 3,
@@ -60,7 +61,7 @@ export class VoteProducer {
         },
       ],
     });
-    return job;
+    // return job;
   }
 
   // async voteProducer(inputData: object[]) {
