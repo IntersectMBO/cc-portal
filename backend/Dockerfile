@@ -15,6 +15,7 @@ COPY . .
 
 # Expose the port that the application will run on
 EXPOSE 1337
+EXPOSE 5432
 
 RUN npm run build
 

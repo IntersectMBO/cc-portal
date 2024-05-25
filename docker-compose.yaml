@@ -92,6 +92,7 @@ services:
     depends_on:
       - s3
       - cache
+
   psql:
     image: postgres:10
     container_name: postgres
@@ -117,6 +118,7 @@ services:
       - cache:/data
     networks:
       - bloxico_local
+
   s3:
     image: minio/minio
     container_name: minio
