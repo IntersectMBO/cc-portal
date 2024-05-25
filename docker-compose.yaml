@@ -130,6 +130,14 @@ services:
     networks:
       - bloxico_local
 
+  frontend:
+    image: cc-portal-frontend:latest
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - bloxico_local
+
 volumes:
   cache:
     driver: local
