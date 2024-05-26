@@ -3,7 +3,6 @@ import {
   JOB_NAME_VOTE_SYNC,
   QUEUE_NAME_VOTES_TABLE_SYNC,
   JOB_NAME_FILTER_VOTE_DATA,
-  JOB_NAME_QWERTY,
   FLOW_NAME_EXTRACT_VOTE_DATA,
 } from '../../common/constants';
 import { InjectQueue, InjectFlowProducer } from '@nestjs/bullmq';
@@ -36,7 +35,7 @@ export class VotesTableSyncProducer {
       children: [
         {
           name: JOB_NAME_FILTER_VOTE_DATA,
-          data: { idx: 0, foo: 'bar' },
+          data: {},
           queueName: QUEUE_NAME_VOTES_TABLE_SYNC,
           opts: {
             delay: 2000,
@@ -45,19 +44,19 @@ export class VotesTableSyncProducer {
             attempts: 3,
             backoff: { type: 'fixed', delay: 5000 },
           },
-          children: [
-            {
-              name: JOB_NAME_QWERTY,
-              data: { firstName: 'Dule', age: 23 },
-              queueName: QUEUE_NAME_VOTES_TABLE_SYNC,
-              opts: {
-                removeOnComplete: { age: 3600, count: 5 },
-                removeOnFail: { age: 24 * 3 * 3600 },
-                attempts: 3,
-                backoff: { type: 'fixed', delay: 5000 },
-              },
-            },
-          ],
+          // children: [
+          //   {
+          //     name: JOB_NAME_QWERTY,
+          //     data: { firstName: 'Dule', age: 23 },
+          //     queueName: QUEUE_NAME_VOTES_TABLE_SYNC,
+          //     opts: {
+          //       removeOnComplete: { age: 3600, count: 5 },
+          //       removeOnFail: { age: 24 * 3 * 3600 },
+          //       attempts: 3,
+          //       backoff: { type: 'fixed', delay: 5000 },
+          //     },
+          //   },
+          // ],
         },
       ],
     });

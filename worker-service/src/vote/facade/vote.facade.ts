@@ -1,20 +1,20 @@
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { VoteService } from '../services/vote.service';
+import { VotesTableSyncProducer } from '../queues/votesTableSync.producer';
 
 @Injectable()
 export class VoteFacade {
   private logger = new Logger(VoteFacade.name);
   constructor(
-    private readonly voteService: VoteService,
+    private readonly voteTableSyncProducer: VotesTableSyncProducer,
     private readonly configService: ConfigService,
   ) {}
 
   @Cron(CronExpression.EVERY_10_SECONDS, { name: 'sync_votes_table_cron_job' })
   async syncVotesTable() {
     // const inputData = await this.getUserData();
-    await this.voteService.syncVotesTable();
+    await this.voteTableSyncProducer.syncVotesTable();
   }
 
   // async getUserData() {

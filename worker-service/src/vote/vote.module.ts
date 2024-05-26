@@ -11,10 +11,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { VoteService } from './services/vote.service';
 import { VotesTableSyncListener } from './events/votesTableSync.listener';
 import { VotesTableSyncProducer } from './queues/votesTableSync.producer';
+import { GovernanceMetadata } from './entities/governance-metadata.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Vote]),
+    TypeOrmModule.forFeature([Vote, GovernanceMetadata]),
     BullModule.registerQueue({
       name: QUEUE_NAME_VOTES_TABLE_SYNC,
     }),

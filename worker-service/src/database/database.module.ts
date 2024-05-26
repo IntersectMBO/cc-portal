@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CONNECTION_NAME_DB_SYNC } from '../common/constants';
 
 @Module({
   imports: [
@@ -19,7 +18,7 @@ import { CONNECTION_NAME_DB_SYNC } from '../common/constants';
       inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
-      name: CONNECTION_NAME_DB_SYNC,
+      name: process.env.DB_SYNC_CONNECTION_NAME,
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.getOrThrow('DB_SYNC_POSTGRES_HOST'),

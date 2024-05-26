@@ -1,27 +1,8 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  Timestamp,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import { CommonEntity } from '../../common/entitites/common.entity';
 
 @Entity('votes')
-export class Vote {
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-  })
-  createdAt: Timestamp;
-
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    nullable: true,
-  })
-  updatedAt: Timestamp;
-
+export class Vote extends CommonEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -39,7 +20,7 @@ export class Vote {
 
   @Column({
     name: 'gov_action_proposal_id',
-    type: 'varchar',
+    type: 'bigint',
   })
   govActionProposalId: string;
 
@@ -68,6 +49,12 @@ export class Vote {
     type: 'varchar',
   })
   type: string;
+
+  @Column({
+    name: 'gov_metadata_url',
+    type: 'varchar',
+  })
+  govMetadataUrl: string;
 
   @Column({
     name: 'end_time',
