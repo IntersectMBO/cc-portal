@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PageParameters } from '../interfaces/page-parameters.interface';
 import { Expose } from 'class-transformer';
+import { PageOptionsDto } from '../dto/page-options.dto';
 
 export class PageMetaResponse {
   @ApiProperty({
@@ -57,7 +57,7 @@ export class PageMetaResponse {
   })
   hasNextPage: boolean;
 
-  constructor({ pageOptionsDto, itemCount }: PageParameters) {
+  constructor(pageOptionsDto: PageOptionsDto, itemCount: number) {
     this.page = pageOptionsDto.page;
     this.perPage = pageOptionsDto.perPage;
     this.itemCount = itemCount;

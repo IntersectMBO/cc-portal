@@ -7,6 +7,7 @@ import { EmailModule } from './email/email.module';
 import { RedisModule } from './redis/redis.module';
 import { ConstitutionModule } from './constitution/constitution.module';
 import { IpfsModule } from './ipfs/ipfs.module';
+import { GovernanceModule } from './governance/governance.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { IpfsModule } from './ipfs/ipfs.module';
     RedisModule,
     ConstitutionModule,
     IpfsModule,
+    GovernanceModule,
   ],
   controllers: [],
   providers: [],

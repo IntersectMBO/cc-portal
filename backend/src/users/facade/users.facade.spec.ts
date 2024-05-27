@@ -13,7 +13,7 @@ import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UserResponse } from '../api/response/user.response';
 import { SortOrder } from 'src/util/pagination/enums/sort-order.enum';
 import { UsersPaginatedDto } from '../dto/users-paginated.dto';
-import { PaginationResponse } from '../../util/pagination/response/pagination.response';
+import { PaginatedResponse } from '../../util/pagination/response/paginated.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
 
 describe('UsersFacade', () => {
@@ -413,7 +413,7 @@ describe('UsersFacade', () => {
       const userResponse = mockUsers2.map((user) =>
         UserMapper.mapUserDtoToResponse(user),
       );
-      const expectedResponse: PaginationResponse<UserResponse> = {
+      const expectedResponse: PaginatedResponse<UserResponse> = {
         data: [userResponse[2], userResponse[1]],
         meta: {
           page: 1,
@@ -439,7 +439,7 @@ describe('UsersFacade', () => {
       const userResponse = mockUsers2.map((user) =>
         UserMapper.mapUserDtoToResponse(user),
       );
-      const expectedResponse: PaginationResponse<UserResponse> = {
+      const expectedResponse: PaginatedResponse<UserResponse> = {
         data: [userResponse[1], userResponse[0], userResponse[2]],
         meta: {
           page: 1,
@@ -465,7 +465,7 @@ describe('UsersFacade', () => {
       const userResponse = mockUsers2.map((user) =>
         UserMapper.mapUserDtoToResponse(user),
       );
-      const expectedResponse: PaginationResponse<UserResponse> = {
+      const expectedResponse: PaginatedResponse<UserResponse> = {
         data: [userResponse[0]],
         meta: {
           page: 2,
@@ -491,7 +491,7 @@ describe('UsersFacade', () => {
         10,
         SortOrder.DESC,
       );
-      const expectedResult: PaginationResponse<UserResponse> = {
+      const expectedResult: PaginatedResponse<UserResponse> = {
         data: [],
         meta: {
           page: 1,

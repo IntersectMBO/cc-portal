@@ -3,7 +3,7 @@ import { PageMetaResponse } from './page-meta.response';
 import { IsArray } from 'class-validator';
 import { Expose } from 'class-transformer';
 
-export class PaginationResponse<T> {
+export class PaginatedResponse<T> {
   @IsArray()
   @ApiProperty({ type: () => [Object] })
   @Expose({

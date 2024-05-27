@@ -1,12 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SearchQueryDto } from 'src/util/pagination/dto/search-query.dto';
 import { VotesService } from '../services/votes.service';
 import { VoteResponse } from '../api/response/vote.response';
-import { PaginationResponse } from 'src/util/pagination/response/pagination.response';
+import { PaginatedResponse } from 'src/util/pagination/response/paginated.response';
 import { VoteDto } from '../dto/vote.dto';
-import { PageMetaResponse } from 'src/util/pagination/response/page-meta.response';
 import { VoteMapper } from '../mapper/vote-mapper';
 import { UsersService } from 'src/users/services/users.service';
+import { PaginateQuery } from 'nestjs-paginate';
+import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mapper';
 
 @Injectable()
 export class VotesFacade {
@@ -18,38 +18,28 @@ export class VotesFacade {
   ) {}
 
   async searchVotes(
-    searchQuery: SearchQueryDto,
+    query: PaginateQuery,
     userAddress?: string,
-  ): Promise<PaginationResponse<VoteResponse>> {
+  ): Promise<PaginatedResponse<VoteResponse>> {
     const votesPaginatedDto = await this.votesService.searchVotes(
-      searchQuery,
+      query,
       userAddress,
     );
 
-    const voteDtos = votesPaginatedDto.voteDtos;
-    const itemCount = votesPaginatedDto.itemCount;
-
     const userNameMap = await this.getUserNameMap(
-      voteDtos.map((voteDto) => {
+      votesPaginatedDto.items.map((voteDto) => {
         return voteDto.userId;
       }),
     );
 
-    voteDtos.forEach((vote) => {
+    votesPaginatedDto.items.forEach((vote) => {
       vote.userName = userNameMap.get(vote.userId);
     });
 
-    const voteResponse: VoteResponse[] = voteDtos.map((userDto: VoteDto) =>
-      VoteMapper.voteDtoToResponse(userDto),
+    return new PaginationDtoMapper<VoteDto, VoteResponse>().dtoToResponse(
+      votesPaginatedDto,
+      VoteMapper.voteDtoToResponse,
     );
-
-    const pageOptionsDto = searchQuery.pageOptions;
-    const pageMetaResponse = new PageMetaResponse({
-      itemCount,
-      pageOptionsDto,
-    });
-
-    return new PaginationResponse(voteResponse, pageMetaResponse);
   }
 
   private async getUserNameMap(ids: string[]): Promise<Map<string, string>> {

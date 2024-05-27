@@ -13,7 +13,6 @@ import {
   UseGuards,
   Request,
   Delete,
-  Query,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
@@ -24,7 +23,6 @@ import {
   ApiConsumes,
   ApiOperation,
   ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -32,14 +30,12 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../../auth/jwt/jwt-auth.guard';
 import { UserPathGuard } from '../../auth/guard/users-path.guard';
-import { SearchQueryDto } from '../../util/pagination/dto/search-query.dto';
-import { SortOrderPipe } from '../../util/pagination/pipe/sort-order.pipe';
-import { SearchPhrasePipe } from '../../util/pagination/pipe/search-phrase.pipe';
 import { RoleEnum } from '../enums/role.enum';
 import { Roles } from '../../auth/guard/role.decorator';
 import { RoleGuard } from '../../auth/guard/role.guard';
-import { PaginationResponse } from '../../util/pagination/response/pagination.response';
-import { SortOrder } from '../../util/pagination/enums/sort-order.enum';
+import { PaginatedResponse } from '../../util/pagination/response/paginated.response';
+import { ApiPaginationQuery, Paginate, PaginateQuery } from 'nestjs-paginate';
+import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -95,113 +91,46 @@ export class UsersController {
     return await this.usersFacade.update(id, updateUserRequest);
   }
 
-  // Search endpoint for CC Members
-  // Returns all registered CC Members
-  @ApiOperation({ summary: 'List of CC Members' })
+  /**
+   Search endpoint for CC Members
+   Returns all registered CC Members
+   **/
+  @ApiOperation({ summary: 'Search users' })
+  @ApiPaginationQuery(USER_PAGINATION_CONFIG)
   @ApiResponse({
     status: 200,
-    description: 'Users',
+    description: 'Users - returns UserResponse array within data',
     isArray: true,
-    type: PaginationResponse<UserResponse>,
-  })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    description: 'Page that is selected by user, accepts numbers',
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'perPage',
-    required: false,
-    description: 'Number of users shown on a page.',
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'order',
-    required: false,
-    description:
-      'Sort order parameter - can be either ASC (Ascending) or DESC (Descending)',
-    enum: SortOrder,
-  })
-  @ApiQuery({
-    name: 'phrase',
-    required: false,
-    description: 'A search phrase related to user name, does not accept * or ;',
-    type: String,
+    type: PaginatedResponse<UserResponse>,
   })
   @Get('cc-member/search')
-  async searchCCMember(
-    @Query('phrase', SearchPhrasePipe) searchPhrase: string,
-    @Query('page') page: number = 1,
-    @Query('perPage') perPage: number = 12,
-    @Query('order', SortOrderPipe) order: SortOrder = SortOrder.DESC,
-  ): Promise<PaginationResponse<UserResponse>> {
-    const searchQuery = new SearchQueryDto(searchPhrase, page, perPage, order);
-    return await this.usersFacade.searchUsers(searchQuery, false);
+  async searchMembersPaginated(
+    @Paginate() query: PaginateQuery,
+  ): Promise<PaginatedResponse<UserResponse>> {
+    return await this.usersFacade.searchUsers(query, false);
   }
 
-  // Search endpoint for admins and super admin
-  // Returns all registered users except super admin
-  @ApiOperation({ summary: 'List of Admins and CC Members' })
+  /**
+   Search endpoint for admins and super admin
+   Returns all registered users except super admin
+   **/
   @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Search users as admin' })
+  @ApiPaginationQuery(USER_PAGINATION_CONFIG)
   @ApiResponse({
     status: 200,
-    description: 'Users',
+    description: 'Users - returns UserResponse array within data',
     isArray: true,
-    type: UserResponse,
+    type: PaginatedResponse<UserResponse>,
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad Request',
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiParam({
-    name: 'id',
-    type: String,
-    description: 'Identifactor of the user',
-  })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    description: 'Page that is selected by user, accepts numbers',
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'perPage',
-    required: false,
-    description: 'Number of users shown on a page.',
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'order',
-    required: false,
-    description:
-      'Sort order parameter - can be either ASC (Ascending) or DESC (Descending)',
-    enum: SortOrder,
-  })
-  @ApiQuery({
-    name: 'phrase',
-    required: false,
-    description: 'A search phrase related to user name, does not accept * or ;',
-    type: String,
-  })
+  @Get(':id/search-admin')
   @Roles(RoleEnum.ADMIN, RoleEnum.SUPER_ADMIN)
   @UseGuards(JwtAuthGuard, UserPathGuard, RoleGuard)
-  @Get(':id/search-admin')
-  async searchAdmin(
+  async searchAdminPaginated(
     @Param('id', ParseUUIDPipe) id: string,
-    @Query('phrase', SearchPhrasePipe) searchPhrase: string,
-    @Query('page') page: number = 1,
-    @Query('perPage') perPage: number = 12,
-    @Query('order', SortOrderPipe) order: SortOrder = SortOrder.DESC,
-  ): Promise<PaginationResponse<UserResponse>> {
-    const searchQuery = new SearchQueryDto(searchPhrase, page, perPage, order);
-
-    return await this.usersFacade.searchUsers(searchQuery, true);
+    @Paginate() query: PaginateQuery,
+  ): Promise<PaginatedResponse<UserResponse>> {
+    return await this.usersFacade.searchUsers(query, true);
   }
 
   @ApiBearerAuth('JWT-auth')

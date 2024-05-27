@@ -1,4 +1,4 @@
-import { VoteValues } from 'src/votes/enums/vote-values.enum';
+import { VoteValues } from 'src/governance/enums/vote-values.enum';
 import { Timestamp } from 'typeorm';
 
 export class VoteDto {

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { VoteValues } from 'src/votes/enums/vote-values.enum';
+import { VoteValues } from 'src/governance/enums/vote-values.enum';
 import { Timestamp } from 'typeorm';
 
 export class VoteResponse {

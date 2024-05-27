@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { VotesPaginatedDto } from '../dto/votes-paginated.dto';
-import { SearchQueryDto } from 'src/util/pagination/dto/search-query.dto';
+import { PaginateQuery } from 'nestjs-paginate';
+import { VoteDto } from '../dto/vote.dto';
+import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
 
 @Injectable()
 export class VotesService {
@@ -10,11 +11,11 @@ export class VotesService {
 
   searchVotes(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    searchQuery: SearchQueryDto,
+    query: PaginateQuery,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     userAddress?: string,
-  ): Promise<VotesPaginatedDto> {
-    //TODO Impl
+  ): Promise<PaginatedDto<VoteDto>> {
+    //TODO Impl - see search from vote service
     return null;
   }
 }

@@ -9,27 +9,23 @@ import {
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { UserStatusEnum } from '../enums/user-status.enum';
-import {
-  EntityManager,
-  FindOptionsWhere,
-  ILike,
-  In,
-  Not,
-  Repository,
-} from 'typeorm';
+import { EntityManager, In, Repository, SelectQueryBuilder } from 'typeorm';
 import { Role } from '../entities/role.entity';
 import { UserDto } from '../dto/user.dto';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { Permission } from '../entities/permission.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
-// import { S3Service } from '../../s3/service/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
-import { UsersPaginatedDto } from '../dto/users-paginated.dto';
 import { HotAddress } from '../entities/hotaddress.entity';
 import { RoleEnum } from '../enums/role.enum';
-import { SearchQueryDto } from '../../util/pagination/dto/search-query.dto';
+import { PaginateQuery, paginate } from 'nestjs-paginate';
+import { PageOptionsDto } from 'src/util/pagination/dto/page-options.dto';
+import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
+import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
+import { PaginationEntityMapper } from 'src/util/pagination/mapper/pagination.mapper';
+import { UserResponse } from '../api/response/user.response';
 
 @Injectable()
 export class UsersService {
@@ -246,35 +242,33 @@ export class UsersService {
   }
 
   async searchUsers(
-    searchQuery: SearchQueryDto,
+    query: PaginateQuery,
     isAdmin: boolean,
-  ): Promise<UsersPaginatedDto> {
-    const { searchPhrase } = searchQuery;
+  ): Promise<PaginatedDto<UserDto>> {
+    const customQuery = isAdmin
+      ? this.createAdminSearchQuery()
+      : this.createUserSearchQuery();
 
-    const conditions: FindOptionsWhere<User> | FindOptionsWhere<User>[] = {
-      ...(isAdmin
-        ? { role: { code: Not(RoleEnum.SUPER_ADMIN) } }
-        : { role: { code: RoleEnum.USER }, status: UserStatusEnum.ACTIVE }),
-      ...(searchPhrase ? { name: ILike(`%${searchPhrase}%`) } : {}),
-    };
+    const result = await paginate(query, customQuery, USER_PAGINATION_CONFIG);
 
-    const { skip, perPage, order } = searchQuery.pageOptions;
+    return new PaginationEntityMapper<User, UserDto>().paginatedToDto(
+      result,
+      UserMapper.userToDto,
+    );
+  }
 
-    const findOptions = {
-      where: conditions,
-      order: { createdAt: order },
-      skip: skip,
-      take: perPage,
-    };
+  private createAdminSearchQuery(): SelectQueryBuilder<User> {
+    return this.userRepository
+      .createQueryBuilder('users')
+      .leftJoinAndSelect('users.role', 'role')
+      .where('role.code != :code', { code: RoleEnum.SUPER_ADMIN });
+  }
 
-    const users = await this.userRepository.find(findOptions);
-    const userDtos: UserDto[] = users.map((user) => UserMapper.userToDto(user));
-    const itemCount = await this.userRepository.count(findOptions);
-
-    const usersPaginatedDto = new UsersPaginatedDto();
-    usersPaginatedDto.userDtos = userDtos;
-    usersPaginatedDto.itemCount = itemCount;
-
-    return usersPaginatedDto;
+  private createUserSearchQuery(): SelectQueryBuilder<User> {
+    return this.userRepository
+      .createQueryBuilder('users')
+      .leftJoinAndSelect('users.role', 'role')
+      .where('role.code = :code', { code: RoleEnum.USER })
+      .andWhere('users.status = :status', { status: UserStatusEnum.ACTIVE });
   }
 }
