@@ -19,7 +19,7 @@ export class VotesFacade {
 
   async searchVotes(
     searchQuery: SearchQueryDto,
-    userAddress: string = null,
+    userAddress?: string,
   ): Promise<PaginationResponse<VoteResponse>> {
     const votesPaginatedDto = await this.votesService.searchVotes(
       searchQuery,

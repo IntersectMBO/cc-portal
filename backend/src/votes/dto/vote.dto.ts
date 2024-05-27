@@ -9,6 +9,7 @@ export class VoteDto {
   voteValue: VoteValues;
   reasoningTitle: string;
   comment: string;
+  govProposalTitle: string;
   govProposalType: string;
   govProposalResolved: boolean;
   govProposalEndTime: Timestamp;

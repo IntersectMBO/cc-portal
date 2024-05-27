@@ -12,7 +12,7 @@ export class VotesService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     searchQuery: SearchQueryDto,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    userAddress: string = null,
+    userAddress?: string,
   ): Promise<VotesPaginatedDto> {
     //TODO Impl
     return null;

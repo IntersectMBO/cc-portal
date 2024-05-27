@@ -48,6 +48,13 @@ export class VoteResponse {
   comment: string;
 
   @ApiProperty({
+    description: 'Returns a title of governance proposal related to a vote',
+    example: 'Random title',
+  })
+  @Expose({ name: 'governance_proposal_title' })
+  govProposalTitle: string;
+
+  @ApiProperty({
     description:
       'Returns a specific type of a governance proposal to which this vote is related',
     example: 'ParameterChange',
