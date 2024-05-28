@@ -8,6 +8,7 @@ import { TopNavWrapper } from "./TopNavWrapper";
 import { useTranslations } from "next-intl";
 import { useAppContext, useModal } from "@context";
 import PermissionChecker from "../PermissionChecker";
+import { PATHS } from "@consts";
 
 export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const t = useTranslations("Navigation");
@@ -22,7 +23,7 @@ export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const addVersion = () => openModal({ type: "uploadConstitution" });
 
   return (
-    <TopNavWrapper>
+    <TopNavWrapper homeRedirectionPath={PATHS.admin.dashboard}>
       {isLoggedIn && (
         <Box>
           <Grid container gap={2}>

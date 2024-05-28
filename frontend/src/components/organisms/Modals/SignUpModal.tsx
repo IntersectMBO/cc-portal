@@ -7,6 +7,7 @@ import {
   Typography,
   Button,
   ModalActions,
+  Tooltip,
 } from "@atoms";
 import { IMAGES } from "@consts";
 import { Box } from "@mui/material";
@@ -17,7 +18,7 @@ import { SignupModalState } from "../types";
 import { editUser, uploadUserPhoto } from "@/lib/api";
 import { useEffect } from "react";
 import { useSnackbar } from "@/context/snackbar";
-
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 export const SignUpModal = () => {
   const { state, closeModal } = useModal<SignupModalState>();
@@ -71,11 +72,11 @@ export const SignUpModal = () => {
 
   return (
     <ModalWrapper dataTestId="sign-up-modal" icon={IMAGES.pastelAddMember}>
-      <ModalHeader>{t("signUp.headline")}</ModalHeader>
+      <ModalHeader>{state.title}</ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
           <Typography variant="body1" fontWeight={500}>
-            {t("signUp.description")}
+            {state.description}
           </Typography>
 
           <ControlledField.Input
@@ -87,7 +88,25 @@ export const SignUpModal = () => {
           />
           <ControlledField.Input
             placeholder={t("signUp.fields.hotAddress.placeholder")}
-            label={t("signUp.fields.hotAddress.label")}
+            label={
+              <Tooltip
+                heading={t("signUp.fields.hotAddress.label")}
+                paragraphOne={t("signUp.fields.hotAddress.tooltip")}
+                placement="bottom-end"
+                arrow
+              >
+                <Box width="max-content" display="flex" alignItems="center">
+                  {t("signUp.fields.hotAddress.label")}
+                  <InfoOutlinedIcon
+                    style={{
+                      color: "#ADAEAD",
+                    }}
+                    sx={{ ml: 0.7 }}
+                    fontSize="small"
+                  />
+                </Box>
+              </Tooltip>
+            }
             errors={errors}
             control={control}
             {...register("hotAddress")}

@@ -16,7 +16,7 @@ const intlMiddleware = createMiddleware({
 export const config = {
   matcher: [
     "/",
-    "/constitution",
+    "/interim-constitution",
     "/members",
     "/admin",
     "/admin/dashboard",
@@ -37,7 +37,7 @@ export async function middleware(req: NextRequest) {
       }
     }
 
-    return NextResponse.redirect(new URL(PATHS.home, req.url));
+    return NextResponse.redirect(new URL(PATHS.admin.home, req.url));
   }
   return response;
 }

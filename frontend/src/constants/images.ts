@@ -13,4 +13,5 @@ export const IMAGES = {
   pastelReasoning: "/images/PastelReasoning.png",
   avatar: "/images/Avatar.svg",
   mail: "/images/Mail.png",
+  favicon: "/images/Favicon.ico",
 };

@@ -61,7 +61,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
         </Box>
         {tab === "revisions" ? (
           <Grid container direction="column">
-            <Grid item justifyContent={"flex-end"} direction="column">
+            <Grid item justifyContent="flex-end">
               {metadata.map(({ title, created_date, cid }) => {
                 return (
                   <NavCard
@@ -86,7 +86,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
           </Grid>
         ) : (
           <Grid container direction="column">
-            <Grid item justifyContent={"flex-end"} direction="column">
+            <Grid item justifyContent="flex-end">
               {children}
             </Grid>
           </Grid>

@@ -1,12 +1,17 @@
 "use client";
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { AppBar } from "@mui/material";
 
-import { IMAGES, PATHS, customPalette } from "@consts";
+import { ICONS, customPalette } from "@consts";
 import NextLink from "next/link";
 
-export const TopNavWrapper = ({ children }) => {
+interface Props {
+  children: ReactNode;
+  homeRedirectionPath: string;
+}
+
+export const TopNavWrapper = ({ children, homeRedirectionPath }: Props) => {
   return (
     <AppBar
       component="nav"
@@ -18,7 +23,7 @@ export const TopNavWrapper = ({ children }) => {
         justifyContent: "space-between",
         alignItems: "center",
         flexDirection: "row",
-        position: "relative",
+        position: "fixed",
         py: { xxs: 2, sm: 3 },
         px: { xxs: 2, sm: 5 },
         "& img": {
@@ -26,8 +31,8 @@ export const TopNavWrapper = ({ children }) => {
         },
       }}
     >
-      <NextLink data-testid="logo-button" href={PATHS.home}>
-        <img height={35} src={IMAGES.logoSign} />
+      <NextLink data-testid="logo-button" href={homeRedirectionPath}>
+        <img height={35} src={ICONS.logoSign} />
       </NextLink>
       {children}
     </AppBar>

@@ -30,14 +30,16 @@ import {
 } from '@nestjs/swagger';
 
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
-import { UserPathGuard } from 'src/auth/guard/users-path.guard';
-import { SearchQueryDto, SortOrder } from '../dto/search-query.dto';
+import { JwtAuthGuard } from '../../auth/jwt/jwt-auth.guard';
+import { UserPathGuard } from '../../auth/guard/users-path.guard';
+import { SearchQueryDto } from '../dto/search-query.dto';
 import { SortOrderPipe } from '../pipe/sort-order.pipe';
 import { SearchPhrasePipe } from '../pipe/search-phrase.pipe';
 import { RoleEnum } from '../enums/role.enum';
-import { Roles } from 'src/auth/guard/role.decorator';
-import { RoleGuard } from 'src/auth/guard/role.guard';
+import { Roles } from '../../auth/guard/role.decorator';
+import { RoleGuard } from '../../auth/guard/role.guard';
+import { PaginationResponse } from '../../util/pagination/response/pagination.response';
+import { SortOrder } from '../../util/pagination/enums/sort-order.enum';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -100,10 +102,22 @@ export class UsersController {
     status: 200,
     description: 'Users',
     isArray: true,
-    type: UserResponse,
+    type: PaginationResponse<UserResponse>,
   })
   @ApiQuery({
-    name: 'sort_order',
+    name: 'page',
+    required: false,
+    description: 'Page that is selected by user, accepts numbers',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'perPage',
+    required: false,
+    description: 'Number of users shown on a page.',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'order',
     required: false,
     description:
       'Sort order parameter - can be either ASC (Ascending) or DESC (Descending)',
@@ -116,14 +130,13 @@ export class UsersController {
     type: String,
   })
   @Get('cc-member/search')
-  async searchCCMemeber(
+  async searchCCMember(
     @Query('phrase', SearchPhrasePipe) searchPhrase: string,
-    @Query('sort_order', SortOrderPipe) sortOrder: SortOrder,
-  ) {
-    if (!sortOrder) {
-      sortOrder = SortOrder.DESC;
-    }
-    const searchQuery = new SearchQueryDto(searchPhrase, sortOrder);
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 12,
+    @Query('order', SortOrderPipe) order: SortOrder = SortOrder.DESC,
+  ): Promise<PaginationResponse<UserResponse>> {
+    const searchQuery = new SearchQueryDto(searchPhrase, page, perPage, order);
     return await this.usersFacade.searchUsers(searchQuery, false);
   }
 
@@ -152,7 +165,19 @@ export class UsersController {
     description: 'Identifactor of the user',
   })
   @ApiQuery({
-    name: 'sort_order',
+    name: 'page',
+    required: false,
+    description: 'Page that is selected by user, accepts numbers',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'perPage',
+    required: false,
+    description: 'Number of users shown on a page.',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'order',
     required: false,
     description:
       'Sort order parameter - can be either ASC (Ascending) or DESC (Descending)',
@@ -170,12 +195,12 @@ export class UsersController {
   async searchAdmin(
     @Param('id', ParseUUIDPipe) id: string,
     @Query('phrase', SearchPhrasePipe) searchPhrase: string,
-    @Query('sort_order', SortOrderPipe) sortOrder: SortOrder,
-  ): Promise<UserResponse[]> {
-    if (!sortOrder) {
-      sortOrder = SortOrder.DESC;
-    }
-    const searchQuery = new SearchQueryDto(searchPhrase, sortOrder);
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 12,
+    @Query('order', SortOrderPipe) order: SortOrder = SortOrder.DESC,
+  ): Promise<PaginationResponse<UserResponse>> {
+    const searchQuery = new SearchQueryDto(searchPhrase, page, perPage, order);
+
     return await this.usersFacade.searchUsers(searchQuery, true);
   }
 

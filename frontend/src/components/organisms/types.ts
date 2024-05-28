@@ -31,11 +31,17 @@ export interface UserListItem extends FetchUserData {}
 
 export interface SignupModalState {
   showCloseButton?: boolean;
+  title: string;
+  description: string;
 }
 
 export interface CompareConstitutionModalState {
   base: ConstitutionMetadata;
   target: ConstitutionMetadata;
+}
+
+export interface SignOutModalState {
+  homeRedirectionPath: string;
 }
 
 export interface ReasoningI {

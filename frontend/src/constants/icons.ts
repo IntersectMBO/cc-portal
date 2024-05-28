@@ -10,4 +10,8 @@ export const ICONS = {
   menuIcon: "/icons/MenuIcon.svg",
   arrowUpRight: "/icons/ArrowUpRight.svg",
   copyIcon: "/icons/Copy.svg",
+  arrowRight: "/icons/ArrowRight.svg",
+  arrowLeft: "/icons/ArrowLeft.svg",
+  favicon: "/icons/Favicon.ico",
+  logoSign: "/icons/LogoSign.svg",
 };

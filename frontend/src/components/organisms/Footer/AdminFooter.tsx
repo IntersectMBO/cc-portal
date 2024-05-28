@@ -5,6 +5,7 @@ import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { Button, Typography } from "@atoms";
 import { useModal } from "@context";
+import { PATHS } from "@consts";
 
 export const AdminFooter = () => {
   const t = useTranslations("Footer");
@@ -31,6 +32,9 @@ export const AdminFooter = () => {
         onClick={() =>
           openModal({
             type: "signOutModal",
+            state: {
+              homeRedirectionPath: PATHS.admin.home,
+            },
           })
         }
         variant="outlined"

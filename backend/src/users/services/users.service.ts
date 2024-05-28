@@ -25,6 +25,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 // import { S3Service } from '../../s3/service/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
+import { UsersPaginatedDto } from '../dto/users-paginated.dto';
 import { HotAddress } from '../entities/hotaddress.entity';
 import { RoleEnum } from '../enums/role.enum';
 import { SearchQueryDto } from '../dto/search-query.dto';
@@ -134,13 +135,6 @@ export class UsersService {
     return UserMapper.userToDto(user);
   }
 
-  async findAll(): Promise<UserDto[]> {
-    const users = await this.userRepository.find();
-    const results: UserDto[] = users.map((x) => UserMapper.userToDto(x));
-
-    return results;
-  }
-
   async findById(id: string): Promise<UserDto> {
     const user = await this.findEntityById(id);
     return UserMapper.userToDto(user);
@@ -238,8 +232,8 @@ export class UsersService {
   async searchUsers(
     searchQuery: SearchQueryDto,
     isAdmin: boolean,
-  ): Promise<UserDto[]> {
-    const { searchPhrase, sortOrder } = searchQuery;
+  ): Promise<UsersPaginatedDto> {
+    const { searchPhrase } = searchQuery;
 
     const conditions: FindOptionsWhere<User> | FindOptionsWhere<User>[] = {
       ...(isAdmin
@@ -248,11 +242,23 @@ export class UsersService {
       ...(searchPhrase ? { name: ILike(`%${searchPhrase}%`) } : {}),
     };
 
-    const users = await this.userRepository.find({
+    const { skip, perPage, order } = searchQuery.pageOptions;
+
+    const findOptions = {
       where: conditions,
-      order: { createdAt: sortOrder },
-    });
-    const results: UserDto[] = users.map((user) => UserMapper.userToDto(user));
-    return results;
+      order: { createdAt: order },
+      skip: skip,
+      take: perPage,
+    };
+
+    const users = await this.userRepository.find(findOptions);
+    const userDtos: UserDto[] = users.map((user) => UserMapper.userToDto(user));
+    const itemCount = await this.userRepository.count(findOptions);
+
+    const usersPaginatedDto = new UsersPaginatedDto();
+    usersPaginatedDto.userDtos = userDtos;
+    usersPaginatedDto.itemCount = itemCount;
+
+    return usersPaginatedDto;
   }
 }

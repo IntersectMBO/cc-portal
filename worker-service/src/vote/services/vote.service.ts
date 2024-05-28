@@ -18,8 +18,6 @@ export class VoteService {
     private readonly entityManager: EntityManager,
   ) {}
 
-  
-
   // async create(data: SyncVotesTableDto[]): Promise<Vote[]> {
   //   const votes = this.voteRepository.create(data);
   //   return await this.voteRepository.save(votes);

@@ -49,9 +49,9 @@ export const PreviewReasoningModal = () => {
     },
   ];
 
-  const tabs2 = reasonings.map((item) => {
+  const tabs2 = reasonings.map((item, i) => {
     return {
-      label: item.title,
+      label: `Reasoning ${i + 1}`,
       Component: (
         <Reasoning
           title={item.title}
@@ -96,19 +96,6 @@ export const PreviewReasoningModal = () => {
         px={{ xs: 2.25, md: 3 }}
       >
         <Tabs tabs={tabs2} />
-        <Box mt={3} data-testid="governance-action-type">
-          <Typography color="neutralGray" variant="caption">
-            {t("previewReasoning.governanceActionCategory")}
-          </Typography>
-          <OutlinedLightButton>
-            <Typography
-              data-testid={`${"proposalTypeNoEmptySpaces"}-type`} //todo proposalTypeNoEmptySpaces
-              variant="caption"
-            >
-              Category 1 {/**todo getProposalTypeLabel */}
-            </Typography>
-          </OutlinedLightButton>
-        </Box>
         <Box mt={3}>
           <Typography color="neutralGray" variant="caption">
             {t("previewReasoning.governanceActionId")}
@@ -119,6 +106,19 @@ export const PreviewReasoningModal = () => {
               variant="caption"
             >
               govaction_7778...8675 {/** todo getShortenedGovActionId */}
+            </Typography>
+          </OutlinedLightButton>
+        </Box>
+        <Box mt={3} data-testid="governance-action-type">
+          <Typography color="neutralGray" variant="caption">
+            {t("previewReasoning.governanceActionCategory")}
+          </Typography>
+          <OutlinedLightButton>
+            <Typography
+              data-testid={`${"proposalTypeNoEmptySpaces"}-type`} //todo proposalTypeNoEmptySpaces
+              variant="caption"
+            >
+              Category 1 {/**todo getProposalTypeLabel */}
             </Typography>
           </OutlinedLightButton>
         </Box>

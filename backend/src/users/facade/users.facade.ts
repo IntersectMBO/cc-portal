@@ -5,6 +5,10 @@ import { UserResponse } from '../api/response/user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { RoleResponse } from '../api/response/role.response';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
+import { PaginationResponse } from '../../util/pagination/response/pagination.response';
+import { PageMetaResponse } from '../../util/pagination/response/page-meta.response';
+import { UserDto } from '../dto/user.dto';
+
 import { S3Service } from '../../s3/service/s3.service';
 import { UploadContext } from '../../s3/enums/upload-context';
 import { SearchQueryDto } from '../dto/search-query.dto';
@@ -14,14 +18,6 @@ export class UsersFacade {
     private readonly usersService: UsersService,
     private readonly s3Service: S3Service,
   ) {}
-
-  async findAll(): Promise<UserResponse[]> {
-    const users = await this.usersService.findAll();
-    const results: UserResponse[] = users.map((x) =>
-      UserMapper.mapUserDtoToResponse(x),
-    );
-    return results;
-  }
 
   async getAllRoles(): Promise<RoleResponse[]> {
     const roles = await this.usersService.getAllRoles();
@@ -79,11 +75,25 @@ export class UsersFacade {
   async searchUsers(
     searchQuery: SearchQueryDto,
     isAdmin: boolean,
-  ): Promise<UserResponse[]> {
-    const users = await this.usersService.searchUsers(searchQuery, isAdmin);
-    const results: UserResponse[] = users.map((x) =>
-      UserMapper.mapUserDtoToResponse(x),
+  ): Promise<PaginationResponse<UserResponse>> {
+    const usersPaginatedDto = await this.usersService.searchUsers(
+      searchQuery,
+      isAdmin,
     );
-    return results;
+
+    const userDtos = usersPaginatedDto.userDtos;
+    const itemCount = usersPaginatedDto.itemCount;
+
+    const usersResponse: UserResponse[] = userDtos.map((userDto: UserDto) =>
+      UserMapper.mapUserDtoToResponse(userDto),
+    );
+
+    const pageOptionsDto = searchQuery.pageOptions;
+    const pageMetaResponse = new PageMetaResponse({
+      itemCount,
+      pageOptionsDto,
+    });
+
+    return new PaginationResponse(usersResponse, pageMetaResponse);
   }
 }
