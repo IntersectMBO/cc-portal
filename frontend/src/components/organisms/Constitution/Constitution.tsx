@@ -4,7 +4,13 @@ import { Card } from "@molecules";
 import { Grid } from "@mui/material";
 import { MDXRemote } from "next-mdx-remote";
 import { useState } from "react";
-import { Heading1, Heading2, Paragraph, TableOfContent } from "./MDXComponents";
+import {
+  Heading1,
+  Heading2,
+  Heading3,
+  Paragraph,
+  TableOfContent,
+} from "./MDXComponents";
 import { ConstitutionProps } from "../types";
 
 export function Constitution({ constitution }: ConstitutionProps) {
@@ -21,6 +27,7 @@ export function Constitution({ constitution }: ConstitutionProps) {
     ),
     h1: Heading1,
     h2: Heading2,
+    h3: Heading3,
     p: Paragraph,
   };
 
