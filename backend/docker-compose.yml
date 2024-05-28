@@ -1,5 +1,5 @@
 services:
-  psql:
+  psql1:
     image: postgres:10
     environment:
       POSTGRES_DB: cc-portal
@@ -7,6 +7,14 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - '5432:5432'
+  psql2:
+    image: postgres:10
+    environment:
+      POSTGRES_DB: fitness_project
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5436:5432'
 
   cache:
     image: redis/redis-stack:latest

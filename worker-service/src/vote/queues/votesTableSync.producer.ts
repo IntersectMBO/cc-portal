@@ -1,12 +1,13 @@
 import { FlowProducer, Queue } from 'bullmq';
-import {
-  JOB_NAME_VOTE_SYNC,
-  QUEUE_NAME_VOTES_TABLE_SYNC,
-  JOB_NAME_FILTER_VOTE_DATA,
-  FLOW_NAME_EXTRACT_VOTE_DATA,
-} from '../../common/constants';
+
 import { InjectQueue, InjectFlowProducer } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
+import {
+  QUEUE_NAME_VOTES_TABLE_SYNC,
+  FLOW_NAME_EXTRACT_VOTE_DATA,
+  JOB_NAME_VOTE_SYNC,
+  JOB_NAME_FILTER_VOTE_DATA,
+} from '../../common/constants/bullmq.constants';
 
 @Injectable()
 export class VotesTableSyncProducer {
@@ -44,47 +45,8 @@ export class VotesTableSyncProducer {
             attempts: 3,
             backoff: { type: 'fixed', delay: 5000 },
           },
-          // children: [
-          //   {
-          //     name: JOB_NAME_QWERTY,
-          //     data: { firstName: 'Dule', age: 23 },
-          //     queueName: QUEUE_NAME_VOTES_TABLE_SYNC,
-          //     opts: {
-          //       removeOnComplete: { age: 3600, count: 5 },
-          //       removeOnFail: { age: 24 * 3 * 3600 },
-          //       attempts: 3,
-          //       backoff: { type: 'fixed', delay: 5000 },
-          //     },
-          //   },
-          // ],
         },
       ],
     });
-    // return job;
   }
-
-  // async voteProducer(inputData: object[]) {
-  //   const job = await this.dbSyncQueue.add(JOB_NAME_VOTE_SYNC, inputData, {
-  //     jobId: randomUUID(),
-  //     removeOnComplete: { age: 3600, count: 5 },
-  //     removeOnFail: { age: 24 * 3 * 3600 },
-  //     attempts: 3,
-  //     backoff: { type: 'fixed', delay: 5000 },
-  //   });
-  //   return job;
-  // }
-
-  // async filterVoteDataProducer(inputData: object[]) {
-  //   const job = await this.dbSyncQueue.add(
-  //     JOB_NAME_FILTER_VOTE_DATA,
-  //     inputData,
-  //     {
-  //       jobId: randomUUID(),
-  //       removeOnComplete: { age: 3600, count: 5 },
-  //       removeOnFail: { age: 24 * 3 * 3600 },
-  //       attempts: 3,
-  //       backoff: { type: 'fixed', delay: 5000 },
-  //     },
-  //   );
-  // }
 }

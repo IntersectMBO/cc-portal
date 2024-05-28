@@ -1,1 +1,1 @@
-select * from votes where hot_address in (:whereInArray);
+select * from public.votes where hot_address in (:whereInArray);

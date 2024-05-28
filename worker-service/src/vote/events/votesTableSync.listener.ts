@@ -4,7 +4,7 @@ import {
   QueueEventsListener,
 } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
-import { QUEUE_NAME_VOTES_TABLE_SYNC } from '../../common/constants';
+import { QUEUE_NAME_VOTES_TABLE_SYNC } from '../../common/constants/bullmq.constants';
 
 @QueueEventsListener(QUEUE_NAME_VOTES_TABLE_SYNC)
 export class VotesTableSyncListener extends QueueEventsHost {

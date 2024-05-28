@@ -1,8 +1,6 @@
 import { Timestamp } from 'typeorm';
 
-export class SyncVotesTableDto {
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+export class VoteRequestDto {
   userId: string;
   hotAddress: string;
   govActionProposalId: string;
@@ -10,6 +8,7 @@ export class SyncVotesTableDto {
   title: string;
   comment: string;
   type: string;
+  govMetadataUrl: string;
   endTime: Timestamp;
   time: Timestamp;
 }

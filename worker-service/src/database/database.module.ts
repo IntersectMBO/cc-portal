@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CONNECTION_NAME_DB_SYNC } from '../common/constants/sql.constants';
 
 @Module({
   imports: [
@@ -14,11 +15,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: configService.getOrThrow('BE_POSTGRES_USERNAME'),
         password: configService.getOrThrow('BE_POSTGRES_PASSWORD'),
         autoLoadEntities: true,
+        entities: [__dirname + '/../**/*.entity{.js,.ts}'],
       }),
       inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
-      name: process.env.DB_SYNC_CONNECTION_NAME,
+      name: CONNECTION_NAME_DB_SYNC,
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.getOrThrow('DB_SYNC_POSTGRES_HOST'),
@@ -28,6 +30,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: configService.getOrThrow('DB_SYNC_POSTGRES_USERNAME'),
         password: configService.getOrThrow('DB_SYNC_POSTGRES_PASSWORD'),
         autoLoadEntities: true,
+        entities: [__dirname + '/../**/*.entity{.js,.ts}'],
       }),
       inject: [ConfigService],
     }),

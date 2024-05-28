@@ -1,7 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  Timestamp,
+  Unique,
+} from 'typeorm';
 import { CommonEntity } from '../../common/entitites/common.entity';
 
 @Entity('votes')
+@Unique('UQ_comment', ['comment'])
 export class Vote extends CommonEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

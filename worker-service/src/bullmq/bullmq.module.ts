@@ -2,9 +2,9 @@ import { BullBoardModule } from '@bull-board/nestjs';
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { QUEUE_NAME_VOTES_TABLE_SYNC } from 'src/common/constants';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter.js';
 import { ExpressAdapter } from '@bull-board/express';
+import { QUEUE_NAME_VOTES_TABLE_SYNC } from '../common/constants/bullmq.constants';
 
 @Module({
   imports: [
