@@ -2,32 +2,64 @@ import { customPalette, ICONS } from "@consts";
 import { Typography } from "@atoms";
 import { Collapse, Grid } from "@mui/material";
 
+const Anchor = ({ id, offset = "-20vh " }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: "block",
+        position: "relative",
+        top: offset,
+        visibility: "hidden",
+      }}
+    />
+  );
+};
 export const Heading1 = ({ children, id }) => (
-  <Typography
-    id={id}
-    sx={{ marginTop: "24px", marginBottom: "24px" }}
-    align="center"
-    variant="headline5"
-  >
-    {children}
-  </Typography>
+  <>
+    <Typography
+      sx={{ marginTop: "24px", marginBottom: "24px" }}
+      align="center"
+      variant="headline5"
+    >
+      {children}
+    </Typography>
+    <Anchor id={id} offset="-30vh" />
+  </>
 );
 
 export const Heading2 = ({ children, id }) => (
-  <Typography
-    id={id}
-    sx={{ marginTop: "24px", marginBottom: "24px" }}
-    align="center"
-    variant="body1"
-  >
-    {children}
-  </Typography>
+  <>
+    <Typography
+      sx={{ marginTop: "24px", marginBottom: "24px" }}
+      align="center"
+      variant="body1"
+    >
+      {children}
+    </Typography>
+    <Anchor id={id} />
+  </>
 );
 
-export const Paragraph = ({ children }) => (
-  <Typography sx={{ lineHeight: "18px" }} variant="caption">
-    {children}
-  </Typography>
+export const Heading3 = ({ children, id }) => (
+  <>
+    <Typography
+      sx={{ marginTop: "12px", marginBottom: "12px" }}
+      variant="body2"
+    >
+      {children}
+    </Typography>
+    <Anchor id={id} />
+  </>
+);
+
+export const Paragraph = ({ children, id }) => (
+  <>
+    <Typography sx={{ lineHeight: "18px" }} variant="caption">
+      {children}
+    </Typography>
+    <Anchor id={id} />
+  </>
 );
 
 export const TableOfContent = ({ children, onClick, isOpen }) => {
