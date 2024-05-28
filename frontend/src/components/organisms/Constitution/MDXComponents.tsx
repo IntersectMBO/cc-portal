@@ -41,7 +41,8 @@ export const TableOfContent = ({ children, onClick, isOpen }) => {
       px={2}
       py={2}
       sx={{
-        height: "80vh",
+        height: "90vh",
+        overflow: "scroll",
         backgroundColor: customPalette.arcticWhite,
         "& ol.toc-level-1": {
           paddingInlineStart: 0,
