@@ -104,6 +104,17 @@ services:
       - "psql-data:/var/lib/postgresql/data/"
     ports:
       - "5432:5432"
+    command: >
+      bash -c '
+      /usr/local/bin/docker-entrypoint.sh postgres & 
+      pid=$!; 
+      echo "Waiting for PostgreSQL to start..."; 
+      while ! pg_isready -q -h localhost -p 5432; do 
+        sleep 1; 
+      done; 
+      PGUSER=postgres PGPASSWORD=postgres psql -U postgres -d cc-portal -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"; 
+      wait $pid
+      '
     networks:
       - bloxico_local
 
