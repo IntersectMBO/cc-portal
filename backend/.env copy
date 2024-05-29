@@ -36,5 +36,5 @@ MINIO_BUCKET=cc-portal
 # IPFS Service
 IPFS_SERVICE_URL=http://ipfs:3001
 # FE Callback Url
-FE_LOGIN_CALLBACK_URL= http://frontend:3000/en/verify/login
-FE_REGISTER_CALLBACK_URL = http://frontend:3000/en/verify/register
+FE_LOGIN_CALLBACK_URL= http://159.89.108.54:3000/en/verify/login
+FE_REGISTER_CALLBACK_URL = http://159.89.108.54:3000/en/verify/register
