@@ -24,6 +24,7 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { PermissionGuard } from 'src/auth/guard/permission.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ConstitutionMetadataResponse } from './response/constitution-metadata.response';
+import { getFileValidator } from '../pipe/fileValidatorPipe';
 
 @ApiTags('Constitution')
 @Controller('constitution')
@@ -96,10 +97,8 @@ export class ConstitutionController {
   @Post()
   async storeConstitutionFile(
     @UploadedFile(
+      getFileValidator(),
       new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: 'text/markdown',
-        })
         .addMaxSizeValidator({
           maxSize: 5242880, // 5MB
         })
