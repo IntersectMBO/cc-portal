@@ -8,6 +8,7 @@ import {
   Heading1,
   Heading2,
   Heading3,
+  ListItem,
   Paragraph,
   TableOfContent,
 } from "./MDXComponents";
@@ -29,6 +30,7 @@ export function Constitution({ constitution }: ConstitutionProps) {
     h2: Heading2,
     h3: Heading3,
     p: Paragraph,
+    li: ListItem,
   };
 
   return (
