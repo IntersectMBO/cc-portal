@@ -55,11 +55,26 @@ export const Heading3 = ({ children, id }) => (
 
 export const Paragraph = ({ children, id }) => (
   <>
-    <Typography sx={{ lineHeight: "18px" }} variant="caption">
+    <Typography
+      sx={{ lineHeight: "18px", marginBottom: "16px" }}
+      variant="caption"
+    >
       {children}
     </Typography>
     <Anchor id={id} />
   </>
+);
+
+export const ListItem = ({ children, id }) => (
+  <li
+    style={{
+      lineHeight: "18px",
+      marginBottom: "16px",
+      fontSize: "12px",
+    }}
+  >
+    {children}
+  </li>
 );
 
 export const TableOfContent = ({ children, onClick, isOpen }) => {
@@ -78,14 +93,24 @@ export const TableOfContent = ({ children, onClick, isOpen }) => {
         backgroundColor: customPalette.arcticWhite,
         "& ol.toc-level-1": {
           paddingInlineStart: 0,
+
+          "& li": {
+            listStyle: "outside !important",
+            "& a.toc-link-h1": {
+              fontWeight: 600,
+            },
+          },
+        },
+        "& ol.toc-level-2": {
+          margin: "10px 0px 10px 0px",
         },
         "& li": {
-          listStyle: "none",
+          marginBottom: "3px !important",
           "& a": {
             textDecoration: "none",
             textAlign: "left",
-            fontSize: 16,
-            fontWeight: 600,
+            fontSize: 14,
+            fontWeight: 500,
             lineHeight: "24px",
             color: customPalette.textBlack,
           },
