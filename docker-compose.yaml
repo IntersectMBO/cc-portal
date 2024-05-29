@@ -98,8 +98,8 @@ services:
     container_name: postgres
     environment:
       POSTGRES_DB: cc-portal
-      POSTGRES_USERNAME: BEdev24 # changed because of security
-      POSTGRES_PASSWORD: bedev.bloxico24 # -||-
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - "psql-data:/var/lib/postgresql/data/"
     ports:
