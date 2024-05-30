@@ -1,5 +1,6 @@
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { FetchUserData, UserRole } from "@/lib/requests";
+import { Vote } from "../atoms";
 
 export interface ConstitutionMetadata {
   cid: string;
@@ -49,4 +50,18 @@ export interface ReasoningI {
   description: string;
   link: string;
   hash: string;
+}
+
+export interface LatestUpdates {
+  id: string;
+  user_name: string;
+  user_address: string;
+  profile_photo_url?: string;
+  value: Vote;
+  reasoning_title: string;
+  comment: string;
+  governance_proposal_title: string;
+  governance_proposal_type: string;
+  governance_proposal_resolved: boolean;
+  governance_proposal_end_time: string;
 }

@@ -13,4 +13,10 @@ export const NAV_ITEMS = [
     label: "Members",
     newTabLink: null,
   },
+  {
+    dataTestId: "latestUpdates",
+    href: PATHS.latestUpdates,
+    label: "Latest Updates",
+    newTabLink: null,
+  },
 ];

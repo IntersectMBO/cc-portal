@@ -1,6 +1,7 @@
 import { IMAGES } from "@consts";
 import { OutlinedLightButton, Typography } from "@atoms";
 import { Grid } from "@mui/material";
+import { truncateText } from "@utils";
 
 export const UserBasicInfo = ({
   name,
@@ -42,7 +43,7 @@ export const UserBasicInfo = ({
     )}
     {hotAddress && (
       <OutlinedLightButton nonInteractive={true}>
-        {hotAddress}
+        {truncateText(hotAddress, 16)}
       </OutlinedLightButton>
     )}
   </Grid>
