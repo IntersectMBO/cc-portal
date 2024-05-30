@@ -31,10 +31,8 @@ export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
           >
             {t("Link")}
           </Typography>
-          <OutlinedLightButton>
-            <Typography data-testid="tab-link" variant="caption">
-              {link}
-            </Typography>
+          <OutlinedLightButton nonInteractive={true}>
+            {link}
           </OutlinedLightButton>
         </Box>
         <Box display="flex" flexDirection="column" gap={0.5}>
@@ -45,10 +43,8 @@ export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
           >
             {t("Hash")}
           </Typography>
-          <OutlinedLightButton>
-            <Typography data-testid="tab-hash" variant="caption">
-              {hash}
-            </Typography>
+          <OutlinedLightButton nonInteractive={true}>
+            {hash}
           </OutlinedLightButton>
         </Box>
       </Box>

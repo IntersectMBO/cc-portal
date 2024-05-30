@@ -1,31 +1,46 @@
 "use client";
 
 import React from "react";
-import { Typography } from "@atoms";
+import { Button, SxProps, Theme } from "@mui/material";
 import { customPalette } from "@consts";
-import { Box } from "@mui/material";
-import { BoxOwnProps } from "@mui/system";
+import { ButtonProps } from "@mui/material/Button";
 
-interface Props extends BoxOwnProps {
-  children: React.ReactNode;
+interface Props extends ButtonProps {
+  sx?: SxProps<Theme>;
+  nonInteractive?: boolean; // Custom prop to disable interactions
 }
 
-export const OutlinedLightButton = ({ children, mt, ...props }: Props) => {
+export const OutlinedLightButton = ({
+  children,
+  sx,
+  onClick,
+  size = "small",
+  variant = "outlined",
+  nonInteractive = false,
+  ...props
+}: Props) => {
+  const defaultSxProps = {
+    color: customPalette.textBlack,
+    fontWeight: 400,
+    fontSize: 12,
+    whiteSpace: "nowrap",
+    "&": {
+      pointerEvents: nonInteractive ? "none" : "all",
+    },
+  };
+
   return (
-    <Box display="flex" mt={mt}>
-      <Box
-        px={2.25}
-        py={0.75}
-        border={1}
-        borderColor={customPalette.lightBlue}
-        borderRadius={100}
-        display="flex"
-        flexWrap="nowrap"
-        gap={1}
-        {...props}
-      >
-        {children}
-      </Box>
-    </Box>
+    <Button
+      size={size}
+      variant={variant}
+      onClick={nonInteractive ? undefined : onClick}
+      sx={{
+        ...defaultSxProps,
+        ...sx,
+      }}
+      {...props}
+    >
+      {children}
+    </Button>
   );
 };
