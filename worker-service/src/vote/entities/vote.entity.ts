@@ -1,14 +1,14 @@
 import {
   Column,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
-  Timestamp,
-  Unique,
 } from 'typeorm';
 import { CommonEntity } from '../../common/entitites/common.entity';
+import { GovActionProposal } from './gov-action-proposal.entity';
 
 @Entity('votes')
-@Unique('UQ_comment', ['comment'])
 export class Vote extends CommonEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -25,11 +25,16 @@ export class Vote extends CommonEntity {
   })
   hotAddress: string;
 
-  @Column({
-    name: 'gov_action_proposal_id',
-    type: 'bigint',
-  })
-  govActionProposalId: string;
+  @ManyToOne(
+    () => GovActionProposal,
+    (govActionProposal) => govActionProposal.govActionProposalId,
+    {
+      cascade: true,
+      eager: true,
+    },
+  )
+  @JoinColumn({ name: 'gov_action_proposal_id' })
+  govActionProposal: GovActionProposal;
 
   @Column({
     name: 'vote',
@@ -52,26 +57,25 @@ export class Vote extends CommonEntity {
   comment: string;
 
   @Column({
-    name: 'type',
+    name: 'gov_action_type',
     type: 'varchar',
   })
-  type: string;
-
-  @Column({
-    name: 'gov_metadata_url',
-    type: 'varchar',
-  })
-  govMetadataUrl: string;
+  govActionType: string;
 
   @Column({
     name: 'end_time',
     type: 'timestamp',
   })
-  endTime: Timestamp;
+  endTime: Date;
 
   @Column({
-    name: 'time',
+    name: 'submit_time',
     type: 'timestamp',
   })
-  time: Timestamp;
+  submitTime: Date;
+
+  constructor(vote: Partial<Vote>) {
+    super();
+    Object.assign(this, vote);
+  }
 }

@@ -3,26 +3,39 @@ import { VoteDto } from '../dto/vote.dto';
 import { Vote } from '../entities/vote.entity';
 
 export class VoteMapper {
-  static votesToDto(voteData: Vote[]): VoteDto[] {
-    const voteDtoArray: VoteDto[] = [];
-    voteData.map((x) => {
-      const voteDto = new VoteDto();
-      voteDto.createdAt = x.createdAt;
-      voteDto.updatedAt = x.updatedAt;
-      voteDto.id = x.id;
-      voteDto.userId = x.userId;
-      voteDto.hotAddress = x.hotAddress;
-      voteDto.govActionProposalId = x.govActionProposalId;
-      voteDto.vote = x.vote;
-      voteDto.title = x.title;
-      voteDto.comment = x.comment;
-      voteDto.type = x.type;
-      voteDto.govMetadataUrl = x.govMetadataUrl;
-      voteDto.endTime = x.endTime;
-      voteDto.time = x.time;
-    });
-    return voteDtoArray;
+  static votesToDto(voteData: Vote): VoteDto {
+    const voteDto = new VoteDto();
+    voteDto.createdAt = voteData.createdAt;
+    voteDto.updatedAt = voteData.updatedAt;
+    voteDto.id = voteData.id;
+    voteDto.userId = voteData.userId;
+    voteDto.hotAddress = voteData.hotAddress;
+    voteDto.govActionProposalId =
+      voteData.govActionProposal.govActionProposalId;
+    voteDto.vote = voteData.vote;
+    voteDto.title = voteData.title;
+    voteDto.comment = voteData.comment;
+    voteDto.govActionType = voteData.govActionType;
+    voteDto.endTime = voteData.endTime;
+    voteDto.submitTime = voteData.submitTime;
+    return voteDto;
   }
+
+  // static voteToDto(vote: Vote): VoteDto {
+  //   const voteDto = new VoteDto();
+  //   voteDto.userId = vote.userId;
+  //   voteDto.hotAddress = vote.hotAddress;
+  //   voteDto.govActionProposalId = vote.govActionProposalId;
+  //   voteDto.vote = vote.vote;
+  //   voteDto.title = vote.title;
+  //   voteDto.comment = vote.comment;
+  //   voteDto.type = vote.type;
+  //   voteDto.endTime = vote.endTime;
+  //   voteDto.time = vote.time;
+  //   voteDto.createdAt = vote.createdAt;
+  //   voteDto.updatedAt = vote.updatedAt;
+  //   return voteDto;
+  // }
 
   static objectToVotesRequest(input): VoteRequestDto {
     const voteRequestDto = new VoteRequestDto();

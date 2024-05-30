@@ -38,8 +38,8 @@ import { SearchPhrasePipe } from '../pipe/search-phrase.pipe';
 import { RoleEnum } from '../enums/role.enum';
 import { Roles } from '../../auth/guard/role.decorator';
 import { RoleGuard } from '../../auth/guard/role.guard';
-import { PaginationResponse } from '../../util/pagination/response/pagination.response';
 import { SortOrder } from '../../util/pagination/enums/sort-order.enum';
+import { PaginationResponse } from '../../util/pagination/response/pagination.response';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {

@@ -5,13 +5,13 @@ import { UserResponse } from '../api/response/user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { RoleResponse } from '../api/response/role.response';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
-import { PaginationResponse } from '../../util/pagination/response/pagination.response';
-import { PageMetaResponse } from '../../util/pagination/response/page-meta.response';
 import { UserDto } from '../dto/user.dto';
 
 import { S3Service } from '../../s3/service/s3.service';
 import { UploadContext } from '../../s3/enums/upload-context';
 import { SearchQueryDto } from '../dto/search-query.dto';
+import { PageMetaResponse } from '../../util/pagination/response/page-meta.response';
+import { PaginationResponse } from '../../util/pagination/response/pagination.response';
 @Injectable()
 export class UsersFacade {
   constructor(

@@ -13,8 +13,8 @@ import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UserResponse } from '../api/response/user.response';
 import { SortOrder } from 'src/util/pagination/enums/sort-order.enum';
 import { UsersPaginatedDto } from '../dto/users-paginated.dto';
-import { PaginationResponse } from '../../util/pagination/response/pagination.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
+import { PaginationResponse } from '../../util/pagination/response/pagination.response';
 
 describe('UsersFacade', () => {
   let facade: UsersFacade;

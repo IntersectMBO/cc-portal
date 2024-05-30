@@ -5,19 +5,20 @@ import { VoteFacade } from './facade/vote.facade';
 import { Vote } from './entities/vote.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VoteService } from './services/vote.service';
-import { VotesTableSyncListener } from './events/votesTableSync.listener';
 import { VotesTableSyncProducer } from './queues/votesTableSync.producer';
-import { GovernanceMetadata } from './entities/governance-metadata.entity';
 import {
   QUEUE_NAME_VOTES_TABLE_SYNC,
   FLOW_NAME_EXTRACT_VOTE_DATA,
 } from '../common/constants/bullmq.constants';
 import { DatabaseModule } from '../database/database.module';
+import { HotAddress } from './entities/hotaddress.entity';
+import { GovActionProposal } from './entities/gov-action-proposal.entity';
+import { User } from './entities/user.entity';
 
 @Module({
   imports: [
     DatabaseModule,
-    TypeOrmModule.forFeature([Vote, GovernanceMetadata]),
+    TypeOrmModule.forFeature([Vote, GovActionProposal, HotAddress, User]),
     BullModule.registerQueue({
       name: QUEUE_NAME_VOTES_TABLE_SYNC,
     }),
@@ -28,7 +29,6 @@ import { DatabaseModule } from '../database/database.module';
     VoteFacade,
     VotesTableSyncConsumer,
     VotesTableSyncProducer,
-    VotesTableSyncListener,
   ],
 })
 export class VoteModule {}
