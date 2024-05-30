@@ -25,16 +25,20 @@ export const TopNav = () => {
 
   const renderAuthNavItems = () => {
     return (
-      <Grid container gap={2} alignItems="center">
+      <>
         {getNavItems()}
         <UserProfileButton user={user} />
-      </Grid>
+      </>
     );
   };
 
   return (
     <TopNavWrapper homeRedirectionPath={PATHS.home}>
-      <Box>{userSession ? renderAuthNavItems() : getNavItems()}</Box>
+      <Box>
+        <Grid container gap={2} alignItems="center">
+          {userSession ? renderAuthNavItems() : getNavItems()}
+        </Grid>
+      </Box>
     </TopNavWrapper>
   );
 };
