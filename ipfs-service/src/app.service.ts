@@ -15,7 +15,8 @@ import { mplex } from '@libp2p/mplex';
 import { unixfs } from '@helia/unixfs';
 import { FsBlockstore } from 'blockstore-fs';
 import { LevelDatastore } from 'datastore-level';
-import { ipns } from '@helia/ipns';
+import { IPNS, ipns } from '@helia/ipns';
+import { keychain, type Keychain } from '@libp2p/keychain';
 import { kadDHT, removePrivateAddressesMapper } from '@libp2p/kad-dht';
 import { ipnsSelector } from 'ipns/selector';
 import { ipnsValidator } from 'ipns/validator';
@@ -30,14 +31,59 @@ import {
 } from '@libp2p/circuit-relay-v2';
 import { IpfsMapper } from './mapper/ipfs.mapper.js';
 import { IpfsDto } from './dto/ipfs.dto.js';
+import { PeerId } from '@libp2p/interface';
+
+const libp2pOptions = {
+  addresses: {
+    listen: [
+      // add a listen address (localhost) to accept TCP connections on a random port
+      '/ip4/0.0.0.0/tcp/4001',
+      '/ip4/0.0.0.0/tcp/4001/ws',
+      '/ip4/0.0.0.0/udp/4001/quic',
+    ]
+  },
+  transports: [
+    tcp(),
+    webSockets({ filter: all }),
+    circuitRelayTransport({ discoverRelays: 3 }),
+  ],
+  connectionEncryption: [
+    noise()
+  ],
+  streamMuxers: [
+    yamux()
+  ],
+  peerDiscovery: [
+    bootstrap({
+      list: [
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt'
+          ]
+    })
+  ],
+  services: {
+    identify: identify(),
+    dcutr: dcutr(),
+    aminoDHT: kadDHT({
+      protocol: '/ipfs/kad/1.0.0',
+      peerInfoMapper: removePrivateAddressesMapper,
+      validators: { ipns: ipnsValidator },
+      selectors: { ipns: ipnsSelector },
+    }),
+    relay: circuitRelayServer({ advertise: true }),
+    keychain: keychain(),
+  }
+};
 
 @Injectable()
 export class AppService implements OnModuleInit {
-  private helia: HeliaLibp2p;
+  private helia;
   private fs;
-  private cid?: CID;
-  private ipns;
-  private ipnsPeerId;
+  private ipns: IPNS;
+  private ipnsPeerId: PeerId;
   private logger = new Logger(AppService.name);
 
   constructor(private readonly configService: ConfigService) {}
@@ -45,7 +91,7 @@ export class AppService implements OnModuleInit {
   async onModuleInit() {
     console.log(`Initialization helia...`);
     await this.getHelia();
-    //await this.getIpns();
+    await this.getIpns();
   }
 
   async onApplicationShutdown(): Promise<void> {
@@ -54,90 +100,22 @@ export class AppService implements OnModuleInit {
     }
   }
 
-  async createLibP2P() {
-    const libP2P: any = await createLibp2p({
-      addresses: {
-        listen: [
-          '/ip4/0.0.0.0/tcp/4001',
-          '/ip4/0.0.0.0/tcp/4001/ws',
-          '/ip4/0.0.0.0/udp/4001/quic',
-        ],
-      },
-      transports: [
-        tcp(),
-        webSockets({ filter: all }),
-        circuitRelayTransport({ discoverRelays: 3 }),
-      ],
-      connectionEncryption: [noise()],
-      streamMuxers: [yamux(), mplex()],
-      peerDiscovery: [
-        bootstrap({
-          list: [
-            '/dnsaddr/sg1.bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
-            '/dnsaddr/sv15.bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
-            '/dnsaddr/am6.bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
-            '/dnsaddr/ny5.bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
-          ],
-        }),
-      ],
-      services: {
-        dcutr: dcutr(),
-        identify: identify(),
-        // autoNAT: autoNAT(),
-        // upnp: uPnPNAT(),
-        // pubsub: gossipsub({
-        //   emitSelf: true,
-        //   canRelayMessage: true,
-        // }),
-        aminoDHT: kadDHT({
-          protocol: '/ipfs/kad/1.0.0',
-          peerInfoMapper: removePrivateAddressesMapper,
-          validators: { ipns: ipnsValidator },
-          selectors: { ipns: ipnsSelector },
-        }),
-        relay: circuitRelayServer({ advertise: true }),
-      },
-    });
-    return libP2P;
-  }
-
-  async getHelia(): Promise<HeliaLibp2p> {
+  async getHelia() {
     if (this.helia == null) {
       const blockstore = new FsBlockstore('ipfs/blockstore');
       const datastore = new LevelDatastore('ipfs/datastore');
       await datastore.open();
-      const libp2p = await this.createLibP2P();
 
-      this.helia = await createHelia({ blockstore, datastore, libp2p });
-      //await this.helia.libp2p.services.dht.setMode('server');
+      this.helia = await createHelia({ 
+        blockstore, 
+        datastore, 
+        libp2p: libp2pOptions,
+      });
 
       this.logger.log('PeerId: ' + this.helia.libp2p.peerId.toString());
       this.helia.libp2p
         .getMultiaddrs()
         .forEach((ma) => console.log(ma.toString()));
-
-      // Listen for new peers
-      // this.helia.libp2p.addEventListener('peer:discovery', (evt) => {
-      //   const peer = evt.detail;
-      //   // dial them when we discover them
-      //   this.helia.libp2p.dial(peer.id).catch((err) => {
-      //     console.log(`Could not dial ${peer.id}`, err);
-      //   });
-      // });
-      // // // Listen for new connections to peers
-      // this.helia.libp2p.addEventListener('peer:connect', (evt) => {
-      //   const connection = evt.detail;
-      //   console.log(`Connected to ${connection.toString()}`);
-
-      //   // this.helia.libp2p
-      //   //   .getPeers()
-      //   //   .forEach((peers) => console.log('\nPeers: ' + peers));
-      // });
-      // // Listen for peers disconnecting
-      // this.helia.libp2p.addEventListener('peer:disconnect', (evt) => {
-      //   const connection = evt.detail;
-      //   console.log(`Disconnected from ${connection.toCID().toString()}`);
-      // });
     }
 
     return this.helia;
@@ -145,15 +123,25 @@ export class AppService implements OnModuleInit {
 
   async getIpns() {
     this.ipns = ipns(this.helia);
+    const keyName = 'my-key11';
+    const existingKeys = await this.helia.libp2p.services.keychain.listKeys();
+    // if keyName already exists
+    if (existingKeys.some(x => x.name === keyName)) {
+      this.ipnsPeerId = await this.helia.libp2p.services.keychain.exportPeerId(
+        keyName,
+      );
+      this.logger.log(`IPNS PeerID: ${this.ipnsPeerId}`);
+      return;
+    }
     // create a public key to publish as an IPNS name
     const keyInfo = await this.helia.libp2p.services.keychain.createKey(
-      'my-key4',
+      keyName,
       'RSA',
     );
     this.ipnsPeerId = await this.helia.libp2p.services.keychain.exportPeerId(
       keyInfo.name,
     );
-    console.log('PeerID; ', this.ipnsPeerId);
+    this.logger.log(`IPNS PeerID: ${this.ipnsPeerId}`);
   }
 
   async addDoc(file: Express.Multer.File): Promise<IpfsDto> {
@@ -161,10 +149,18 @@ export class AppService implements OnModuleInit {
     const fileBuffer = Buffer.from(file.buffer);
     const fileObj = Object.values(fileBuffer);
     const cid: CID = await this.fs.addBytes(Uint8Array.from(fileObj));
-    console.log('\nAdded file:', cid);
+    this.logger.log(`Added file: ${cid}`);
 
     const ret1 = this.helia.pins.add(cid);
-    ret1.next().then((res) => console.log('Ret: ' + res.value));
+    ret1.next().then((res) => this.logger.log(`Ret: ${res.value}`));
+
+    // publish the name
+    await this.ipns.publish(this.ipnsPeerId, cid);
+ 
+    // resolve the name
+    const result = await this.ipns.resolve(this.ipnsPeerId);
+    this.logger.log(`Result cid: ${result.cid}`);
+    this.logger.log(`Result path: ${result.path}`);
 
     const content = fileBuffer.toString('utf-8');
 
