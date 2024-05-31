@@ -14,4 +14,5 @@ export const ICONS = {
   arrowLeft: "/icons/ArrowLeft.svg",
   favicon: "/icons/Favicon.ico",
   logoSign: "/icons/LogoSign.svg",
+  informationCircle: "/icons/InformationCircle.svg",
 };

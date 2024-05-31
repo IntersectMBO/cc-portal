@@ -9,5 +9,6 @@ export * from "./PermissionChecker";
 export * from "./Constitution";
 export * from "./MembersCard";
 export * from "./Tabs";
+export * from "./LatestUpdates";
 
 export * from "./types";

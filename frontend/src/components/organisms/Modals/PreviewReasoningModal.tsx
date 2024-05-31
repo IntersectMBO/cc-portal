@@ -100,26 +100,16 @@ export const PreviewReasoningModal = () => {
           <Typography color="neutralGray" variant="caption">
             {t("previewReasoning.governanceActionId")}
           </Typography>
-          <OutlinedLightButton>
-            <Typography
-              data-testid={`${"proposalTypeNoEmptySpaces"}-id`} //todo
-              variant="caption"
-            >
-              govaction_7778...8675 {/** todo getShortenedGovActionId */}
-            </Typography>
+          <OutlinedLightButton nonInteractive={true}>
+            govaction_7778...8675 {/** todo getShortenedGovActionId */}
           </OutlinedLightButton>
         </Box>
         <Box mt={3} data-testid="governance-action-type">
           <Typography color="neutralGray" variant="caption">
             {t("previewReasoning.governanceActionCategory")}
           </Typography>
-          <OutlinedLightButton>
-            <Typography
-              data-testid={`${"proposalTypeNoEmptySpaces"}-type`} //todo proposalTypeNoEmptySpaces
-              variant="caption"
-            >
-              Category 1 {/**todo getProposalTypeLabel */}
-            </Typography>
+          <OutlinedLightButton nonInteractive={true}>
+            Category 1 {/**todo getProposalTypeLabel */}
           </OutlinedLightButton>
         </Box>
         <Box mt={3}>

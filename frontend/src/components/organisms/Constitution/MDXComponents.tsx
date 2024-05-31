@@ -144,12 +144,23 @@ export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
           <Typography variant="caption">{description}</Typography>
         </Grid>
         <Grid item>
-          <OutlinedLightButton>
-            <CopyButton size={14} text={hash} />
-            <Typography variant="caption">
-              {getShortenedGovActionId(hash)}
-            </Typography>
-          </OutlinedLightButton>
+          <Box display="flex">
+            <Box
+              px={2.25}
+              py={0.75}
+              border={1}
+              borderColor={customPalette.lightBlue}
+              borderRadius={100}
+              display="flex"
+              flexWrap="nowrap"
+              gap={1}
+            >
+              <CopyButton size={14} text={hash} />
+              <Typography variant="caption">
+                {getShortenedGovActionId(hash)}
+              </Typography>
+            </Box>
+          </Box>
         </Grid>
         <Grid item>
           <Button onClick={onClick} variant="outlined">

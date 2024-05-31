@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Card } from "@molecules";
+import { Card, TableDivider } from "@molecules";
 import { Grid } from "@mui/material";
 import { UserAvatar, UserBasicInfo, UserRole, UserStatus } from "@molecules";
 import { UserStatus as UserStatusType } from "@atoms";
@@ -32,6 +32,7 @@ export function UsersListItem({
                   </Grid>
                 </Grid>
               </Grid>
+              <TableDivider />
               <Grid item px={{ xxs: 0, lg: 3 }}>
                 <UserRole roles={[role]} />
               </Grid>

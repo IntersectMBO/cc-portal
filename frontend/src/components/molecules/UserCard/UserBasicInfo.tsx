@@ -1,20 +1,24 @@
 import { IMAGES } from "@consts";
-import { Typography } from "@atoms";
+import { OutlinedLightButton, Typography } from "@atoms";
 import { Grid } from "@mui/material";
+import { truncateText } from "@utils";
 
 export const UserBasicInfo = ({
   name,
   email,
+  hotAddress,
+  maxWidth = 300,
 }: {
   name: string;
-  email: string;
+  email?: string;
+  hotAddress?: string;
+  maxWidth?: number;
 }) => (
   <Grid
     container
     sx={{
-      borderRight: { xxs: "none", md: "1px solid #D6E2FF" },
       paddingRight: 3,
-      width: { xxs: "auto", md: 300 },
+      width: { xxs: "auto", md: maxWidth },
       height: "100%",
     }}
     px={{ xxs: 1, lg: 3 }}
@@ -29,11 +33,18 @@ export const UserBasicInfo = ({
     >
       {name}
     </Typography>
-    <Grid container gap={1} flexWrap="nowrap">
-      <img src={IMAGES.mail} width={20} height={20} />
-      <Typography variant="body2" fontWeight={400}>
-        {email}
-      </Typography>
-    </Grid>
+    {email && (
+      <Grid container gap={1} flexWrap="nowrap">
+        <img src={IMAGES.mail} width={20} height={20} />
+        <Typography variant="body2" fontWeight={400}>
+          {email}
+        </Typography>
+      </Grid>
+    )}
+    {hotAddress && (
+      <OutlinedLightButton nonInteractive={true}>
+        {truncateText(hotAddress, 16)}
+      </OutlinedLightButton>
+    )}
   </Grid>
 );
