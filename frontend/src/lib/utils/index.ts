@@ -7,3 +7,4 @@ export * from "./forms";
 export * from "./date";
 export * from "./getGovActionId";
 export * from "./string";
+export * from "./getProposalTypeLabel";

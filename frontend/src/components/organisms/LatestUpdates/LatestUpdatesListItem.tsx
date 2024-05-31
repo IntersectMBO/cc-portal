@@ -10,6 +10,7 @@ import { customPalette, ICONS } from "@consts";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { truncateText } from "@utils";
+import { getProposalTypeLabel } from "@utils";
 
 export const LatestUpdatesListItem = ({
   user_name,
@@ -111,7 +112,7 @@ export const LatestUpdatesListItem = ({
                   {t("govActionCategoryShort")}
                 </Typography>
                 <OutlinedLightButton onClick={onFilterClick}>
-                  {governance_proposal_type}
+                  {getProposalTypeLabel(governance_proposal_type)}
                 </OutlinedLightButton>
               </Grid>
               <TableDivider />
