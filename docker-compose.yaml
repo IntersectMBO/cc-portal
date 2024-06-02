@@ -153,6 +153,14 @@ services:
     networks:
       - bloxico_local
 
+  proxy:
+    image: cc-portal-proxy:latest
+    container_name: proxy
+    ports:
+      - "80:80"
+    networks:
+      - bloxico_local
+
 volumes:
   cache:
   s3_data:
