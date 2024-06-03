@@ -1,15 +1,15 @@
 import React from "react";
-import { Box, Grid } from "@mui/material";
-import { NotFound } from "../NotFound";
-import { LatestUpdates } from "../types";
+import { Box } from "@mui/material";
 import { Typography } from "@atoms";
 import { useTranslations } from "next-intl";
-import { LatestUpdatesListItem } from "./LatestUpdatesListItem";
+import { VotesTable } from "./VotesTable";
+import { VotesTableI } from "./types";
+import { NotFound } from "./NotFound";
 
-export const LatestUpdatesList = ({
+export const LatestUpdates = ({
   latestUpdates,
 }: {
-  latestUpdates: LatestUpdates[];
+  latestUpdates: VotesTableI[];
 }) => {
   const t = useTranslations("LatestUpdates");
 
@@ -27,13 +27,7 @@ export const LatestUpdatesList = ({
       <Typography sx={{ paddingBottom: 4 }} variant="headline4">
         {t("title")}
       </Typography>
-      <Grid container direction="column" gap={0}>
-        {latestUpdates.map((data, index) => (
-          <Grid key={index} item data-testid={`latest-updates-${data.id}-card`}>
-            <LatestUpdatesListItem {...data} />
-          </Grid>
-        ))}
-      </Grid>
+      <VotesTable votes={latestUpdates} />
     </Box>
   );
 };

@@ -1,12 +1,12 @@
 import React from "react";
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import { Typography } from "@atoms";
 import { useTranslations } from "next-intl";
-import { LatestUpdates } from "./types";
+import { VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
-import { LatestUpdatesListItem } from "./LatestUpdates";
+import { VotesTable } from "./VotesTable";
 
-export const MyActions = ({ actions }: { actions: LatestUpdates[] }) => {
+export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
   const t = useTranslations("MyActions");
 
   if (actions?.length === 0 || actions === undefined) {
@@ -20,13 +20,7 @@ export const MyActions = ({ actions }: { actions: LatestUpdates[] }) => {
       <Typography sx={{ paddingBottom: 4 }} variant="headline4">
         {t("title")}
       </Typography>
-      <Grid container direction="column" gap={0}>
-        {actions.map((data, index) => (
-          <Grid key={index} item data-testid={`latest-updates-${data.id}-card`}>
-            <LatestUpdatesListItem {...data} />
-          </Grid>
-        ))}
-      </Grid>
+      <VotesTable votes={actions} />
     </Box>
   );
 };
