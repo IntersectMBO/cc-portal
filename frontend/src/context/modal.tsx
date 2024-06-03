@@ -15,6 +15,7 @@ import { SignUpModal } from "@/components/organisms/Modals/SignUpModal";
 import { SignOutModal } from "@/components/organisms/Modals/SignOutModal";
 import { CompareConstitutionModal } from "@/components/organisms/Modals/CompareConstitutionModal";
 import { PreviewReasoningModal } from "@/components/organisms/Modals/PreviewReasoningModal";
+import { GovActionModal } from "@/components/organisms/Modals/GovActionModal";
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -38,7 +39,8 @@ export type ModalType =
   | "compareConstitutionModal"
   | "addReasoningModal"
   | "reasoningLinkModal"
-  | "previewReasoningModal";
+  | "previewReasoningModal"
+  | "govActionModal";
 
 const modals: Record<ModalType, ContextModal> = {
   none: {
@@ -74,6 +76,9 @@ const modals: Record<ModalType, ContextModal> = {
   },
   previewReasoningModal: {
     component: <PreviewReasoningModal />,
+  },
+  govActionModal: {
+    component: <GovActionModal />,
   },
 };
 

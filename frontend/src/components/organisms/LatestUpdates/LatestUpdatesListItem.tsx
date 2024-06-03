@@ -5,14 +5,16 @@ import { Card, TableDivider } from "@molecules";
 import { Box, Grid } from "@mui/material";
 import { UserAvatar, UserBasicInfo } from "@molecules";
 import { Button, OutlinedLightButton, Typography, VotePill } from "@atoms";
-import { LatestUpdates } from "../types";
+import { GovActionModalState, LatestUpdates } from "../types";
 import { customPalette, ICONS } from "@consts";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { truncateText } from "@utils";
 import { getProposalTypeLabel } from "@utils";
+import { useModal } from "@context";
 
 export const LatestUpdatesListItem = ({
+  id,
   user_name,
   user_address,
   profile_photo_url,
@@ -22,6 +24,7 @@ export const LatestUpdatesListItem = ({
   governance_proposal_type,
 }: LatestUpdates) => {
   const t = useTranslations("LatestUpdates");
+  const { openModal } = useModal<GovActionModalState>();
 
   const onShowMoreClick = () => {
     console.log("Show more clicked");
@@ -32,7 +35,13 @@ export const LatestUpdatesListItem = ({
   };
 
   const openGAModal = () => {
-    console.log("Open GA details modal");
+    openModal({
+      type: "govActionModal",
+      state: {
+        id,
+        governance_proposal_title,
+      },
+    });
   };
 
   return (

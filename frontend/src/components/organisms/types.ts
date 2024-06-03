@@ -45,6 +45,11 @@ export interface SignOutModalState {
   homeRedirectionPath: string;
 }
 
+export interface GovActionModalState {
+  id: string;
+  governance_proposal_title: string;
+}
+
 export interface ReasoningI {
   title: string;
   description: string;

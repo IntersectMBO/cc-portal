@@ -192,6 +192,9 @@
           "paragraphOne": "The date when the governance action was submitted on-chain."
         }
       }
+    },
+    "govActionModal": {
+      "govActionId": "Governance Action ID"
     }
   },
   "AdminDashboard": {
