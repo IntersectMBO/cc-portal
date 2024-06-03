@@ -2,7 +2,11 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { defaultLocale, locales, PATHS } from "@consts";
-import { isAdminProtectedRoute, isAnyAdminRole } from "@utils";
+import {
+  isAdminProtectedRoute,
+  isAnyAdminRole,
+  isUserProtectedRoute,
+} from "@utils";
 import { decodeUserToken } from "./lib/api";
 
 // Export the middleware configuration to define supported locales and the default locale.
@@ -40,6 +44,14 @@ export async function middleware(req: NextRequest) {
     }
 
     return NextResponse.redirect(new URL(PATHS.admin.home, req.url));
+  }
+
+  if (isUserProtectedRoute(req)) {
+    if (decodedToken) {
+      return response;
+    }
+
+    return NextResponse.redirect(new URL(PATHS.home, req.url));
   }
   return response;
 }
