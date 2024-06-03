@@ -1,12 +1,12 @@
 import { ChangeEvent } from "react";
 import {
-  ButtonProps as MUIButtonProps,
   CheckboxProps as MUICheckboxProps,
   InputBaseProps,
   TypographyProps as MUITypographyProps,
   TextareaAutosizeProps,
   SxProps,
 } from "@mui/material";
+import { ButtonProps as MUIButtonProps } from "@mui/material/Button";
 
 export type ButtonProps = Omit<MUIButtonProps, "size"> & {
   size?: "small" | "medium" | "large" | "extraLarge";
