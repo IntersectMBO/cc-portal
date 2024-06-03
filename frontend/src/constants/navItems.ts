@@ -20,3 +20,12 @@ export const NAV_ITEMS = [
     newTabLink: null,
   },
 ];
+
+export const PROTECTED_NAV_ITEMS = [
+  {
+    dataTestId: "my-actions",
+    href: PATHS.myActions,
+    label: "My Actions",
+    newTabLink: null,
+  },
+];

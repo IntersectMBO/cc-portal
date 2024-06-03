@@ -33,6 +33,9 @@
     "reasoning": "Reasoning",
     "showMore": "Show more"
   },
+  "MyActions": {
+    "title": "My Actions"
+  },
   "Navigation": {
     "addNewMember": "Add new member",
     "uploadNewVersion": "Upload new version",
@@ -209,6 +212,10 @@
     "latestUpdates": {
       "title": "No votes found",
       "description": "There is currently no votes. Please check back later for updates"
+    },
+    "myActions": {
+      "title": "No votes found",
+      "description": "There is currently no actions. Please check back later for updates"
     },
     "constitution": {
       "title": "No Constitution available",

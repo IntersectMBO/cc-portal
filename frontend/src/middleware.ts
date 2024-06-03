@@ -18,6 +18,7 @@ export const config = {
     "/",
     "/interim-constitution",
     "/latest-updates",
+    "/my-actions",
     "/members",
     "/admin",
     "/admin/dashboard",

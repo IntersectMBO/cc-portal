@@ -191,6 +191,71 @@ export async function getLatestUpdates(): Promise<any[]> {
   }
 }
 
+export async function getUserVotes(): Promise<any[]> {
+  try {
+    const res: { data: LatestUpdates[] } = {
+      data: [
+        {
+          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
+          user_name: "Maria",
+          user_address: "longaddress@example.com",
+          value: "yes",
+          reasoning_title: "This proposal is good for the ecosystem",
+          comment:
+            "Here i elaborated why this proposal is good for the ecosystem",
+          governance_proposal_title: "Random title",
+          governance_proposal_type: "ParameterChange",
+          governance_proposal_resolved: false,
+          governance_proposal_end_time: "End time of a governance proposal",
+        },
+        {
+          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
+          user_name: "Maria",
+          user_address: "test@example.com",
+          value: "yes",
+          reasoning_title: "This proposal is good for the ecosystem",
+          comment:
+            "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit  Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis, lorem ipsum dolor sit amet consectetur.             ",
+          governance_proposal_title:
+            "This title can have up to 88 characters amet orci adipiscing proin duis nibh sed id am.",
+          governance_proposal_type: "ParameterChange",
+          governance_proposal_resolved: false,
+          governance_proposal_end_time: "End time of a governance proposal",
+        },
+        {
+          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
+          user_name: "Maria",
+          user_address: "test@example.com",
+          value: "no",
+          reasoning_title: "This proposal is good for the ecosystem",
+          comment:
+            "Here i elaborated why this proposal is good for the ecosystem",
+          governance_proposal_title: "Random title",
+          governance_proposal_type: "ParameterChange",
+          governance_proposal_resolved: false,
+          governance_proposal_end_time: "End time of a governance proposal",
+        },
+        {
+          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
+          user_name: "Maria",
+          user_address: "test@example.com",
+          value: "abstain",
+          reasoning_title: "This proposal is good for the ecosystem",
+          comment:
+            "Here i elaborated why this proposal is good for the ecosystem",
+          governance_proposal_title: "Random title",
+          governance_proposal_type: "ParameterChange",
+          governance_proposal_resolved: false,
+          governance_proposal_end_time: "End time of a governance proposal",
+        },
+      ],
+    };
+    return res.data;
+  } catch (error) {
+    console.log("error get latest updates", error);
+  }
+}
+
 export async function registerUser(email: string) {
   try {
     const token = getAccessToken();
