@@ -13,6 +13,7 @@ import {
   ConstitutionByCid,
   ConstitutionMetadata,
   LatestUpdates,
+  VotesTableI,
 } from "@/components/organisms";
 
 // Function to decode the user token stored in the authentication cookie
@@ -128,7 +129,7 @@ export async function getMembers(): Promise<any[]> {
 
 export async function getLatestUpdates(): Promise<any[]> {
   try {
-    const res: { data: LatestUpdates[] } = {
+    const res: { data: VotesTableI[] } = {
       data: [
         {
           id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
@@ -193,7 +194,7 @@ export async function getLatestUpdates(): Promise<any[]> {
 
 export async function getUserVotes(): Promise<any[]> {
   try {
-    const res: { data: LatestUpdates[] } = {
+    const res: { data: VotesTableI[] } = {
       data: [
         {
           id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
