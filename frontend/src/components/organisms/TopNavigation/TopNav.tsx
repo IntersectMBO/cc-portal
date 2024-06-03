@@ -35,7 +35,7 @@ export const TopNav = () => {
   return (
     <TopNavWrapper homeRedirectionPath={PATHS.home}>
       <Box>
-        <Grid container gap={2} alignItems="center">
+        <Grid container gap={4} alignItems="center">
           {userSession ? renderAuthNavItems() : getNavItems()}
         </Grid>
       </Box>
