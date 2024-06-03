@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const ModalHeader = ({ children, sx }: Props) => (
-  <Typography marginBottom="8px" fontSize="28px" fontWeight="500" sx={sx}>
+  <Typography marginBottom="8px" fontSize="22px" fontWeight="500" sx={sx}>
     {children}
   </Typography>
 );
