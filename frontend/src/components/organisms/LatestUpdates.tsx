@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Box } from "@mui/material";
 import { Typography } from "@atoms";
@@ -27,7 +29,11 @@ export const LatestUpdates = ({
       <Typography sx={{ paddingBottom: 4 }} variant="headline4">
         {t("title")}
       </Typography>
-      <VotesTable votes={latestUpdates} />
+      <VotesTable
+        votes={latestUpdates}
+        actionTitle={t("actionTitle")}
+        onActionClick={() => console.log("Show Reasoning Modal")}
+      />
     </Box>
   );
 };

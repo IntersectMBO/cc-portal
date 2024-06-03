@@ -3,14 +3,34 @@ import { Grid } from "@mui/material";
 import { VotesTableI } from "../types";
 import { VotesTableRow } from "./VotesTableRow";
 
-export const VotesTable = ({ votes }: { votes: VotesTableI[] }) => {
+interface Props {
+  votes: VotesTableI[];
+  onActionClick: () => void;
+  actionTitle: string;
+  isDisabled?: (data: VotesTableI) => boolean;
+}
+
+export const VotesTable = ({
+  votes,
+  onActionClick,
+  actionTitle,
+  isDisabled,
+}: Props) => {
   return (
     <Grid container direction="column" gap={0}>
-      {votes.map((data, index) => (
-        <Grid key={index} item data-testid={`latest-updates-${data.id}-card`}>
-          <VotesTableRow {...data} />
-        </Grid>
-      ))}
+      {votes.map((data, index) => {
+        const disabled = isDisabled && isDisabled(data);
+        return (
+          <Grid key={index} item data-testid={`latest-updates-${data.id}-card`}>
+            <VotesTableRow
+              votes={data}
+              disabled={disabled}
+              onActionClick={onActionClick}
+              actionTitle={actionTitle}
+            />
+          </Grid>
+        );
+      })}
     </Grid>
   );
 };

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Box } from "@mui/material";
 import { Typography } from "@atoms";
@@ -20,7 +22,12 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
       <Typography sx={{ paddingBottom: 4 }} variant="headline4">
         {t("title")}
       </Typography>
-      <VotesTable votes={actions} />
+      <VotesTable
+        votes={actions}
+        actionTitle={t("actionTitle")}
+        onActionClick={() => console.log("Manage Actions Modal")}
+        isDisabled={(data) => data.governance_proposal_resolved}
+      />
     </Box>
   );
 };

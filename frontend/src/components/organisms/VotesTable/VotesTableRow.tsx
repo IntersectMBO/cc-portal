@@ -13,22 +13,30 @@ import { truncateText } from "@utils";
 import { getProposalTypeLabel } from "@utils";
 import { useModal } from "@context";
 
+interface Props {
+  votes: VotesTableI;
+  disabled: boolean;
+  actionTitle: string;
+  onActionClick: () => void;
+}
+
 export const VotesTableRow = ({
-  id,
-  user_name,
-  user_address,
-  profile_photo_url,
-  value,
-  comment,
-  governance_proposal_title,
-  governance_proposal_type,
-}: VotesTableI) => {
+  votes: {
+    id,
+    user_name,
+    user_address,
+    profile_photo_url,
+    value,
+    comment,
+    governance_proposal_title,
+    governance_proposal_type,
+  },
+  disabled,
+  actionTitle,
+  onActionClick,
+}: Props) => {
   const t = useTranslations("LatestUpdates");
   const { openModal } = useModal<GovActionModalState>();
-
-  const onShowMoreClick = () => {
-    console.log("Show more clicked");
-  };
 
   const onFilterClick = () => {
     console.log("Filter clicked");
@@ -45,7 +53,13 @@ export const VotesTableRow = ({
   };
 
   return (
-    <Grid item mb={3}>
+    <Grid
+      item
+      mb={3}
+      sx={{
+        opacity: disabled && 0.5,
+      }}
+    >
       <Card variant="default">
         <Grid
           container
@@ -179,11 +193,12 @@ export const VotesTableRow = ({
             px={{ xxs: 0, xl: 3 }}
           >
             <Button
+              disabled={disabled}
               sx={{ whiteSpace: "nowrap" }}
-              onClick={onShowMoreClick}
+              onClick={onActionClick}
               variant="outlined"
             >
-              {t("showMore")}
+              {actionTitle}
             </Button>
           </Grid>
         </Grid>

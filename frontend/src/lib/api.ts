@@ -141,7 +141,7 @@ export async function getLatestUpdates(): Promise<any[]> {
             "Here i elaborated why this proposal is good for the ecosystem",
           governance_proposal_title: "Random title",
           governance_proposal_type: "ParameterChange",
-          governance_proposal_resolved: false,
+          governance_proposal_resolved: true,
           governance_proposal_end_time: "End time of a governance proposal",
         },
         {
@@ -220,7 +220,7 @@ export async function getUserVotes(): Promise<any[]> {
           governance_proposal_title:
             "This title can have up to 88 characters amet orci adipiscing proin duis nibh sed id am.",
           governance_proposal_type: "ParameterChange",
-          governance_proposal_resolved: false,
+          governance_proposal_resolved: true,
           governance_proposal_end_time: "End time of a governance proposal",
         },
         {
