@@ -57,7 +57,7 @@ export interface ReasoningI {
   hash: string;
 }
 
-export interface LatestUpdates {
+export interface VotesTableI {
   id: string;
   user_name: string;
   user_address: string;
