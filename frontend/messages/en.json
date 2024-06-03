@@ -31,10 +31,11 @@
     "govActionCategoryShort": "GA Category",
     "voted": "Voted",
     "reasoning": "Reasoning",
-    "showMore": "Show more"
+    "actionTitle": "Show more"
   },
   "MyActions": {
-    "title": "My Actions"
+    "title": "My Actions",
+    "actionTitle": "Manage"
   },
   "Navigation": {
     "addNewMember": "Add new member",
