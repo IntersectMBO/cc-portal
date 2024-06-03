@@ -42,7 +42,8 @@
     "uploadNewVersion": "Upload new version",
     "editProfile": "Edit Profile",
     "signOut": "Sign Out",
-    "seeConstituton": "See Constitution"
+    "seeConstituton": "See Constitution",
+    "adminDashboard": "Admin Dashboard"
   },
   "Footer": {
     "copyright": "© 2024 Intersect MBO",
