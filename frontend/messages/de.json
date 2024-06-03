@@ -41,7 +41,8 @@
     "addNewMember": "Add new member",
     "uploadNewVersion": "Upload new version",
     "editProfile": "Edit Profile",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "seeConstituton": "See Constitution"
   },
   "Footer": {
     "copyright": "© 2024 Intersect MBO",
