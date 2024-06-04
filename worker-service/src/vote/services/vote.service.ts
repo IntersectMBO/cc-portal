@@ -16,9 +16,9 @@ import { Vote } from '../entities/vote.entity';
 import { VoteMapper } from '../mapper/vote.mapper';
 import { VoteRequestDto } from '../dto/vote-request.dto';
 import { CONNECTION_NAME_DB_SYNC } from '../../common/constants/sql.constants';
-import { PAGE_HOT_ADDRESS } from '../../common/constants/bullmq.constants';
 import { PageOptionsDto } from '../../util/pagination/dto/page-options.dto';
 import { HotAddress } from '../entities/hotaddress.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class VoteService {
@@ -33,6 +33,7 @@ export class VoteService {
     private readonly entityManager: EntityManager,
     @InjectRepository(HotAddress)
     private readonly hotAddressRepository: Repository<HotAddress>,
+    private readonly configService: ConfigService,
   ) {}
 
   async countHotAddressPages(): Promise<number> {
@@ -40,7 +41,7 @@ export class VoteService {
     let pages: number = 0;
 
     while (countedHotAddresses >= 0) {
-      countedHotAddresses -= PAGE_HOT_ADDRESS;
+      countedHotAddresses -= this.configService.getOrThrow('PAGE_HOT_ADDRESS');
       pages++;
     }
 
@@ -50,10 +51,10 @@ export class VoteService {
   async getHotAddresses(hotAddressPage: number): Promise<Map<string, string>> {
     const pageOptions = new PageOptionsDto();
     pageOptions.page = hotAddressPage;
-    pageOptions.perPage = PAGE_HOT_ADDRESS;
+    pageOptions.perPage = this.configService.getOrThrow('PAGE_HOT_ADDRESS');
     const { skip } = pageOptions;
     const findOptions = {
-      take: PAGE_HOT_ADDRESS,
+      take: this.configService.getOrThrow('PAGE_HOT_ADDRESS'),
       skip: skip,
     };
     const hotAddresses = await this.hotAddressRepository.find(findOptions);
