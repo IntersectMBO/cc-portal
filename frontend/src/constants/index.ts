@@ -12,3 +12,4 @@ export * from "./paths";
 export * from "./font";
 export * from "./cookies";
 export * from "./forms";
+export * from "./governanceAction";

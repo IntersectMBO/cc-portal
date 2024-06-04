@@ -25,11 +25,25 @@
       "latestUpdates": "Latest updates"
     }
   },
+  "LatestUpdates": {
+    "title": "Latest Updates",
+    "govAction": "Governance Action",
+    "govActionCategoryShort": "GA Category",
+    "voted": "Voted",
+    "reasoning": "Reasoning",
+    "actionTitle": "Show more"
+  },
+  "MyActions": {
+    "title": "My Actions",
+    "actionTitle": "Manage"
+  },
   "Navigation": {
     "addNewMember": "Add new member",
     "uploadNewVersion": "Upload new version",
     "editProfile": "Edit Profile",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "seeConstituton": "See Constitution",
+    "adminDashboard": "Admin Dashboard"
   },
   "Footer": {
     "copyright": "© 2024 Intersect MBO",
@@ -184,6 +198,9 @@
           "paragraphOne": "The date when the governance action was submitted on-chain."
         }
       }
+    },
+    "govActionModal": {
+      "govActionId": "Governance Action ID"
     }
   },
   "AdminDashboard": {
@@ -194,6 +211,14 @@
     "members": {
       "title": "No members found",
       "description": "Add new members"
+    },
+    "latestUpdates": {
+      "title": "No votes found",
+      "description": "There is currently no votes. Please check back later for updates"
+    },
+    "myActions": {
+      "title": "No votes found",
+      "description": "There is currently no actions. Please check back later for updates"
     },
     "constitution": {
       "title": "No Constitution available",

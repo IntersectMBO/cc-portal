@@ -1,19 +1,23 @@
 "use client";
 import React from "react";
 
-import { Box, Grid } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 
-import { NAV_ITEMS, PATHS } from "@consts";
+import { ICONS, NAV_ITEMS, PATHS, PROTECTED_NAV_ITEMS } from "@consts";
 import { Link } from "@atoms";
 import { useAppContext } from "@context";
 import { TopNavWrapper } from "./TopNavWrapper";
 import UserProfileButton from "@/components/molecules/UserProfileButton";
+import { isAnyAdminRole } from "@utils";
+import NextLink from "next/link";
+import { useTranslations } from "next-intl";
 
 export const TopNav = () => {
   const { userSession, user } = useAppContext();
+  const t = useTranslations("Navigation");
 
-  const getNavItems = () =>
-    NAV_ITEMS.map((navItem) => (
+  const getNavItems = (items = NAV_ITEMS) =>
+    items.map((navItem) => (
       <Grid item key={navItem.label}>
         <Link
           data-testid={navItem.dataTestId}
@@ -25,16 +29,31 @@ export const TopNav = () => {
 
   const renderAuthNavItems = () => {
     return (
-      <Grid container gap={2} alignItems="center">
+      <>
         {getNavItems()}
+        {getNavItems(PROTECTED_NAV_ITEMS)}
+        {isAnyAdminRole(userSession.role) && (
+          <Button
+            endIcon={<img src={ICONS.arrowUpRight} />}
+            variant="outlined"
+            href={PATHS.admin.dashboard}
+            component={NextLink}
+          >
+            {t("adminDashboard")}
+          </Button>
+        )}
         <UserProfileButton user={user} />
-      </Grid>
+      </>
     );
   };
 
   return (
     <TopNavWrapper homeRedirectionPath={PATHS.home}>
-      <Box>{userSession ? renderAuthNavItems() : getNavItems()}</Box>
+      <Box>
+        <Grid container gap={4} alignItems="center">
+          {userSession ? renderAuthNavItems() : getNavItems()}
+        </Grid>
+      </Box>
     </TopNavWrapper>
   );
 };

@@ -13,4 +13,19 @@ export const NAV_ITEMS = [
     label: "Members",
     newTabLink: null,
   },
+  {
+    dataTestId: "latestUpdates",
+    href: PATHS.latestUpdates,
+    label: "Latest Updates",
+    newTabLink: null,
+  },
+];
+
+export const PROTECTED_NAV_ITEMS = [
+  {
+    dataTestId: "my-actions",
+    href: PATHS.myActions,
+    label: "My Actions",
+    newTabLink: null,
+  },
 ];
