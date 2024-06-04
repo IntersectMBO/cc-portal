@@ -52,7 +52,7 @@ export class TestData1717518991112 implements MigrationInterface {
     await queryRunner.query(
       `-- Votes
             insert into votes ("id", "user_id","gov_action_proposal_id", "hot_address", "vote", "title", "comment", "gov_action_type", "end_time", "submit_time") values
-            (uuid_generate_v4()
+            (1
             ,(select id from users where email = '${standardUserEmail1}')
             ,(select id from gov_action_proposals where title = 'First Proposal')
             ,(select address from hot_addresses where user_id = (select id from users where email = '${standardUserEmail1}'))
@@ -63,7 +63,7 @@ export class TestData1717518991112 implements MigrationInterface {
             ,NOW() + INTERVAL '10 DAYS'
             ,NOW()),
 
-            (uuid_generate_v4()
+            (2
             ,(select id from users where email = '${standardUserEmail2}')
             ,(select id from gov_action_proposals where title = 'First Proposal')
             ,(select address from hot_addresses where user_id = (select id from users where email = '${standardUserEmail2}'))
@@ -74,7 +74,7 @@ export class TestData1717518991112 implements MigrationInterface {
             ,NOW() + INTERVAL '10 DAYS'
             ,NOW()),
 
-            (uuid_generate_v4()
+            (3
             ,(select id from users where email = '${standardUserEmail3}')
             ,(select id from gov_action_proposals where title = 'First Proposal')
             ,(select address from hot_addresses where user_id = (select id from users where email = '${standardUserEmail3}'))
@@ -85,7 +85,7 @@ export class TestData1717518991112 implements MigrationInterface {
             ,NOW() + INTERVAL '10 DAYS'
             ,NOW()),
 
-            (uuid_generate_v4()
+            (4
             ,(select id from users where email = '${standardUserEmail1}')
             ,(select id from gov_action_proposals where title = 'Second Proposal')
             ,(select address from hot_addresses where user_id = (select id from users where email = '${standardUserEmail1}'))
@@ -96,7 +96,7 @@ export class TestData1717518991112 implements MigrationInterface {
             ,NOW() + INTERVAL '12 DAYS'
             ,NOW()),
 
-            (uuid_generate_v4()
+            (5
             ,(select id from users where email = '${standardUserEmail2}')
             ,(select id from gov_action_proposals where title = 'Second Proposal')
             ,(select address from hot_addresses where user_id = (select id from users where email = '${standardUserEmail2}'))
@@ -107,7 +107,7 @@ export class TestData1717518991112 implements MigrationInterface {
             ,NOW() + INTERVAL '12 DAYS'
             ,NOW()),
 
-            (uuid_generate_v4()
+            (6
             ,(select id from users where email = '${standardUserEmail3}')
             ,(select id from gov_action_proposals where title = 'Second Proposal')
             ,(select address from hot_addresses where user_id = (select id from users where email = '${standardUserEmail3}'))
@@ -118,7 +118,7 @@ export class TestData1717518991112 implements MigrationInterface {
             ,NOW() + INTERVAL '12 DAYS'
             ,NOW()),
 
-            (uuid_generate_v4()
+            (7
             ,(select id from users where email = '${standardUserEmail1}')
             ,(select id from gov_action_proposals where title = 'Third Proposal')
             ,(select address from hot_addresses where user_id = (select id from users where email = '${standardUserEmail1}'))
@@ -129,7 +129,7 @@ export class TestData1717518991112 implements MigrationInterface {
             ,NOW() - INTERVAL '2 DAYS'
             ,NOW()),
 
-            (uuid_generate_v4()
+            (8
             ,(select id from users where email = '${standardUserEmail3}')
             ,(select id from gov_action_proposals where title = 'Third Proposal')
             ,(select address from hot_addresses where user_id = (select id from users where email = '${standardUserEmail3}'))
