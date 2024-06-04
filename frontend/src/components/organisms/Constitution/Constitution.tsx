@@ -5,6 +5,7 @@ import { Grid } from "@mui/material";
 import { MDXRemote } from "next-mdx-remote";
 import { useState } from "react";
 import {
+  Code,
   Heading1,
   Heading2,
   Heading3,
@@ -31,6 +32,7 @@ export function Constitution({ constitution }: ConstitutionProps) {
     h3: Heading3,
     p: Paragraph,
     li: ListItem,
+    code: Code,
   };
 
   return (

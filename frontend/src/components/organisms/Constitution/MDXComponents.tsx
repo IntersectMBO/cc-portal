@@ -15,12 +15,24 @@ const Anchor = ({ id, offset = "-20vh " }) => {
     />
   );
 };
+
+export const HeadingAnchor = ({ children, id }) => (
+  <>
+    {children}
+    <Anchor id={id} offset="-30vh" />
+  </>
+);
+
 export const Heading1 = ({ children, id }) => (
   <>
     <Typography
-      sx={{ marginTop: "24px", marginBottom: "24px" }}
-      align="center"
-      variant="headline5"
+      sx={{
+        marginTop: "24px",
+        marginBottom: "16px",
+        lineHeight: "1.25em",
+        fontSize: "2em",
+      }}
+      variant="headline4"
     >
       {children}
     </Typography>
@@ -31,9 +43,13 @@ export const Heading1 = ({ children, id }) => (
 export const Heading2 = ({ children, id }) => (
   <>
     <Typography
-      sx={{ marginTop: "24px", marginBottom: "24px" }}
-      align="center"
-      variant="body1"
+      sx={{
+        marginTop: "24px",
+        marginBottom: "16px",
+        fontWeight: 600,
+        fontSize: 20,
+        lineHeight: "1.25em",
+      }}
     >
       {children}
     </Typography>
@@ -44,8 +60,13 @@ export const Heading2 = ({ children, id }) => (
 export const Heading3 = ({ children, id }) => (
   <>
     <Typography
-      sx={{ marginTop: "12px", marginBottom: "12px" }}
-      variant="body2"
+      sx={{
+        marginTop: "24px",
+        marginBottom: "16px",
+        fontWeight: 600,
+        fontSize: 18,
+        lineHeight: "1.25em",
+      }}
     >
       {children}
     </Typography>
@@ -56,7 +77,7 @@ export const Heading3 = ({ children, id }) => (
 export const Paragraph = ({ children, id }) => (
   <>
     <Typography
-      sx={{ lineHeight: "18px", marginBottom: "16px" }}
+      sx={{ lineHeight: "1.5", marginBottom: "16px", fontSize: "14px" }}
       variant="caption"
     >
       {children}
@@ -68,15 +89,30 @@ export const Paragraph = ({ children, id }) => (
 export const ListItem = ({ children, id }) => (
   <li
     style={{
-      lineHeight: "18px",
+      lineHeight: "1.5",
       marginBottom: "16px",
-      fontSize: "12px",
+      fontSize: "14px",
     }}
   >
     {children}
   </li>
 );
 
+export const Code = ({ children }) => (
+  <code
+    style={{
+      lineHeight: "1.5",
+      fontSize: "14px",
+      padding: ".2em .4em",
+      margin: 0,
+      whiteSpace: "break-spaces",
+      backgroundColor: "#afb8c133",
+      borderRadius: "6px",
+    }}
+  >
+    {children}
+  </code>
+);
 export const TableOfContent = ({ children, onClick, isOpen }) => {
   return (
     <Grid
