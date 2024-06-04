@@ -9,6 +9,7 @@ import {
 import { LoggerFactory } from './util/logger-factory';
 import { CamelCasePipe } from './common/pipes/camel-case.pipe';
 import * as cookieParser from 'cookie-parser';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const logger: LoggerService = LoggerFactory('CC Portal API');
@@ -52,11 +53,15 @@ async function bootstrap() {
       'JWT-auth', // This name here is important for matching up with @ApiBearerAuth() in your controller!
     )
     .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+
+  const configService = app.get(ConfigService);
+  const displaySwaggerApi = configService.get<boolean>('DISPLAY_SWAGGER_API');
+  if (displaySwaggerApi) {
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api-docs', app, document);
+  }
 
   app.use(cookieParser());
-
   await app.listen(1337);
 }
 bootstrap();

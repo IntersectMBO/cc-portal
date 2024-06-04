@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { VoteValues } from 'src/governance/enums/vote-values.enum';
-import { Timestamp } from 'typeorm';
+import { VoteValue } from 'src/governance/enums/vote-value.enum';
 
 export class VoteResponse {
   @ApiProperty({
@@ -21,17 +20,24 @@ export class VoteResponse {
   @ApiProperty({
     description:
       'Address of a user that voted (can be one either his current or previous hot address)',
-    example: 'sofija@example.com',
+    example: 'Ae2tdPwUPEZKyArxpKiJu9qDf4yrBb8mJc6aNqiNi72NqRkJKTmCXHJqWVE',
   })
   @Expose({ name: 'user_address' })
   userAddress: string;
 
   @ApiProperty({
+    description: 'URL of a photo related to a user',
+    example: 'http://imgpost.com/abc123',
+  })
+  @Expose({ name: 'user_photo_url' })
+  userPhotoUrl: string;
+
+  @ApiProperty({
     description: 'Value of a vote - can be either yes, no or abstain',
-    type: VoteValues,
+    type: VoteValue,
   })
   @Expose({ name: 'value' })
-  voteValue: VoteValues;
+  voteValue: VoteValue;
 
   @ApiProperty({
     description: 'Gives an on chain reasoning title related to a vote',
@@ -76,7 +82,7 @@ export class VoteResponse {
     description: 'End time of a governance proposal',
   })
   @Expose({ name: 'governance_proposal_end_time' })
-  govProposalEndTime: Timestamp;
+  govProposalEndTime: Date;
 
   @ApiProperty({
     type: Date,
@@ -84,5 +90,5 @@ export class VoteResponse {
     description: 'Submit time of this particular vote',
   })
   @Expose({ name: 'vote_submit_time' })
-  voteSubmitTime: Timestamp;
+  voteSubmitTime: Date;
 }

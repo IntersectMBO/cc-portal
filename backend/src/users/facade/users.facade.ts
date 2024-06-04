@@ -6,7 +6,6 @@ import { UserMapper } from '../mapper/userMapper.mapper';
 import { RoleResponse } from '../api/response/role.response';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
 import { PaginatedResponse } from '../../util/pagination/response/paginated.response';
-import { PageMetaResponse } from '../../util/pagination/response/page-meta.response';
 import { UserDto } from '../dto/user.dto';
 
 import { S3Service } from '../../s3/service/s3.service';

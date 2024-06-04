@@ -1,17 +1,18 @@
-import { VoteValues } from 'src/governance/enums/vote-values.enum';
-import { Timestamp } from 'typeorm';
+import { VoteValue } from 'src/governance/enums/vote-value.enum';
 
 export class VoteDto {
   id: string;
   userId: string;
   userName: string;
   userAddress: string;
-  voteValue: VoteValues;
+  userPhotoUrl: string;
+  voteValue: VoteValue;
   reasoningTitle: string;
-  comment: string;
+  reasoningComment: string;
+  govProposalId: string;
   govProposalTitle: string;
   govProposalType: string;
   govProposalResolved: boolean;
-  govProposalEndTime: Timestamp;
-  voteSubmitTime: Timestamp;
+  govProposalEndTime: Date;
+  voteSubmitTime: Date;
 }

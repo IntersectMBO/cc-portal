@@ -21,11 +21,9 @@ import { RoleMapper } from '../mapper/roleMapper.mapper';
 import { HotAddress } from '../entities/hotaddress.entity';
 import { RoleEnum } from '../enums/role.enum';
 import { PaginateQuery, paginate } from 'nestjs-paginate';
-import { PageOptionsDto } from 'src/util/pagination/dto/page-options.dto';
 import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
 import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
 import { PaginationEntityMapper } from 'src/util/pagination/mapper/pagination.mapper';
-import { UserResponse } from '../api/response/user.response';
 
 @Injectable()
 export class UsersService {

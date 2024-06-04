@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { VotesFacade } from './facade/votes.facade';
-import { VotesService } from './services/votes.service';
-import { VotesController } from './api/votes.controller';
+import { GovernanceFacade } from './facade/governance.facade';
+import { GovernanceService } from './services/governance.service';
+import { GovernanceController } from './api/governance.controller';
 import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [UsersModule],
-  controllers: [VotesController],
-  providers: [VotesFacade, VotesService],
+  controllers: [GovernanceController],
+  providers: [GovernanceFacade, GovernanceService],
   exports: [],
 })
 export class GovernanceModule {}
