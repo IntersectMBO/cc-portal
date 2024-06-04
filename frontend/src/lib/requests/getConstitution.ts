@@ -7,7 +7,7 @@ import rehypeSlug from "rehype-slug";
 const GITHUB_URL =
   "https://raw.githubusercontent.com/Kristina2103/publicTestMdx/main";
 
-export const CONSTITUTION_FILE = "constitution.md";
+export const CONSTITUTION_FILE = "cardano-constitution-{1}.md";
 
 export async function getConstitution(
   fileName: string = CONSTITUTION_FILE
