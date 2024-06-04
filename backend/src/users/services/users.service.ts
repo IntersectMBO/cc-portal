@@ -20,10 +20,11 @@ import { RoleDto } from '../dto/role.dto';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
 import { HotAddress } from '../entities/hotaddress.entity';
 import { RoleEnum } from '../enums/role.enum';
-import { PaginateQuery, paginate } from 'nestjs-paginate';
+import { PaginateQuery } from 'nestjs-paginate';
 import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
 import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
 import { PaginationEntityMapper } from 'src/util/pagination/mapper/pagination.mapper';
+import { Paginator } from 'src/util/pagination/paginator';
 
 @Injectable()
 export class UsersService {
@@ -40,7 +41,7 @@ export class UsersService {
     private readonly hotAddressRepository: Repository<HotAddress>,
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
-    // private s3Service: S3Service,
+    private readonly paginator: Paginator,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
@@ -247,7 +248,11 @@ export class UsersService {
       ? this.createAdminSearchQuery()
       : this.createUserSearchQuery();
 
-    const result = await paginate(query, customQuery, USER_PAGINATION_CONFIG);
+    const result = await this.paginator.paginate(
+      query,
+      customQuery,
+      USER_PAGINATION_CONFIG,
+    );
 
     return new PaginationEntityMapper<User, UserDto>().paginatedToDto(
       result,

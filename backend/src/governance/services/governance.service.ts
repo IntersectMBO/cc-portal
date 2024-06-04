@@ -1,5 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { paginate, PaginateQuery } from 'nestjs-paginate';
+import { PaginateQuery } from 'nestjs-paginate';
 import { VoteDto } from '../dto/vote.dto';
 import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
 import { VOTE_PAGINATION_CONFIG } from '../util/pagination/votes-pagination.config';
@@ -10,6 +10,7 @@ import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 import { GovActionMetaDto } from '../dto/gov-action-meta.dto';
+import { Paginator } from 'src/util/pagination/paginator';
 
 @Injectable()
 export class GovernanceService {
@@ -20,6 +21,8 @@ export class GovernanceService {
     private readonly voteRepository: Repository<Vote>,
     @InjectRepository(GovActionProposal)
     private readonly govActionMetadataRepository: Repository<GovActionProposal>,
+
+    private readonly paginator: Paginator,
   ) {}
 
   async findGovActionMetadataById(id: number): Promise<GovActionMetaDto> {
@@ -44,7 +47,11 @@ export class GovernanceService {
       ? this.createUserVotesQuery(userId)
       : this.createAllVotesQuery();
 
-    const result = await paginate(query, customQuery, VOTE_PAGINATION_CONFIG);
+    const result = await this.paginator.paginate(
+      query,
+      customQuery,
+      VOTE_PAGINATION_CONFIG,
+    );
 
     return new PaginationEntityMapper<Vote, VoteDto>().paginatedToDto(
       result,

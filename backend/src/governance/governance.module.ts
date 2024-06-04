@@ -6,11 +6,12 @@ import { UsersModule } from 'src/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GovActionProposal } from './entities/gov-action-proposal.entity';
 import { Vote } from './entities/vote.entity';
+import { Paginator } from 'src/util/pagination/paginator';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Vote, GovActionProposal]), UsersModule],
   controllers: [GovernanceController],
-  providers: [GovernanceFacade, GovernanceService],
+  providers: [GovernanceFacade, GovernanceService, Paginator],
   exports: [],
 })
 export class GovernanceModule {}

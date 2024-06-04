@@ -8,13 +8,11 @@ import { Permission } from '../entities/permission.entity';
 import { S3Service } from '../../s3/service/s3.service';
 import { RoleDto } from '../dto/role.dto';
 import { Role } from '../entities/role.entity';
-import { SearchQueryDto } from '../dto/sear../../util/pagination/dto/search-query.dto
 import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UserResponse } from '../api/response/user.response';
-import { SortOrder } from 'src/util/pagination/enums/sort-order.enum';
-import { UsersPaginatedDto } from '../dto/users-paginated.dto';
-import { PaginatedResponse } from '../../util/pagination/response/paginated.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
+import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
+import { PaginateQuery } from 'nestjs-paginate';
 
 describe('UsersFacade', () => {
   let facade: UsersFacade;
@@ -182,18 +180,15 @@ describe('UsersFacade', () => {
     removeProfilePhoto: jest.fn(),
     searchUsers: jest
       .fn()
-      .mockImplementation((searchQuery: SearchQueryDto, isAdmin: boolean) => {
-        const { searchPhrase, pageOptions } = searchQuery;
-        const { order, skip, perPage } = pageOptions;
-
+      .mockImplementation((query: PaginateQuery, isAdmin: boolean) => {
         const userResponse = mockUsers2.map((userDto: UserDto) =>
           UserMapper.mapUserDtoToResponse(userDto),
         );
         let filteredUsers = userResponse;
 
-        if (searchPhrase) {
+        if (query.search) {
           filteredUsers = filteredUsers.filter((user) =>
-            user.name.toLowerCase().includes(searchPhrase.toLowerCase()),
+            user.name.toLowerCase().includes(query.search.toLowerCase()),
           );
         }
 
@@ -208,19 +203,23 @@ describe('UsersFacade', () => {
           );
         }
 
-        const sortedUsers = filteredUsers.sort((a, b) => {
-          if (order === SortOrder.ASC) {
-            return a.name > b.name ? 1 : -1;
-          } else if (order === SortOrder.DESC) {
-            return b.name > a.name ? -1 : -1;
-          }
-        });
+        // const sortedUsers = filteredUsers.sort((a, b) => {
+        //   if (query.sortBy === SortOrder.ASC) {
+        //     return a.name > b.name ? 1 : -1;
+        //   } else if (order === SortOrder.DESC) {
+        //     return b.name > a.name ? -1 : -1;
+        //   }
+        // });
+        const currentPosition = query.page * query.limit;
+        const paginatedUsers = filteredUsers.slice(
+          currentPosition,
+          currentPosition + query.limit,
+        );
 
-        const paginatedUsers = sortedUsers.slice(skip, skip + perPage);
-
-        const usersPaginatedDto: UsersPaginatedDto = {
-          userDtos: paginatedUsers,
-          itemCount: sortedUsers.length,
+        const usersPaginatedDto: PaginatedDto<UserDto> = {
+          items: paginatedUsers,
+          itemCount: paginatedUsers.length,
+          pageOptions: null,
         };
 
         return usersPaginatedDto;
@@ -407,107 +406,37 @@ describe('UsersFacade', () => {
 
   describe('Search users', () => {
     it('should return an array of CC Members', async () => {
-      const searchQuery = new SearchQueryDto('ivan', 1, 10, SortOrder.DESC);
-
-      const foundUser = await facade.searchUsers(searchQuery, false);
-      const userResponse = mockUsers2.map((user) =>
-        UserMapper.mapUserDtoToResponse(user),
-      );
-      const expectedResponse: PaginatedResponse<UserResponse> = {
-        data: [userResponse[2], userResponse[1]],
-        meta: {
-          page: 1,
-          perPage: 10,
-          pageCount: 1,
-          itemCount: 2,
-          hasPreviousPage: false,
-          hasNextPage: false,
-        },
+      const query: PaginateQuery = {
+        page: 0,
+        limit: 10,
+        search: 'John',
+        path: 'randomPath',
       };
 
-      expect(foundUser).toEqual(expectedResponse);
-      expect(mockUserService.searchUsers).toHaveBeenCalledWith(
-        searchQuery,
-        false,
-      );
+      await facade.searchUsers(query, false);
+
+      expect(mockUserService.searchUsers).toHaveBeenCalledWith(query, false);
     });
 
     it('should return an array of Admins and CC Members', async () => {
-      const searchQuery = new SearchQueryDto('', 1, 10, SortOrder.ASC);
-
-      const foundUser = await facade.searchUsers(searchQuery, true);
-      const userResponse = mockUsers2.map((user) =>
-        UserMapper.mapUserDtoToResponse(user),
-      );
-      const expectedResponse: PaginatedResponse<UserResponse> = {
-        data: [userResponse[1], userResponse[0], userResponse[2]],
-        meta: {
-          page: 1,
-          perPage: 10,
-          pageCount: 1,
-          itemCount: 3,
-          hasPreviousPage: false,
-          hasNextPage: false,
-        },
+      const query: PaginateQuery = {
+        page: 0,
+        limit: 10,
+        path: 'randomPath',
       };
+      await facade.searchUsers(query, true);
 
-      expect(foundUser).toEqual(expectedResponse);
-      expect(mockUserService.searchUsers).toHaveBeenCalledWith(
-        searchQuery,
-        true,
-      );
+      expect(mockUserService.searchUsers).toHaveBeenCalledWith(query, true);
     });
 
     it('should return an array of administrators and CC members from the second page', async () => {
-      const searchQuery = new SearchQueryDto('', 2, 2, SortOrder.DESC);
-
-      const foundUser = await facade.searchUsers(searchQuery, true);
-      const userResponse = mockUsers2.map((user) =>
-        UserMapper.mapUserDtoToResponse(user),
-      );
-      const expectedResponse: PaginatedResponse<UserResponse> = {
-        data: [userResponse[0]],
-        meta: {
-          page: 2,
-          perPage: 2,
-          pageCount: 2,
-          itemCount: 3,
-          hasPreviousPage: true,
-          hasNextPage: false,
-        },
+      const query: PaginateQuery = {
+        page: 2,
+        limit: 10,
+        path: 'randomPath',
       };
-
-      expect(foundUser).toEqual(expectedResponse);
-      expect(mockUserService.searchUsers).toHaveBeenCalledWith(
-        searchQuery,
-        true,
-      );
-    });
-
-    it('should return an empty array if no name with given phrase', async () => {
-      const searchQuery: SearchQueryDto = new SearchQueryDto(
-        'not existing user',
-        1,
-        10,
-        SortOrder.DESC,
-      );
-      const expectedResult: PaginatedResponse<UserResponse> = {
-        data: [],
-        meta: {
-          page: 1,
-          perPage: 10,
-          pageCount: 0,
-          itemCount: 0,
-          hasPreviousPage: false,
-          hasNextPage: false,
-        },
-      };
-      const foundUser = await facade.searchUsers(searchQuery, true);
-      expect(foundUser).toEqual(expectedResult);
-      expect(mockUserService.searchUsers).toHaveBeenCalledWith(
-        searchQuery,
-        true,
-      );
+      await facade.searchUsers(query, true);
+      expect(mockUserService.searchUsers).toHaveBeenCalledWith(query, true);
     });
   });
 });

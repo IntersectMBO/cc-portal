@@ -9,6 +9,7 @@ import { Permission } from './entities/permission.entity';
 import { HotAddress } from './entities/hotaddress.entity';
 import { S3Module } from 'src/s3/s3.module';
 import { RoleController } from './api/role.controller';
+import { Paginator } from 'src/util/pagination/paginator';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { RoleController } from './api/role.controller';
     S3Module,
   ],
   controllers: [UsersController, RoleController],
-  providers: [UsersFacade, UsersService],
+  providers: [UsersFacade, UsersService, Paginator],
   exports: [UsersService],
 })
 export class UsersModule {}

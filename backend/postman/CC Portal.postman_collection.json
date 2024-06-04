@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "f70e79f8-7bd3-4c94-b850-9957120d9789",
+		"_postman_id": "e09f94f4-6551-4598-a844-327a44ec936e",
 		"name": "CC Portal develop",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20133713"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -134,7 +133,7 @@
 					"response": []
 				},
 				{
-					"name": "Search CC Member",
+					"name": "Search User",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -172,7 +171,7 @@
 					"response": []
 				},
 				{
-					"name": "Search Admin / Super Admin",
+					"name": "(Admin) Search User",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -623,6 +622,84 @@
 							"path": [
 								"api",
 								"version"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Governance",
+			"item": [
+				{
+					"name": "Get Gov Action Proposal Metadata By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/governance/919c6053-bac4-439e-ac56-b50fb5896c72",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"governance",
+								"919c6053-bac4-439e-ac56-b50fb5896c72"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Gov Votes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/governance/votes/search?search=First",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"governance",
+								"votes",
+								"search"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "First"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search My Gov Votes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/api/governance/votes/users/{{userId}}/search",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"governance",
+								"votes",
+								"users",
+								"{{userId}}",
+								"search"
 							]
 						}
 					},

@@ -5,13 +5,6 @@ import { VoteValue } from 'src/governance/enums/vote-value.enum';
 
 export class VoteResponse {
   @ApiProperty({
-    description: 'Unique vote ID',
-    example: '7ceb9ab7-6427-40b7-be2e-37ba6742d5fd',
-  })
-  @Expose({ name: 'id' })
-  id: string;
-
-  @ApiProperty({
     description: 'Name of the user that voted',
     example: 'John Doe',
   })

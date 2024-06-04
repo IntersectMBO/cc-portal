@@ -10,7 +10,6 @@ import { VoteValue } from '../enums/vote-value.enum';
 export class GovernanceMapper {
   static voteDtoToResponse(voteDto: VoteDto): VoteResponse {
     const voteResponse = new VoteResponse();
-    voteResponse.id = voteDto.id;
     voteResponse.userName = voteDto.userName;
     voteResponse.userPhotoUrl = voteDto.userPhotoUrl;
     voteResponse.userAddress = voteDto.userAddress;
@@ -32,7 +31,6 @@ export class GovernanceMapper {
 
   static voteToDto(vote: Vote): VoteDto {
     const voteDto = new VoteDto();
-    voteDto.id = vote.id;
     voteDto.userId = vote.userId;
     voteDto.userAddress = vote.hotAddress;
     voteDto.voteValue = VoteValue[vote.vote];

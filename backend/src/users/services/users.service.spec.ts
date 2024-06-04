@@ -13,9 +13,11 @@ import { HotAddress } from '../entities/hotaddress.entity';
 import { ConflictException } from '@nestjs/common/exceptions/conflict.exception';
 import { UserStatusEnum } from '../enums/user-status.enum';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { SearchQueryDto } from '../../util/pagination/dto/search-query.dto';
-import { UsersPaginatedDto } from '../dto/users-paginated.dto';
-import { SortOrder } from 'src/util/pagination/enums/sort-order.enum';
+import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
+import { UserDto } from '../dto/user.dto';
+import { PaginateQuery, Paginated } from 'nestjs-paginate';
+import { Paginator } from 'src/util/pagination/paginator';
+import { RoleEnum } from '../enums/role.enum';
 const mockS3Service = {
   uploadFileMinio: jest.fn().mockResolvedValue('mocked_file_name'),
   createBucketIfNotExists: jest.fn().mockResolvedValue('new_bucket'),
@@ -29,7 +31,14 @@ const user: User = {
   description: 'mockedDescription',
   profilePhotoUrl: 'mockedProfilePhoto',
   status: UserStatusEnum.ACTIVE,
-  role: null,
+  role: {
+    id: 'roleId3',
+    code: RoleEnum.USER,
+    users: [],
+    permissions: [],
+    createdAt: null,
+    updatedAt: null,
+  },
   permissions: null,
   hotAddresses: null,
   createdAt: null,
@@ -138,9 +147,75 @@ const mockUsers: User[] = [
   },
 ];
 
+const paginatedValue: Paginated<User> = {
+  data: new Array<User>(user),
+  meta: {
+    currentPage: 0,
+    itemsPerPage: 10,
+    totalItems: 1,
+    search: null,
+    totalPages: 3,
+    sortBy: null,
+    searchBy: null,
+    select: null,
+  },
+  links: {
+    current: null,
+  },
+};
+
+const paginatedEmptyValue: Paginated<User> = {
+  data: [],
+  meta: {
+    currentPage: 0,
+    itemsPerPage: 10,
+    totalItems: 0,
+    search: null,
+    totalPages: 0,
+    sortBy: null,
+    searchBy: null,
+    select: null,
+  },
+  links: {
+    current: null,
+  },
+};
+const paginatedMultiValue: Paginated<User> = {
+  data: mockUsers,
+  meta: {
+    currentPage: 0,
+    itemsPerPage: 10,
+    totalItems: 2,
+    search: null,
+    totalPages: 0,
+    sortBy: null,
+    searchBy: null,
+    select: null,
+  },
+  links: {
+    current: null,
+  },
+};
+
+const mockPaginator = {
+  paginate: jest.fn().mockResolvedValue(paginatedValue),
+};
+
 const mockUserRepository = {
   create: jest.fn().mockImplementation((user) => {
     return user;
+  }),
+  createQueryBuilder: jest.fn().mockImplementation(function () {
+    return mockUserRepository;
+  }),
+  leftJoinAndSelect: jest.fn().mockImplementation(function () {
+    return mockUserRepository;
+  }),
+  where: jest.fn().mockImplementation(function () {
+    return mockUserRepository;
+  }),
+  andWhere: jest.fn().mockImplementation(function () {
+    return mockUserRepository;
   }),
   save: jest.fn().mockImplementation((user) => {
     return user;
@@ -233,6 +308,7 @@ describe('UsersService', () => {
       providers: [
         UsersService,
         { provide: S3Service, useValue: mockS3Service },
+        { provide: Paginator, useValue: mockPaginator },
         { provide: getRepositoryToken(User), useValue: mockUserRepository },
         { provide: getRepositoryToken(Role), useValue: mockRoleRepository },
         {
@@ -578,59 +654,56 @@ describe('UsersService', () => {
 
   describe('Search users', () => {
     it('should return an array of CC Members', async () => {
-      const searchQuery: SearchQueryDto = new SearchQueryDto(
-        'John',
-        0,
-        10,
-        SortOrder.DESC,
+      const query: PaginateQuery = {
+        page: 0,
+        limit: 10,
+        search: 'John',
+        path: 'randomPath',
+      };
+
+      const userPaginatedDto: PaginatedDto<UserDto> = await service.searchUsers(
+        query,
+        false,
       );
 
-      mockUserRepository.find.mockResolvedValue([mockUsers[0]]);
-
-      const userPaginatedDto = await service.searchUsers(searchQuery, false);
-
-      expect(userPaginatedDto.userDtos[0].name).toEqual(user.name);
-      expect(userPaginatedDto.userDtos.length).toEqual(1);
-      expect(mockUserRepository.find).toHaveBeenCalled();
+      expect(userPaginatedDto.items[0].name).toEqual(user.name);
+      expect(userPaginatedDto.items.length).toEqual(1);
+      expect(mockPaginator.paginate).toHaveBeenCalled();
     });
 
     it('should return an empty array of users', async () => {
-      const searchQuery: SearchQueryDto = new SearchQueryDto(
-        'NotExistingUser',
-        0,
-        10,
-        SortOrder.DESC,
-      );
+      const query: PaginateQuery = {
+        page: 0,
+        limit: 10,
+        search: 'NotExistingUser',
+        path: 'randomPath',
+      };
 
-      mockUserRepository.find.mockResolvedValueOnce([]);
+      mockPaginator.paginate.mockResolvedValueOnce(paginatedEmptyValue);
 
-      const usersPaginatedDto: UsersPaginatedDto = await service.searchUsers(
-        searchQuery,
-        false,
-      );
-      expect(usersPaginatedDto.userDtos).toEqual([]);
-      expect(usersPaginatedDto.userDtos.length).toEqual(0);
-      expect(mockUserRepository.find).toHaveBeenCalled();
+      const usersPaginatedDto: PaginatedDto<UserDto> =
+        await service.searchUsers(query, false);
+      expect(usersPaginatedDto.items).toEqual([]);
+      expect(usersPaginatedDto.items.length).toEqual(0);
+      expect(mockPaginator.paginate).toHaveBeenCalled();
     });
 
     it('should return an array with users and admins', async () => {
-      const searchQuery: SearchQueryDto = new SearchQueryDto(
-        'John',
-        0,
-        10,
-        SortOrder.DESC,
-      );
-      mockUserRepository.find.mockResolvedValue(mockUsers);
+      const query: PaginateQuery = {
+        page: 0,
+        limit: 10,
+        path: 'randomPath',
+      };
 
-      const usersPaginatedDto: UsersPaginatedDto = await service.searchUsers(
-        searchQuery,
-        true,
-      );
+      mockPaginator.paginate.mockResolvedValueOnce(paginatedMultiValue);
 
-      expect(usersPaginatedDto.userDtos[0].name).toEqual(mockUsers[0].name);
-      expect(usersPaginatedDto.userDtos[1].name).toEqual(mockUsers[1].name);
-      expect(usersPaginatedDto.userDtos.length).toEqual(2);
-      expect(mockUserRepository.find).toHaveBeenCalled();
+      const usersPaginatedDto: PaginatedDto<UserDto> =
+        await service.searchUsers(query, true);
+
+      expect(usersPaginatedDto.items[0].name).toEqual(mockUsers[0].name);
+      expect(usersPaginatedDto.items[1].name).toEqual(mockUsers[1].name);
+      expect(usersPaginatedDto.items.length).toEqual(2);
+      expect(mockPaginator.paginate).toHaveBeenCalled();
     });
   });
 });
