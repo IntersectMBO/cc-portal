@@ -18,10 +18,11 @@ export class GovernanceService {
   constructor(
     @InjectRepository(Vote)
     private readonly voteRepository: Repository<Vote>,
+    @InjectRepository(GovActionProposal)
     private readonly govActionMetadataRepository: Repository<GovActionProposal>,
   ) {}
 
-  async findGovActionMetadataById(id: string): Promise<GovActionMetaDto> {
+  async findGovActionMetadataById(id: number): Promise<GovActionMetaDto> {
     const govActionProposal = await this.govActionMetadataRepository.findOne({
       where: {
         id: id,
@@ -54,10 +55,13 @@ export class GovernanceService {
   private createUserVotesQuery(userAddress: string): SelectQueryBuilder<Vote> {
     return this.voteRepository
       .createQueryBuilder('votes')
+      .leftJoinAndSelect('votes.govActionProposal', 'govActionProposal')
       .where('votes.userId = :userId', { userId: userAddress });
   }
 
   private createAllVotesQuery(): SelectQueryBuilder<Vote> {
-    return this.voteRepository.createQueryBuilder('votes');
+    return this.voteRepository
+      .createQueryBuilder('votes')
+      .leftJoinAndSelect('votes.govActionProposal', 'govActionProposal');
   }
 }

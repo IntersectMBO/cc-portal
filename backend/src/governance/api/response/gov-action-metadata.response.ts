@@ -4,10 +4,10 @@ import { Expose } from 'class-transformer';
 export class GovernanceActionMetadataResponse {
   @ApiProperty({
     description: 'Unique governance proposal ID',
-    example: '7ceb9ab7-6427-40b7-be2e-37ba6742d5fd',
+    example: '1',
   })
   @Expose({ name: 'id' })
-  id: string;
+  id: number;
 
   @ApiProperty({
     description: 'Title of a governance action proposal',

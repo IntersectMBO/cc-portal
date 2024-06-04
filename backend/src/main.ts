@@ -55,7 +55,7 @@ async function bootstrap() {
     .build();
 
   const configService = app.get(ConfigService);
-  const displaySwaggerApi = configService.get<boolean>('DISPLAY_SWAGGER_API');
+  const displaySwaggerApi = configService.get('DISPLAY_SWAGGER_API') === 'true';
   if (displaySwaggerApi) {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api-docs', app, document);

@@ -20,7 +20,7 @@ export class GovernanceFacade {
   ) {}
 
   async findGovActionProposalById(
-    id: string,
+    id: number,
   ): Promise<GovernanceActionMetadataResponse> {
     const dto = await this.governanceService.findGovActionMetadataById(id);
     return GovernanceMapper.govActionMetaDtoToResponse(dto);
@@ -42,8 +42,8 @@ export class GovernanceFacade {
     );
 
     votesPaginatedDto.items.forEach((vote) => {
-      vote.userName = userDataMap.get(vote.userId).userName;
-      vote.userPhotoUrl = userDataMap.get(vote.userId).photoUrl;
+      vote.userName = userDataMap.get(vote.userId)?.userName;
+      vote.userPhotoUrl = userDataMap.get(vote.userId)?.photoUrl;
     });
 
     return new PaginationDtoMapper<VoteDto, VoteResponse>().dtoToResponse(

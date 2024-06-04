@@ -27,7 +27,10 @@ export class Vote extends CommonEntity {
 
   @ManyToOne(
     () => GovActionProposal,
-    (govActionProposal) => govActionProposal.govActionProposalId,
+    (govActionProposal) => govActionProposal.id,
+    {
+      eager: true,
+    },
   )
   @JoinColumn({ name: 'gov_action_proposal_id' })
   govActionProposal: GovActionProposal;

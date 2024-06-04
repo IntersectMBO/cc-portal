@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   ParseUUIDPipe,
   UseGuards,
 } from '@nestjs/common';
@@ -37,7 +38,7 @@ export class GovernanceController {
   })
   @Get(':id')
   async findOne(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseIntPipe) id: number,
   ): Promise<GovernanceActionMetadataResponse> {
     return await this.governanceFacade.findGovActionProposalById(id);
   }

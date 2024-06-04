@@ -1,5 +1,5 @@
 export class GovActionMetaDto {
-  id: string;
+  id: number;
   title: string;
   abstract: string;
   metadataUrl: string;

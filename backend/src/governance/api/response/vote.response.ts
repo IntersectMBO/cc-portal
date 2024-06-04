@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { GovActionProposalStatus } from 'src/governance/enums/gov-action-proposal-status.enum';
 import { VoteValue } from 'src/governance/enums/vote-value.enum';
 
 export class VoteResponse {
@@ -50,14 +51,21 @@ export class VoteResponse {
     description: 'Gives an on chain reasoning comment related to a vote',
     example: 'Here i elaborated why this proposal is good for the ecosystem',
   })
-  @Expose({ name: 'comment' })
-  comment: string;
+  @Expose({ name: 'reasoning_comment' })
+  reasoningComment: string;
+
+  @ApiProperty({
+    description: 'Returns an id of a governance proposal related to a vote',
+    example: '123',
+  })
+  @Expose({ name: 'gov_action_proposal_id' })
+  govProposalId: number;
 
   @ApiProperty({
     description: 'Returns a title of governance proposal related to a vote',
     example: 'Random title',
   })
-  @Expose({ name: 'governance_proposal_title' })
+  @Expose({ name: 'gov_action_proposal_title' })
   govProposalTitle: string;
 
   @ApiProperty({
@@ -65,7 +73,7 @@ export class VoteResponse {
       'Returns a specific type of a governance proposal to which this vote is related',
     example: 'ParameterChange',
   })
-  @Expose({ name: 'governance_proposal_type' })
+  @Expose({ name: 'gov_action_proposal_type' })
   govProposalType: string;
 
   @ApiProperty({
@@ -73,15 +81,15 @@ export class VoteResponse {
       'Returns whether this governance proposal is already resolved (if resolved, cc member should not have an option to manage his vote)',
     example: 'false',
   })
-  @Expose({ name: 'governance_proposal_resolved' })
-  govProposalResolved: boolean;
+  @Expose({ name: 'gov_action_proposal_status' })
+  govProposalStatus: GovActionProposalStatus;
 
   @ApiProperty({
     type: Date,
     format: 'date-time',
     description: 'End time of a governance proposal',
   })
-  @Expose({ name: 'governance_proposal_end_time' })
+  @Expose({ name: 'gov_action_proposal_end_time' })
   govProposalEndTime: Date;
 
   @ApiProperty({
