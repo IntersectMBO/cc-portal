@@ -47,7 +47,6 @@ export const VotesTableRow = ({
       type: "govActionModal",
       state: {
         id: gov_action_proposal_id,
-        gov_action_proposal_title,
       },
     });
   };

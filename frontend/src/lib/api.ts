@@ -12,7 +12,7 @@ import {
 import {
   ConstitutionByCid,
   ConstitutionMetadata,
-  LatestUpdates,
+  GovActionMetadata,
   VotesTableI,
 } from "@/components/organisms";
 
@@ -127,7 +127,7 @@ export async function getMembers(): Promise<any[]> {
   }
 }
 
-export async function getLatestUpdates(): Promise<any[]> {
+export async function getLatestUpdates(): Promise<VotesTableI[]> {
   try {
     const res: { data: VotesTableI[] } = await axiosInstance.get(
       "/api/governance/votes/search"
@@ -139,12 +139,23 @@ export async function getLatestUpdates(): Promise<any[]> {
   }
 }
 
-export async function getUserVotes(id: string): Promise<any[]> {
+export async function getUserVotes(id: string): Promise<VotesTableI[]> {
   try {
     const res: { data: VotesTableI[] } = await axiosInstance.get(
       `/api/governance/votes/search?filter.userId=$eq:${id}`
     );
     return res.data;
+  } catch (error) {
+    console.log("error get latest updates", error);
+  }
+}
+
+export async function getGovernanceMetadata(id: string): Promise<any> {
+  try {
+    const res: GovActionMetadata = await axiosInstance.get(
+      `/api/governance/${id}`
+    );
+    return res;
   } catch (error) {
     console.log("error get latest updates", error);
   }

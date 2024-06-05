@@ -47,7 +47,13 @@ export interface SignOutModalState {
 
 export interface GovActionModalState {
   id: string;
-  gov_action_proposal_title: string;
+}
+
+export interface GovActionMetadata {
+  id: string;
+  title: string;
+  abstract: string;
+  metadataUrl: string;
 }
 
 export interface ReasoningI {
