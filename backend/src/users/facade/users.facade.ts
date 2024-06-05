@@ -5,13 +5,13 @@ import { UserResponse } from '../api/response/user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { RoleResponse } from '../api/response/role.response';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
-import { PaginationResponse } from '../../util/pagination/response/pagination.response';
-import { PageMetaResponse } from '../../util/pagination/response/page-meta.response';
+import { PaginatedResponse } from '../../util/pagination/response/paginated.response';
 import { UserDto } from '../dto/user.dto';
 
 import { S3Service } from '../../s3/service/s3.service';
 import { UploadContext } from '../../s3/enums/upload-context';
-import { SearchQueryDto } from '../dto/search-query.dto';
+import { PaginateQuery } from 'nestjs-paginate';
+import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mapper';
 @Injectable()
 export class UsersFacade {
   constructor(
@@ -73,27 +73,17 @@ export class UsersFacade {
   }
 
   async searchUsers(
-    searchQuery: SearchQueryDto,
+    query: PaginateQuery,
     isAdmin: boolean,
-  ): Promise<PaginationResponse<UserResponse>> {
+  ): Promise<PaginatedResponse<UserResponse>> {
     const usersPaginatedDto = await this.usersService.searchUsers(
-      searchQuery,
+      query,
       isAdmin,
     );
 
-    const userDtos = usersPaginatedDto.userDtos;
-    const itemCount = usersPaginatedDto.itemCount;
-
-    const usersResponse: UserResponse[] = userDtos.map((userDto: UserDto) =>
-      UserMapper.mapUserDtoToResponse(userDto),
+    return new PaginationDtoMapper<UserDto, UserResponse>().dtoToResponse(
+      usersPaginatedDto,
+      UserMapper.mapUserDtoToResponse,
     );
-
-    const pageOptionsDto = searchQuery.pageOptions;
-    const pageMetaResponse = new PageMetaResponse({
-      itemCount,
-      pageOptionsDto,
-    });
-
-    return new PaginationResponse(usersResponse, pageMetaResponse);
   }
 }

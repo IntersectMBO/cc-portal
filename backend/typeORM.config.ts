@@ -6,6 +6,8 @@ import { DataSource } from 'typeorm';
 import { Permission } from './src/users/entities/permission.entity';
 import { HotAddress } from './src/users/entities/hotaddress.entity';
 import { IpfsMetadata } from './src/ipfs/entities/ipfs-metadata.entity';
+import { Vote } from './src/governance/entities/vote.entity';
+import { GovActionProposal } from './src/governance/entities/gov-action-proposal.entity';
 
 config();
 
@@ -20,5 +22,13 @@ export default new DataSource({
   password: configService.getOrThrow('POSTGRES_PASSWORD'),
   migrations: ['migrations/**'],
   migrationsTableName: 'migrations',
-  entities: [User, Role, Permission, HotAddress, IpfsMetadata],
+  entities: [
+    User,
+    Role,
+    Permission,
+    HotAddress,
+    IpfsMetadata,
+    Vote,
+    GovActionProposal,
+  ],
 });
