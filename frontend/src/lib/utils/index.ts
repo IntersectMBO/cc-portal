@@ -9,3 +9,4 @@ export * from "./getGovActionId";
 export * from "./string";
 export * from "./getProposalTypeLabel";
 export * from "./helpers";
+export * from "./useDebounce";
