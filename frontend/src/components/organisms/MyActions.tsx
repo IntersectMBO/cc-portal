@@ -26,7 +26,7 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
         votes={actions}
         actionTitle={t("actionTitle")}
         onActionClick={() => console.log("Manage Actions Modal")}
-        isDisabled={(data) => data.governance_proposal_resolved}
+        isDisabled={(data) => data.gov_action_proposal_status !== "ACTIVE"}
       />
     </Box>
   );

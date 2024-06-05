@@ -22,14 +22,14 @@ interface Props {
 
 export const VotesTableRow = ({
   votes: {
-    id,
     user_name,
     user_address,
-    profile_photo_url,
+    user_photo_url,
     value,
-    comment,
-    governance_proposal_title,
-    governance_proposal_type,
+    reasoning_comment,
+    gov_action_proposal_id,
+    gov_action_proposal_title,
+    gov_action_proposal_type,
   },
   disabled,
   actionTitle,
@@ -46,8 +46,8 @@ export const VotesTableRow = ({
     openModal({
       type: "govActionModal",
       state: {
-        id,
-        governance_proposal_title,
+        id: gov_action_proposal_id,
+        gov_action_proposal_title,
       },
     });
   };
@@ -76,7 +76,7 @@ export const VotesTableRow = ({
               <Grid item xs="auto" lg={3} xl={2} mb={{ xxs: 2, lg: 0 }}>
                 <Grid container flexWrap="nowrap">
                   <Grid item>
-                    <UserAvatar src={profile_photo_url} />
+                    <UserAvatar src={user_photo_url} />
                   </Grid>
                   <Grid item>
                     <UserBasicInfo
@@ -115,7 +115,7 @@ export const VotesTableRow = ({
                     />
                   }
                 >
-                  {truncateText(governance_proposal_title, 40)}
+                  {truncateText(gov_action_proposal_title, 40)}
                 </OutlinedLightButton>
               </Grid>
               <TableDivider />
@@ -135,7 +135,7 @@ export const VotesTableRow = ({
                   {t("govActionCategoryShort")}
                 </Typography>
                 <OutlinedLightButton onClick={onFilterClick}>
-                  {getProposalTypeLabel(governance_proposal_type)}
+                  {getProposalTypeLabel(gov_action_proposal_type)}
                 </OutlinedLightButton>
               </Grid>
               <TableDivider />
@@ -179,7 +179,7 @@ export const VotesTableRow = ({
                   {t("reasoning")}
                 </Typography>
                 <Typography variant="caption">
-                  {truncateText(comment, 100)}
+                  {truncateText(reasoning_comment, 100)}
                 </Typography>
               </Grid>
             </Grid>

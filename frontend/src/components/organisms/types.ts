@@ -47,7 +47,7 @@ export interface SignOutModalState {
 
 export interface GovActionModalState {
   id: string;
-  governance_proposal_title: string;
+  gov_action_proposal_title: string;
 }
 
 export interface ReasoningI {
@@ -57,16 +57,25 @@ export interface ReasoningI {
   hash: string;
 }
 
+export enum GovActionProposalStatus {
+  ACTIVE = "ACTIVE",
+  EXPIRED = "EXPIRED",
+  RATIFIED = "RATIFIED",
+  ENACTED = "ENACTED",
+  DROPPED = "DROPPED",
+}
+
 export interface VotesTableI {
-  id: string;
   user_name: string;
   user_address: string;
-  profile_photo_url?: string;
+  user_photo_url?: string;
   value: Vote;
   reasoning_title: string;
-  comment: string;
-  governance_proposal_title: string;
-  governance_proposal_type: string;
-  governance_proposal_resolved: boolean;
-  governance_proposal_end_time: string;
+  reasoning_comment: string;
+  gov_action_proposal_id: string;
+  gov_action_proposal_title: string;
+  gov_action_proposal_type: string;
+  gov_action_proposal_status: GovActionProposalStatus;
+  gov_action_proposal_end_time: string;
+  vote_submit_time: string;
 }
