@@ -5,16 +5,20 @@ import rehypeToc from "rehype-toc";
 import rehypeSlug from "rehype-slug";
 
 const GITHUB_URL =
-  "https://raw.githubusercontent.com/Kristina2103/publicTestMdx/main";
+  "https://raw.githubusercontent.com/Kristina2103/testMdx/main";
 
-export const CONSTITUTION_FILE = "cardano-constitution-{1}.md";
+export const CONSTITUTION_FILE = "cardano-constitution-{2}.md";
 
 export async function getConstitution(
   fileName: string = CONSTITUTION_FILE
 ): Promise<MDXRemoteSerializeResult | undefined> {
   const apiUrl = `${GITHUB_URL}/${fileName}`;
 
-  const res = await fetch(apiUrl);
+  const res = await fetch(apiUrl, {
+    headers: {
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_CONSTITUTION_TOKEN}`,
+    },
+  });
 
   if (!res.ok) {
     console.error("Error fetching MDX file:", res.statusText);
