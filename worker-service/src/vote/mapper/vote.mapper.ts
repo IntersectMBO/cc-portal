@@ -22,6 +22,7 @@ export class VoteMapper {
     voteRequest.submitTime = dbSyncData.time;
     voteRequest.endTime = dbSyncData.end_time;
     voteRequest.govMetadataUrl = dbSyncData.url;
+    voteRequest.status = dbSyncData.status;
     return voteRequest;
   }
 }

@@ -76,6 +76,7 @@ export class VoteService {
         comment: voteRequests[i].comment,
         govActionType: voteRequests[i].govActionType,
         govActionProposal: govActionProposal,
+        status: voteRequests[i].status,
         endTime: new Date(voteRequests[i].endTime * 1000),
         submitTime: new Date(voteRequests[i].submitTime * 1000),
       };
@@ -99,6 +100,7 @@ export class VoteService {
       govActionProposal.id = voteRequest.govActionProposalId;
       govActionProposal.votingAnchorId = voteRequest.votingAnchorId;
     }
+    govActionProposal.status = voteRequest.status;
     return govActionProposal;
   }
 

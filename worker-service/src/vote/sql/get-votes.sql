@@ -9,7 +9,15 @@ gap.type, -- Should be Governance Action Proposal category (ParameterChange, Har
 gap_exp_epoch.end_time, -- Should be GAP "Expiry date" info when clicking on show more button
 gap.voting_anchor_id, -- Should be anchor id for URL that contins JSON governance action metadata
 vp_block.time, -- Should be Vote "Submit date" info when clicking on show more button
-va.url -- Should be a URL that contains JSON governance action metadata
+va.url, -- Should be a URL that contains JSON governance action metadata
+
+case 
+when gap.ratified_epoch is not null then 'RATIFIED'
+when gap.enacted_epoch is not null then 'ENACTED'
+when gap.dropped_epoch is not null then 'DROPPED'
+when gap.expired_epoch is not null then 'EXPIRED'
+else 'pending'
+end as status
 
 from voting_procedure vp
 -- Vote Procedure related data

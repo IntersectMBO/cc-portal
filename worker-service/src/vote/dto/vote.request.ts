@@ -11,4 +11,5 @@ export class VoteRequest {
   endTime: number;
   submitTime: number;
   govMetadataUrl: string;
+  status: string;
 }

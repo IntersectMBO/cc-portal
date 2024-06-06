@@ -38,6 +38,12 @@ export class GovActionProposal extends CommonEntity {
   })
   govMetadataUrl: string;
 
+  @Column({
+    name: 'status',
+    type: 'varchar',
+  })
+  status: string;
+
   @OneToMany(() => Vote, (votes) => votes.govActionProposal)
   votes: Vote[];
 
