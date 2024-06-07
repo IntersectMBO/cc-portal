@@ -232,5 +232,9 @@
   "GovernanceAction": {
     "Link": "Link",
     "Hash": "Hash"
+  },
+  "Filters": {
+    "sortBy": "Sort by",
+    "clear": "Clear"
   }
 }
