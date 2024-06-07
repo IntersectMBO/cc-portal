@@ -133,7 +133,7 @@ export const VotesTableRow = ({
                 >
                   {t("govActionCategoryShort")}
                 </Typography>
-                <OutlinedLightButton onClick={onFilterClick}>
+                <OutlinedLightButton nonInteractive>
                   {getProposalTypeLabel(gov_action_proposal_type)}
                 </OutlinedLightButton>
               </Grid>
@@ -153,11 +153,7 @@ export const VotesTableRow = ({
                 >
                   {t("voted")}
                 </Typography>
-                <Box
-                  width={85}
-                  sx={{ cursor: "pointer" }}
-                  onClick={onFilterClick}
-                >
+                <Box width={85}>
                   <VotePill vote={value} />
                 </Box>
               </Grid>

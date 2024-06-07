@@ -8,7 +8,7 @@ import { customPalette } from "@/constants";
 export function NotFound({
   title,
   description,
-  height = "80vh",
+  height = "70vh",
 }: {
   title: string;
   description: string;
