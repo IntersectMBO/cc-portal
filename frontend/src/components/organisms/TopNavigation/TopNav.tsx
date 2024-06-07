@@ -8,7 +8,7 @@ import { Link } from "@atoms";
 import { useAppContext } from "@context";
 import { TopNavWrapper } from "./TopNavWrapper";
 import UserProfileButton from "@/components/molecules/UserProfileButton";
-import { isAnyAdminRole } from "@utils";
+import { isAnyAdminRole, isUserRole } from "@utils";
 import NextLink from "next/link";
 import { useTranslations } from "next-intl";
 
@@ -42,7 +42,7 @@ export const TopNav = () => {
             {t("adminDashboard")}
           </Button>
         )}
-        <UserProfileButton user={user} />
+        {isUserRole(userSession.role) && <UserProfileButton user={user} />}
       </>
     );
   };

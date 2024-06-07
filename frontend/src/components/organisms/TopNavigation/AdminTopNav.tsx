@@ -34,7 +34,6 @@ export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               variant="outlined"
               href={PATHS.constitution}
               component={Link}
-              target="_blank"
             >
               {t("seeConstituton")}
             </MUIButton>
