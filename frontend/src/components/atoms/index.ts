@@ -20,5 +20,6 @@ export * from "./CopyButton";
 export * from "./Tooltip";
 export * from "./VotePill";
 export * from "./OutlinedLightButton";
+export * from "./ClickOutside";
 
 export * from "./types";
