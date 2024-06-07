@@ -5,6 +5,7 @@ import { Footer, LatestUpdates, NotFound, TopNav } from "@organisms";
 import { Loading } from "@molecules";
 import { getLatestUpdates } from "@/lib/api";
 import { isEmpty } from "@utils";
+import { ContentWrapper } from "@atoms";
 
 export default async function LatestUpdatesPage({
   params: { locale },
@@ -21,16 +22,18 @@ export default async function LatestUpdatesPage({
   return (
     <main>
       <TopNav />
-      <Suspense fallback={<Loading />}>
-        {isEmpty(latestUpdates) && isEmpty(searchParams) ? (
-          <NotFound
-            title="latestUpdates.title"
-            description="latestUpdates.description"
-          />
-        ) : (
-          <LatestUpdates latestUpdates={latestUpdates} />
-        )}
-      </Suspense>
+      <ContentWrapper>
+        <Suspense fallback={<Loading />}>
+          {isEmpty(latestUpdates) && isEmpty(searchParams) ? (
+            <NotFound
+              title="latestUpdates.title"
+              description="latestUpdates.description"
+            />
+          ) : (
+            <LatestUpdates latestUpdates={latestUpdates} />
+          )}
+        </Suspense>
+      </ContentWrapper>
       <Footer />
     </main>
   );

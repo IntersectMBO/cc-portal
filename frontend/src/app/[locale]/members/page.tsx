@@ -4,6 +4,7 @@ import { unstable_setRequestLocale } from "next-intl/server"; // Import function
 import { Footer, MembersCardList, TopNav } from "@organisms";
 import { getMembers } from "@/lib/api";
 import { Loading } from "@molecules";
+import { ContentWrapper } from "@atoms";
 
 export default async function Members({ params: { locale } }) {
   unstable_setRequestLocale(locale); // Sets the locale for the request. Use cautiously due to its unstable nature.
@@ -12,9 +13,11 @@ export default async function Members({ params: { locale } }) {
   return (
     <main>
       <TopNav />
-      <Suspense fallback={<Loading />}>
-        <MembersCardList members={members} />;
-      </Suspense>
+      <ContentWrapper>
+        <Suspense fallback={<Loading />}>
+          <MembersCardList members={members} />;
+        </Suspense>
+      </ContentWrapper>
       <Footer />
     </main>
   );
