@@ -8,7 +8,7 @@ import { ClickOutside } from "@atoms";
 import { OrderActionsChip } from "./OrderActionsChip";
 
 type DataActionsBarProps = {
-  chosenFilters?: Record<string, string[];
+  chosenFilters?: Record<string, string[]>;
   chosenFiltersLength?: number;
   chosenSorting: string;
   closeFilters?: () => void;
