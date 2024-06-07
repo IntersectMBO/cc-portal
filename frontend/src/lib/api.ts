@@ -127,12 +127,25 @@ export async function getMembers(): Promise<any[]> {
   }
 }
 
-export async function getLatestUpdates(): Promise<VotesTableI[]> {
+export async function getLatestUpdates({
+  search,
+  govActionType,
+  vote,
+  sortBy,
+}: {
+  search?: string;
+  govActionType?: string;
+  vote?: string;
+  sortBy?: string;
+}): Promise<VotesTableI[]> {
   try {
     const res: { data: VotesTableI[] } = await axiosInstance.get(
-      "/api/governance/votes/search"
+      `/api/governance/votes/search?${search ? `search=${search}` : ""}&${
+        govActionType ? `filter.govActionType=$in:${govActionType}` : ""
+      }&${vote ? `filter.vote=$in:${vote}` : ""}&${
+        sortBy ? `sortBy=${sortBy}` : ""
+      }`
     );
-
     return res.data;
   } catch (error) {
     console.log("error get latest updates", error);
