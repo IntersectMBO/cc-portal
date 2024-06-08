@@ -97,13 +97,17 @@ export async function getUser(id: string): Promise<FetchUserData> {
   }
 }
 
-export async function getUsersAdmin(): Promise<FetchUserData[]> {
+export async function getUsersAdmin({
+  search,
+}: {
+  search?: string;
+}): Promise<FetchUserData[]> {
   try {
     const token = getAccessToken();
     const { userId } = await decodeUserToken();
 
     const res: { data: FetchUserData[] } = await axiosInstance.get(
-      `/api/users/${userId}/search-admin`,
+      `/api/users/${userId}/search-admin?${search ? `search=${search}` : ""}`,
       {
         headers: {
           Authorization: `bearer ${token}`,
