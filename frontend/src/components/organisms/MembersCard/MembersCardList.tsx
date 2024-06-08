@@ -9,6 +9,7 @@ import { Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 import { isEmpty, useSearchFilters } from "@utils";
 import { DataActionsBar } from "@molecules";
+import { CC_MEMBERS_SORTING } from "@consts";
 
 export function MembersCardList({ members }: { members: UserListItem[] }) {
   const t = useTranslations("Members");
@@ -46,6 +47,7 @@ export function MembersCardList({ members }: { members: UserListItem[] }) {
             setSortOpen={setSortOpen}
             sortingActive={Boolean(chosenSorting)}
             sortOpen={sortOpen}
+            sortOptions={CC_MEMBERS_SORTING}
           />
         </Box>
       </Box>
