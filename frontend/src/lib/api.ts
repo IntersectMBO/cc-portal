@@ -97,13 +97,17 @@ export async function getUser(id: string): Promise<FetchUserData> {
   }
 }
 
-export async function getUsersAdmin(): Promise<FetchUserData[]> {
+export async function getUsersAdmin({
+  search,
+}: {
+  search?: string;
+}): Promise<FetchUserData[]> {
   try {
     const token = getAccessToken();
     const { userId } = await decodeUserToken();
 
     const res: { data: FetchUserData[] } = await axiosInstance.get(
-      `/api/users/${userId}/search-admin`,
+      `/api/users/${userId}/search-admin?${search ? `search=${search}` : ""}`,
       {
         headers: {
           Authorization: `bearer ${token}`,
@@ -116,10 +120,18 @@ export async function getUsersAdmin(): Promise<FetchUserData[]> {
   }
 }
 
-export async function getMembers(): Promise<any[]> {
+export async function getMembers({
+  search,
+  sortBy,
+}: {
+  search?: string;
+  sortBy?: string;
+}): Promise<FetchUserData[]> {
   try {
     const res: { data: FetchUserData[] } = await axiosInstance.get(
-      "/api/users/cc-member/search"
+      `/api/users/cc-member/search?${search ? `search=${search}` : ""}&${
+        sortBy ? `sortBy=${sortBy}` : ""
+      }`
     );
     return res.data;
   } catch (error) {

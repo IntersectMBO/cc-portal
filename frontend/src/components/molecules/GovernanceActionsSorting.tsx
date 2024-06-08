@@ -8,17 +8,19 @@ import {
   Typography,
 } from "@mui/material";
 
-import { GOVERNANCE_ACTIONS_SORTING } from "@consts";
 import { useTranslations } from "next-intl";
+import { FilterItem } from "./types";
 
 interface Props {
   chosenSorting: string;
   setChosenSorting: Dispatch<SetStateAction<string>>;
+  sortOptions: FilterItem[];
 }
 
 export const GovernanceActionsSorting = ({
   chosenSorting,
   setChosenSorting,
+  sortOptions,
 }: Props) => {
   const t = useTranslations();
 
@@ -57,7 +59,7 @@ export const GovernanceActionsSorting = ({
             setChosenSorting(e.target.value);
           }}
         >
-          {GOVERNANCE_ACTIONS_SORTING.map((item) => (
+          {sortOptions.map((item) => (
             <FormControlLabel
               sx={[
                 {
