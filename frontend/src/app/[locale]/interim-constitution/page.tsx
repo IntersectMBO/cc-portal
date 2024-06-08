@@ -30,7 +30,6 @@ export default async function ConstitutionPage({ params: { locale } }) {
           )}
         </Suspense>
       </ContentWrapper>
-      <Footer />
     </main>
   );
 }
