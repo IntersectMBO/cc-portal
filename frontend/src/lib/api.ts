@@ -116,10 +116,18 @@ export async function getUsersAdmin(): Promise<FetchUserData[]> {
   }
 }
 
-export async function getMembers(): Promise<any[]> {
+export async function getMembers({
+  search,
+  sortBy,
+}: {
+  search?: string;
+  sortBy?: string;
+}): Promise<FetchUserData[]> {
   try {
     const res: { data: FetchUserData[] } = await axiosInstance.get(
-      "/api/users/cc-member/search"
+      `/api/users/cc-member/search?${search ? `search=${search}` : ""}&${
+        sortBy ? `sortBy=${sortBy}` : ""
+      }`
     );
     return res.data;
   } catch (error) {
