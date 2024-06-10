@@ -17,6 +17,7 @@ import { useTranslations } from "next-intl";
 import { useModal } from "@/context";
 import { Footer } from "../Footer";
 import { customPalette } from "@consts";
+import { ContentWrapper } from "@/components/atoms";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const [isOpen, setIsOpen] = useState(true);
@@ -129,11 +130,13 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       justifyContent="flex-end"
     >
       <Grid mt={3} item xs={10} md={isOpen ? 8 : 11}>
-        <Box px={{ xs: 2, md: 5 }}>
-          <Card sx={{ px: { xs: 2, md: 7 }, py: { xs: 1, md: 6 } }}>
-            <MDXRemote {...constitution} components={MDXComponents} />
-          </Card>
-        </Box>
+        <ContentWrapper>
+          <Box px={{ xs: 2, md: 5 }}>
+            <Card sx={{ px: { xs: 2, md: 7 }, py: { xs: 1, md: 6 } }}>
+              <MDXRemote {...constitution} components={MDXComponents} />
+            </Card>
+          </Box>
+        </ContentWrapper>
         <Footer />
       </Grid>
     </Grid>
