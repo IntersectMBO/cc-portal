@@ -50,7 +50,7 @@ export const TopNav = () => {
   return (
     <TopNavWrapper homeRedirectionPath={PATHS.home}>
       <Box>
-        <Grid container gap={4} alignItems="center">
+        <Grid container gap={4} alignItems="center" flexWrap="nowrap">
           {userSession ? renderAuthNavItems() : getNavItems()}
         </Grid>
       </Box>
