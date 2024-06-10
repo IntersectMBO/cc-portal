@@ -50,10 +50,13 @@ export const LatestUpdates = ({
 
   return (
     <Box px={{ xs: 3, md: 5 }} py={{ xs: 3, md: 6 }}>
-      <Box display="flex" justifyContent="space-between">
-        <Typography sx={{ paddingBottom: 4 }} variant="headline4">
-          {t("title")}
-        </Typography>
+      <Box
+        paddingBottom={4}
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Typography variant="headline4">{t("title")}</Typography>
         <Box display="flex" sx={{ position: "relative" }}>
           <DataActionsBar
             chosenFilters={chosenFilters}
