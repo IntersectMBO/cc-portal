@@ -7,14 +7,14 @@ import { MembersCard } from "./MembersCard";
 import { UserListItem } from "../types";
 import { Typography } from "@atoms";
 import { useTranslations } from "next-intl";
-import { isEmpty, useSearchFilters } from "@utils";
+import { isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "@molecules";
 import { CC_MEMBERS_SORTING } from "@consts";
 
 export function MembersCardList({ members }: { members: UserListItem[] }) {
   const t = useTranslations("Members");
 
-  const { updateSearchParams } = useSearchFilters();
+  const { updateQueryParams } = useManageQueryParams();
   const [searchText, setSearchText] = useState<string>("");
   const [sortOpen, setSortOpen] = useState(false);
   const [chosenSorting, setChosenSorting] = useState<string>("");
@@ -28,8 +28,8 @@ export function MembersCardList({ members }: { members: UserListItem[] }) {
       search: searchText || null,
       sortBy: chosenSorting || null,
     };
-    updateSearchParams(params);
-  }, [searchText, chosenSorting, updateSearchParams]);
+    updateQueryParams(params);
+  }, [searchText, chosenSorting, updateQueryParams]);
 
   return (
     <Box px={{ xs: 3, md: 5 }} py={{ xs: 3, md: 6 }}>

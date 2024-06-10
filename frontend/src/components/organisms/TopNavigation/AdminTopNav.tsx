@@ -12,21 +12,21 @@ import PermissionChecker from "../PermissionChecker";
 import { IMAGES, PATHS } from "@consts";
 import Link from "next/link";
 import { Search } from "@molecules";
-import { useSearchFilters } from "@utils";
+import { useManageQueryParams } from "@utils";
 
 export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const t = useTranslations("Navigation");
   const { openModal } = useModal();
   const { userSession } = useAppContext();
   const [searchText, setSearchText] = useState<string>("");
-  const { updateSearchParams } = useSearchFilters();
+  const { updateQueryParams } = useManageQueryParams();
 
   useEffect(() => {
     const params: Record<string, string | null> = {
       search: searchText || null,
     };
-    updateSearchParams(params);
-  }, [searchText, updateSearchParams]);
+    updateQueryParams(params);
+  }, [searchText, updateQueryParams]);
 
   const addMember = () =>
     openModal({

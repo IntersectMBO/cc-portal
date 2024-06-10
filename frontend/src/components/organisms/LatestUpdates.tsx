@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { VotesTable } from "./VotesTable";
 import { VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
-import { isEmpty, useSearchFilters } from "@utils";
+import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
 import { GOVERNANCE_ACTIONS_SORTING } from "@consts";
 
@@ -17,7 +17,7 @@ export const LatestUpdates = ({
   latestUpdates: VotesTableI[];
 }) => {
   const t = useTranslations("LatestUpdates");
-  const { updateSearchParams } = useSearchFilters();
+  const { updateQueryParams } = useManageQueryParams();
   const [searchText, setSearchText] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [chosenFilters, setChosenFilters] = useState<Record<string, string[]>>(
@@ -45,8 +45,8 @@ export const LatestUpdates = ({
         chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
       sortBy: chosenSorting || null,
     };
-    updateSearchParams(params);
-  }, [searchText, chosenFilters, chosenSorting, updateSearchParams]);
+    updateQueryParams(params);
+  }, [searchText, chosenFilters, chosenSorting, updateQueryParams]);
 
   return (
     <Box px={{ xs: 3, md: 5 }} py={{ xs: 3, md: 6 }}>
@@ -57,9 +57,7 @@ export const LatestUpdates = ({
         <Box display="flex" sx={{ position: "relative" }}>
           <DataActionsBar
             chosenFilters={chosenFilters}
-            chosenFiltersLength={
-              chosenFilters.govActionType?.length + chosenFilters.vote?.length
-            }
+            chosenFiltersLength={countSelectedFilters(chosenFilters)}
             chosenSorting={chosenSorting}
             closeFilters={closeFilters}
             closeSorts={closeSorts}

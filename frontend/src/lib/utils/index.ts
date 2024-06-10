@@ -10,4 +10,4 @@ export * from "./string";
 export * from "./getProposalTypeLabel";
 export * from "./helpers";
 export * from "./useDebounce";
-export * from "./useSearchFilters";
+export * from "./useManageQueryParams";
