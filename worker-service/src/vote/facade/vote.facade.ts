@@ -20,7 +20,12 @@ export class VoteFacade {
         const dbSyncData =
           await this.voteService.getVoteDataFromDbSync(mapHotAddresses);
         await this.producer.addToVoteQueue(dbSyncData);
+        //await this.delay(1000); // delay of 1s for the next iteration
       }
     }
+  }
+
+  async delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

@@ -1,15 +1,15 @@
-import { OnWorkerEvent, Processor } from '@nestjs/bullmq';
+import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import {
   JOB_NAME_VOTE_SYNC,
   QUEUE_NAME_DB_SYNC,
 } from '../common/constants/bullmq.constants';
-import { WorkerHostProcessor } from 'src/common/worker-host.processor';
+//import { WorkerHostProcessor } from 'src/common/worker-host.processor';
 import { Logger } from '@nestjs/common';
 import { VoteService } from './services/vote.service';
 
 @Processor(QUEUE_NAME_DB_SYNC)
-export class VoteProcessor extends WorkerHostProcessor {
+export class VoteProcessor extends WorkerHost {
   protected readonly logger = new Logger(VoteProcessor.name);
   constructor(private readonly voteService: VoteService) {
     super();
@@ -21,12 +21,6 @@ export class VoteProcessor extends WorkerHostProcessor {
         this.logger.debug('Data from db-sync');
         return job.data;
       }
-      // case JOB_NAME_FILTER_DATA: {
-      //   this.logger.debug('Second child job is getting executed');
-      //   const secondChildrenData = await job.data;
-      //   this.logger.verbose(secondChildrenData);
-      //   return secondChildrenData;
-      // }
     }
   }
 

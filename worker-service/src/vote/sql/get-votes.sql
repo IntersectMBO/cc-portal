@@ -1,6 +1,6 @@
 select
 vp.id,
-vp.comitee_voter, -- Should be a hot address related to a vote
+vp.committee_voter, -- Should be a hot address related to a vote
 vp.gov_action_proposal_id, -- Should be Governance Action ID
 vp.vote, -- The vote itself, should be Yes, No, Abstain
 ocvd.title, -- Should be "Reasoning title"
@@ -10,13 +10,13 @@ gap_exp_epoch.end_time, -- Should be GAP "Expiry date" info when clicking on sho
 gap.voting_anchor_id, -- Should be anchor id for URL that contins JSON governance action metadata
 vp_block.time, -- Should be Vote "Submit date" info when clicking on show more button
 va.url, -- Should be a URL that contains JSON governance action metadata
-
+ch.raw,
 case 
 when gap.ratified_epoch is not null then 'RATIFIED'
 when gap.enacted_epoch is not null then 'ENACTED'
 when gap.dropped_epoch is not null then 'DROPPED'
 when gap.expired_epoch is not null then 'EXPIRED'
-else 'pending'
+else 'ACTIVE'
 end as status
 
 from voting_procedure vp
@@ -36,4 +36,5 @@ left join off_chain_vote_author ocva on ocva.off_chain_vote_data_id = ocvd.id
 
 -- Relation for URL that contains governance action metadata
 left join voting_anchor va on va.id = gap.voting_anchor_id
-where vp.comitee_voter in (:whereInArray)
+left join committee_hash ch on ch.id = vp.committee_voter
+where ch.raw in (:whereInArray)

@@ -4,4 +4,5 @@ export class GovActionProposalDto {
   title: string;
   abstract: string;
   govMetadataUrl: string;
+  status: string;
 }

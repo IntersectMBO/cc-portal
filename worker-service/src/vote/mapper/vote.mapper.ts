@@ -7,9 +7,9 @@ export class VoteMapper {
   ): VoteRequest {
     const voteRequest = new VoteRequest();
     voteRequest.id = dbSyncData.id;
-    voteRequest.hotAddress = dbSyncData.comitee_voter;
+    voteRequest.hotAddress = this.hotAddressFromBufferToHash(dbSyncData.raw);
     mapHotAddresses.forEach((val, key) => {
-      if (key === dbSyncData.comitee_voter) {
+      if (key === voteRequest.hotAddress) {
         voteRequest.userId = val;
       }
     });
@@ -24,5 +24,11 @@ export class VoteMapper {
     voteRequest.govMetadataUrl = dbSyncData.url;
     voteRequest.status = dbSyncData.status;
     return voteRequest;
+  }
+
+  private static hotAddressFromBufferToHash(address: Buffer): string {
+    const buffer = Buffer.from(address);
+    const hashAddress = '\\x' + buffer.toString('hex');
+    return hashAddress;
   }
 }
