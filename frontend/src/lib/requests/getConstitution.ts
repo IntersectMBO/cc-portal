@@ -4,15 +4,10 @@ import remarkToc from "remark-toc";
 import rehypeToc from "rehype-toc";
 import rehypeSlug from "rehype-slug";
 
-const GITHUB_URL =
-  "https://raw.githubusercontent.com/Kristina2103/testMdx/main";
-
-export const CONSTITUTION_FILE = "cardano-constitution-{2}.md";
-
 export async function getConstitution(
-  fileName: string = CONSTITUTION_FILE
+  fileName: string = process.env.NEXT_PUBLIC_CONSTITUTION_FILE_NAME
 ): Promise<MDXRemoteSerializeResult | undefined> {
-  const apiUrl = `${GITHUB_URL}/${fileName}`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_CONSTITUTION_URL}/${fileName}`;
 
   const res = await fetch(apiUrl, {
     headers: {
