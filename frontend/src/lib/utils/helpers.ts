@@ -15,3 +15,22 @@ export const isEmpty = (value: any): boolean => {
   }
   return false;
 };
+
+/**
+ * Calculates the total number of selected filters.
+ *
+ * This function takes an object representing chosen filters, where each key corresponds
+ * to a category and each value is an array of selected filters for that category.
+ * It returns the total number of selected filters across all categories.
+ *
+ * @param {Record<string, string[]>} chosenFilters - An object where each key is a filter category and each value is an array of selected filters for that category.
+ * @returns {number} - The total number of selected filters across all categories.
+ */
+export const countSelectedFilters = (
+  chosenFilters: Record<string, string[]>
+): number => {
+  return Object.values(chosenFilters).reduce(
+    (total, filters) => total + filters.length,
+    0
+  );
+};

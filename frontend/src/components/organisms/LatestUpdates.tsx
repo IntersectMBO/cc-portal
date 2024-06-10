@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { VotesTable } from "./VotesTable";
 import { VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
-import { isEmpty, useSearchFilters } from "@utils";
+import { countSelectedFilters, isEmpty, useSearchFilters } from "@utils";
 import { DataActionsBar } from "../molecules";
 import { GOVERNANCE_ACTIONS_SORTING } from "@consts";
 
@@ -57,9 +57,7 @@ export const LatestUpdates = ({
         <Box display="flex" sx={{ position: "relative" }}>
           <DataActionsBar
             chosenFilters={chosenFilters}
-            chosenFiltersLength={
-              chosenFilters.govActionType?.length + chosenFilters.vote?.length
-            }
+            chosenFiltersLength={countSelectedFilters(chosenFilters)}
             chosenSorting={chosenSorting}
             closeFilters={closeFilters}
             closeSorts={closeSorts}
