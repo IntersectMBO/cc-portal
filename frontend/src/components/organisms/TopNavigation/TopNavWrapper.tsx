@@ -1,7 +1,7 @@
 "use client";
 import React, { ReactNode } from "react";
 
-import { AppBar } from "@mui/material";
+import { AppBar, SxProps } from "@mui/material";
 
 import { ICONS, customPalette } from "@consts";
 import NextLink from "next/link";
@@ -9,9 +9,10 @@ import NextLink from "next/link";
 interface Props {
   children: ReactNode;
   homeRedirectionPath: string;
+  sx?: SxProps;
 }
 
-export const TopNavWrapper = ({ children, homeRedirectionPath }: Props) => {
+export const TopNavWrapper = ({ children, homeRedirectionPath, sx }: Props) => {
   return (
     <AppBar
       component="nav"
@@ -29,6 +30,8 @@ export const TopNavWrapper = ({ children, homeRedirectionPath }: Props) => {
         "& img": {
           width: "100%",
         },
+        gap: "40px",
+        ...sx,
       }}
     >
       <NextLink data-testid="logo-button" href={homeRedirectionPath}>

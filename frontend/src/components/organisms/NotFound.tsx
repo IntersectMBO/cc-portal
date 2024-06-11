@@ -8,9 +8,11 @@ import { customPalette } from "@/constants";
 export function NotFound({
   title,
   description,
+  height = "70vh",
 }: {
   title: string;
   description: string;
+  height?: string;
 }) {
   const t = useTranslations("NotFound");
 
@@ -19,7 +21,7 @@ export function NotFound({
       display="flex"
       justifyContent="center"
       alignItems="center"
-      sx={{ height: "80vh" }}
+      sx={{ height }}
     >
       <Box
         sx={{

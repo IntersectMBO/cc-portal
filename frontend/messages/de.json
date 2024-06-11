@@ -14,7 +14,7 @@
     "drawer": {
       "compare": "Compare",
       "latestRevisions": "Latest Revisions",
-      "tableOfContents": "Table of contents",
+      "tableOfContents": "Content",
       "latest": "Latest"
     }
   },
@@ -232,5 +232,9 @@
   "GovernanceAction": {
     "Link": "Link",
     "Hash": "Hash"
+  },
+  "Filters": {
+    "sortBy": "Sort by",
+    "clear": "Clear"
   }
 }

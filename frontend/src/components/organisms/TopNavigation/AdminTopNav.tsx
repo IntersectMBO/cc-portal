@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Box, Grid } from "@mui/material";
 
@@ -11,11 +11,22 @@ import { useAppContext, useModal } from "@context";
 import PermissionChecker from "../PermissionChecker";
 import { IMAGES, PATHS } from "@consts";
 import Link from "next/link";
+import { Search } from "@molecules";
+import { useManageQueryParams } from "@utils";
 
 export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const t = useTranslations("Navigation");
   const { openModal } = useModal();
   const { userSession } = useAppContext();
+  const [searchText, setSearchText] = useState<string>("");
+  const { updateQueryParams } = useManageQueryParams();
+
+  useEffect(() => {
+    const params: Record<string, string | null> = {
+      search: searchText || null,
+    };
+    updateQueryParams(params);
+  }, [searchText, updateQueryParams]);
 
   const addMember = () =>
     openModal({
@@ -25,16 +36,24 @@ export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const addVersion = () => openModal({ type: "uploadConstitution" });
 
   return (
-    <TopNavWrapper homeRedirectionPath={PATHS.admin.dashboard}>
+    <TopNavWrapper
+      homeRedirectionPath={PATHS.admin.dashboard}
+      sx={{ justifyContent: "flex-Start" }}
+    >
       {isLoggedIn && (
-        <Box>
-          <Grid container gap={2}>
+        <Box
+          display="flex"
+          flexDirection="row"
+          justifyContent="space-between"
+          width="100%"
+        >
+          <Search setSearchText={setSearchText} />
+          <Grid container gap={2} justifyContent="flex-end">
             <MUIButton
               startIcon={<img src={IMAGES.bookOpen} />}
               variant="outlined"
               href={PATHS.constitution}
               component={Link}
-              target="_blank"
             >
               {t("seeConstituton")}
             </MUIButton>
@@ -42,7 +61,7 @@ export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               permissions={userSession?.permissions}
               requiredPermission="manage_cc_members"
             >
-              <Button onClick={addMember} variant="outlined">
+              <Button size="extraLarge" onClick={addMember} variant="outlined">
                 {t("addNewMember")}
               </Button>
             </PermissionChecker>
@@ -50,7 +69,7 @@ export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               permissions={userSession?.permissions}
               requiredPermission="add_constitution_version"
             >
-              <Button type="submit" onClick={addVersion}>
+              <Button size="extraLarge" type="submit" onClick={addVersion}>
                 {t("uploadNewVersion")}
               </Button>
             </PermissionChecker>

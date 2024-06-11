@@ -12,7 +12,7 @@ import {
 import {
   ConstitutionByCid,
   ConstitutionMetadata,
-  LatestUpdates,
+  GovActionMetadata,
   VotesTableI,
 } from "@/components/organisms";
 
@@ -97,13 +97,17 @@ export async function getUser(id: string): Promise<FetchUserData> {
   }
 }
 
-export async function getUsersAdmin(): Promise<FetchUserData[]> {
+export async function getUsersAdmin({
+  search,
+}: {
+  search?: string;
+}): Promise<FetchUserData[]> {
   try {
     const token = getAccessToken();
     const { userId } = await decodeUserToken();
 
     const res: { data: FetchUserData[] } = await axiosInstance.get(
-      `/api/users/${userId}/search-admin`,
+      `/api/users/${userId}/search-admin?${search ? `search=${search}` : ""}`,
       {
         headers: {
           Authorization: `bearer ${token}`,
@@ -116,10 +120,18 @@ export async function getUsersAdmin(): Promise<FetchUserData[]> {
   }
 }
 
-export async function getMembers(): Promise<any[]> {
+export async function getMembers({
+  search,
+  sortBy,
+}: {
+  search?: string;
+  sortBy?: string;
+}): Promise<FetchUserData[]> {
   try {
     const res: { data: FetchUserData[] } = await axiosInstance.get(
-      "/api/users/cc-member/search"
+      `/api/users/cc-member/search?${search ? `search=${search}` : ""}&${
+        sortBy ? `sortBy=${sortBy}` : ""
+      }`
     );
     return res.data;
   } catch (error) {
@@ -127,131 +139,48 @@ export async function getMembers(): Promise<any[]> {
   }
 }
 
-export async function getLatestUpdates(): Promise<any[]> {
+export async function getLatestUpdates({
+  search,
+  govActionType,
+  vote,
+  sortBy,
+}: {
+  search?: string;
+  govActionType?: string;
+  vote?: string;
+  sortBy?: string;
+}): Promise<VotesTableI[]> {
   try {
-    const res: { data: VotesTableI[] } = {
-      data: [
-        {
-          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
-          user_name: "Maria",
-          user_address: "longaddress@example.com",
-          value: "yes",
-          reasoning_title: "This proposal is good for the ecosystem",
-          comment:
-            "Here i elaborated why this proposal is good for the ecosystem",
-          governance_proposal_title: "Random title",
-          governance_proposal_type: "ParameterChange",
-          governance_proposal_resolved: true,
-          governance_proposal_end_time: "End time of a governance proposal",
-        },
-        {
-          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
-          user_name: "Thomas",
-          user_address: "test@example.com",
-          value: "yes",
-          reasoning_title: "This proposal is good for the ecosystem",
-          comment:
-            "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit  Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis, lorem ipsum dolor sit amet consectetur.             ",
-          governance_proposal_title:
-            "This title can have up to 88 characters amet orci adipiscing proin duis nibh sed id am.",
-          governance_proposal_type: "ParameterChange",
-          governance_proposal_resolved: false,
-          governance_proposal_end_time: "End time of a governance proposal",
-        },
-        {
-          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
-          user_name: "James",
-          user_address: "test@example.com",
-          value: "no",
-          reasoning_title: "This proposal is good for the ecosystem",
-          comment:
-            "Here i elaborated why this proposal is good for the ecosystem",
-          governance_proposal_title: "Random title",
-          governance_proposal_type: "ParameterChange",
-          governance_proposal_resolved: false,
-          governance_proposal_end_time: "End time of a governance proposal",
-        },
-        {
-          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
-          user_name: "Nicole",
-          user_address: "test@example.com",
-          value: "abstain",
-          reasoning_title: "This proposal is good for the ecosystem",
-          comment:
-            "Here i elaborated why this proposal is good for the ecosystem",
-          governance_proposal_title: "Random title",
-          governance_proposal_type: "ParameterChange",
-          governance_proposal_resolved: false,
-          governance_proposal_end_time: "End time of a governance proposal",
-        },
-      ],
-    };
+    const res: { data: VotesTableI[] } = await axiosInstance.get(
+      `/api/governance/votes/search?${search ? `search=${search}` : ""}&${
+        govActionType ? `filter.govActionType=$in:${govActionType}` : ""
+      }&${vote ? `filter.vote=$in:${vote}` : ""}&${
+        sortBy ? `sortBy=${sortBy}` : ""
+      }`
+    );
     return res.data;
   } catch (error) {
     console.log("error get latest updates", error);
   }
 }
 
-export async function getUserVotes(): Promise<any[]> {
+export async function getUserVotes(id: string): Promise<VotesTableI[]> {
   try {
-    const res: { data: VotesTableI[] } = {
-      data: [
-        {
-          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
-          user_name: "Maria",
-          user_address: "longaddress@example.com",
-          value: "yes",
-          reasoning_title: "This proposal is good for the ecosystem",
-          comment:
-            "Here i elaborated why this proposal is good for the ecosystem",
-          governance_proposal_title: "Random title",
-          governance_proposal_type: "ParameterChange",
-          governance_proposal_resolved: false,
-          governance_proposal_end_time: "End time of a governance proposal",
-        },
-        {
-          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
-          user_name: "Maria",
-          user_address: "test@example.com",
-          value: "yes",
-          reasoning_title: "This proposal is good for the ecosystem",
-          comment:
-            "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit  Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis, lorem ipsum dolor sit amet consectetur.             ",
-          governance_proposal_title:
-            "This title can have up to 88 characters amet orci adipiscing proin duis nibh sed id am.",
-          governance_proposal_type: "ParameterChange",
-          governance_proposal_resolved: true,
-          governance_proposal_end_time: "End time of a governance proposal",
-        },
-        {
-          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
-          user_name: "Maria",
-          user_address: "test@example.com",
-          value: "no",
-          reasoning_title: "This proposal is good for the ecosystem",
-          comment:
-            "Here i elaborated why this proposal is good for the ecosystem",
-          governance_proposal_title: "Random title",
-          governance_proposal_type: "ParameterChange",
-          governance_proposal_resolved: false,
-          governance_proposal_end_time: "End time of a governance proposal",
-        },
-        {
-          id: "7ceb9ab7-6427-40b7-be2e-37ba6742d5fd",
-          user_name: "Maria",
-          user_address: "test@example.com",
-          value: "abstain",
-          reasoning_title: "This proposal is good for the ecosystem",
-          comment:
-            "Here i elaborated why this proposal is good for the ecosystem",
-          governance_proposal_title: "Random title",
-          governance_proposal_type: "ParameterChange",
-          governance_proposal_resolved: false,
-          governance_proposal_end_time: "End time of a governance proposal",
-        },
-      ],
-    };
+    const res: { data: VotesTableI[] } = await axiosInstance.get(
+      `/api/governance/votes/search?filter.userId=$eq:${id}`
+    );
     return res.data;
+  } catch (error) {
+    console.log("error get latest updates", error);
+  }
+}
+
+export async function getGovernanceMetadata(id: string): Promise<any> {
+  try {
+    const res: GovActionMetadata = await axiosInstance.get(
+      `/api/governance/${id}`
+    );
+    return res;
   } catch (error) {
     console.log("error get latest updates", error);
   }

@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@molecules";
-import { Box, Grid } from "@mui/material";
+import { Box, Divider, Grid } from "@mui/material";
 import { MDXRemote } from "next-mdx-remote";
 import { useState } from "react";
 import {
@@ -15,6 +15,9 @@ import {
 import { ConstitutionMetadata, ConstitutionProps } from "../types";
 import { useTranslations } from "next-intl";
 import { useModal } from "@/context";
+import { Footer } from "../Footer";
+import { customPalette } from "@consts";
+import { ContentWrapper } from "@/components/atoms";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const [isOpen, setIsOpen] = useState(true);
@@ -36,17 +39,18 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       <NavDrawer
         isOpen={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        top={90}
+        top={{ xs: 75, md: 90 }}
         left={0}
       >
-        <Box>
-          <Grid
-            container
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{ marginBottom: 2 }}
-            gap={2}
-          >
+        <Grid
+          container
+          alignItems="center"
+          justifyContent="space-between"
+          padding={2}
+          sx={{ marginBottom: 2 }}
+          flexWrap="nowrap"
+        >
+          <Grid item xs={12} md="auto">
             <NavTitle
               onClick={() => setTab("revisions")}
               label={t("drawer.latestRevisions")}
@@ -58,10 +62,32 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
               isActive={tab === ""}
             />
           </Grid>
-        </Box>
-        {tab === "revisions" ? (
-          <Grid container direction="column">
-            <Grid item justifyContent="flex-end">
+          <Grid
+            item
+            xs={6}
+            justifySelf="flex-end"
+            sx={{ display: { xs: "none", md: "flex" } }}
+          >
+            <Divider
+              color={customPalette.lightBlue}
+              orientation="horizontal"
+              flexItem={true}
+              sx={{
+                height: "1px",
+                width: "100%",
+                alignSelf: "center",
+              }}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          direction="column"
+          width={{ xs: "100%", md: "400p", lg: "450px" }}
+          px={{ xs: 1, md: 2 }}
+        >
+          {tab === "revisions" ? (
+            <Grid item justifyContent="flex-end" px={{ xs: 1, md: 0 }}>
               {metadata.map(({ title, created_date, cid }) => {
                 return (
                   <NavCard
@@ -83,14 +109,12 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                 );
               })}
             </Grid>
-          </Grid>
-        ) : (
-          <Grid container direction="column">
+          ) : (
             <Grid item justifyContent="flex-end">
               {children}
             </Grid>
-          </Grid>
-        )}
+          )}
+        </Grid>
       </NavDrawer>
     ),
     h1: Heading1,
@@ -102,14 +126,18 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
     <Grid
       data-testid="constitution-page-wrapper"
       container
-      px={5}
       position="relative"
       justifyContent="flex-end"
     >
-      <Grid my={3} item xs={10} md={isOpen ? 8 : 11}>
-        <Card sx={{ px: { xs: 2, md: 7 }, py: { xs: 1, md: 6 } }}>
-          <MDXRemote {...constitution} components={MDXComponents} />
-        </Card>
+      <Grid mt={3} item xs={10} md={isOpen ? 8 : 11}>
+        <ContentWrapper>
+          <Box px={{ xs: 2, md: 5 }}>
+            <Card sx={{ px: { xs: 2, md: 7 }, py: { xs: 1, md: 6 } }}>
+              <MDXRemote {...constitution} components={MDXComponents} />
+            </Card>
+          </Box>
+        </ContentWrapper>
+        <Footer />
       </Grid>
     </Grid>
   );

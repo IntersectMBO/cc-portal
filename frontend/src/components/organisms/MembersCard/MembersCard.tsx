@@ -22,6 +22,9 @@ export const MembersCard = ({
 
   return (
     <Box
+      display="flex"
+      justifyContent="space-between"
+      flexDirection="column"
       sx={{
         borderColor: "lightOrange",
         boxShadow: "0px 4px 15px 0px #DDE3F5",
@@ -33,15 +36,17 @@ export const MembersCard = ({
         height: "386px",
       }}
     >
-      <Box textAlign="center" data-testid="members-photo" pb={3}>
-        <UserAvatar width={100} height={100} src={profile_photo_url} />
-      </Box>
-      <Box textAlign="center" data-testid="members-name" pb={3}>
-        <Typography variant="headline5">{name} </Typography>
+      <Box>
+        <Box textAlign="center" data-testid="members-photo" pb={3}>
+          <UserAvatar width={100} height={100} src={profile_photo_url} />
+        </Box>
+        <Box textAlign="center" data-testid="members-name" pb={3}>
+          <Typography variant="headline5">{name} </Typography>
 
-        <Typography fontWeight={400} variant="body1">
-          {description}
-        </Typography>
+          <Typography fontWeight={400} variant="body1">
+            {description}
+          </Typography>
+        </Box>
       </Box>
 
       <Box display="flex" justifyContent="space-between">

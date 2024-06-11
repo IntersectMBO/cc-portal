@@ -8,7 +8,7 @@ import { Link } from "@atoms";
 import { useAppContext } from "@context";
 import { TopNavWrapper } from "./TopNavWrapper";
 import UserProfileButton from "@/components/molecules/UserProfileButton";
-import { isAnyAdminRole } from "@utils";
+import { isAnyAdminRole, isUserRole } from "@utils";
 import NextLink from "next/link";
 import { useTranslations } from "next-intl";
 
@@ -31,7 +31,7 @@ export const TopNav = () => {
     return (
       <>
         {getNavItems()}
-        {getNavItems(PROTECTED_NAV_ITEMS)}
+        {/**   {getNavItems(PROTECTED_NAV_ITEMS)} */}
         {isAnyAdminRole(userSession.role) && (
           <Button
             endIcon={<img src={ICONS.arrowUpRight} />}
@@ -42,7 +42,7 @@ export const TopNav = () => {
             {t("adminDashboard")}
           </Button>
         )}
-        <UserProfileButton user={user} />
+        {isUserRole(userSession.role) && <UserProfileButton user={user} />}
       </>
     );
   };
@@ -50,7 +50,7 @@ export const TopNav = () => {
   return (
     <TopNavWrapper homeRedirectionPath={PATHS.home}>
       <Box>
-        <Grid container gap={4} alignItems="center">
+        <Grid container gap={4} alignItems="center" flexWrap="nowrap">
           {userSession ? renderAuthNavItems() : getNavItems()}
         </Grid>
       </Box>

@@ -5,10 +5,14 @@ import { UsersList } from "@organisms";
 import { getUsersAdmin } from "@/lib/api";
 import { Loading } from "@/components/molecules";
 
-export default async function AdminDashboard({ params: { locale } }) {
+export default async function AdminDashboard({
+  params: { locale },
+  searchParams,
+}) {
   unstable_setRequestLocale(locale); // Sets the locale for the request. Use cautiously due to its unstable nature.
-  const users = await getUsersAdmin();
-
+  const users = await getUsersAdmin({
+    search: searchParams?.search,
+  });
   return (
     <main>
       <Suspense fallback={<Loading />}>

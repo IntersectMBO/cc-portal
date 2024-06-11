@@ -15,4 +15,9 @@ export const ICONS = {
   favicon: "/icons/Favicon.ico",
   logoSign: "/icons/LogoSign.svg",
   informationCircle: "/icons/InformationCircle.svg",
+  filter: "/icons/Filter.svg",
+  filterWhite: "/icons/FilterWhite.svg",
+  sort: "/icons/Sort.svg",
+  sortActive: "/icons/SortActive.svg",
+  sortWhite: "/icons/SortWhite.svg",
 };

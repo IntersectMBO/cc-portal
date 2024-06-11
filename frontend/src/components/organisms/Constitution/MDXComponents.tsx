@@ -3,7 +3,7 @@ import { customPalette, ICONS } from "@/constants";
 import { getShortenedGovActionId } from "@utils";
 import { Button, CopyButton, OutlinedLightButton, Typography } from "@atoms";
 import { Box, Collapse, Grid } from "@mui/material";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 export const Heading1 = ({
   children,
@@ -55,17 +55,15 @@ export const NavTitle = ({
   isActive: boolean;
 }) => {
   return (
-    <Grid item>
-      <Button
-        sx={{ px: 2, py: 0.75 }}
-        onClick={onClick}
-        variant={isActive ? "outlined" : "text"}
+    <Button variant="text" size="small" onClick={onClick}>
+      <Typography
+        fontWeight={isActive ? 500 : 400}
+        variant="body1"
+        sx={{ marginRight: 1, whiteSpace: "nowrap" }}
       >
-        <Typography fontWeight={400} variant="body1" sx={{ marginRight: 1 }}>
-          {label}
-        </Typography>
-      </Button>
-    </Grid>
+        {label}
+      </Typography>
+    </Button>
   );
 };
 
@@ -74,13 +72,13 @@ export const NavDrawer = ({
   onClick,
   isOpen,
   left = 0,
-  top = 90,
+  top = { xs: 75, md: 90 },
 }: {
   children: ReactNode;
   onClick: () => void;
   isOpen: boolean;
   left: number;
-  top: number;
+  top: { xs: number; md: number };
 }) => {
   return (
     <Grid
@@ -88,10 +86,10 @@ export const NavDrawer = ({
       left={left}
       top={top}
       item
-      px={2}
+      px={3}
       py={2}
       sx={{
-        height: { xs: "90vh", md: "80vh" },
+        height: { xs: "90vh", md: "88vh" },
         backgroundColor: customPalette.arcticWhite,
         "& ol.toc-level-1": {
           paddingInlineStart: 0,
@@ -122,7 +120,11 @@ export const NavDrawer = ({
         />
       </Grid>
       <Collapse
-        sx={{ paddingLeft: { xs: 1, md: 3 }, paddingRight: { xs: 1, md: 3 } }}
+        sx={{
+          height: { xs: "90vh", md: "80vh" },
+          overflow: "scroll",
+          background: "#FBFBFF",
+        }}
         in={isOpen}
         timeout="auto"
         easing="enter"
@@ -137,14 +139,22 @@ export const NavDrawer = ({
 
 export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
   <Box mb={2}>
-    <Card sx={{ padding: 3 }}>
-      <Grid container justifyContent="space-between" alignItems="center">
-        <Grid item>
+    <Card sx={{ px: 3, py: 2 }}>
+      <Grid
+        container
+        justifyContent="space-between"
+        alignItems={{ lg: "center" }}
+      >
+        <Grid item xs={6} lg={"auto"}>
           <Typography variant="body1">{title}</Typography>
           <Typography variant="caption">{description}</Typography>
         </Grid>
-        <Grid item>
-          <Box display="flex">
+        <Grid item xs={6} lg="auto">
+          <Box
+            display="flex"
+            alignItems={{ xs: "center" }}
+            justifyContent={{ xs: "flex-end" }}
+          >
             <Box
               px={2.25}
               py={0.75}
@@ -162,8 +172,13 @@ export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
             </Box>
           </Box>
         </Grid>
-        <Grid item>
-          <Button onClick={onClick} variant="outlined">
+        <Grid item xs={12} lg="auto" mt={{ xs: 2, md: 0 }}>
+          <Button
+            sx={{ width: "100%" }}
+            size="medium"
+            onClick={onClick}
+            variant="outlined"
+          >
             {buttonLabel}
           </Button>
         </Grid>
