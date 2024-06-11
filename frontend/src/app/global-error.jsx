@@ -10,6 +10,7 @@ export default function GlobalError({ error }) {
 		Sentry.captureException(error);
   }, [error]);
 
+  
   return (
 		<html>
 			<body>
