@@ -20,10 +20,7 @@ export class GovernanceMapper {
     voteResponse.govProposalTitle = voteDto.govProposalTitle;
     voteResponse.voteSubmitTime = voteDto.voteSubmitTime;
     voteResponse.govProposalType = voteDto.govProposalType;
-    voteResponse.govProposalStatus =
-      voteDto.govProposalEndTime > new Date()
-        ? GovActionProposalStatus.ACTIVE
-        : GovActionProposalStatus.EXPIRED;
+    voteResponse.govProposalStatus = voteDto.govProposalStatus;
     voteResponse.govProposalEndTime = voteDto.govProposalEndTime;
 
     return voteResponse;
@@ -40,6 +37,8 @@ export class GovernanceMapper {
     voteDto.govProposalTitle = vote.govActionProposal?.title;
     voteDto.voteSubmitTime = vote.submitTime;
     voteDto.govProposalType = vote.govActionType;
+    voteDto.govProposalStatus =
+      GovActionProposalStatus[vote.govActionProposal.status];
     voteDto.govProposalEndTime = vote.endTime;
 
     return voteDto;

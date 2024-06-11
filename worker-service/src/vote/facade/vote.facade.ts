@@ -11,7 +11,7 @@ export class VoteFacade {
     private readonly voteService: VoteService,
   ) {}
 
-  @Cron('0 */5 * * * *') // every 5 minute
+  @Cron('*/30 * * * * *') // every 30 sec
   async syncVotesTable() {
     const pages = await this.voteService.countHotAddressPages();
     if (pages > 0) {
@@ -20,7 +20,6 @@ export class VoteFacade {
         const dbSyncData =
           await this.voteService.getVoteDataFromDbSync(mapHotAddresses);
         await this.producer.addToVoteQueue(dbSyncData);
-        //await this.delay(1000); // delay of 1s for the next iteration
       }
     }
   }

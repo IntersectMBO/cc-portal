@@ -2,7 +2,7 @@ import { CommonEntity } from '../../common/entities/common.entity';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { Vote } from './vote.entity';
 
-@Entity('gov_action_proposal')
+@Entity('gov_action_proposals')
 export class GovActionProposal extends CommonEntity {
   @PrimaryColumn({
     name: 'id',
