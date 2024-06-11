@@ -2,6 +2,7 @@
 
 Welcome to the official repository for the Web App Boilerplate.
 
+
 ## Table of content:
 
 - [Introduction](#introduction)
