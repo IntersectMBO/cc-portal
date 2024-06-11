@@ -18,7 +18,7 @@ ENV NEXT_PUBLIC_ENV $NEXT_PUBLIC_ENV
 
 ENV NEXT_PUBLIC_CONSTITUTION_TOKEN="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"
 ENV NEXT_PUBLIC_CONSTITUTION_URL="https://raw.githubusercontent.com/Kristina2103/testMdx/main"
-ENV NEXT_PUBLIC_CONSTITUTION_FILE_NAME="cardano-constitution-{2}.md"
+ENV NEXT_PUBLIC_CONSTITUTION_FILE_NAME="test.md"
 
 # Build the app
 RUN npm run build
