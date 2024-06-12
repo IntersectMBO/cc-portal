@@ -31,7 +31,8 @@
     "govActionCategoryShort": "GA Category",
     "voted": "Voted",
     "reasoning": "Reasoning",
-    "actionTitle": "Show more"
+    "actionTitle": "Show more",
+    "notAvailable": "Not Available"
   },
   "MyActions": {
     "title": "My Actions",
