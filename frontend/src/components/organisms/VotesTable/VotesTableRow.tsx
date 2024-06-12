@@ -114,7 +114,9 @@ export const VotesTableRow = ({
                     />
                   }
                 >
-                  {truncateText(gov_action_proposal_title, 40)}
+                  {gov_action_proposal_title
+                    ? truncateText(gov_action_proposal_title, 40)
+                    : t("notAvailable")}
                 </OutlinedLightButton>
               </Grid>
               <TableDivider />
