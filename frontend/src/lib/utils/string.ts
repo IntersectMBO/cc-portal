@@ -1,4 +1,7 @@
 export const truncateText = (text: string, limit: number): string => {
+  if (!text) {
+    return;
+  }
   if (text.length <= limit) {
     return text;
   }

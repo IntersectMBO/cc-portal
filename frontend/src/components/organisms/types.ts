@@ -76,10 +76,10 @@ export interface VotesTableI {
   user_address: string;
   user_photo_url?: string;
   value: Vote;
-  reasoning_title: string;
-  reasoning_comment: string;
+  reasoning_title?: string;
+  reasoning_comment?: string;
   gov_action_proposal_id: string;
-  gov_action_proposal_title: string;
+  gov_action_proposal_title?: string;
   gov_action_proposal_type: string;
   gov_action_proposal_status: GovActionProposalStatus;
   gov_action_proposal_end_time: string;
