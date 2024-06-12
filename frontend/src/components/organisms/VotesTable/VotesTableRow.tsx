@@ -65,6 +65,7 @@ export const VotesTableRow = ({
           flexDirection={{ xs: "column", xl: "row" }}
           justifyContent="space-between"
           flexWrap="nowrap"
+          gap={{ xs: 0, xl: 3 }}
         >
           <Grid item xs={12} xl={11}>
             <Grid
@@ -105,12 +106,14 @@ export const VotesTableRow = ({
 
                 <OutlinedLightButton
                   onClick={openGAModal}
+                  disabled={!gov_action_proposal_title}
                   startIcon={
                     <Image
                       alt="GA title"
                       width={12}
                       height={12}
                       src={ICONS.informationCircle}
+                      style={{ opacity: gov_action_proposal_title ? 1 : 0.5 }}
                     />
                   }
                 >
@@ -176,7 +179,9 @@ export const VotesTableRow = ({
                   {t("reasoning")}
                 </Typography>
                 <Typography variant="caption">
-                  {truncateText(reasoning_comment, 100)}
+                  {reasoning_comment
+                    ? truncateText(reasoning_comment, 100)
+                    : t("notAvailable")}
                 </Typography>
               </Grid>
             </Grid>
@@ -187,7 +192,6 @@ export const VotesTableRow = ({
             xl={1}
             textAlign={{ xs: "right", xl: "center" }}
             mt={{ xxs: 2, xl: 0 }}
-            px={{ xxs: 0, xl: 3 }}
           >
             <Button
               disabled={disabled}
