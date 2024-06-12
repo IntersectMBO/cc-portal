@@ -43,15 +43,15 @@ export const GOVERNANCE_ACTIONS_FILTERS: Record<
     title: "Vote",
     items: [
       {
-        key: "YES",
+        key: "Yes",
         label: "Yes",
       },
       {
-        key: "NO",
+        key: "No",
         label: "No",
       },
       {
-        key: "ABSTAIN",
+        key: "Abstain",
         label: "Abstain",
       },
     ],
