@@ -97,11 +97,8 @@ export class AuthFacade {
       throw new UnauthorizedException('Authentication failed');
     }
 
-    // Issue new access token using the same payload
-    const result = new TokenResponse();
-    result.user = UserMapper.mapUserDtoToResponse(user);
-    result.accessToken = this.authService.issueAccessToken({ userId, email });
-    result.refreshToken = this.authService.issueRefreshToken({ userId, email });
+    // Issue new access and refresh tokens using the same payload
+    const result = this.generateTokens(user);
 
     return result;
   }
