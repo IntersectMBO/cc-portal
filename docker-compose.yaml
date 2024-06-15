@@ -1,6 +1,5 @@
 services:
   backend:
-    #image: cc-portal-backend:latest
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -26,7 +25,6 @@ services:
       - bloxico_local
 
   ipfs:
-    # image: ipfs-service:latest
     build:
       context: ./ipfs-service
       dockerfile: Dockerfile
@@ -34,8 +32,8 @@ services:
     ports:
       - "3001:3001"
       - "4001:4001"
-      - "4002:4002" # New
-      - "4003:4003" # New
+      - "4002:4002"
+      - "4003:4003"
       - "5001:5001"
       - "8080:8080"
     volumes:
@@ -64,7 +62,7 @@ services:
       /usr/local/bin/docker-entrypoint.sh postgres & 
       pid=$!; 
       echo "Waiting for PostgreSQL to start..."; 
-      while ! pg_isready -q -h psql -p 5432; do 
+      while ! pg_isready -q -h postgres -p 5432; do 
         sleep 1; 
       done; 
       PGUSER=BEdev24 PGPASSWORD=bedev.bloxico24 psql -U BEdev24 -d cc-portal -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"; 
@@ -75,7 +73,6 @@ services:
 
   cache:
     image: redis/redis-stack:latest
-    # container_name: redis
     container_name: cache
     restart: always
     ports:
@@ -101,19 +98,14 @@ services:
       - bloxico_local
 
   frontend:
-    # image: cc-portal-frontend:latest
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend
-    # Using proxy
-    # ports:
-    #   - "3000:3000"
     networks:
       - bloxico_local
 
   proxy:
-    # image: cc-portal-proxy:latest
     build:
       context: ./proxy
       dockerfile: Dockerfile
