@@ -15,7 +15,6 @@ RUN npm install
 
 RUN npm install --build-from-source node-datachannel
 
-# Copy the rest of the application code to the working directory
 
 # Expose the port that the application will run on
 EXPOSE 3001
@@ -28,5 +27,4 @@ EXPOSE 8080
 RUN npm run build
 
 # Start the application
-CMD [ "npm", "run", "start:prod" ]
-# Build the application
+CMD [ "npm", "run", "start:dev" ]

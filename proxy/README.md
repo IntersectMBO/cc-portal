@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In Nginx, you can enhance the security of your web server by implementing basic HTTP authentication. This involves creating a `.httpasswd` file to store usernames and encrypted passwords. This guide will walk you through the process of creating and managing a `.httpasswd` file for user authentication on Nginx.
+In Nginx, you can enhance the security of your web server by implementing basic HTTP authentication. This involves creating a `.htpasswd` file to store usernames and encrypted passwords. This guide will walk you through the process of creating and managing a `.htpasswd` file for user authentication on Nginx.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ In Nginx, you can enhance the security of your web server by implementing basic 
 
 ## Step 1: Install Apache Utilities (htpasswd)
 
-To create the `.httpasswd` file, we'll use the `htpasswd` utility which is part of the Apache HTTP server package. If you don't have it installed, you can typically install it using your system's package manager. For example, on Ubuntu or Debian-based systems, you can install it with the following command:
+To create the `.htpasswd` file, we'll use the `htpasswd` utility which is part of the Apache HTTP server package. If you don't have it installed, you can typically install it using your system's package manager. For example, on Ubuntu or Debian-based systems, you can install it with the following command:
 
 ```bash
 sudo apt-get update
