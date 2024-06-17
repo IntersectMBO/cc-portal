@@ -2,12 +2,14 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { defaultLocale, locales, PATHS } from "@consts";
+import { isTokenExpired, refreshToken, decodeUserToken } from "./lib/api";
+import * as cookie from "cookie";
 import {
   isAdminProtectedRoute,
   isAnyAdminRole,
   isUserProtectedRoute,
+  getAuthCookies,
 } from "@utils";
-import { decodeUserToken } from "./lib/api";
 
 // Export the middleware configuration to define supported locales and the default locale.
 const intlMiddleware = createMiddleware({
@@ -33,8 +35,37 @@ export const config = {
 export async function middleware(req: NextRequest) {
   // This setup applies internationalization strategies across the application.
   const response = intlMiddleware(req);
-  const decodedToken = await decodeUserToken();
 
+  // Decode user token to check user role
+  const decodedToken = await decodeUserToken();
+  const { token, refresh_token } = getAuthCookies();
+
+  // Check if token is expired and refresh if necessary
+  if (!!token && (await isTokenExpired(token))) {
+    try {
+      const newToken = await refreshToken(refresh_token);
+      // Rewrite cookies and headers with new token
+      const newRequestHeaders = withRewrittenCookieHeader(
+        req.headers,
+        newToken
+      );
+      // Return updated response with new token
+      const response = NextResponse.next({
+        request: {
+          headers: newRequestHeaders,
+        },
+      });
+      response.cookies.set("token", newToken?.access_token);
+      response.cookies.set("refresh_token", newToken?.refresh_token);
+
+      return response;
+    } catch (error) {
+      console.error("Error refreshing access token:", error);
+      return NextResponse.error();
+    }
+  }
+
+  // Check if the route requires admin role
   if (isAdminProtectedRoute(req)) {
     if (decodedToken) {
       const { role } = decodedToken;
@@ -46,6 +77,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(PATHS.admin.home, req.url));
   }
 
+  // Check if the route requires user role
   if (isUserProtectedRoute(req)) {
     if (decodedToken) {
       return response;
@@ -54,4 +86,26 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(PATHS.home, req.url));
   }
   return response;
+}
+
+// Function to update request headers with new token
+function withRewrittenCookieHeader(
+  requestHeaders: Headers,
+  newToken: any
+): Headers {
+  const cookiesHeader = requestHeaders.get("cookie");
+  const parsedCookies = cookie.parse(cookiesHeader || "");
+
+  parsedCookies["token"] = newToken?.access_token;
+  parsedCookies["refresh_token"] = newToken?.refresh_token;
+
+  const serializedCookies = Object.entries(parsedCookies)
+    .map(([key, value]) => cookie.serialize(key, value))
+    .join("; ");
+
+  const newRequestHeaders = new Headers(requestHeaders);
+  newRequestHeaders.set("cookie", serializedCookies);
+  newRequestHeaders.set("Authorization", `Bearer ${newToken?.access_token}`);
+
+  return newRequestHeaders;
 }
