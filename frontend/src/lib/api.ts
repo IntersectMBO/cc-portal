@@ -15,6 +15,27 @@ import {
   GovActionMetadata,
   VotesTableI,
 } from "@/components/organisms";
+const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
+
+export async function isTokenExpired(token): Promise<boolean> {
+  try {
+    // Decode the token without verifying the signature to get the payload
+    const decodedToken = jwt.decode(token) as { exp: number };
+
+    if (!decodedToken || !decodedToken.exp) {
+      throw new Error("Token does not have an expiration time");
+    }
+
+    // Get the current time in seconds
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    // Check if the token is expired
+    return currentTime > decodedToken.exp;
+  } catch (error) {
+    console.error("Error decoding token:");
+    return true; // Assume the token is expired if there's an error
+  }
+}
 
 // Function to decode the user token stored in the authentication cookie
 export async function decodeUserToken(): Promise<DecodedToken | undefined> {
@@ -69,12 +90,16 @@ export async function registerAuthCallback(token: string) {
 
 export async function refreshToken(refresh_token: string) {
   try {
-    const res = await axiosInstance.post<string, any>(`/api/auth/refresh`, {
-      refresh_token,
+    const res = await fetch(`${baseURL}/api/auth/refresh`, {
+      method: "POST",
+      body: JSON.stringify({ refresh_token }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-    setAuthCookies(res.access_token, res.refresh_token);
 
-    return res;
+    const responseData = await res.json();
+    return responseData;
   } catch (error) {
     console.error("error refresh token");
   }
