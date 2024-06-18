@@ -3,12 +3,14 @@
 "use client";
 
 import { getUser, logout as removeCookies } from "@/lib/api";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 // Import createContext and useContext hooks from React to create and consume the context.
 import { createContext, useContext, useEffect, useState } from "react";
 import { ModalProvider } from "./modal";
 import { DecodedToken, FetchUserData } from "@/lib/requests";
 import { SnackbarProvider } from "./snackbar";
+import { PATHS } from "@consts";
+import { isAnyAdminRole } from "@utils";
 
 interface AppContextType {
   userSession: DecodedToken | null;
@@ -29,6 +31,7 @@ export function AppContextProvider({ session, children }) {
   const [userSession, setUserSession] = useState<DecodedToken | null>(session);
   const [user, setUser] = useState<FetchUserData | null>();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   async function fetchUserData(userId: string) {
     const userData = await getUser(userId);
@@ -40,6 +43,19 @@ export function AppContextProvider({ session, children }) {
       fetchUserData(userSession.userId);
     }
   }, [userSession]);
+
+  useEffect(() => {
+    // Logout user if "logout" url query param exists
+    if (searchParams.has("logout") && searchParams.get("logout") === "true") {
+      const role = userSession?.role;
+
+      let redirectUrl = PATHS.home;
+      if (isAnyAdminRole(role)) {
+        redirectUrl = PATHS.admin.home;
+      }
+      logout(redirectUrl);
+    }
+  }, [searchParams]);
 
   const resetState = () => {
     setUser(null);
