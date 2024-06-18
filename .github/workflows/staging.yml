@@ -1,0 +1,27 @@
+name: CI-staging-branch
+
+on:
+  push:
+    branches: [staging]
+
+  workflow_dispatch:
+
+jobs:
+  deploy_to_do:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+        with:
+          ref: staging
+
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY }}
+          script: |
+            git pull
+            cd cc-portal
+            docker compose up -d --force-recreate --build
