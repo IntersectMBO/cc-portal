@@ -40,6 +40,20 @@ export async function middleware(req: NextRequest) {
   const decodedToken = await decodeUserToken();
   const { token, refresh_token } = getAuthCookies();
 
+  if (!!refresh_token && (await isTokenExpired(refresh_token))) {
+    const newRequestHeaders = new Headers(req.headers);
+    newRequestHeaders.set("cookie", "token=; refresh_token=; Max-Age=0");
+
+    const url = new URL(PATHS.home, req.url);
+    url.searchParams.set("logout", "true");
+
+    const newResponse = NextResponse.redirect(url);
+    newResponse.cookies.set("token", "", { maxAge: 0 });
+    newResponse.cookies.set("refresh_token", "", { maxAge: 0 });
+
+    return newResponse;
+  }
+
   // Check if token is expired and refresh if necessary
   if (!!token && (await isTokenExpired(token))) {
     try {
