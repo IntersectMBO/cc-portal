@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { PaginateQuery } from 'nestjs-paginate';
 import { VoteDto } from '../dto/vote.dto';
 import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
@@ -11,6 +16,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 import { GovActionMetaDto } from '../dto/gov-action-meta.dto';
 import { Paginator } from 'src/util/pagination/paginator';
+import { ReasoningDto } from '../dto/reasoning.dto';
+import { Reasoning } from '../entities/reasoning.entity';
 
 @Injectable()
 export class GovernanceService {
@@ -21,6 +28,8 @@ export class GovernanceService {
     private readonly voteRepository: Repository<Vote>,
     @InjectRepository(GovActionProposal)
     private readonly govActionMetadataRepository: Repository<GovActionProposal>,
+    @InjectRepository(Reasoning)
+    private readonly reasoningRepository: Repository<Reasoning>,
 
     private readonly paginator: Paginator,
   ) {}
@@ -70,5 +79,20 @@ export class GovernanceService {
     return this.voteRepository
       .createQueryBuilder('votes')
       .leftJoinAndSelect('votes.govActionProposal', 'govActionProposal');
+  }
+
+  async addReasoning(reasoningDto: ReasoningDto): Promise<ReasoningDto> {
+    const existing = await this.reasoningRepository.findOne({
+      where: {
+        userId: reasoningDto.userId,
+        govActionProposalId: reasoningDto.govActionProposalId,
+      },
+    });
+    if (existing) {
+      throw new ConflictException(`Reasoning already exists for this user`);
+    }
+    const resoning = this.reasoningRepository.create(reasoningDto);
+    const savedReasoning = await this.reasoningRepository.save(resoning);
+    return GovernanceMapper.reasoningToDto(savedReasoning);
   }
 }

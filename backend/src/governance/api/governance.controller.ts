@@ -1,13 +1,16 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
   ParseIntPipe,
   ParseUUIDPipe,
+  Post,
   UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -21,6 +24,8 @@ import { UserPathGuard } from 'src/auth/guard/users-path.guard';
 import { ApiPaginationQuery, Paginate, PaginateQuery } from 'nestjs-paginate';
 import { VOTE_PAGINATION_CONFIG } from '../util/pagination/votes-pagination.config';
 import { GovernanceActionMetadataResponse } from './response/gov-action-metadata.response';
+import { ReasoningRequest } from './request/reasoning.request';
+import { ReasoningResponse } from './response/reasoning.response';
 @ApiTags('Governance')
 @Controller('governance')
 export class GovernanceController {
@@ -82,5 +87,32 @@ export class GovernanceController {
     @Paginate() query: PaginateQuery,
   ): Promise<PaginatedResponse<VoteResponse>> {
     return await this.governanceFacade.searchGovVotes(query, id);
+  }
+
+  @ApiOperation({
+    summary: 'Add reasoning to governance action proposals',
+  })
+  @ApiBearerAuth('JWT-auth')
+  @ApiBody({ type: ReasoningRequest })
+  @ApiResponse({
+    status: 200,
+    description: 'Reasoning added successfully',
+    type: ReasoningResponse,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Reasoning already exists for this user',
+  })
+  @UseGuards(JwtAuthGuard, UserPathGuard)
+  @Post('reasoning/users/:id')
+  async addReasoning(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() reasoningRequest: ReasoningRequest,
+  ) {
+    return await this.governanceFacade.addReasoning(id, reasoningRequest);
   }
 }

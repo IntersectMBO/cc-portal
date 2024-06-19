@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "c1371af6-46e7-4adb-b07b-e391b8d2fa3e",
+		"_postman_id": "4d20299b-0234-4c12-9a30-a77cc28e827c",
 		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "23221045",
-		"_collection_link": "https://dark-trinity-61176.postman.co/workspace/New-Team-Workspace~50bed050-230f-4192-93a9-401b32d4ad61/collection/23221045-c1371af6-46e7-4adb-b07b-e391b8d2fa3e?action=share&source=collection_link&creator=23221045"
+		"_exporter_id": "20133713"
 	},
 	"item": [
 		{
@@ -709,6 +708,41 @@
 								"users",
 								"{{userId}}",
 								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Reasoning",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gov_action_proposal_id\": 16,\n    \"gov_action_proposal_hash\": \"\\\\x28a5c50e900fbc155a98d78d2081e49ca4d6f004f2604e758a64357119db1b05\",\n    \"title\": \"test reasoning\",\n    \"content\": \"some text of reasoning\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/governance/reasoning/users/{{userId}}",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"governance",
+								"reasoning",
+								"users",
+								"{{userId}}"
 							]
 						}
 					},

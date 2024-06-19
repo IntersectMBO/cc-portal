@@ -140,4 +140,40 @@ export class IpfsService {
     );
     return results;
   }
+
+  async addReasoningToIpfs(reasoningJson: any): Promise<IpfsContentDto> {
+    let ipfsContentDto: IpfsContentDto;
+    try {
+      ipfsContentDto = await this.sendReasoningToIpfs(reasoningJson);
+    } catch (error) {
+      this.logger.error(`Error when adding to IPFS: ${error}`);
+      throw new InternalServerErrorException(
+        `Error when add reasoning to the IPFS service`,
+      );
+    }
+    // const reasoning = IpfsMapper.ipfsContentToReasoning(ipfsContentDto);
+    // await this.saveReasoning(reasoning);
+    return ipfsContentDto;
+  }
+
+  async sendReasoningToIpfs(reasoningJson: any): Promise<IpfsContentDto> {
+    const apiLink =
+      this.configService.getOrThrow('IPFS_SERVICE_URL') + '/ipfs/reasoning';
+    const requestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const response = await axios.post(apiLink, reasoningJson, requestConfig);
+    const cid = response.data.cid;
+    const url = response.data.url;
+    const content = response.data.content;
+    const blake2b = await this.generateBlake2bHash(content);
+    return {
+      cid: cid,
+      url: url,
+      blake2b: blake2b,
+      contents: content,
+    };
+  }
 }

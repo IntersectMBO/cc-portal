@@ -1,3 +1,4 @@
+import { IpfsContentDto } from 'src/ipfs/dto/ipfs-content.dto';
 import { GovernanceActionMetadataResponse as GovActionMetadataResponse } from '../api/response/gov-action-metadata.response';
 import { VoteResponse } from '../api/response/vote.response';
 import { GovActionMetaDto } from '../dto/gov-action-meta.dto';
@@ -6,6 +7,10 @@ import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 import { Vote } from '../entities/vote.entity';
 import { GovActionProposalStatus } from '../enums/gov-action-proposal-status.enum';
 import { VoteValue } from '../enums/vote-value.enum';
+import { ReasoningResponse } from '../api/response/reasoning.response';
+import { ReasoningDto } from '../dto/reasoning.dto';
+import { ReasoningRequest } from '../api/request/reasoning.request';
+import { Reasoning } from '../entities/reasoning.entity';
 
 export class GovernanceMapper {
   static voteDtoToResponse(voteDto: VoteDto): VoteResponse {
@@ -65,6 +70,46 @@ export class GovernanceMapper {
     response.abstract = dto.abstract;
     response.metadataUrl = dto.metadataUrl;
 
+    return response;
+  }
+
+  static ipfsContentDtoToReasoningDto(
+    ipfsContentDto: IpfsContentDto,
+    userId: string,
+    reasoningRequest: ReasoningRequest,
+  ): ReasoningDto {
+    const reasoningDto = new ReasoningDto();
+    reasoningDto.cid = ipfsContentDto.cid;
+    reasoningDto.url = ipfsContentDto.url;
+    reasoningDto.blake2b = ipfsContentDto.blake2b;
+    reasoningDto.json = ipfsContentDto.contents;
+    reasoningDto.userId = userId;
+    reasoningDto.govActionProposalId = reasoningRequest.govActionProposalId;
+    reasoningDto.title = reasoningRequest.title;
+    reasoningDto.content = reasoningRequest.content;
+    return reasoningDto;
+  }
+
+  static reasoningToDto(reasoning: Reasoning): ReasoningDto {
+    const reasoningDto = new ReasoningDto();
+    reasoningDto.id = reasoning.id;
+    reasoningDto.userId = reasoning.userId;
+    reasoningDto.title = reasoning.title;
+    reasoningDto.content = reasoning.content;
+    reasoningDto.cid = reasoning.cid;
+    reasoningDto.blake2b = reasoning.blake2b;
+    reasoningDto.url = reasoning.url;
+    reasoningDto.json = reasoning.json;
+    reasoningDto.govActionProposalId = reasoning.govActionProposalId;
+    return reasoningDto;
+  }
+
+  static reasoningDtoToResponse(dto: ReasoningDto): ReasoningResponse {
+    const response = new ReasoningResponse();
+    response.cid = dto.cid;
+    response.blake2b = dto.blake2b;
+    response.url = dto.url;
+    response.contents = dto.json;
     return response;
   }
 }

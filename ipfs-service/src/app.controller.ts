@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   NotFoundException,
@@ -24,6 +25,11 @@ export class AppController {
   @Post()
   async addDoc(@UploadedFile() file: Express.Multer.File): Promise<IpfsDto> {
     return await this.appService.addDoc(file);
+  }
+
+  @Post('reasoning')
+  async addReasoning(@Body() reasoningJson: string): Promise<IpfsDto> {
+    return await this.appService.addReasoning(reasoningJson);
   }
 
   @Get(':cid')

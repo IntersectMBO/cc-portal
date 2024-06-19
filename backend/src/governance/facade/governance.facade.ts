@@ -9,6 +9,10 @@ import { PaginateQuery } from 'nestjs-paginate';
 import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mapper';
 import { UserPhotoDto } from '../dto/user-photo.dto';
 import { GovernanceActionMetadataResponse } from '../api/response/gov-action-metadata.response';
+import { ReasoningResponse } from '../api/response/reasoning.response';
+import { IpfsService } from 'src/ipfs/services/ipfs.service';
+import { ReasoningRequest } from '../api/request/reasoning.request';
+import { IpfsContentDto } from 'src/ipfs/dto/ipfs-content.dto';
 
 @Injectable()
 export class GovernanceFacade {
@@ -17,7 +21,42 @@ export class GovernanceFacade {
   constructor(
     private readonly governanceService: GovernanceService,
     private readonly usersService: UsersService,
+    private readonly ipfsService: IpfsService,
   ) {}
+
+  async addReasoning(
+    userId: string,
+    reasoningRequest: ReasoningRequest,
+  ): Promise<ReasoningResponse> {
+    const reasoningJson = await this.createReasoningJson(reasoningRequest);
+    const ipfsContentDto = await this.addReasoningToIpfs(reasoningJson);
+    const reasoningDto = GovernanceMapper.ipfsContentDtoToReasoningDto(
+      ipfsContentDto,
+      userId,
+      reasoningRequest,
+    );
+    const response = await this.governanceService.addReasoning(reasoningDto);
+    return GovernanceMapper.reasoningDtoToResponse(response);
+  }
+
+  private async createReasoningJson(
+    reasoningRequest: ReasoningRequest,
+  ): Promise<string> {
+    const reasoningJson = {
+      govActionProposalHash: reasoningRequest.govActionProposalHash,
+      title: reasoningRequest.title,
+      content: reasoningRequest.content,
+    };
+    return JSON.stringify(reasoningJson);
+  }
+
+  private async addReasoningToIpfs(
+    reasoningJson: string,
+  ): Promise<IpfsContentDto> {
+    const ipfsContentDto =
+      await this.ipfsService.addReasoningToIpfs(reasoningJson);
+    return ipfsContentDto;
+  }
 
   async findGovActionProposalById(
     id: number,
