@@ -189,10 +189,26 @@ export async function getLatestUpdates({
   }
 }
 
-export async function getUserVotes(id: string): Promise<VotesTableI[]> {
+export async function getUserVotes({
+  search,
+  govActionType,
+  vote,
+  sortBy,
+  userId,
+}: {
+  search?: string;
+  govActionType?: string;
+  vote?: string;
+  sortBy?: string;
+  userId?: string;
+}): Promise<VotesTableI[]> {
   try {
     const res: { data: VotesTableI[] } = await axiosInstance.get(
-      `/api/governance/votes/search?filter.userId=$eq:${id}`
+      `/api/governance/votes/search?filter.userId=$eq:${userId}&${
+        search ? `search=${search}` : ""
+      }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
+        vote ? `filter.vote=$in:${vote}` : ""
+      }&${sortBy ? `sortBy=${sortBy}` : ""}`
     );
     return res.data;
   } catch (error) {

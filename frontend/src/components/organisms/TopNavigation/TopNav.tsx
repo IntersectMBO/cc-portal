@@ -31,7 +31,7 @@ export const TopNav = () => {
     return (
       <>
         {getNavItems()}
-        {/**   {getNavItems(PROTECTED_NAV_ITEMS)} */}
+        {getNavItems(PROTECTED_NAV_ITEMS)}
         {isAnyAdminRole(userSession.role) && (
           <Button
             endIcon={<img src={ICONS.arrowUpRight} />}

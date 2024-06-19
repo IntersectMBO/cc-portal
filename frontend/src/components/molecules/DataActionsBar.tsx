@@ -24,7 +24,7 @@ type DataActionsBarProps = {
   sortingActive: boolean;
   sortOpen: boolean;
   sortOptions: FilterItem[];
-  filterOptions?: Record<string, FilterItems>;
+  filterOptions: Record<string, FilterItems>;
 };
 
 export const DataActionsBar: FC<DataActionsBarProps> = ({ ...props }) => {
