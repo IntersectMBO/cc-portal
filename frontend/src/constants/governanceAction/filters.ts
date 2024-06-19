@@ -1,9 +1,6 @@
-import { GovernanceActionFilterItems } from "@molecules";
+import { FilterItems } from "@molecules";
 
-export const GOVERNANCE_ACTIONS_FILTERS: Record<
-  string,
-  GovernanceActionFilterItems
-> = {
+export const GOVERNANCE_ACTIONS_FILTERS: Record<string, FilterItems> = {
   govActionType: {
     key: "govActionType",
     title: "Governance Action Type",
