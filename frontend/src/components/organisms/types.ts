@@ -71,6 +71,12 @@ export enum GovActionProposalStatus {
   DROPPED = "DROPPED",
 }
 
+export enum GovActionStatus {
+  PENDING = "PENDING",
+  VOTED = "VOTED",
+  UNVOTED = "UNVOTED",
+}
+
 export interface VotesTableI {
   user_name: string;
   user_address: string;
@@ -84,4 +90,12 @@ export interface VotesTableI {
   gov_action_proposal_status: GovActionProposalStatus;
   gov_action_proposal_end_time: string;
   vote_submit_time: string;
+}
+
+export interface GovernanceActionTableI {
+  gov_action_proposal_id: string;
+  gov_action_proposal_title?: string;
+  gov_action_proposal_type: string;
+  gov_action_proposal_status: GovActionStatus;
+  abstract: string;
 }

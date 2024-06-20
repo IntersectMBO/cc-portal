@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { VotesTableI } from "./types";
+import { GovernanceActionTableI, VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
@@ -13,8 +13,13 @@ import {
   PATHS,
 } from "@consts";
 import { PageTitleTabs } from "./PageTitleTabs";
+import { GovActionTable } from "./GovActionTable";
 
-export const GovernanceActions = ({ actions }: { actions: VotesTableI[] }) => {
+export const GovernanceActions = ({
+  actions,
+}: {
+  actions: GovernanceActionTableI[];
+}) => {
   const t = useTranslations("MyActions");
   const { updateQueryParams } = useManageQueryParams();
   const [searchText, setSearchText] = useState<string>("");
@@ -98,7 +103,7 @@ export const GovernanceActions = ({ actions }: { actions: VotesTableI[] }) => {
           description="governanceAction.description"
         />
       ) : (
-        <h1>Governance Actions</h1>
+        <GovActionTable govActions={actions} />
       )}
     </Box>
   );

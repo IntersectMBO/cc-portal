@@ -39,6 +39,16 @@
     "gaTab": "Governance Actions",
     "actionTitle": "Show more"
   },
+  "GovernanceActions": {
+    "govAction": "Governance Action",
+    "govActionCategoryShort": "GA Category",
+    "status": "Status",
+    "abstract": "Abstract",
+    "actionTitle": "Show more",
+    "notAvailable": "Not Available",
+    "addReasoning": "Add Reasoning",
+    "updateReasoning": "Update Reasoning"
+  },
   "Navigation": {
     "addNewMember": "Add new member",
     "uploadNewVersion": "Upload new version",

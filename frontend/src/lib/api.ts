@@ -13,7 +13,9 @@ import {
   ConstitutionByCid,
   ConstitutionMetadata,
   GovActionMetadata,
+  GovernanceActionTableI,
   VotesTableI,
+  GovActionStatus,
 } from "@/components/organisms";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
@@ -210,6 +212,7 @@ export async function getUserVotes({
         vote ? `filter.vote=$in:${vote}` : ""
       }&${sortBy ? `sortBy=${sortBy}` : ""}`
     );
+    console.log("res", res.data);
     return res.data;
   } catch (error) {
     console.log("error get latest updates", error);
@@ -224,6 +227,60 @@ export async function getGovernanceMetadata(id: string): Promise<any> {
     return res;
   } catch (error) {
     console.log("error get latest updates", error);
+  }
+}
+
+export async function getGovernanceActions({
+  search,
+  govActionType,
+  status,
+  sortBy,
+  userId,
+}: {
+  search?: string;
+  govActionType?: string;
+  status?: string;
+  sortBy?: string;
+  userId?: string;
+}): Promise<GovernanceActionTableI[]> {
+  try {
+    const res: GovernanceActionTableI[] = [
+      {
+        gov_action_proposal_id: "1",
+        gov_action_proposal_title: "Title name",
+        gov_action_proposal_type: "HardForkInitiation",
+        gov_action_proposal_status: "PENDING" as GovActionStatus,
+        abstract:
+          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
+      },
+      {
+        gov_action_proposal_id: "2",
+        gov_action_proposal_title: "Title name",
+        gov_action_proposal_type: "HardForkInitiation",
+        gov_action_proposal_status: "VOTED" as GovActionStatus,
+        abstract:
+          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit. ",
+      },
+      {
+        gov_action_proposal_id: "3",
+        gov_action_proposal_title: "Title name",
+        gov_action_proposal_type: "HardForkInitiation",
+        gov_action_proposal_status: "UNVOTED" as GovActionStatus,
+        abstract:
+          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
+      },
+      {
+        gov_action_proposal_id: "4",
+        gov_action_proposal_title: "Title name",
+        gov_action_proposal_type: "HardForkInitiation",
+        gov_action_proposal_status: "UNVOTED" as GovActionStatus,
+        abstract:
+          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
+      },
+    ];
+    return res;
+  } catch (error) {
+    console.log("error get governance actions", error);
   }
 }
 
