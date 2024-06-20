@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
-import { VotesTable } from "./VotesTable";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
 import {
@@ -15,7 +14,7 @@ import {
 } from "@consts";
 import { PageTitleTabs } from "./PageTitleTabs";
 
-export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
+export const GovernanceActions = ({ actions }: { actions: VotesTableI[] }) => {
   const t = useTranslations("MyActions");
   const { updateQueryParams } = useManageQueryParams();
   const [searchText, setSearchText] = useState<string>("");
@@ -93,16 +92,11 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
       {isEmpty(actions) ? (
         <NotFound
           height="55vh"
-          title="myActions.title"
-          description="myActions.description"
+          title="governanceAction.title"
+          description="governanceAction.description"
         />
       ) : (
-        <VotesTable
-          votes={actions}
-          actionTitle={t("actionTitle")}
-          onActionClick={() => console.log("Manage Actions Modal")}
-          isDisabled={(data) => data.gov_action_proposal_status !== "ACTIVE"}
-        />
+        <h1>Governance Actions</h1>
       )}
     </Box>
   );

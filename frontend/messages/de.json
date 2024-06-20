@@ -35,7 +35,8 @@
     "notAvailable": "Not Available"
   },
   "MyActions": {
-    "title": "My Actions",
+    "myVotesTab": "My Votes",
+    "gaTab": "Governance Actions",
     "actionTitle": "Show more"
   },
   "Navigation": {
@@ -219,11 +220,15 @@
     },
     "myActions": {
       "title": "No votes found",
-      "description": "There is currently no actions. Please check back later for updates"
+      "description": "There is currently no votes. Please check back later for updates"
     },
     "constitution": {
       "title": "No Constitution available",
       "description": "There is currently no Constitution uploaded. Please check back later for updates"
+    },
+    "governanceAction": {
+      "title": "No governance actions available",
+      "description": "There is currently no governance actions. Please check back later for updates"
     }
   },
   "Snackbar": {
