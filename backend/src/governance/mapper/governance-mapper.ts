@@ -1,7 +1,7 @@
 import { IpfsContentDto } from 'src/ipfs/dto/ipfs-content.dto';
 import { GovernanceActionMetadataResponse as GovActionMetadataResponse } from '../api/response/gov-action-metadata.response';
 import { VoteResponse } from '../api/response/vote.response';
-import { GovActionMetaDto } from '../dto/gov-action-meta.dto';
+import { GovActionProposalDto } from '../dto/gov-action-proposal-dto';
 import { VoteDto } from '../dto/vote.dto';
 import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 import { Vote } from '../entities/vote.entity';
@@ -51,18 +51,18 @@ export class GovernanceMapper {
 
   static govActionProposalToDto(
     govActionProposal: GovActionProposal,
-  ): GovActionMetaDto {
-    const govActionMetaDto = new GovActionMetaDto();
-    govActionMetaDto.id = govActionProposal.id;
-    govActionMetaDto.title = govActionProposal.title;
-    govActionMetaDto.abstract = govActionProposal.abstract;
-    govActionMetaDto.metadataUrl = govActionProposal.govMetadataUrl;
+  ): GovActionProposalDto {
+    const govActionProposalDto = new GovActionProposalDto();
+    govActionProposalDto.id = govActionProposal.id;
+    govActionProposalDto.title = govActionProposal.title;
+    govActionProposalDto.abstract = govActionProposal.abstract;
+    govActionProposalDto.metadataUrl = govActionProposal.govMetadataUrl;
 
-    return govActionMetaDto;
+    return govActionProposalDto;
   }
 
   static govActionMetaDtoToResponse(
-    dto: GovActionMetaDto,
+    dto: GovActionProposalDto,
   ): GovActionMetadataResponse {
     const response = new GovActionMetadataResponse();
     response.id = dto.id;

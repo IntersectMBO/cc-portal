@@ -13,6 +13,7 @@ import { ReasoningResponse } from '../api/response/reasoning.response';
 import { IpfsService } from 'src/ipfs/services/ipfs.service';
 import { ReasoningRequest } from '../api/request/reasoning.request';
 import { IpfsContentDto } from 'src/ipfs/dto/ipfs-content.dto';
+import { GovActionProposalDto } from '../dto/gov-action-proposal-dto';
 
 @Injectable()
 export class GovernanceFacade {
@@ -28,7 +29,13 @@ export class GovernanceFacade {
     userId: string,
     reasoningRequest: ReasoningRequest,
   ): Promise<ReasoningResponse> {
-    const reasoningJson = await this.createReasoningJson(reasoningRequest);
+    const govActionDto = await this.governanceService.findGovProposalById(
+      reasoningRequest.govActionProposalId,
+    );
+    const reasoningJson = await this.createReasoningJson(
+      reasoningRequest,
+      govActionDto,
+    );
     const ipfsContentDto = await this.addReasoningToIpfs(reasoningJson);
     const reasoningDto = GovernanceMapper.ipfsContentDtoToReasoningDto(
       ipfsContentDto,
@@ -41,9 +48,10 @@ export class GovernanceFacade {
 
   private async createReasoningJson(
     reasoningRequest: ReasoningRequest,
+    govActionDto: GovActionProposalDto,
   ): Promise<string> {
     const reasoningJson = {
-      govActionProposalHash: reasoningRequest.govActionProposalHash,
+      govActionProposalHash: govActionDto.hash,
       title: reasoningRequest.title,
       content: reasoningRequest.content,
     };
@@ -61,7 +69,7 @@ export class GovernanceFacade {
   async findGovActionProposalById(
     id: number,
   ): Promise<GovernanceActionMetadataResponse> {
-    const dto = await this.governanceService.findGovActionMetadataById(id);
+    const dto = await this.governanceService.findGovProposalById(id);
     return GovernanceMapper.govActionMetaDtoToResponse(dto);
   }
 

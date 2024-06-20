@@ -24,7 +24,7 @@ export class ReasoningResponse {
   @Expose({ name: 'blake2b' })
   blake2b: string;
 
-  @ApiProperty({ description: 'Contents of a constitution file' })
+  @ApiProperty({ description: 'Contents of a reasoning in json format' })
   @Expose({ name: 'contents' })
   contents: string;
 }

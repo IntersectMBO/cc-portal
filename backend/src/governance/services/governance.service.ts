@@ -14,7 +14,7 @@ import { PaginationEntityMapper } from 'src/util/pagination/mapper/pagination.ma
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GovActionProposal } from '../entities/gov-action-proposal.entity';
-import { GovActionMetaDto } from '../dto/gov-action-meta.dto';
+import { GovActionProposalDto } from '../dto/gov-action-proposal-dto';
 import { Paginator } from 'src/util/pagination/paginator';
 import { ReasoningDto } from '../dto/reasoning.dto';
 import { Reasoning } from '../entities/reasoning.entity';
@@ -34,7 +34,7 @@ export class GovernanceService {
     private readonly paginator: Paginator,
   ) {}
 
-  async findGovActionMetadataById(id: number): Promise<GovActionMetaDto> {
+  async findGovProposalById(id: number): Promise<GovActionProposalDto> {
     const govActionProposal = await this.govActionMetadataRepository.findOne({
       where: {
         id: id,
@@ -91,8 +91,8 @@ export class GovernanceService {
     if (existing) {
       throw new ConflictException(`Reasoning already exists for this user`);
     }
-    const resoning = this.reasoningRepository.create(reasoningDto);
-    const savedReasoning = await this.reasoningRepository.save(resoning);
+    const reasoning = this.reasoningRepository.create(reasoningDto);
+    const savedReasoning = await this.reasoningRepository.save(reasoning);
     return GovernanceMapper.reasoningToDto(savedReasoning);
   }
 }

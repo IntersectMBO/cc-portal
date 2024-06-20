@@ -7,14 +7,7 @@ export class ReasoningRequest {
     name: 'gov_action_proposal_id',
   })
   @IsNumber()
-  govActionProposalId: string;
-
-  @ApiProperty({
-    description: 'Tx hash of the Governanace Action Proposal',
-    name: 'gov_action_proposal_hash',
-  })
-  @IsString()
-  govActionProposalHash: string;
+  govActionProposalId: number;
 
   @ApiProperty({ description: 'Reasoning title' })
   @IsString()

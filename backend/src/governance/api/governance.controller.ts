@@ -112,7 +112,7 @@ export class GovernanceController {
   async addReasoning(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() reasoningRequest: ReasoningRequest,
-  ) {
+  ): Promise<ReasoningResponse> {
     return await this.governanceFacade.addReasoning(id, reasoningRequest);
   }
 }
