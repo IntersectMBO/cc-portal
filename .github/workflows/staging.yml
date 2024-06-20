@@ -22,6 +22,8 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            git pull
-            cd cc-portal
-            docker compose up -d --force-recreate --build
+            eval `ssh-agent -s`
+            ssh-add cc
+            cd cc-portal \
+            && git clone -b staging git@github.com:IntersectMBO/cc-portal.git \
+            && docker compose up -d --force-recreate --build
