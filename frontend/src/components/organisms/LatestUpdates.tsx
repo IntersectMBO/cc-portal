@@ -9,10 +9,7 @@ import { VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
-import {
-  GOVERNANCE_ACTIONS_FILTERS,
-  GOVERNANCE_ACTIONS_SORTING,
-} from "@consts";
+import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING } from "@consts";
 
 export const LatestUpdates = ({
   latestUpdates,
@@ -75,8 +72,8 @@ export const LatestUpdates = ({
             setSortOpen={setSortOpen}
             sortingActive={Boolean(chosenSorting)}
             sortOpen={sortOpen}
-            sortOptions={GOVERNANCE_ACTIONS_SORTING}
-            filterOptions={GOVERNANCE_ACTIONS_FILTERS}
+            sortOptions={LATEST_UPDATES_SORTING}
+            filterOptions={LATEST_UPDATES_FILTERS}
           />
         </Box>
       </Box>

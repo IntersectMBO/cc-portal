@@ -40,8 +40,10 @@ export const GovernanceActions = ({ actions }: { actions: VotesTableI[] }) => {
         chosenFilters.govActionType?.length > 0
           ? chosenFilters.govActionType?.join(",")
           : null,
-      vote:
-        chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
+      status:
+        chosenFilters.status?.length > 0
+          ? chosenFilters.status?.join(",")
+          : null,
       sortBy: chosenSorting || null,
     };
     updateQueryParams(params);

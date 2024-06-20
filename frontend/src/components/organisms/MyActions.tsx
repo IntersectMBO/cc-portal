@@ -1,18 +1,14 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
 import { VotesTable } from "./VotesTable";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
-import {
-  GOVERNANCE_ACTIONS_FILTERS,
-  GOVERNANCE_ACTIONS_SORTING,
-  PATHS,
-} from "@consts";
+import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING, PATHS } from "@consts";
 import { PageTitleTabs } from "./PageTitleTabs";
 
 export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
@@ -85,8 +81,8 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
             setSortOpen={setSortOpen}
             sortingActive={Boolean(chosenSorting)}
             sortOpen={sortOpen}
-            sortOptions={GOVERNANCE_ACTIONS_SORTING}
-            filterOptions={GOVERNANCE_ACTIONS_FILTERS}
+            sortOptions={LATEST_UPDATES_SORTING}
+            filterOptions={LATEST_UPDATES_FILTERS}
           />
         </Box>
       </Box>
