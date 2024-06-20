@@ -10,6 +10,7 @@ export async function getConstitution(
   const apiUrl = `${process.env.NEXT_PUBLIC_CONSTITUTION_URL}/${fileName}`;
 
   const res = await fetch(apiUrl, {
+    cache: "no-store",
     headers: {
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_CONSTITUTION_TOKEN}`,
     },
