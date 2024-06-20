@@ -12,5 +12,6 @@ export * from "./Tabs";
 export * from "./VotesTable";
 export * from "./LatestUpdates";
 export * from "./MyActions";
+export * from "./PageTitleTabs";
 
 export * from "./types";
