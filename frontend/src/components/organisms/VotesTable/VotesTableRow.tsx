@@ -38,10 +38,6 @@ export const VotesTableRow = ({
   const t = useTranslations("LatestUpdates");
   const { openModal } = useModal<GovActionModalState>();
 
-  const onFilterClick = () => {
-    console.log("Filter clicked");
-  };
-
   const openGAModal = () => {
     openModal({
       type: "govActionModal",
@@ -106,7 +102,7 @@ export const VotesTableRow = ({
 
                 <OutlinedLightButton
                   onClick={openGAModal}
-                  disabled={!gov_action_proposal_title}
+                  disabled={disabled || !gov_action_proposal_title}
                   startIcon={
                     <Image
                       alt="GA title"

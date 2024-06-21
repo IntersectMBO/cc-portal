@@ -246,7 +246,7 @@ export async function getGovernanceActions({
   try {
     const res: GovernanceActionTableI[] = [
       {
-        gov_action_proposal_id: "1",
+        gov_action_proposal_id: "2",
         gov_action_proposal_title: "Title name",
         gov_action_proposal_type: "HardForkInitiation",
         gov_action_proposal_status: "PENDING" as GovActionStatus,
@@ -262,7 +262,7 @@ export async function getGovernanceActions({
           "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit. ",
       },
       {
-        gov_action_proposal_id: "3",
+        gov_action_proposal_id: "16",
         gov_action_proposal_title: "Title name",
         gov_action_proposal_type: "HardForkInitiation",
         gov_action_proposal_status: "UNVOTED" as GovActionStatus,
@@ -270,7 +270,7 @@ export async function getGovernanceActions({
           "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
       },
       {
-        gov_action_proposal_id: "4",
+        gov_action_proposal_id: "16",
         gov_action_proposal_title: "Title name",
         gov_action_proposal_type: "HardForkInitiation",
         gov_action_proposal_status: "UNVOTED" as GovActionStatus,
