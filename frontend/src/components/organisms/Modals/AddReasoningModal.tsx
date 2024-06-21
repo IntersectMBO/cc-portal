@@ -21,7 +21,9 @@ interface AddReasoningFormData {
 }
 export const AddReasoningModal = () => {
   const t = useTranslations("Modals");
-  const { closeModal } = useModal();
+  const {
+    state: { callback },
+  } = useModal();
   const router = useRouter();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
 
@@ -36,9 +38,10 @@ export const AddReasoningModal = () => {
     try {
       router.refresh();
       addSuccessAlert(t("addReasoning.alerts.success"));
-      closeModal();
     } catch (error) {
       addErrorAlert(t("addReasoning.alerts.error"));
+    } finally {
+      callback();
     }
   };
 

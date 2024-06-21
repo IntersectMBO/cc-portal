@@ -1,5 +1,4 @@
 import { Grid, Typography } from "@mui/material";
-import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 
 interface Tab {
@@ -9,7 +8,6 @@ interface Tab {
 
 export const PageTitleTabs = ({ tabs }: { tabs: Tab[] }) => {
   const router = useRouter();
-  const t = useTranslations("MyActions");
   const pathname = usePathname();
   const isSelectedTab = (path: string) => pathname.includes(path);
 

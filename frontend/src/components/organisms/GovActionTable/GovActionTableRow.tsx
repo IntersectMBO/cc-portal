@@ -10,7 +10,13 @@ import {
   OutlinedLightButton,
   Typography,
 } from "@atoms";
-import { GovActionModalState, GovernanceActionTableI } from "../types";
+import {
+  GovActionModalState,
+  GovernanceActionTableI,
+  OpenAddReasoningModalState,
+  OpenPreviewReasoningModal,
+  OpenReasoningLinkModalState,
+} from "../types";
 import { customPalette, ICONS } from "@consts";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -32,27 +38,61 @@ export const GovActionTableRow = ({
   },
 }: Props) => {
   const t = useTranslations("GovernanceActions");
-  const { openModal } = useModal<GovActionModalState>();
+  const govActionModal = useModal<GovActionModalState>();
+  const addReasoningModal = useModal<OpenAddReasoningModalState>();
+  const reasoningLinkModal = useModal<OpenReasoningLinkModalState>();
+  const updateReasoningkModal = useModal<OpenPreviewReasoningModal>();
+
   const isDisabled = false; //todo
+  const isUnvoted = gov_action_proposal_status === "UNVOTED";
 
   const openGAModal = () => {
-    openModal({
+    govActionModal.openModal({
       type: "govActionModal",
       state: {
         id: gov_action_proposal_id,
       },
     });
   };
-
-  const getActionButtonTitle = () => {
-    if (gov_action_proposal_status === "UNVOTED") {
-      return t("addReasoning");
-    } else {
-      return t("updateReasoning");
-    }
+  const openUpdateReasoningCallback = () => {
+    updateReasoningkModal.closeModal();
+    openAddReasoningModal();
+  };
+  const openUpdateReasoningModal = () => {
+    updateReasoningkModal.openModal({
+      type: "previewReasoningModal",
+      state: {
+        id: gov_action_proposal_id,
+        actionTitle: t("updateReasoning"),
+        onActionClick: openUpdateReasoningCallback,
+      },
+    });
   };
 
-  const onActionClick = () => {};
+  const openReasoningLinkModal = () => {
+    reasoningLinkModal.openModal({
+      type: "reasoningLinkModal",
+      state: {
+        hash: "324rfwdf123abcdH76ADF8utkm",
+        link: "djfs.fems.com",
+      },
+    });
+  };
+
+  const addReasoningCallback = () => {
+    addReasoningModal.closeModal();
+    openReasoningLinkModal();
+  };
+
+  const openAddReasoningModal = () => {
+    addReasoningModal.openModal({
+      type: "addReasoningModal",
+      state: {
+        id: gov_action_proposal_id,
+        callback: addReasoningCallback,
+      },
+    });
+  };
 
   return (
     <Grid
@@ -185,10 +225,12 @@ export const GovActionTableRow = ({
             <Button
               disabled={isDisabled}
               sx={{ whiteSpace: "nowrap" }}
-              onClick={onActionClick}
+              onClick={() =>
+                isUnvoted ? openAddReasoningModal() : openUpdateReasoningModal()
+              }
               variant="outlined"
             >
-              {getActionButtonTitle()}
+              {isUnvoted ? t("addReasoning") : t("updateReasoning")}
             </Button>
           </Grid>
         </Grid>
