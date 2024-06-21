@@ -63,11 +63,11 @@ export const PreviewReasoningModal = () => {
   }, [id]);
 
   return (
-    <ModalWrapper dataTestId="preview-reasoning-modal" sx={{ padding: 0 }}>
+    <ModalWrapper dataTestId="preview-reasoning-modal" sx={{ py: 3, px: 0 }}>
       {reasoning ? (
         <>
-          <ModalHeader sx={{ px: 3, py: 1, mb: 0 }}>
-            <Box>
+          <ModalHeader sx={{ px: 3 }}>
+            <Box sx={{ mb: 2, height: "64px" }}>
               <img
                 width={64}
                 data-testid="modal-icon"
@@ -92,7 +92,7 @@ export const PreviewReasoningModal = () => {
               borderTopRightRadius: 20,
               backgroundColor: "rgba(255, 255, 255, 0.3)",
             }}
-            pt={1.5}
+            pt={3}
             pb={3}
             px={{ xs: 2.25, md: 3 }}
           >
@@ -215,7 +215,7 @@ export const PreviewReasoningModal = () => {
           <Box
             bgcolor="white"
             px={{ xs: 1.4, md: 3 }}
-            py={2.5}
+            pt={2.5}
             sx={{ borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}
           >
             {onActionClick && (
