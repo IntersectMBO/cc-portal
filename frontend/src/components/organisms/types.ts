@@ -49,6 +49,16 @@ export interface GovActionModalState {
   id: string;
 }
 
+export interface OpenAddReasoningModalState {
+  id: string;
+  callback: () => void;
+}
+
+export interface OpenReasoningLinkModalState {
+  hash: string;
+  link: string;
+}
+
 export interface GovActionMetadata {
   id: string;
   title: string;
