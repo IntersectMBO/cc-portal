@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@atoms";
 import { useForm } from "react-hook-form";
-import { IMAGES } from "@consts";
+import { customPalette, IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
 import { ControlledField } from "@organisms";
 import { useModal } from "@context";
@@ -54,7 +54,11 @@ export const AddReasoningModal = () => {
       <ModalHeader>{t("addReasoning.headline")}</ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
-          <Typography variant="body1" fontWeight={500}>
+          <Typography
+            variant="body2"
+            fontWeight={400}
+            color={customPalette.textGray}
+          >
             {t("addReasoning.description")}
           </Typography>
           <ControlledField.Input
