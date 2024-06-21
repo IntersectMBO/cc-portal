@@ -47,6 +47,7 @@ export const BaseWrapper = styled("div")<{
 }>`
   box-shadow: 1px 2px 11px 0px #00123d5e;
   max-height: 90vh;
+  min-height: 400px;
   position: absolute;
   top: 50%;
   left: 50%;

@@ -56,6 +56,22 @@ export interface GovActionMetadata {
   metadataUrl: string;
 }
 
+export interface OpenPreviewReasoningModal {
+  id: string;
+  onActionClick?: (id: string) => void;
+  actionTitle?: string;
+}
+
+export interface PreviewReasoningModalState extends ReasoningI {
+  gov_action_proposal_id: string;
+  gov_action_proposal_title: string;
+  gov_action_proposal_type: string;
+  abstract: string;
+  vote: Vote;
+  submission_date: string;
+  expiry_date: string;
+}
+
 export interface ReasoningI {
   title: string;
   description: string;

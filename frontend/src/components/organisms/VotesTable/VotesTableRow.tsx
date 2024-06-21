@@ -17,7 +17,7 @@ interface Props {
   votes: VotesTableI;
   disabled: boolean;
   actionTitle: string;
-  onActionClick: () => void;
+  onActionClick: (id: string) => void;
 }
 
 export const VotesTableRow = ({
@@ -192,7 +192,7 @@ export const VotesTableRow = ({
             <Button
               disabled={disabled}
               sx={{ whiteSpace: "nowrap" }}
-              onClick={onActionClick}
+              onClick={() => onActionClick(gov_action_proposal_id)}
               variant="outlined"
             >
               {actionTitle}

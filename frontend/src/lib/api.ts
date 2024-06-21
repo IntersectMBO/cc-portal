@@ -16,6 +16,7 @@ import {
   GovernanceActionTableI,
   VotesTableI,
   GovActionStatus,
+  PreviewReasoningModalState,
 } from "@/components/organisms";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
@@ -281,6 +282,31 @@ export async function getGovernanceActions({
     return res;
   } catch (error) {
     console.log("error get governance actions", error);
+  }
+}
+
+export async function getReasoningData(id: string) {
+  try {
+    const response: PreviewReasoningModalState = {
+      title: "Reasoning title 1",
+      description:
+        "Lorem ipsum dolor sit amet consectetur. Neque eleifend sed sit elementum vulputate. At diam orci mauris sit in nulla. Dui id urna aliquet et tempor est mattis. Sit ornare.",
+      link: "wandjksc.com",
+      hash: "sdfsdgsdbhs",
+      gov_action_proposal_id: "2",
+      gov_action_proposal_title: "Title name",
+      gov_action_proposal_type: "HardForkInitiation",
+      abstract:
+        "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
+
+      vote: "yes",
+      submission_date: "2024-05-19T12:49:10.631Z",
+      expiry_date: "2024-06-19T12:49:10.631Z",
+    };
+    return response;
+  } catch (error) {
+    console.log("error get reasoning data", error);
+    throw error;
   }
 }
 

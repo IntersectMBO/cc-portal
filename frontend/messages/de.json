@@ -209,6 +209,9 @@
           "heading": "Submission Date",
           "paragraphOne": "The date when the governance action was submitted on-chain."
         }
+      },
+      "alerts": {
+        "errorFetchingData": "Error fetching governance action data"
       }
     },
     "govActionModal": {

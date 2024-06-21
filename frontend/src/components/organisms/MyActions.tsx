@@ -10,6 +10,7 @@ import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
 import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING, PATHS } from "@consts";
 import { PageTitleTabs } from "./PageTitleTabs";
+import { useModal } from "@/context";
 
 export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
   const t = useTranslations("MyActions");
@@ -21,7 +22,16 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
   );
   const [sortOpen, setSortOpen] = useState(false);
   const [chosenSorting, setChosenSorting] = useState<string>("");
+  const { openModal } = useModal();
 
+  const openReasoningModal = (id: string) => {
+    openModal({
+      type: "previewReasoningModal",
+      state: {
+        id,
+      },
+    });
+  };
   const closeFilters = useCallback(() => {
     setFiltersOpen(false);
   }, []);
@@ -96,8 +106,8 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
         <VotesTable
           votes={actions}
           actionTitle={t("actionTitle")}
-          onActionClick={() => console.log("Manage Actions Modal")}
-          isDisabled={(data) => data.gov_action_proposal_status !== "ACTIVE"}
+          onActionClick={(id) => openReasoningModal(id)}
+          //  isDisabled={(data) => data.gov_action_proposal_status !== "ACTIVE"}
         />
       )}
     </Box>

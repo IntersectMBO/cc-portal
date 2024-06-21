@@ -11,7 +11,7 @@ export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
   const t = useTranslations("GovernanceAction");
 
   return (
-    <Box display="flex" flexDirection="column" gap={1}>
+    <Box display="flex" flexDirection="column" gap={2}>
       <Typography variant="body2" color={customPalette.neutralGray}>
         {title}
       </Typography>
