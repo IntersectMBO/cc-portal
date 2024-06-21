@@ -17,12 +17,7 @@ export class VoteMapper {
     voteRequest.comment = dbSyncData.comment;
     voteRequest.vote = dbSyncData.vote;
     voteRequest.govActionProposalId = dbSyncData.gov_action_proposal_id;
-    voteRequest.votingAnchorId = dbSyncData.voting_anchor_id;
-    voteRequest.govActionType = dbSyncData.type;
     voteRequest.submitTime = dbSyncData.time;
-    voteRequest.endTime = dbSyncData.end_time;
-    voteRequest.govMetadataUrl = dbSyncData.url;
-    voteRequest.status = dbSyncData.status;
     return voteRequest;
   }
 

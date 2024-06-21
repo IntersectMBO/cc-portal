@@ -2,7 +2,6 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -20,11 +19,9 @@ import { HotAddress } from '../entities/hotaddress.entity';
 import { VoteMapper } from '../mapper/vote.mapper';
 import { Vote } from '../entities/vote.entity';
 import { VoteRequest } from '../dto/vote.request';
-import { GovActionProposal } from '../entities/gov-action-proposal.entity';
-import { GovActionProposalDto } from '../dto/gov-action-proposal.dto';
+import { GovActionProposal } from '../../governance-action-proposal/entities/gov-action-proposal.entity';
 import { PageOptionsDto } from '../../util/pagination/dto/page-options.dto';
 import { ConfigService } from '@nestjs/config';
-import axios from 'axios';
 
 @Injectable()
 export class VoteService {
@@ -71,11 +68,8 @@ export class VoteService {
         vote: voteRequests[i].vote,
         title: voteRequests[i].title,
         comment: voteRequests[i].comment,
-        govActionType: voteRequests[i].govActionType,
-        govActionProposal: govActionProposal,
-        status: voteRequests[i].status,
-        endTime: voteRequests[i].endTime,
         submitTime: voteRequests[i].submitTime,
+        govActionProposal: govActionProposal?.id,
       };
       votes.push(vote);
     }
@@ -84,23 +78,14 @@ export class VoteService {
 
   private async prepareGovActionProposal(
     voteRequest: VoteRequest,
-  ): Promise<Partial<GovActionProposal>> {
+  ): Promise<Partial<GovActionProposal> | null> {
     const existingGovActionProposal = await this.findGovActionProposal(
       voteRequest.govActionProposalId,
     );
     if (existingGovActionProposal) {
       return existingGovActionProposal;
     }
-    const govActionProposalDto: Partial<GovActionProposalDto> =
-      await this.getGovActionProposalFromUrl(voteRequest.govMetadataUrl);
-    govActionProposalDto.id = voteRequest.govActionProposalId;
-    govActionProposalDto.votingAnchorId = voteRequest.votingAnchorId;
-    govActionProposalDto.status = voteRequest.status;
-
-    const govActionProposal =
-      this.govActionProposalRepository.create(govActionProposalDto);
-
-    return govActionProposal;
+    return null;
   }
 
   private async findGovActionProposal(
@@ -111,32 +96,6 @@ export class VoteService {
         id: govActionProposalId,
       },
     });
-    return govActionProposal;
-  }
-
-  private async getGovActionProposalFromUrl(
-    url: string,
-  ): Promise<Partial<GovActionProposalDto>> {
-    const response = await axios.get(url);
-    if (response.status == 404) {
-      throw new NotFoundException(
-        `Governance action proposal URL is invalid: ${url}`,
-      );
-    }
-    const jsonData = response.data;
-    let title: string = '';
-    let abstract: string = '';
-    if (jsonData['body'] && jsonData.body['title']) {
-      title = jsonData.body.title;
-    }
-    if (jsonData['body'] && jsonData.body['abstract']) {
-      abstract = jsonData.body.abstract;
-    }
-    const govActionProposal: Partial<GovActionProposalDto> = {
-      title: title['@value'],
-      abstract: abstract['@value'],
-      govMetadataUrl: url,
-    };
     return govActionProposal;
   }
 

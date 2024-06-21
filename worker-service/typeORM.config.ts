@@ -2,7 +2,8 @@ import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { Vote } from './src/vote/entities/vote.entity';
 import { DataSource } from 'typeorm';
-import { GovActionProposal } from './src/vote/entities/gov-action-proposal.entity';
+import { GovActionProposal } from './src/governance-action-proposal/entities/gov-action-proposal.entity';
+import { Reasoning } from './src/governance-action-proposal/entities/reasoning.entity';
 
 config();
 
@@ -17,5 +18,5 @@ export default new DataSource({
   password: configService.getOrThrow('BE_POSTGRES_PASSWORD'),
   migrations: ['migrations/**'],
   migrationsTableName: 'migrations',
-  entities: [Vote, GovActionProposal],
+  entities: [Vote, GovActionProposal, Reasoning],
 });

@@ -11,7 +11,7 @@ export class VoteFacade {
     private readonly voteService: VoteService,
   ) {}
 
-  @Cron('*/30 * * * * *') // every 30 sec
+  @Cron('*/30 * * * * *') // Job runs every 30 seconds
   async syncVotesTable() {
     const pages = await this.voteService.countHotAddressPages();
     if (pages > 0) {

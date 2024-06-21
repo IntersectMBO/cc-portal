@@ -3,6 +3,9 @@ export class GovActionProposalDto {
   votingAnchorId: string;
   title: string;
   abstract: string;
+  govActionType: string;
   govMetadataUrl: string;
   status: string;
+  endTime: number;
+  txHash: string;
 }

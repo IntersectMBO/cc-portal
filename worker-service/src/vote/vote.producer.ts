@@ -4,7 +4,7 @@ import { FlowProducer, Queue } from 'bullmq';
 import {
   FLOW_NAME_EXTRACT_VOTE_DATA,
   JOB_NAME_VOTE_SYNC,
-  QUEUE_NAME_DB_SYNC,
+  QUEUE_NAME_DB_SYNC_VOTES,
 } from '../common/constants/bullmq.constants';
 import { VoteService } from './services/vote.service';
 import { randomUUID } from 'crypto';
@@ -13,7 +13,7 @@ import { VoteRequest } from './dto/vote.request';
 @Injectable()
 export class VoteProducer {
   constructor(
-    @InjectQueue(QUEUE_NAME_DB_SYNC) private readonly dbSyncQueue: Queue,
+    @InjectQueue(QUEUE_NAME_DB_SYNC_VOTES) private readonly dbSyncQueue: Queue,
     @InjectFlowProducer(FLOW_NAME_EXTRACT_VOTE_DATA)
     private readonly flowProducer: FlowProducer,
     private readonly voteService: VoteService,
