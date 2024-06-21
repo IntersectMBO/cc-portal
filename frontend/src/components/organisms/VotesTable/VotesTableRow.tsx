@@ -102,7 +102,7 @@ export const VotesTableRow = ({
 
                 <OutlinedLightButton
                   onClick={openGAModal}
-                  disabled={disabled || !gov_action_proposal_title}
+                  disabled={!gov_action_proposal_title}
                   startIcon={
                     <Image
                       alt="GA title"
