@@ -75,8 +75,8 @@ export interface PreviewReasoningModalState extends ReasoningI {
 export interface ReasoningI {
   title: string;
   description: string;
-  link: string;
-  hash: string;
+  link?: string;
+  hash?: string;
 }
 
 export enum GovActionProposalStatus {

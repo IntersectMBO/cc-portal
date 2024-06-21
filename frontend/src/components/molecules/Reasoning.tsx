@@ -22,32 +22,34 @@ export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
       >
         {description}
       </Typography>
-      <Box display="flex" gap={2}>
-        <Box display="flex" flexDirection="column" gap={0.5}>
-          <Typography
-            variant="caption"
-            fontWeight={500}
-            color={customPalette.neutralGray}
-          >
-            {t("Link")}
-          </Typography>
-          <OutlinedLightButton nonInteractive={true}>
-            {link}
-          </OutlinedLightButton>
+      {link && hash && (
+        <Box display="flex" gap={2}>
+          <Box display="flex" flexDirection="column" gap={0.5}>
+            <Typography
+              variant="caption"
+              fontWeight={500}
+              color={customPalette.neutralGray}
+            >
+              {t("Link")}
+            </Typography>
+            <OutlinedLightButton nonInteractive={true}>
+              {link}
+            </OutlinedLightButton>
+          </Box>
+          <Box display="flex" flexDirection="column" gap={0.5}>
+            <Typography
+              variant="caption"
+              fontWeight={500}
+              color={customPalette.neutralGray}
+            >
+              {t("Hash")}
+            </Typography>
+            <OutlinedLightButton nonInteractive={true}>
+              {hash}
+            </OutlinedLightButton>
+          </Box>
         </Box>
-        <Box display="flex" flexDirection="column" gap={0.5}>
-          <Typography
-            variant="caption"
-            fontWeight={500}
-            color={customPalette.neutralGray}
-          >
-            {t("Hash")}
-          </Typography>
-          <OutlinedLightButton nonInteractive={true}>
-            {hash}
-          </OutlinedLightButton>
-        </Box>
-      </Box>
+      )}
     </Box>
   );
 };

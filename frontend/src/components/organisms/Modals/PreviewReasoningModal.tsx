@@ -106,8 +106,8 @@ export const PreviewReasoningModal = () => {
               <Reasoning
                 title={reasoning.title}
                 description={reasoning.description}
-                link={reasoning.link}
-                hash={reasoning.hash}
+                link={reasoning?.link}
+                hash={reasoning?.hash}
               />
             </Box>
             <Box mt={3}>

@@ -291,9 +291,8 @@ export async function getReasoningData(id: string) {
       title: "Reasoning title 1",
       description:
         "Lorem ipsum dolor sit amet consectetur. Neque eleifend sed sit elementum vulputate. At diam orci mauris sit in nulla. Dui id urna aliquet et tempor est mattis. Sit ornare.",
-      link: "wandjksc.com",
-      hash: "sdfsdgsdbhs",
-      gov_action_proposal_id: "2",
+
+      gov_action_proposal_id: "g_77788675",
       gov_action_proposal_title: "Title name",
       gov_action_proposal_type: "HardForkInitiation",
       abstract:
