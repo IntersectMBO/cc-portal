@@ -28,6 +28,14 @@ export const GOVERNANCE_ACTIONS_SORTING: FilterItem[] = [
     key: "submitTime:DESC",
     label: "Latest first",
   },
+  {
+    key: "expireTime:ASC",
+    label: "Expire first",
+  },
+  {
+    key: "expireTime:DESC",
+    label: "Latest expire",
+  },
 ];
 
 export const CC_MEMBERS_SORTING: FilterItem[] = [
