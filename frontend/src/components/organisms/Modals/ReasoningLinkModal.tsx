@@ -33,7 +33,9 @@ export const ReasoningLinkModal = () => {
       dataTestId="reasoning-link-modal"
       icon={IMAGES.pastelReasoning}
     >
-      <ModalHeader>{t("reasoningLink.headline")}</ModalHeader>
+      <ModalHeader sx={{ marginTop: "16px" }}>
+        {t("reasoningLink.headline")}
+      </ModalHeader>
       <form onSubmit={onSubmit}>
         <ModalContents>
           <Typography

@@ -51,7 +51,9 @@ export const AddReasoningModal = () => {
       dataTestId="add-reasoning-modal"
       icon={IMAGES.pastelReasoning}
     >
-      <ModalHeader>{t("addReasoning.headline")}</ModalHeader>
+      <ModalHeader sx={{ marginTop: "16px" }}>
+        {t("addReasoning.headline")}
+      </ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
           <Typography
