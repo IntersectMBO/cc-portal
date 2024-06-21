@@ -14,6 +14,7 @@ import { ControlledField } from "@organisms";
 import { useModal } from "@context";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/context/snackbar";
+import { OpenAddReasoningModalState } from "../types";
 
 interface AddReasoningFormData {
   title: string;
@@ -23,7 +24,7 @@ export const AddReasoningModal = () => {
   const t = useTranslations("Modals");
   const {
     state: { callback },
-  } = useModal();
+  } = useModal<OpenAddReasoningModalState>();
   const router = useRouter();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
 
