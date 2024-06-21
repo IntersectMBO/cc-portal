@@ -5,7 +5,7 @@ import { VotesTableRow } from "./VotesTableRow";
 
 interface Props {
   votes: VotesTableI[];
-  onActionClick: () => void;
+  onActionClick: (id: string) => void;
   actionTitle: string;
   isDisabled?: (data: VotesTableI) => boolean;
 }

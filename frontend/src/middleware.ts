@@ -25,6 +25,7 @@ export const config = {
     "/interim-constitution",
     "/latest-updates",
     "/my-actions",
+    "/governance-actions",
     "/members",
     "/admin",
     "/admin/dashboard",

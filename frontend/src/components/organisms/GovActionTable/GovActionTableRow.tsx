@@ -3,9 +3,14 @@ import React from "react";
 
 import { Card, TableDivider } from "@molecules";
 import { Box, Grid } from "@mui/material";
-import { UserAvatar, UserBasicInfo } from "@molecules";
-import { Button, OutlinedLightButton, Typography, VotePill } from "@atoms";
-import { GovActionModalState, VotesTableI } from "../types";
+import { UserAvatar } from "@molecules";
+import {
+  Button,
+  GovActionStatusPill,
+  OutlinedLightButton,
+  Typography,
+} from "@atoms";
+import { GovActionModalState, GovernanceActionTableI } from "../types";
 import { customPalette, ICONS } from "@consts";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -14,29 +19,21 @@ import { getProposalTypeLabel } from "@utils";
 import { useModal } from "@context";
 
 interface Props {
-  votes: VotesTableI;
-  disabled: boolean;
-  actionTitle: string;
-  onActionClick: (id: string) => void;
+  govActions: GovernanceActionTableI;
 }
 
-export const VotesTableRow = ({
-  votes: {
-    user_name,
-    user_address,
-    user_photo_url,
-    value,
-    reasoning_comment,
+export const GovActionTableRow = ({
+  govActions: {
+    abstract,
+    gov_action_proposal_status,
     gov_action_proposal_id,
     gov_action_proposal_title,
     gov_action_proposal_type,
   },
-  disabled,
-  actionTitle,
-  onActionClick,
 }: Props) => {
-  const t = useTranslations("LatestUpdates");
+  const t = useTranslations("GovernanceActions");
   const { openModal } = useModal<GovActionModalState>();
+  const isDisabled = false; //todo
 
   const openGAModal = () => {
     openModal({
@@ -47,12 +44,22 @@ export const VotesTableRow = ({
     });
   };
 
+  const getActionButtonTitle = () => {
+    if (gov_action_proposal_status === "UNVOTED") {
+      return t("addReasoning");
+    } else {
+      return t("updateReasoning");
+    }
+  };
+
+  const onActionClick = () => {};
+
   return (
     <Grid
       item
       mb={3}
       sx={{
-        opacity: disabled && 0.5,
+        opacity: isDisabled ? 0.5 : 1,
       }}
     >
       <Card variant="default">
@@ -63,31 +70,19 @@ export const VotesTableRow = ({
           flexWrap="nowrap"
           gap={{ xs: 0, xl: 3 }}
         >
-          <Grid item xs={12} xl={11}>
+          <Grid item xs={12} xl={10}>
             <Grid
               container
               flexDirection={{ xs: "column", lg: "row" }}
               flexWrap={{ xxs: "wrap", lg: "nowrap" }}
             >
-              <Grid item xs="auto" lg={3} xl={2} mb={{ xxs: 2, lg: 0 }}>
-                <Grid container flexWrap="nowrap">
-                  <Grid item>
-                    <UserAvatar src={user_photo_url} />
-                  </Grid>
-                  <Grid item>
-                    <UserBasicInfo
-                      name={user_name}
-                      hotAddress={user_address}
-                      maxWidth={200}
-                    />
-                  </Grid>
-                </Grid>
+              <Grid item xs="auto" mb={{ xxs: 2, lg: 0 }}>
+                <UserAvatar src={ICONS.govAction} />
               </Grid>
-              <TableDivider />
               <Grid
                 item
                 xs="auto"
-                lg={3}
+                lg={2}
                 px={{ xxs: 0, lg: 1, xl: 3 }}
                 py={{ xxs: 1.5, lg: 0 }}
               >
@@ -109,7 +104,9 @@ export const VotesTableRow = ({
                       width={12}
                       height={12}
                       src={ICONS.informationCircle}
-                      style={{ opacity: gov_action_proposal_title ? 1 : 0.5 }}
+                      style={{
+                        opacity: gov_action_proposal_title ? 1 : 0.5,
+                      }}
                     />
                   }
                 >
@@ -142,7 +139,6 @@ export const VotesTableRow = ({
               <Grid
                 item
                 lg={2}
-                xl={2}
                 px={{ xxs: 0, lg: 1, xl: 3 }}
                 py={{ xxs: 1.5, lg: 0 }}
               >
@@ -152,17 +148,16 @@ export const VotesTableRow = ({
                   variant="caption"
                   fontWeight={500}
                 >
-                  {t("voted")}
+                  {t("status")}
                 </Typography>
                 <Box width={85}>
-                  <VotePill vote={value} />
+                  <GovActionStatusPill status={gov_action_proposal_status} />
                 </Box>
               </Grid>
               <TableDivider />
               <Grid
                 item
-                lg={3}
-                xl={3}
+                lg={5}
                 px={{ xxs: 0, lg: 1, xl: 3 }}
                 py={{ xxs: 1.5, lg: 0 }}
               >
@@ -172,12 +167,10 @@ export const VotesTableRow = ({
                   variant="caption"
                   fontWeight={500}
                 >
-                  {t("reasoning")}
+                  {t("abstract")}
                 </Typography>
                 <Typography variant="caption">
-                  {reasoning_comment
-                    ? truncateText(reasoning_comment, 100)
-                    : t("notAvailable")}
+                  {abstract ? truncateText(abstract, 100) : t("notAvailable")}
                 </Typography>
               </Grid>
             </Grid>
@@ -185,17 +178,17 @@ export const VotesTableRow = ({
           <Grid
             item
             xs={12}
-            xl={1}
+            xl="auto"
             textAlign={{ xs: "right", xl: "center" }}
             mt={{ xxs: 2, xl: 0 }}
           >
             <Button
-              disabled={disabled}
+              disabled={isDisabled}
               sx={{ whiteSpace: "nowrap" }}
-              onClick={() => onActionClick(gov_action_proposal_id)}
+              onClick={onActionClick}
               variant="outlined"
             >
-              {actionTitle}
+              {getActionButtonTitle()}
             </Button>
           </Grid>
         </Grid>

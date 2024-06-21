@@ -2,21 +2,25 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { Typography } from "@atoms";
 import { useTranslations } from "next-intl";
-import { VotesTable } from "./VotesTable";
-import { VotesTableI } from "./types";
+import { GovernanceActionTableI, VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
-import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING } from "@consts";
+import {
+  GOVERNANCE_ACTIONS_FILTERS,
+  GOVERNANCE_ACTIONS_SORTING,
+  PATHS,
+} from "@consts";
+import { PageTitleTabs } from "./PageTitleTabs";
+import { GovActionTable } from "./GovActionTable";
 
-export const LatestUpdates = ({
-  latestUpdates,
+export const GovernanceActions = ({
+  actions,
 }: {
-  latestUpdates: VotesTableI[];
+  actions: GovernanceActionTableI[];
 }) => {
-  const t = useTranslations("LatestUpdates");
+  const t = useTranslations("MyActions");
   const { updateQueryParams } = useManageQueryParams();
   const [searchText, setSearchText] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -41,12 +45,25 @@ export const LatestUpdates = ({
         chosenFilters.govActionType?.length > 0
           ? chosenFilters.govActionType?.join(",")
           : null,
-      vote:
-        chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
+      status:
+        chosenFilters.status?.length > 0
+          ? chosenFilters.status?.join(",")
+          : null,
       sortBy: chosenSorting || null,
     };
     updateQueryParams(params);
   }, [searchText, chosenFilters, chosenSorting, updateQueryParams]);
+
+  const tabs = [
+    {
+      path: PATHS.governanceActions,
+      title: t("gaTab"),
+    },
+    {
+      path: PATHS.myActions,
+      title: t("myVotesTab"),
+    },
+  ];
 
   return (
     <Box px={{ xs: 3, md: 5 }} py={{ xs: 3, md: 6 }}>
@@ -56,7 +73,9 @@ export const LatestUpdates = ({
         justifyContent="space-between"
         alignItems="center"
       >
-        <Typography variant="headline4">{t("title")}</Typography>
+        <Box>
+          <PageTitleTabs tabs={tabs} />
+        </Box>
         <Box display="flex" sx={{ position: "relative" }}>
           <DataActionsBar
             chosenFilters={chosenFilters}
@@ -72,23 +91,19 @@ export const LatestUpdates = ({
             setSortOpen={setSortOpen}
             sortingActive={Boolean(chosenSorting)}
             sortOpen={sortOpen}
-            sortOptions={LATEST_UPDATES_SORTING}
-            filterOptions={LATEST_UPDATES_FILTERS}
+            sortOptions={GOVERNANCE_ACTIONS_SORTING}
+            filterOptions={GOVERNANCE_ACTIONS_FILTERS}
           />
         </Box>
       </Box>
-      {isEmpty(latestUpdates) ? (
+      {isEmpty(actions) ? (
         <NotFound
           height="55vh"
-          title="latestUpdates.title"
-          description="latestUpdates.description"
+          title="governanceAction.title"
+          description="governanceAction.description"
         />
       ) : (
-        <VotesTable
-          votes={latestUpdates}
-          actionTitle={t("actionTitle")}
-          onActionClick={() => console.log("Show Reasoning Modal")}
-        />
+        <GovActionTable govActions={actions} />
       )}
     </Box>
   );

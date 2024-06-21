@@ -1,6 +1,6 @@
 import { FilterItem } from "@molecules";
 
-export const GOVERNANCE_ACTIONS_SORTING: FilterItem[] = [
+export const LATEST_UPDATES_SORTING: FilterItem[] = [
   {
     key: "submitTime:ASC",
     label: "Newest first",
@@ -16,6 +16,25 @@ export const GOVERNANCE_ACTIONS_SORTING: FilterItem[] = [
   {
     key: "govActionProposal.title:DESC",
     label: "Titile DESC",
+  },
+];
+
+export const GOVERNANCE_ACTIONS_SORTING: FilterItem[] = [
+  {
+    key: "submitTime:ASC",
+    label: "Newest first",
+  },
+  {
+    key: "submitTime:DESC",
+    label: "Latest first",
+  },
+  {
+    key: "expireTime:ASC",
+    label: "Expire first",
+  },
+  {
+    key: "expireTime:DESC",
+    label: "Latest expire",
   },
 ];
 

@@ -4,10 +4,12 @@ export const PATHS = {
   members: "/members",
   latestUpdates: "/latest-updates",
   myActions: "/my-actions",
+  governanceActions: "/governance-actions",
   admin: {
     home: "/admin",
     dashboard: "/admin/dashboard",
   },
 };
 
-export const adminProtectedPath = "/admin/dashboard";
+export const adminProtectedPath = PATHS.admin.dashboard;
+export const userProtectedPaths = [PATHS.myActions, PATHS.governanceActions];

@@ -6,7 +6,7 @@ import { GovernanceActionsFilters, GovernanceActionsSorting } from "@molecules";
 import { ClickOutside } from "@atoms";
 
 import { OrderActionsChip } from "./OrderActionsChip";
-import { FilterItem } from "./types";
+import { FilterItem, FilterItems } from "./types";
 
 type DataActionsBarProps = {
   chosenFilters?: Record<string, string[]>;
@@ -24,6 +24,7 @@ type DataActionsBarProps = {
   sortingActive: boolean;
   sortOpen: boolean;
   sortOptions: FilterItem[];
+  filterOptions?: Record<string, FilterItems>;
 };
 
 export const DataActionsBar: FC<DataActionsBarProps> = ({ ...props }) => {
@@ -43,6 +44,7 @@ export const DataActionsBar: FC<DataActionsBarProps> = ({ ...props }) => {
     sortingActive,
     sortOpen,
     sortOptions,
+    filterOptions,
   } = props;
 
   return (
@@ -64,6 +66,7 @@ export const DataActionsBar: FC<DataActionsBarProps> = ({ ...props }) => {
           <GovernanceActionsFilters
             chosenFilters={chosenFilters}
             setChosenFilters={setChosenFilters}
+            filterOptions={filterOptions}
           />
         </ClickOutside>
       )}

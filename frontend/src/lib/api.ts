@@ -13,7 +13,10 @@ import {
   ConstitutionByCid,
   ConstitutionMetadata,
   GovActionMetadata,
+  GovernanceActionTableI,
   VotesTableI,
+  GovActionStatus,
+  PreviewReasoningModalState,
 } from "@/components/organisms";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
@@ -189,11 +192,28 @@ export async function getLatestUpdates({
   }
 }
 
-export async function getUserVotes(id: string): Promise<VotesTableI[]> {
+export async function getUserVotes({
+  search,
+  govActionType,
+  vote,
+  sortBy,
+  userId,
+}: {
+  search?: string;
+  govActionType?: string;
+  vote?: string;
+  sortBy?: string;
+  userId?: string;
+}): Promise<VotesTableI[]> {
   try {
     const res: { data: VotesTableI[] } = await axiosInstance.get(
-      `/api/governance/votes/search?filter.userId=$eq:${id}`
+      `/api/governance/votes/search?filter.userId=$eq:${userId}&${
+        search ? `search=${search}` : ""
+      }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
+        vote ? `filter.vote=$in:${vote}` : ""
+      }&${sortBy ? `sortBy=${sortBy}` : ""}`
     );
+    console.log("res", res.data);
     return res.data;
   } catch (error) {
     console.log("error get latest updates", error);
@@ -208,6 +228,84 @@ export async function getGovernanceMetadata(id: string): Promise<any> {
     return res;
   } catch (error) {
     console.log("error get latest updates", error);
+  }
+}
+
+export async function getGovernanceActions({
+  search,
+  govActionType,
+  status,
+  sortBy,
+  userId,
+}: {
+  search?: string;
+  govActionType?: string;
+  status?: string;
+  sortBy?: string;
+  userId?: string;
+}): Promise<GovernanceActionTableI[]> {
+  try {
+    const res: GovernanceActionTableI[] = [
+      {
+        gov_action_proposal_id: "2",
+        gov_action_proposal_title: "Title name",
+        gov_action_proposal_type: "HardForkInitiation",
+        gov_action_proposal_status: "PENDING" as GovActionStatus,
+        abstract:
+          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
+      },
+      {
+        gov_action_proposal_id: "2",
+        gov_action_proposal_title: "Title name",
+        gov_action_proposal_type: "HardForkInitiation",
+        gov_action_proposal_status: "VOTED" as GovActionStatus,
+        abstract:
+          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit. ",
+      },
+      {
+        gov_action_proposal_id: "16",
+        gov_action_proposal_title: "Title name",
+        gov_action_proposal_type: "HardForkInitiation",
+        gov_action_proposal_status: "UNVOTED" as GovActionStatus,
+        abstract:
+          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
+      },
+      {
+        gov_action_proposal_id: "16",
+        gov_action_proposal_title: "Title name",
+        gov_action_proposal_type: "HardForkInitiation",
+        gov_action_proposal_status: "UNVOTED" as GovActionStatus,
+        abstract:
+          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
+      },
+    ];
+    return res;
+  } catch (error) {
+    console.log("error get governance actions", error);
+  }
+}
+
+export async function getReasoningData(id: string) {
+  try {
+    const response: PreviewReasoningModalState = {
+      title: "Reasoning title 1",
+      description:
+        "Lorem ipsum dolor sit amet consectetur. Neque eleifend sed sit elementum vulputate. At diam orci mauris sit in nulla. Dui id urna aliquet et tempor est mattis. Sit ornare.",
+
+      gov_action_proposal_id: "g_77788675",
+      gov_action_proposal_title: "Title name",
+      gov_action_proposal_type: "HardForkInitiation",
+      abstract:
+        "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
+
+      vote: "yes",
+      submission_date: "2024-05-19T12:49:10.631Z",
+      expiry_date: "2024-06-19T12:49:10.631Z",
+    };
+    return response;
+  } catch (error) {
+    console.log("error get reasoning data", error);
+    throw error;
   }
 }
 

@@ -12,5 +12,8 @@ export * from "./Tabs";
 export * from "./VotesTable";
 export * from "./LatestUpdates";
 export * from "./MyActions";
+export * from "./PageTitleTabs";
+export * from "./GovernanceActions";
+export * from "./GovActionTable";
 
 export * from "./types";
