@@ -9,6 +9,7 @@ import { PaginateQuery } from 'nestjs-paginate';
 import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mapper';
 import { UserPhotoDto } from '../dto/user-photo.dto';
 import { GovernanceActionMetadataResponse } from '../api/response/gov-action-metadata.response';
+import { GovernanceActionProposalResponse } from '../api/response/gov-action-proposal.response';
 
 @Injectable()
 export class GovernanceFacade {
@@ -24,6 +25,14 @@ export class GovernanceFacade {
   ): Promise<GovernanceActionMetadataResponse> {
     const dto = await this.governanceService.findGovActionMetadataById(id);
     return GovernanceMapper.govActionMetaDtoToResponse(dto);
+  }
+
+  async searchGovActionProposals(
+    query: PaginateQuery,
+    userId: string,
+  ): Promise<PaginatedResponse<GovernanceActionProposalResponse>> {
+    //TODO Impl
+    return null;
   }
 
   async searchGovVotes(

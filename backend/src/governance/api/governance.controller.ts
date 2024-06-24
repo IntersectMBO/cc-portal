@@ -21,6 +21,8 @@ import { UserPathGuard } from 'src/auth/guard/users-path.guard';
 import { ApiPaginationQuery, Paginate, PaginateQuery } from 'nestjs-paginate';
 import { VOTE_PAGINATION_CONFIG } from '../util/pagination/votes-pagination.config';
 import { GovernanceActionMetadataResponse } from './response/gov-action-metadata.response';
+import { GAP_PAGINATION_CONFIG } from '../util/pagination/gap-pagination.config';
+import { GovernanceActionProposalResponse } from './response/gov-action-proposal.response';
 @ApiTags('Governance')
 @Controller('governance')
 export class GovernanceController {
@@ -36,11 +38,34 @@ export class GovernanceController {
     status: 404,
     description: 'Governance action proposal with {id} not found',
   })
-  @Get(':id')
+  @Get('proposals/:id')
   async findOne(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<GovernanceActionMetadataResponse> {
     return await this.governanceFacade.findGovActionProposalById(id);
+  }
+
+  @ApiOperation({ summary: 'Search GAP' })
+  @ApiBearerAuth('JWT-auth')
+  @ApiPaginationQuery(GAP_PAGINATION_CONFIG)
+  @ApiResponse({
+    status: 200,
+    description:
+      'Governance Action Proposals - returns GovernanceActionProposalResponse array within data',
+    isArray: true,
+    type: PaginatedResponse<GovernanceActionProposalResponse>,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Governance action proposal with {id} not found',
+  })
+  @Get('proposals/users/:id/search')
+  @UseGuards(JwtAuthGuard, UserPathGuard)
+  async searchGovActionProposalsPaginated(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Paginate() query: PaginateQuery,
+  ): Promise<PaginatedResponse<GovernanceActionProposalResponse>> {
+    return await this.governanceFacade.searchGovActionProposals(query, id);
   }
 
   @ApiOperation({
