@@ -67,7 +67,7 @@ export class GovernanceFacade {
   }
 
   async findGovActionProposalById(
-    id: number,
+    id: string,
   ): Promise<GovernanceActionMetadataResponse> {
     const dto = await this.governanceService.findGovProposalById(id);
     return GovernanceMapper.govActionMetaDtoToResponse(dto);

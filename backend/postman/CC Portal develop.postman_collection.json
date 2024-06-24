@@ -725,7 +725,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"gov_action_proposal_id\": 16,\n    \"gov_action_proposal_hash\": \"\\\\x28a5c50e900fbc155a98d78d2081e49ca4d6f004f2604e758a64357119db1b05\",\n    \"title\": \"test reasoning\",\n    \"content\": \"some text of reasoning\"\n}",
+							"raw": "{\n    \"gov_action_proposal_id\": 2,\n    \"title\": \"test reasoning 2\",\n    \"content\": \"some text of reasoning 2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

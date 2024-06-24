@@ -27,9 +27,9 @@ export class AppController {
     return await this.appService.addDoc(file);
   }
 
-  @Post('reasoning')
-  async addReasoning(@Body() reasoningJson: string): Promise<IpfsDto> {
-    return await this.appService.addReasoning(reasoningJson);
+  @Post('json')
+  async addJson(@Body() json: string): Promise<IpfsDto> {
+    return await this.appService.addJson(json);
   }
 
   @Get(':cid')

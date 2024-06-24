@@ -1,5 +1,5 @@
 export class GovActionProposalDto {
-  id: number;
+  id: string;
   hash: string;
   title: string;
   abstract: string;

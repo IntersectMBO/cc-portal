@@ -1,11 +1,14 @@
 import { CommonEntity } from '../../common/entities/common.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { Vote } from './vote.entity';
 
 @Entity('gov_action_proposals')
 export class GovActionProposal extends CommonEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn({
+    name: 'id',
+    type: 'bigint',
+  })
+  id: string;
 
   @Column({
     name: 'voting_anchor_id',
