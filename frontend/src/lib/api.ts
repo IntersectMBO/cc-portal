@@ -409,10 +409,16 @@ export async function uploadConstitution(data: FormData) {
 }
 
 export async function uploadUserPhoto(userId: string, data: FormData) {
+  const token = getAccessToken();
   try {
     const response = await axiosInstance.patch(
       `/api/users/${userId}/profile-photo`,
-      data
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return response.data;
   } catch (error) {
