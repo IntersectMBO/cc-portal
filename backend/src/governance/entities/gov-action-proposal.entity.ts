@@ -7,6 +7,9 @@ export class GovActionProposal extends CommonEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ name: 'tx_hash', type: 'varchar' })
+  txHash: string;
+
   @Column({
     name: 'voting_anchor_id',
     type: 'bigint',
