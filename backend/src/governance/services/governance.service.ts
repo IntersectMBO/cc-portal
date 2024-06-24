@@ -34,7 +34,7 @@ export class GovernanceService {
     private readonly paginator: Paginator,
   ) {}
 
-  async findGovProposalById(id: number): Promise<GovActionProposalDto> {
+  async findGovProposalById(id: string): Promise<GovActionProposalDto> {
     const govActionProposal = await this.govActionMetadataRepository.findOne({
       where: {
         id: id,

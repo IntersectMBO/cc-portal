@@ -180,15 +180,15 @@ export class AppService implements OnModuleInit {
     return IpfsMapper.ipfsToIpfsDto(cid, text);
   }
 
-  async addReasoning(reasoningJson: any): Promise<IpfsDto> {
+  async addJson(json: string): Promise<IpfsDto> {
     this.fs = unixfs(this.helia);
     const encoder = new TextEncoder();
-    const jsonContent = JSON.stringify(reasoningJson);
+    const jsonContent = JSON.stringify(json);
     const cid: CID = await this.fs.addBytes(encoder.encode(jsonContent));
-    this.logger.log(`Added reasoning: ${cid}`);
+    this.logger.log(`Added json: ${cid}`);
 
     const ret1 = this.helia.pins.add(cid);
-    ret1.next().then((res) => this.logger.log(`Pinned reasoning: ${res.value}`));
+    ret1.next().then((res) => this.logger.log(`Pinned json: ${res.value}`));
 
     const url = 'https://ipfs.io/ipfs/' + cid.toString()
 

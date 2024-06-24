@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Param,
-  ParseIntPipe,
   ParseUUIDPipe,
   Post,
   UseGuards,
@@ -43,7 +42,7 @@ export class GovernanceController {
   })
   @Get(':id')
   async findOne(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
   ): Promise<GovernanceActionMetadataResponse> {
     return await this.governanceFacade.findGovActionProposalById(id);
   }

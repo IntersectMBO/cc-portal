@@ -7,7 +7,7 @@ export class ReasoningRequest {
     name: 'gov_action_proposal_id',
   })
   @IsNumber()
-  govActionProposalId: number;
+  govActionProposalId: string;
 
   @ApiProperty({ description: 'Reasoning title' })
   @IsString()
