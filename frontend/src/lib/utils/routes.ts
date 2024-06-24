@@ -1,7 +1,5 @@
-import { adminProtectedPath, PROTECTED_NAV_ITEMS } from "@consts";
+import { adminProtectedPath, userProtectedPaths } from "@consts";
 import { NextRequest } from "next/server";
-
-export const userProtectedPaths = PROTECTED_NAV_ITEMS.map((item) => item.href);
 
 // Function to check if the current request URL belongs to an admin-protected route
 export const isAdminProtectedRoute = (req: NextRequest): boolean =>

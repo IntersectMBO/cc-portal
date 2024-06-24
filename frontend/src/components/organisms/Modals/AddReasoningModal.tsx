@@ -8,12 +8,13 @@ import {
   Typography,
 } from "@atoms";
 import { useForm } from "react-hook-form";
-import { IMAGES } from "@consts";
+import { customPalette, IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
 import { ControlledField } from "@organisms";
 import { useModal } from "@context";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/context/snackbar";
+import { OpenAddReasoningModalState } from "../types";
 
 interface AddReasoningFormData {
   title: string;
@@ -21,7 +22,9 @@ interface AddReasoningFormData {
 }
 export const AddReasoningModal = () => {
   const t = useTranslations("Modals");
-  const { closeModal } = useModal();
+  const {
+    state: { callback },
+  } = useModal<OpenAddReasoningModalState>();
   const router = useRouter();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
 
@@ -36,9 +39,10 @@ export const AddReasoningModal = () => {
     try {
       router.refresh();
       addSuccessAlert(t("addReasoning.alerts.success"));
-      closeModal();
     } catch (error) {
       addErrorAlert(t("addReasoning.alerts.error"));
+    } finally {
+      callback();
     }
   };
 
@@ -47,10 +51,16 @@ export const AddReasoningModal = () => {
       dataTestId="add-reasoning-modal"
       icon={IMAGES.pastelReasoning}
     >
-      <ModalHeader>{t("addReasoning.headline")}</ModalHeader>
+      <ModalHeader sx={{ marginTop: "16px" }}>
+        {t("addReasoning.headline")}
+      </ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
-          <Typography variant="body1" fontWeight={500}>
+          <Typography
+            variant="body2"
+            fontWeight={400}
+            color={customPalette.textGray}
+          >
             {t("addReasoning.description")}
           </Typography>
           <ControlledField.Input

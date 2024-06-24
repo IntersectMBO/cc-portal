@@ -49,6 +49,16 @@ export interface GovActionModalState {
   id: string;
 }
 
+export interface OpenAddReasoningModalState {
+  id: string;
+  callback: () => void;
+}
+
+export interface OpenReasoningLinkModalState {
+  hash: string;
+  link: string;
+}
+
 export interface GovActionMetadata {
   id: string;
   title: string;
@@ -56,11 +66,27 @@ export interface GovActionMetadata {
   metadataUrl: string;
 }
 
+export interface OpenPreviewReasoningModal {
+  id: string;
+  onActionClick?: (id: string) => void;
+  actionTitle?: string;
+}
+
+export interface PreviewReasoningModalState extends ReasoningI {
+  gov_action_proposal_id: string;
+  gov_action_proposal_title: string;
+  gov_action_proposal_type: string;
+  abstract: string;
+  vote: Vote;
+  submission_date: string;
+  expiry_date: string;
+}
+
 export interface ReasoningI {
   title: string;
   description: string;
-  link: string;
-  hash: string;
+  link?: string;
+  hash?: string;
 }
 
 export enum GovActionProposalStatus {
@@ -69,6 +95,12 @@ export enum GovActionProposalStatus {
   RATIFIED = "RATIFIED",
   ENACTED = "ENACTED",
   DROPPED = "DROPPED",
+}
+
+export enum GovActionStatus {
+  PENDING = "PENDING",
+  VOTED = "VOTED",
+  UNVOTED = "UNVOTED",
 }
 
 export interface VotesTableI {
@@ -84,4 +116,12 @@ export interface VotesTableI {
   gov_action_proposal_status: GovActionProposalStatus;
   gov_action_proposal_end_time: string;
   vote_submit_time: string;
+}
+
+export interface GovernanceActionTableI {
+  gov_action_proposal_id: string;
+  gov_action_proposal_title?: string;
+  gov_action_proposal_type: string;
+  gov_action_proposal_status: GovActionStatus;
+  abstract: string;
 }

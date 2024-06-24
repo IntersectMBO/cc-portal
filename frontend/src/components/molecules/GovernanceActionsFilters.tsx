@@ -7,17 +7,19 @@ import {
   Typography,
 } from "@mui/material";
 
-import { GOVERNANCE_ACTIONS_FILTERS } from "@consts";
 import { useTranslations } from "next-intl";
+import { FilterItems } from "./types";
 
 interface Props {
   chosenFilters: Record<string, string[]>;
   setChosenFilters: Dispatch<SetStateAction<Record<string, string[]>>>;
+  filterOptions: Record<string, FilterItems>;
 }
 
 export const GovernanceActionsFilters = ({
   chosenFilters,
   setChosenFilters,
+  filterOptions,
 }: Props) => {
   const t = useTranslations();
 
@@ -68,7 +70,7 @@ export const GovernanceActionsFilters = ({
           {t("Filters.clear")}
         </Typography>
       </Box>
-      {Object.values(GOVERNANCE_ACTIONS_FILTERS).map((filter) => {
+      {Object.values(filterOptions).map((filter) => {
         return (
           <Box>
             <FormLabel

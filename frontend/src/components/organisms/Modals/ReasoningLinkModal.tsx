@@ -8,7 +8,7 @@ import {
   ModalActions,
   Typography,
 } from "@atoms";
-import { IMAGES } from "@consts";
+import { customPalette, IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
 import { useModal } from "@context";
 import { useSnackbar } from "@/context/snackbar";
@@ -33,10 +33,16 @@ export const ReasoningLinkModal = () => {
       dataTestId="reasoning-link-modal"
       icon={IMAGES.pastelReasoning}
     >
-      <ModalHeader>{t("reasoningLink.headline")}</ModalHeader>
+      <ModalHeader sx={{ marginTop: "16px" }}>
+        {t("reasoningLink.headline")}
+      </ModalHeader>
       <form onSubmit={onSubmit}>
         <ModalContents>
-          <Typography variant="body1" fontWeight={500}>
+          <Typography
+            color={customPalette.textGray}
+            variant="body2"
+            fontWeight={400}
+          >
             {t("reasoningLink.description")}
           </Typography>
 
