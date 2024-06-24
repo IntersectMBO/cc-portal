@@ -84,7 +84,8 @@ export class GovernanceMapper {
     reasoningDto.blake2b = ipfsContentDto.blake2b;
     reasoningDto.json = ipfsContentDto.contents;
     reasoningDto.userId = userId;
-    reasoningDto.govActionProposalId = reasoningRequest.govActionProposalId;
+    reasoningDto.govActionProposalId =
+      reasoningRequest.govActionProposalId.toString();
     reasoningDto.title = reasoningRequest.title;
     reasoningDto.content = reasoningRequest.content;
     return reasoningDto;
@@ -92,15 +93,14 @@ export class GovernanceMapper {
 
   static reasoningToDto(reasoning: Reasoning): ReasoningDto {
     const reasoningDto = new ReasoningDto();
-    reasoningDto.id = reasoning.id;
     reasoningDto.userId = reasoning.userId;
+    reasoningDto.govActionProposalId = reasoning.govActionProposalId;
     reasoningDto.title = reasoning.title;
     reasoningDto.content = reasoning.content;
     reasoningDto.cid = reasoning.cid;
     reasoningDto.blake2b = reasoning.blake2b;
     reasoningDto.url = reasoning.url;
     reasoningDto.json = reasoning.json;
-    reasoningDto.govActionProposalId = reasoning.govActionProposalId;
     return reasoningDto;
   }
 

@@ -1,17 +1,20 @@
 import { CommonEntity } from '../../common/entities/common.entity';
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
 
 @Entity('reasonings')
 @Unique(['userId', 'govActionProposalId'])
 export class Reasoning extends CommonEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({
+  @PrimaryColumn({
     name: 'user_id',
     type: 'uuid',
   })
   userId: string;
+
+  @PrimaryColumn({
+    name: 'gov_action_proposal_id',
+    type: 'bigint',
+  })
+  govActionProposalId: string;
 
   @Column({
     name: 'title',
@@ -48,10 +51,4 @@ export class Reasoning extends CommonEntity {
     type: 'jsonb',
   })
   json: string;
-
-  @Column({
-    name: 'gov_action_proposal_id',
-    type: 'bigint',
-  })
-  govActionProposalId: string;
 }
