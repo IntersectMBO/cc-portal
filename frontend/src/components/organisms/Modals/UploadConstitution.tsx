@@ -32,7 +32,9 @@ export const UploadConstitution = () => {
       addSuccessAlert(t("uploadConstitution.alerts.success"));
       closeModal();
     } catch (error) {
-      addErrorAlert(t("uploadConstitution.alerts.error"));
+      addErrorAlert(
+        error.message ? error.message : t("uploadConstitution.alerts.error")
+      );
     } finally {
       setSubmitting(false);
     }
