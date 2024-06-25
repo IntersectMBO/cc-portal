@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { GovActionProposalService } from '../services/gov-action-proposal.service';
 import { GovActionProposalProducer } from '../gov-action-proposal.producer';
 import { Cron } from '@nestjs/schedule';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GovActionProposalFacade {
@@ -10,7 +9,6 @@ export class GovActionProposalFacade {
   constructor(
     private readonly producer: GovActionProposalProducer,
     private readonly govActionProposalService: GovActionProposalService,
-    private readonly configService: ConfigService,
   ) {}
 
   @Cron('*/30 * * * * *') // Job runs every 30 seconds
