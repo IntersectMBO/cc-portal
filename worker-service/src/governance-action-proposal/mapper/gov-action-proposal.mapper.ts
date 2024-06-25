@@ -14,6 +14,8 @@ export class GovActionProposalMapper {
     govActionProposalDto.govMetadataUrl = govActionProposal.govMetadataUrl;
     govActionProposalDto.govActionType = govActionProposal.govActionType;
     govActionProposalDto.txHash = govActionProposal.txHash;
+    govActionProposalDto.status = govActionProposal.status;
+    govActionProposalDto.endTime = govActionProposal.endTime;
     return govActionProposalDto;
   }
 

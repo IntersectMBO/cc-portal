@@ -6,6 +6,6 @@ export class GovActionProposalDto {
   govActionType: string;
   govMetadataUrl: string;
   status: string;
-  endTime: number;
+  endTime: Date;
   txHash: string;
 }
