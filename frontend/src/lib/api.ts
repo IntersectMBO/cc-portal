@@ -21,7 +21,7 @@ import {
 } from "@/components/organisms";
 import { getTranslations } from "next-intl/server";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
-
+const DEFAULT_PAGINATION_LIMIT = 10;
 export async function isTokenExpired(token): Promise<boolean> {
   try {
     // Decode the token without verifying the signature to get the payload
@@ -130,9 +130,11 @@ export async function getUser(id: string): Promise<FetchUserData> {
 export async function getUsersAdmin({
   search,
   page,
+  limit = DEFAULT_PAGINATION_LIMIT,
 }: {
   search?: string;
   page?: number;
+  limit?: number;
 }): Promise<{ data: FetchUserData[]; meta: PaginationMeta }> {
   try {
     const token = getAccessToken();
@@ -141,7 +143,7 @@ export async function getUsersAdmin({
       await axiosInstance.get(
         `/api/users/${userId}/search-admin?${
           search ? `search=${search}` : ""
-        }&${page ? `page=${page}` : ""}`,
+        }&${page ? `page=${page}` : ""}&limit=${limit}`,
         {
           headers: {
             Authorization: `bearer ${token}`,
@@ -157,17 +159,22 @@ export async function getUsersAdmin({
 export async function getMembers({
   search,
   sortBy,
+  page,
+  limit = 9,
 }: {
   search?: string;
   sortBy?: string;
-}): Promise<FetchUserData[]> {
+  page?: number;
+  limit?: number;
+}): Promise<{ data: FetchUserData[]; meta: PaginationMeta }> {
   try {
-    const res: { data: FetchUserData[] } = await axiosInstance.get(
-      `/api/users/cc-member/search?${search ? `search=${search}` : ""}&${
-        sortBy ? `sortBy=${sortBy}` : ""
-      }`
-    );
-    return res.data;
+    const res: { data: FetchUserData[]; meta: PaginationMeta } =
+      await axiosInstance.get(
+        `/api/users/cc-member/search?${search ? `search=${search}` : ""}&${
+          sortBy ? `sortBy=${sortBy}` : ""
+        }&${page ? `page=${page}` : ""}&limit=${limit}`
+      );
+    return res;
   } catch (error) {
     console.log("error get members", error);
   }
