@@ -11,11 +11,11 @@ export const LATEST_UPDATES_SORTING: FilterItem[] = [
   },
   {
     key: "govActionProposal.title:ASC",
-    label: "Titile ASC",
+    label: "Title ASC",
   },
   {
     key: "govActionProposal.title:DESC",
-    label: "Titile DESC",
+    label: "Title DESC",
   },
 ];
 

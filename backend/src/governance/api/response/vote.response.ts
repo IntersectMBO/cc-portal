@@ -52,7 +52,7 @@ export class VoteResponse {
     example: '123',
   })
   @Expose({ name: 'gov_action_proposal_id' })
-  govProposalId: number;
+  govProposalId: string;
 
   @ApiProperty({
     description: 'Returns a title of governance proposal related to a vote',

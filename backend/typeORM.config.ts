@@ -8,6 +8,7 @@ import { HotAddress } from './src/users/entities/hotaddress.entity';
 import { IpfsMetadata } from './src/ipfs/entities/ipfs-metadata.entity';
 import { Vote } from './src/governance/entities/vote.entity';
 import { GovActionProposal } from './src/governance/entities/gov-action-proposal.entity';
+import { Reasoning } from './src/governance/entities/reasoning.entity';
 
 config();
 
@@ -30,5 +31,6 @@ export default new DataSource({
     IpfsMetadata,
     Vote,
     GovActionProposal,
+    Reasoning,
   ],
 });
