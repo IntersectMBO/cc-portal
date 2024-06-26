@@ -1,29 +1,41 @@
-# name: CI-staging-branch
+name: CI-staging-branch
 
-# on:
-#   push:
-#     branches: [staging]
+on:
+  push:
+    branches: [staging]
 
-#   workflow_dispatch:
+  workflow_dispatch:
 
-# jobs:
-#   deploy_to_do:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout the repo
-#         uses: actions/checkout@v4
-#         with:
-#           ref: staging
+jobs:
+  deploy_to_do:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+        with:
+          ref: staging
 
-#       - name: Deploy to Digital Ocean droplet via SSH action
-#         uses: appleboy/ssh-action@v1.0.3
-#         with:
-#           host: ${{ secrets.STAGING_HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           key: ${{ secrets.SSH_KEY }}
-#           script: |
-#             eval `ssh-agent -s`
-#             ssh-add cc
-#             cd cc-portal \
-#             && git pull origin staging \
-#             && docker compose up -d --force-recreate --build
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            eval `ssh-agent -s`
+            ssh-add cc
+            cd cc-portal \
+            && git pull origin staging \
+            && docker compose up -d --force-recreate --build
+            && docker container exec -i postgres psql -U BEdev24 -d cc-portal \
+            -c "
+            INSERT INTO users (email, status, role_id) VALUES ('developer@bloxico.com', 'active', 
+            (SELECT r.id FROM roles r WHERE r.code='super_admin'));
+
+            INSERT INTO user_permissions(user_id, permission_id)
+            SELECT users.id, permissions.id
+            FROM permissions
+            INNER join users on users.email 
+            IN ('developer@bloxico.com')
+            WHERE code IN ('manage_cc_members', 'add_constitution_version', 'add_new_admin')
+            "
