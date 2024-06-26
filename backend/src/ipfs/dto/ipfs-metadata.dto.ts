@@ -5,6 +5,7 @@
 export class IpfsMetadataDto {
   blake2b?: string;
   cid?: string;
+  url?: string;
   title?: string;
   contentType?: string;
   version?: string;
