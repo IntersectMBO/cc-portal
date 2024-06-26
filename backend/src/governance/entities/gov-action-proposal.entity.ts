@@ -47,6 +47,18 @@ export class GovActionProposal extends CommonEntity {
   })
   status: string;
 
+  @Column({
+    name: 'gov_action_type',
+    type: 'varchar',
+  })
+  govActionType: string;
+
+  @Column({
+    name: 'end_time',
+    type: 'timestamp',
+  })
+  endTime: Date;
+
   @OneToMany(() => Vote, (votes) => votes.govActionProposal, {
     cascade: true,
   })

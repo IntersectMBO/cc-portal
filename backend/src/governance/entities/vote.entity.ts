@@ -53,18 +53,6 @@ export class Vote extends CommonEntity {
   comment: string;
 
   @Column({
-    name: 'gov_action_type',
-    type: 'varchar',
-  })
-  govActionType: string;
-
-  @Column({
-    name: 'end_time',
-    type: 'timestamp',
-  })
-  endTime: Date;
-
-  @Column({
     name: 'submit_time',
     type: 'timestamp',
   })

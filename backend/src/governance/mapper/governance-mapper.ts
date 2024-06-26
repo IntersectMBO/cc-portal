@@ -41,10 +41,10 @@ export class GovernanceMapper {
     voteDto.govProposalId = vote.govActionProposal?.id;
     voteDto.govProposalTitle = vote.govActionProposal?.title;
     voteDto.voteSubmitTime = vote.submitTime;
-    voteDto.govProposalType = vote.govActionType;
+    voteDto.govProposalType = vote.govActionProposal.govActionType;
     voteDto.govProposalStatus =
       GovActionProposalStatus[vote.govActionProposal.status];
-    voteDto.govProposalEndTime = vote.endTime;
+    voteDto.govProposalEndTime = vote.govActionProposal.endTime;
 
     return voteDto;
   }
@@ -54,9 +54,13 @@ export class GovernanceMapper {
   ): GovActionProposalDto {
     const govActionProposalDto = new GovActionProposalDto();
     govActionProposalDto.id = govActionProposal.id;
+    govActionProposalDto.txHash = govActionProposal.txHash;
     govActionProposalDto.title = govActionProposal.title;
     govActionProposalDto.abstract = govActionProposal.abstract;
     govActionProposalDto.metadataUrl = govActionProposal.govMetadataUrl;
+    govActionProposalDto.status = govActionProposal.status;
+    govActionProposalDto.govActionType = govActionProposal.govActionType;
+    govActionProposalDto.endTime = govActionProposal.endTime;
 
     return govActionProposalDto;
   }
@@ -66,9 +70,13 @@ export class GovernanceMapper {
   ): GovActionMetadataResponse {
     const response = new GovActionMetadataResponse();
     response.id = dto.id;
+    response.txHash = dto.txHash;
     response.title = dto.title;
     response.abstract = dto.abstract;
     response.metadataUrl = dto.metadataUrl;
+    response.status = GovActionProposalStatus[dto.status];
+    response.govActionType = dto.govActionType;
+    response.endTime = dto.endTime;
 
     return response;
   }

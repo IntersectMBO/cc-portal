@@ -29,9 +29,9 @@ export class GovActionProposalMapper {
     govActionProposalRequest.govMetadataUrl = dbSyncData.url;
     govActionProposalRequest.status = dbSyncData.epoch_status;
     govActionProposalRequest.endTime = dbSyncData.end_time;
-    govActionProposalRequest.txHash = Buffer.from(dbSyncData.hash)
-      .toString('hex')
-      .toUpperCase();
+    govActionProposalRequest.txHash = Buffer.from(dbSyncData.hash).toString(
+      'hex',
+    );
 
     return govActionProposalRequest;
   }

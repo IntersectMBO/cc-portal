@@ -15,12 +15,8 @@ export class GovActionProposalFacade {
   async syncGovActionProposalTable() {
     const govActionProposalIdsArray: object[] =
       await this.govActionProposalService.getGovActionProposalIds();
-    const pages =
-      await this.govActionProposalService.countGovActionProposalsPages(
-        govActionProposalIdsArray,
-      );
 
-    if (pages > 0) {
+    if (govActionProposalIdsArray.length > 0) {
       for (let i = 0; i <= govActionProposalIdsArray.length + 10; i += 10) {
         if (i >= govActionProposalIdsArray.length) {
           break;
@@ -38,8 +34,5 @@ export class GovActionProposalFacade {
         await this.producer.addToGovActionQueue(dbSyncData);
       }
     }
-  }
-  async delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

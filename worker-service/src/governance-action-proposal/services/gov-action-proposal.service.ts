@@ -137,16 +137,6 @@ export class GovActionProposalService {
     return govActionProposalIds;
   }
 
-  async countGovActionProposalsPages(
-    govActionProposalsIds: object[],
-  ): Promise<number> {
-    const pages = Math.ceil(
-      govActionProposalsIds.length /
-        this.configService.getOrThrow('GOV_ACTION_PROPOSALS_PER_PAGE'),
-    );
-    return pages;
-  }
-
   async getGovActionProposalDataFromDbSync(
     govActionProposalIdsValues: string[],
   ): Promise<GovActionProposalRequest[]> {
