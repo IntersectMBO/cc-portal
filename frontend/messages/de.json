@@ -260,5 +260,8 @@
     "uploadConstitution": {
       "409": "File already exists."
     }
+  },
+  "General": {
+    "showMore": "Show more"
   }
 }
