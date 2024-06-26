@@ -7,6 +7,7 @@ import {
   DecodedToken,
   FetchUserData,
   LoginResponse,
+  PaginationMeta,
   Permissions,
 } from "./requests";
 import {
@@ -128,22 +129,26 @@ export async function getUser(id: string): Promise<FetchUserData> {
 
 export async function getUsersAdmin({
   search,
+  page,
 }: {
   search?: string;
-}): Promise<FetchUserData[]> {
+  page?: number;
+}): Promise<{ data: FetchUserData[]; meta: PaginationMeta }> {
   try {
     const token = getAccessToken();
     const { userId } = await decodeUserToken();
-
-    const res: { data: FetchUserData[] } = await axiosInstance.get(
-      `/api/users/${userId}/search-admin?${search ? `search=${search}` : ""}`,
-      {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      }
-    );
-    return res.data;
+    const res: { data: FetchUserData[]; meta: PaginationMeta } =
+      await axiosInstance.get(
+        `/api/users/${userId}/search-admin?${
+          search ? `search=${search}` : ""
+        }&${page ? `page=${page}` : ""}`,
+        {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        }
+      );
+    return res;
   } catch (error) {
     console.log("error get users admin", error);
   }
