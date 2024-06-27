@@ -7,7 +7,7 @@ export class GovernanceActionMetadataResponse {
     example: '1',
   })
   @Expose({ name: 'id' })
-  id: number;
+  id: string;
 
   @ApiProperty({
     description: 'Title of a governance action proposal',

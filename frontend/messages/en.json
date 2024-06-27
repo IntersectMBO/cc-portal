@@ -256,11 +256,6 @@
     "sortBy": "Sort by",
     "clear": "Clear"
   },
-  "Errors": {
-    "uploadConstitution": {
-      "409": "File already exists."
-    }
-  },
   "General": {
     "showMore": "Show more"
   }

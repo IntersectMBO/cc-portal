@@ -19,7 +19,6 @@ import {
   GovActionStatus,
   PreviewReasoningModalState,
 } from "@/components/organisms";
-import { getTranslations } from "next-intl/server";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 const DEFAULT_PAGINATION_LIMIT = 10;
 export async function isTokenExpired(token): Promise<boolean> {
@@ -417,10 +416,6 @@ export async function uploadConstitution(data: FormData) {
     });
     return response.data;
   } catch (error) {
-    const t = await getTranslations();
-    if (error.res.statusCode === 409) {
-      throw new Error(t(`Errors.uploadConstitution.${error.res.statusCode}`));
-    }
     throw error;
   }
 }
