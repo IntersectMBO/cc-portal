@@ -255,5 +255,8 @@
   "Filters": {
     "sortBy": "Sort by",
     "clear": "Clear"
+  },
+  "General": {
+    "showMore": "Show more"
   }
 }

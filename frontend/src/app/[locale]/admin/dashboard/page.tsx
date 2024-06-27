@@ -16,7 +16,7 @@ export default async function AdminDashboard({
   return (
     <main>
       <Suspense fallback={<Loading />}>
-        <UsersList usersList={users} />
+        <UsersList usersList={users.data} paginationMeta={users.meta} />
       </Suspense>
     </main>
   );

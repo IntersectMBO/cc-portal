@@ -5,29 +5,44 @@ import { Box, Grid } from "@mui/material";
 import { NotFound } from "../NotFound";
 import { MembersCard } from "./MembersCard";
 import { UserListItem } from "../types";
-import { Typography } from "@atoms";
+import { ShowMoreButton, Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 import { isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "@molecules";
 import { CC_MEMBERS_SORTING } from "@consts";
+import { PaginationMeta } from "@/lib/requests";
+import { usePagination } from "@/lib/utils/usePagination";
+import { getMembers } from "@/lib/api";
 
-export function MembersCardList({ members }: { members: UserListItem[] }) {
+export function MembersCardList({
+  members,
+  paginationMeta,
+}: {
+  members: UserListItem[];
+  paginationMeta: PaginationMeta;
+}) {
   const t = useTranslations("Members");
 
   const { updateQueryParams } = useManageQueryParams();
   const [searchText, setSearchText] = useState<string>("");
   const [sortOpen, setSortOpen] = useState(false);
   const [chosenSorting, setChosenSorting] = useState<string>("");
+  const params: Record<string, string | null> = {
+    search: searchText || null,
+    sortBy: chosenSorting || null,
+  };
+
+  const { data, pagination, isLoading, loadMore } = usePagination(
+    members,
+    paginationMeta,
+    (page) => getMembers({ page, ...params })
+  );
 
   const closeSorts = useCallback(() => {
     setSortOpen(false);
   }, []);
 
   useEffect(() => {
-    const params: Record<string, string | null> = {
-      search: searchText || null,
-      sortBy: chosenSorting || null,
-    };
     updateQueryParams(params);
   }, [searchText, chosenSorting, updateQueryParams]);
 
@@ -54,31 +69,38 @@ export function MembersCardList({ members }: { members: UserListItem[] }) {
           />
         </Box>
       </Box>
-      {isEmpty(members) ? (
+      {isEmpty(data) ? (
         <NotFound
           height="55vh"
           title="members.title"
           description="members.description"
         />
       ) : (
-        <Grid container>
-          {members.map((data, index) => (
-            <Grid
-              key={index}
-              item
-              xs={12}
-              sm={6}
-              lg={4}
-              data-testid={`members-${data.id}-card`}
-              sx={{
-                padding: 2,
-                paddingTop: 0,
-              }}
-            >
-              <MembersCard {...data} />
-            </Grid>
-          ))}
-        </Grid>
+        <>
+          <Grid container>
+            {data.map((members, index) => (
+              <Grid
+                key={index}
+                item
+                xs={12}
+                sm={6}
+                lg={4}
+                data-testid={`members-${members.id}-card`}
+                sx={{
+                  padding: 2,
+                  paddingTop: 0,
+                }}
+              >
+                <MembersCard {...members} />
+              </Grid>
+            ))}
+          </Grid>
+          <ShowMoreButton
+            isLoading={isLoading}
+            hasNextPage={pagination.has_next_page}
+            callBack={loadMore}
+          />
+        </>
       )}
     </Box>
   );
