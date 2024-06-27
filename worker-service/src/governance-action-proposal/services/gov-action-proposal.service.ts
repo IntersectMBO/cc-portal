@@ -18,7 +18,6 @@ import {
 import { DataSource, EntityManager, Repository } from 'typeorm';
 import { GovActionProposal } from '../../governance-action-proposal/entities/gov-action-proposal.entity';
 import { GovActionProposalDto } from '../dto/gov-action-proposal.dto';
-import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { GovActionProposalRequest } from '../dto/gov-action-proposal.request';
 import { GovActionProposalMapper } from '../mapper/gov-action-proposal.mapper';
@@ -33,7 +32,6 @@ export class GovActionProposalService {
     private readonly govActionProposalRepository: Repository<GovActionProposal>,
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
-    private readonly configService: ConfigService,
   ) {}
 
   async storeGovActionProposalData(
