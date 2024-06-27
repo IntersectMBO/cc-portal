@@ -19,8 +19,10 @@ import {
   GovActionStatus,
   PreviewReasoningModalState,
 } from "@/components/organisms";
+
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 const DEFAULT_PAGINATION_LIMIT = 2;
+
 export async function isTokenExpired(token): Promise<boolean> {
   try {
     // Decode the token without verifying the signature to get the payload
@@ -183,25 +185,30 @@ export async function getMembers({
 }
 
 export async function getLatestUpdates({
+  page = 1,
+  limit = DEFAULT_PAGINATION_LIMIT,
   search,
   govActionType,
   vote,
   sortBy,
 }: {
+  page?: number;
+  limit?: number;
   search?: string;
   govActionType?: string;
   vote?: string;
   sortBy?: string;
-}): Promise<VotesTableI[]> {
+}): Promise<{ data: VotesTableI[]; meta: PaginationMeta }> {
   try {
-    const res: { data: VotesTableI[] } = await axiosInstance.get(
-      `/api/governance/votes/search?${search ? `search=${search}` : ""}&${
-        govActionType ? `filter.govActionType=$in:${govActionType}` : ""
-      }&${vote ? `filter.vote=$in:${vote}` : ""}&${
-        sortBy ? `sortBy=${sortBy}` : ""
-      }`
-    );
-    return res.data;
+    const res: { data: VotesTableI[]; meta: PaginationMeta } =
+      await axiosInstance.get(
+        `/api/governance/votes/search?${search ? `search=${search}` : ""}&${
+          govActionType ? `filter.govActionType=$in:${govActionType}` : ""
+        }&${vote ? `filter.vote=$in:${vote}` : ""}&${
+          sortBy ? `sortBy=${sortBy}` : ""
+        }&${page ? `page=${page}` : ""}&limit=${limit}`
+      );
+    return res;
   } catch (error) {
     console.log("error get latest updates", error);
   }
