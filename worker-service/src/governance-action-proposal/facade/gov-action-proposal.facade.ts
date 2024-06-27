@@ -17,10 +17,7 @@ export class GovActionProposalFacade {
       await this.govActionProposalService.getGovActionProposalIds();
 
     if (govActionProposalIdsArray.length > 0) {
-      for (let i = 0; i <= govActionProposalIdsArray.length + 10; i += 10) {
-        if (i >= govActionProposalIdsArray.length) {
-          break;
-        }
+      for (let i = 0; i <= govActionProposalIdsArray.length; i += 10) {
         const chunk: object[] = govActionProposalIdsArray.slice(i, i + 10);
         const govActionProposalIdsValues: string[] = chunk.map(
           (obj) => (obj as any).id,
@@ -34,5 +31,8 @@ export class GovActionProposalFacade {
         await this.producer.addToGovActionQueue(dbSyncData);
       }
     }
+  }
+  async delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
