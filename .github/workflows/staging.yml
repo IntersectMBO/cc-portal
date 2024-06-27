@@ -26,8 +26,9 @@ jobs:
             ssh-add cc
             cd cc-portal \
             && git pull origin staging \
-            && docker compose up -d --force-recreate --build \
-            && docker image rm $(docker image ls -f "dangling=true") \
+            && docker compose up down -v \
+            && docker image rm $(docker image ls) \
+            && docker compose up -d \
             && docker container exec -i backend npm run typeorm:run-migrations \
             && docker container exec -i postgres psql -U BEdev24 -d cc-portal \
             -c "
