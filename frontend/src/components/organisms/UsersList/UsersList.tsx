@@ -10,6 +10,7 @@ import { PaginationMeta } from "@/lib/requests";
 import { isEmpty } from "@utils";
 import { usePagination } from "@/lib/utils/usePagination";
 import { ShowMoreButton } from "@atoms";
+import { useSearchParams } from "next/navigation";
 
 export function UsersList({
   usersList,
@@ -18,10 +19,11 @@ export function UsersList({
   usersList: UserListItem[];
   paginationMeta: PaginationMeta;
 }) {
+  const searchParams = useSearchParams();
   const { data, pagination, isLoading, loadMore } = usePagination(
     usersList,
     paginationMeta,
-    getUsersAdmin
+    (page) => getUsersAdmin({ page, search: searchParams.get("search") })
   );
 
   if (isEmpty(data)) {

@@ -20,7 +20,7 @@ import {
   PreviewReasoningModalState,
 } from "@/components/organisms";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
-const DEFAULT_PAGINATION_LIMIT = 10;
+const DEFAULT_PAGINATION_LIMIT = 2;
 export async function isTokenExpired(token): Promise<boolean> {
   try {
     // Decode the token without verifying the signature to get the payload
@@ -128,12 +128,14 @@ export async function getUser(id: string): Promise<FetchUserData> {
 
 export async function getUsersAdmin({
   search,
-  page,
+  page = 1,
   limit = DEFAULT_PAGINATION_LIMIT,
+  searchParams,
 }: {
   search?: string;
   page?: number;
   limit?: number;
+  searchParams?: URLSearchParams;
 }): Promise<{ data: FetchUserData[]; meta: PaginationMeta }> {
   try {
     const token = getAccessToken();
@@ -158,13 +160,14 @@ export async function getUsersAdmin({
 export async function getMembers({
   search,
   sortBy,
-  page,
-  limit = 9,
+  page = 1,
+  limit = DEFAULT_PAGINATION_LIMIT,
 }: {
   search?: string;
   sortBy?: string;
   page?: number;
   limit?: number;
+  searchParams?: any;
 }): Promise<{ data: FetchUserData[]; meta: PaginationMeta }> {
   try {
     const res: { data: FetchUserData[]; meta: PaginationMeta } =

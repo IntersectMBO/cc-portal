@@ -27,10 +27,15 @@ export function MembersCardList({
   const [searchText, setSearchText] = useState<string>("");
   const [sortOpen, setSortOpen] = useState(false);
   const [chosenSorting, setChosenSorting] = useState<string>("");
+  const params: Record<string, string | null> = {
+    search: searchText || null,
+    sortBy: chosenSorting || null,
+  };
+
   const { data, pagination, isLoading, loadMore } = usePagination(
     members,
     paginationMeta,
-    getMembers
+    (page) => getMembers({ page, ...params })
   );
 
   const closeSorts = useCallback(() => {
@@ -38,10 +43,6 @@ export function MembersCardList({
   }, []);
 
   useEffect(() => {
-    const params: Record<string, string | null> = {
-      search: searchText || null,
-      sortBy: chosenSorting || null,
-    };
     updateQueryParams(params);
   }, [searchText, chosenSorting, updateQueryParams]);
 
