@@ -56,6 +56,7 @@ export class GovActionProposal extends CommonEntity {
   @Column({
     name: 'end_time',
     type: 'timestamp',
+    nullable: true,
   })
   endTime: Date;
 

@@ -13,11 +13,18 @@ export class VoteMapper {
         voteRequest.userId = val;
       }
     });
-    voteRequest.title = dbSyncData.title;
+    voteRequest.reasoningTitle = dbSyncData.title;
     voteRequest.comment = dbSyncData.comment;
     voteRequest.vote = dbSyncData.vote;
     voteRequest.govActionProposalId = dbSyncData.gov_action_proposal_id;
     voteRequest.submitTime = dbSyncData.time;
+    voteRequest.votingAnchorId = dbSyncData.voting_anchor_id;
+    voteRequest.govActionType = dbSyncData.type;
+    voteRequest.govMetadataUrl = dbSyncData.url;
+    voteRequest.status = dbSyncData.epoch_status;
+    voteRequest.endTime = dbSyncData.end_time;
+    voteRequest.txHash = dbSyncData.hash;
+
     return voteRequest;
   }
 

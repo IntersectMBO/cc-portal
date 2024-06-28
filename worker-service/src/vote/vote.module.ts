@@ -13,22 +13,22 @@ import { Vote } from './entities/vote.entity';
 import { GovActionProposal } from '../governance-action-proposal/entities/gov-action-proposal.entity';
 import { HotAddress } from './entities/hotaddress.entity';
 import { User } from './entities/user.entity';
-import { Reasoning } from '../governance-action-proposal/entities/reasoning.entity';
+import { GovActionProposalService } from '../governance-action-proposal/services/gov-action-proposal.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Vote,
-      GovActionProposal,
-      HotAddress,
-      User,
-      Reasoning,
-    ]),
+    TypeOrmModule.forFeature([Vote, GovActionProposal, HotAddress, User]),
     BullModule.registerQueue({
       name: QUEUE_NAME_DB_SYNC_VOTES,
     }),
     BullModule.registerFlowProducer({ name: FLOW_NAME_EXTRACT_VOTE_DATA }),
   ],
-  providers: [VoteFacade, VoteProducer, VoteProcessor, VoteService],
+  providers: [
+    VoteFacade,
+    VoteProducer,
+    VoteProcessor,
+    VoteService,
+    GovActionProposalService,
+  ],
 })
 export class VoteModule {}

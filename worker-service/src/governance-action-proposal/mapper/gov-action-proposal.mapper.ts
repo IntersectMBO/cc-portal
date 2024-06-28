@@ -3,7 +3,7 @@ import { GovActionProposalRequest } from '../dto/gov-action-proposal.request';
 import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 
 export class GovActionProposalMapper {
-  static GovActionProposalToDto(
+  static govActionProposalToDto(
     govActionProposal: GovActionProposal,
   ): GovActionProposalDto {
     const govActionProposalDto = new GovActionProposalDto();
@@ -16,6 +16,11 @@ export class GovActionProposalMapper {
     govActionProposalDto.txHash = govActionProposal.txHash;
     govActionProposalDto.status = govActionProposal.status;
     govActionProposalDto.endTime = govActionProposal.endTime;
+    govActionProposalDto.votes = govActionProposal.votes;
+
+    govActionProposalDto.createdAt = govActionProposal.createdAt;
+    govActionProposalDto.updatedAt = govActionProposal.updatedAt;
+
     return govActionProposalDto;
   }
 

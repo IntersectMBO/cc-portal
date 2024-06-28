@@ -4,7 +4,15 @@ export class VoteRequest {
   userId: string;
   govActionProposalId: string;
   vote: string;
-  title: string;
+  reasoningTitle: string;
   comment: string;
   submitTime: number;
+  votingAnchorId: string;
+  govTitle: string;
+  abstract: string;
+  govActionType: string;
+  govMetadataUrl: string;
+  status: string;
+  endTime: Date;
+  txHash: string;
 }
