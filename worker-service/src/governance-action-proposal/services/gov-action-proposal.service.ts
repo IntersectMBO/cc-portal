@@ -1,8 +1,8 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -56,22 +56,8 @@ export class GovActionProposalService {
   ): Promise<Partial<GovActionProposal[]>> {
     const govActionProposals = [];
     for (let i = 0; i < govActionProposalRequests.length; i++) {
-      const existingGovActionProposal: GovActionProposal =
-        await this.findGovActionProposal(govActionProposalRequests[i].id);
-      if (existingGovActionProposal) {
-        continue;
-      }
-
       const govMetadataUrl = govActionProposalRequests[i].govMetadataUrl;
-      if (
-        govMetadataUrl.indexOf('http') == -1 ||
-        govMetadataUrl.indexOf('https') == -1
-      ) {
-        continue;
-      }
-      if (!govActionProposalRequests[i].endTime) {
-        continue;
-      }
+
       const axiosData = await this.getGovActionProposalFromUrl(govMetadataUrl);
       const hash = govActionProposalRequests[i].txHash;
       const govActionProposal = {
@@ -79,51 +65,56 @@ export class GovActionProposalService {
         votingAnchorId: govActionProposalRequests[i].votingAnchorId,
         govActionType: govActionProposalRequests[i].govActionType,
         govMetadataUrl: govActionProposalRequests[i].govMetadataUrl,
-        endTime: govActionProposalRequests[i].endTime,
+        endTime: govActionProposalRequests[i]?.endTime,
         status: govActionProposalRequests[i].status,
         txHash: hash,
-        title: axiosData.title,
-        abstract: axiosData.abstract,
+        title: axiosData?.title,
+        abstract: axiosData?.abstract,
       };
       govActionProposals.push(govActionProposal);
     }
     return govActionProposals;
   }
 
-  private async findGovActionProposal(
-    govActionProposalId: string,
-  ): Promise<GovActionProposal> {
-    const govActionProposal = await this.govActionProposalRepository.findOne({
-      where: {
-        id: govActionProposalId,
-      },
-    });
-    return govActionProposal;
-  }
-
   private async getGovActionProposalFromUrl(
     url: string,
   ): Promise<Partial<GovActionProposalDto>> {
-    const response = await axios.get(url);
-    if (response.status == 404) {
-      throw new NotFoundException(
-        `Governance action proposal URL is invalid: ${url}`,
-      );
+    try {
+      let govActionProposal: Partial<GovActionProposalDto> =
+        await this.getNonValidMetadataUrl(url);
+      if (govActionProposal) {
+        return govActionProposal;
+      }
+      const response = await axios.get(url);
+      const jsonData = response.data;
+      const title = jsonData.body?.title;
+      const abstract = jsonData.body?.abstract;
+      if (!title || !abstract) {
+        throw new BadRequestException(
+          'This url does not contain required data',
+        );
+      }
+      govActionProposal = {
+        title: title?.['@value'],
+        abstract: abstract?.['@value'],
+        govMetadataUrl: url,
+      };
+
+      return govActionProposal;
+    } catch (err) {
+      this.logger.error(err);
     }
-    const jsonData = response.data;
-    let title: string = '';
-    let abstract: string = '';
-    if (jsonData['body'] && jsonData.body['title']) {
-      title = jsonData.body.title;
+  }
+
+  private async getNonValidMetadataUrl(
+    url: string,
+  ): Promise<Partial<GovActionProposalDto>> {
+    let govActionProposal: Partial<GovActionProposalDto>;
+    if (!url.includes('http') || !url.includes('https')) {
+      govActionProposal = {
+        govMetadataUrl: url,
+      };
     }
-    if (jsonData['body'] && jsonData.body['abstract']) {
-      abstract = jsonData.body.abstract;
-    }
-    const govActionProposal: Partial<GovActionProposalDto> = {
-      title: title['@value'],
-      abstract: abstract['@value'],
-      govMetadataUrl: url,
-    };
     return govActionProposal;
   }
 

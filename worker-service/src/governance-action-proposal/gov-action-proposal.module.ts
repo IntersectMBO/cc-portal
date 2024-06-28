@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GovActionProposal } from './entities/gov-action-proposal.entity';
-import { Reasoning } from './entities/reasoning.entity';
 import { GovActionProposalService } from './services/gov-action-proposal.service';
 import { BullModule } from '@nestjs/bullmq';
 import {
@@ -14,7 +13,7 @@ import { GovActionProposalProducer } from './gov-action-proposal.producer';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([GovActionProposal, Reasoning]),
+    TypeOrmModule.forFeature([GovActionProposal]),
     BullModule.registerQueue({
       name: QUEUE_NAME_DB_SYNC_GOV_ACTIONS,
     }),

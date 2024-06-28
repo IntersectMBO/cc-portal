@@ -8,7 +8,7 @@ import { GovernanceActionProposalModule } from './governance-action-proposal/gov
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, cache: true }),
     DatabaseModule,
     ScheduleModule.forRoot(),
     BullmqModule,

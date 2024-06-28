@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -14,7 +15,7 @@ import {
   CONNECTION_NAME_DB_SYNC,
   SQL_FILE_PATH,
 } from '../../common/constants/sql.constants';
-import { DataSource, EntityManager, Repository } from 'typeorm';
+import { DataSource, EntityManager, In, Repository } from 'typeorm';
 import { HotAddress } from '../entities/hotaddress.entity';
 import { VoteMapper } from '../mapper/vote.mapper';
 import { Vote } from '../entities/vote.entity';
@@ -22,6 +23,11 @@ import { VoteRequest } from '../dto/vote.request';
 import { GovActionProposal } from '../../governance-action-proposal/entities/gov-action-proposal.entity';
 import { PageOptionsDto } from '../../util/pagination/dto/page-options.dto';
 import { ConfigService } from '@nestjs/config';
+import { GovActionProposalDto } from '../../governance-action-proposal/dto/gov-action-proposal.dto';
+import { GovActionProposalService } from '../../governance-action-proposal/services/gov-action-proposal.service';
+import axios from 'axios';
+import { GovActionProposalMapper } from '../../governance-action-proposal/mapper/gov-action-proposal.mapper';
+import { GovActionProposalRequest } from '../../governance-action-proposal/dto/gov-action-proposal.request';
 
 @Injectable()
 export class VoteService {
@@ -38,12 +44,18 @@ export class VoteService {
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
     private readonly configService: ConfigService,
+    private readonly govActionProposalService: GovActionProposalService,
   ) {}
 
   async storeVoteData(voteRequest: VoteRequest[]): Promise<void> {
     const votes = await this.prepareVotes(voteRequest);
-    console.log(votes);
+    const govActionProposalRequest: GovActionProposalRequest[] =
+      await this.getGovActionProposalsFromDbSync(voteRequest);
     try {
+      // TODO: ask Aca should we store gaps from votes with valid urls that don't have abstract & title
+      await this.govActionProposalService.storeGovActionProposalData(
+        govActionProposalRequest,
+      );
       await this.entityManager.transaction(async () => {
         return await this.voteRepository.save(votes);
       });
@@ -57,19 +69,31 @@ export class VoteService {
     voteRequests: VoteRequest[],
   ): Promise<Partial<Vote[]>> {
     const votes = [];
+    const govActionProposalIds: string[] = [];
+    voteRequests.forEach((voteRequest) => {
+      govActionProposalIds.push(voteRequest.govActionProposalId);
+    });
+    const existingGovActionProposal =
+      await this.findGovActionProposalFromIds(govActionProposalIds);
     for (let i = 0; i < voteRequests.length; i++) {
+      if (existingGovActionProposal[i]) {
+        continue;
+      }
       const govActionProposal = await this.prepareGovActionProposal(
         voteRequests[i],
       );
+      if (!govActionProposal) {
+        continue;
+      }
       const vote = {
         id: voteRequests[i].id,
         userId: voteRequests[i].userId,
         hotAddress: voteRequests[i].hotAddress,
         vote: voteRequests[i].vote,
-        title: voteRequests[i].title,
+        title: voteRequests[i].reasoningTitle,
         comment: voteRequests[i].comment,
         submitTime: voteRequests[i].submitTime,
-        govActionProposal: govActionProposal?.id,
+        govActionProposal: govActionProposal.id,
       };
       votes.push(vote);
     }
@@ -78,24 +102,86 @@ export class VoteService {
 
   private async prepareGovActionProposal(
     voteRequest: VoteRequest,
-  ): Promise<Partial<GovActionProposal> | null> {
-    const existingGovActionProposal = await this.findGovActionProposal(
-      voteRequest.govActionProposalId,
-    );
-    if (existingGovActionProposal) {
-      return existingGovActionProposal;
+  ): Promise<Partial<GovActionProposal>> {
+    let govActionProposal: GovActionProposal;
+
+    const govActionProposalDto: Partial<GovActionProposalDto> =
+      await this.getGovActionProposalFromUrl(voteRequest.govMetadataUrl);
+    if (govActionProposalDto) {
+      govActionProposalDto.id = voteRequest.govActionProposalId;
+      govActionProposalDto.votingAnchorId = voteRequest.votingAnchorId;
+      govActionProposalDto.status = voteRequest.status;
+      govActionProposalDto.endTime = voteRequest.endTime;
+      govActionProposalDto.txHash = voteRequest.txHash;
+      govActionProposalDto.govActionType = voteRequest.govActionType;
+      govActionProposalDto.govMetadataUrl = voteRequest.govMetadataUrl;
+
+      govActionProposal =
+        this.govActionProposalRepository.create(govActionProposalDto);
     }
-    return null;
+
+    return govActionProposal;
   }
 
-  private async findGovActionProposal(
-    govActionProposalId: string,
-  ): Promise<GovActionProposal> {
-    const govActionProposal = this.govActionProposalRepository.findOne({
+  private async findGovActionProposalFromIds(
+    govActionProposalIds: string[],
+  ): Promise<GovActionProposalDto[]> {
+    const govActionProposals = await this.govActionProposalRepository.find({
       where: {
-        id: govActionProposalId,
+        id: In(govActionProposalIds),
       },
     });
+
+    const govActionProposalDtos: GovActionProposalDto[] = [];
+
+    govActionProposals.forEach((govActionProposal) => {
+      govActionProposalDtos.push(
+        GovActionProposalMapper.govActionProposalToDto(govActionProposal),
+      );
+    });
+
+    return govActionProposalDtos;
+  }
+
+  private async getGovActionProposalFromUrl(
+    url: string,
+  ): Promise<Partial<GovActionProposalDto>> {
+    try {
+      let govActionProposal: Partial<GovActionProposalDto> =
+        await this.getNonValidMetadataUrl(url);
+      if (govActionProposal) {
+        return govActionProposal;
+      }
+      const response = await axios.get(url);
+      const jsonData = response.data;
+      const title: string = jsonData.body?.title;
+      const abstract: string = jsonData.body?.abstract;
+      if (!title || !abstract) {
+        throw new BadRequestException(
+          'This url does not contain required data',
+        );
+      }
+      govActionProposal = {
+        title: title?.['@value'],
+        abstract: abstract?.['@value'],
+        govMetadataUrl: url,
+      };
+
+      return govActionProposal;
+    } catch (err) {
+      this.logger.error(err);
+    }
+  }
+
+  private async getNonValidMetadataUrl(
+    url: string,
+  ): Promise<Partial<GovActionProposalDto>> {
+    let govActionProposal: Partial<GovActionProposalDto>;
+    if (!url.includes('http') || !url.includes('https')) {
+      govActionProposal = {
+        govMetadataUrl: url,
+      };
+    }
     return govActionProposal;
   }
 
@@ -103,7 +189,7 @@ export class VoteService {
     mapHotAddresses: Map<string, string>,
   ): Promise<VoteRequest[]> {
     const addresses = [...mapHotAddresses.keys()];
-    const dbData = await this.getVotesFromSqlFile(
+    const dbData = await this.getDataFromSqlFile(
       SQL_FILE_PATH.GET_VOTES,
       addresses,
     );
@@ -117,7 +203,32 @@ export class VoteService {
     return results;
   }
 
-  private async getVotesFromSqlFile(
+  private async getGovActionProposalsFromDbSync(
+    voteRequests: VoteRequest[],
+  ): Promise<GovActionProposalRequest[]> {
+    const voteIds: string[] = [];
+    voteRequests.forEach((voteRequest) => {
+      voteIds.push(voteRequest.id);
+    });
+    const dbData = await this.getDataFromSqlFile(
+      SQL_FILE_PATH.GET_GOV_ACTION_PROPOSALS_FROM_VOTES,
+      voteIds,
+    );
+
+    const results: GovActionProposalRequest[] = [];
+    if (dbData.length > 0) {
+      dbData.forEach((govActionProposal) => {
+        results.push(
+          GovActionProposalMapper.dbSyncToGovActionProposalRequest(
+            govActionProposal,
+          ),
+        );
+      });
+    }
+    return results;
+  }
+
+  private async getDataFromSqlFile(
     filePath: string,
     whereInArray: string[],
   ): Promise<object[]> {
