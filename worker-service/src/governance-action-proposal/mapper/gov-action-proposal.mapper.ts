@@ -16,7 +16,6 @@ export class GovActionProposalMapper {
     govActionProposalDto.txHash = govActionProposal.txHash;
     govActionProposalDto.status = govActionProposal.status;
     govActionProposalDto.endTime = govActionProposal.endTime;
-    govActionProposalDto.votes = govActionProposal.votes;
 
     govActionProposalDto.createdAt = govActionProposal.createdAt;
     govActionProposalDto.updatedAt = govActionProposal.updatedAt;

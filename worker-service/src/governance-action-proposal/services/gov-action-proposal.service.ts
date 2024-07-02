@@ -33,12 +33,11 @@ export class GovActionProposalService extends CommonService {
   }
 
   async storeGovActionProposalData(
-    govActionProposalRequest: GovActionProposalRequest[],
+    govActionProposalRequests: GovActionProposalRequest[],
   ): Promise<void> {
     const govActionProposals = await this.prepareGovActionProposals(
-      govActionProposalRequest,
+      govActionProposalRequests,
     );
-    console.log(govActionProposals);
     try {
       await this.entityManager.transaction(async () => {
         return await this.govActionProposalRepository.save(govActionProposals);
@@ -50,27 +49,27 @@ export class GovActionProposalService extends CommonService {
   }
 
   private async prepareGovActionProposals(
-    govActionProposalRequests: GovActionProposalRequest[],
+    requests: GovActionProposalRequest[],
   ): Promise<Partial<GovActionProposal[]>> {
     const govActionProposals = [];
-    for (let i = 0; i < govActionProposalRequests.length; i++) {
-      const govMetadataUrl = govActionProposalRequests[i].govMetadataUrl;
-
+    for (const request of requests) {
+      const govMetadataUrl = request.govMetadataUrl;
       const axiosData = await this.getGovActionProposalFromUrl(govMetadataUrl);
-      const hash = govActionProposalRequests[i].txHash;
+      const hash = request.txHash;
       const govActionProposal = {
-        id: govActionProposalRequests[i].id,
-        votingAnchorId: govActionProposalRequests[i].votingAnchorId,
-        govActionType: govActionProposalRequests[i].govActionType,
-        govMetadataUrl: govActionProposalRequests[i].govMetadataUrl,
-        endTime: govActionProposalRequests[i]?.endTime,
-        status: govActionProposalRequests[i].status,
+        id: request.id,
+        votingAnchorId: request.votingAnchorId,
+        govActionType: request.govActionType,
+        govMetadataUrl: request.govMetadataUrl,
+        endTime: request?.endTime,
+        status: request.status,
         txHash: hash,
         title: axiosData?.title,
         abstract: axiosData?.abstract,
       };
       govActionProposals.push(govActionProposal);
     }
+
     return govActionProposals;
   }
 

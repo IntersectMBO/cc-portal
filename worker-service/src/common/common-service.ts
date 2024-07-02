@@ -8,6 +8,7 @@ import { GovActionProposalDto } from 'src/governance-action-proposal/dto/gov-act
 import axios from 'axios';
 
 export abstract class CommonService {
+  //TODO After merging gap + votes into governance module, this will become obsolete
   protected logger = new Logger(CommonService.name);
 
   constructor(
@@ -64,33 +65,22 @@ export abstract class CommonService {
   async getGovActionProposalFromUrl(
     url: string,
   ): Promise<Partial<GovActionProposalDto>> {
-    let govActionProposal: Partial<GovActionProposalDto> =
-      await this.getNonValidMetadataUrl(url);
-    if (govActionProposal) {
-      return govActionProposal;
-    }
-    const response = await axios.get(url);
-    const jsonData = response.data;
-    const title = jsonData.body?.title;
-    const abstract = jsonData.body?.abstract;
-    govActionProposal = {
-      title: title?.['@value'],
-      abstract: abstract?.['@value'],
-      govMetadataUrl: url,
-    };
-
-    return govActionProposal;
-  }
-
-  async getNonValidMetadataUrl(
-    url: string,
-  ): Promise<Partial<GovActionProposalDto>> {
-    let govActionProposal: Partial<GovActionProposalDto>;
-    if (!url.includes('http') || !url.includes('https')) {
-      govActionProposal = {
+    try {
+      const response = await axios.get(url);
+      const jsonData = response.data;
+      const title = jsonData.body?.title;
+      const abstract = jsonData.body?.abstract;
+      const govActionProposal: Partial<GovActionProposalDto> = {
+        title: title?.['@value'],
+        abstract: abstract?.['@value'],
         govMetadataUrl: url,
       };
+      return govActionProposal;
+    } catch (e) {
+      this.logger.log(
+        `There has been an exception when fetching data for governance action proposal: ${e}`,
+      );
+      return null;
     }
-    return govActionProposal;
   }
 }

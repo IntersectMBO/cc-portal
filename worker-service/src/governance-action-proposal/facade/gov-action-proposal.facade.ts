@@ -33,6 +33,7 @@ export class GovActionProposalFacade {
   }
 
   async syncGovActionProposalTable() {
+    //TODO This should be refactored with LIMIT + OFFSET Calls directly from DB sync, there is no need to fetch all ids first
     const govActionProposalIdsArray: object[] =
       await this.govActionProposalService.getGovActionProposalIds();
 

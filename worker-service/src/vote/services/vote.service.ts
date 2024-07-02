@@ -46,13 +46,16 @@ export class VoteService extends CommonService {
     this.logger = new Logger(VoteService.name);
   }
 
-  async storeVoteData(voteRequest: VoteRequest[]): Promise<void> {
-    const votes = await this.prepareVotes(voteRequest);
-    const govActionProposalRequest: GovActionProposalRequest[] =
-      await this.getGovActionProposalsFromDbSync(voteRequest);
+  async storeVoteData(voteRequests: VoteRequest[]): Promise<void> {
+    const votes = await this.prepareVotes(voteRequests);
+    // 1. Check if they are already within our DB - if yes do nothing
+    // 2. If not - get GAP data from db + from metadata url
+    // If there is data from metadata url, insert remaining stuff regardless
+    const govActionProposalRequests: GovActionProposalRequest[] =
+      await this.getGovActionProposalsFromDbSync(voteRequests);
     try {
       await this.govActionProposalService.storeGovActionProposalData(
-        govActionProposalRequest,
+        govActionProposalRequests,
       );
       await this.entityManager.transaction(async () => {
         return await this.voteRepository.save(votes);
@@ -91,7 +94,7 @@ export class VoteService extends CommonService {
         title: voteRequests[i].reasoningTitle,
         comment: voteRequests[i].comment,
         submitTime: voteRequests[i].submitTime,
-        govActionProposal: govActionProposal.id,
+        govActionProposal: voteRequests[i].govActionProposalId,
       };
       votes.push(vote);
     }
@@ -162,9 +165,8 @@ export class VoteService extends CommonService {
   private async getGovActionProposalsFromDbSync(
     voteRequests: VoteRequest[],
   ): Promise<GovActionProposalRequest[]> {
-    const voteIds: string[] = [];
-    voteRequests.forEach((voteRequest) => {
-      voteIds.push(voteRequest.id);
+    const voteIds = voteRequests.map((request) => {
+      return request.id;
     });
     const dbData = await this.getDataFromSqlFile(
       SQL_FILE_PATH.GET_GOV_ACTION_PROPOSALS_FROM_VOTES,
@@ -172,15 +174,13 @@ export class VoteService extends CommonService {
     );
 
     const results: GovActionProposalRequest[] = [];
-    if (dbData.length > 0) {
-      dbData.forEach((govActionProposal) => {
-        results.push(
-          GovActionProposalMapper.dbSyncToGovActionProposalRequest(
-            govActionProposal,
-          ),
-        );
-      });
-    }
+    dbData.forEach((govActionProposal) => {
+      results.push(
+        GovActionProposalMapper.dbSyncToGovActionProposalRequest(
+          govActionProposal,
+        ),
+      );
+    });
     return results;
   }
 
