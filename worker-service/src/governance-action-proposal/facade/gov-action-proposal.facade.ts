@@ -19,7 +19,7 @@ export class GovActionProposalFacade {
   ) {
     this.cronInterval =
       this.configService.get<string>('SCHEDULER_JOBS_DB_SYNC_FREQUENCY') ||
-      '*/30 * * * * *';
+      '0 * * * * *';
     this.addCronJob();
   }
 

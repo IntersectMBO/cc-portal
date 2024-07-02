@@ -1,0 +1,96 @@
+import { Logger } from '@nestjs/common';
+import * as fs from 'fs';
+import * as path from 'path';
+import { DataSource } from 'typeorm';
+import { CONNECTION_NAME_DB_SYNC } from './constants/sql.constants';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { GovActionProposalDto } from 'src/governance-action-proposal/dto/gov-action-proposal.dto';
+import axios from 'axios';
+
+export abstract class CommonService {
+  protected logger = new Logger(CommonService.name);
+
+  constructor(
+    @InjectDataSource(CONNECTION_NAME_DB_SYNC)
+    protected dataSource: DataSource,
+  ) {}
+
+  async getDataFromSqlFile(
+    filePath: string,
+    whereInArray: string[],
+  ): Promise<object[]> {
+    const fullPath = path.resolve(__dirname, filePath);
+    let query = fs.readFileSync(fullPath, 'utf-8');
+    const placeholders = whereInArray
+      .map((_, index) => `$${index + 1}`)
+      .join(', ');
+    query = query.replace(':whereInArray', placeholders);
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    let result: object[];
+    try {
+      await queryRunner.startTransaction();
+      result = await queryRunner.manager.query(query, whereInArray);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+      return result;
+    }
+  }
+
+  async getDataFromSqlFileByPath(filePath: string): Promise<object[]> {
+    const fullPath = path.resolve(__dirname, filePath);
+    const query = fs.readFileSync(fullPath, 'utf-8');
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    let result: object[];
+    try {
+      await queryRunner.startTransaction();
+      result = await queryRunner.manager.query(query);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+      return result;
+    }
+  }
+
+  async getGovActionProposalFromUrl(
+    url: string,
+  ): Promise<Partial<GovActionProposalDto>> {
+    let govActionProposal: Partial<GovActionProposalDto> =
+      await this.getNonValidMetadataUrl(url);
+    if (govActionProposal) {
+      return govActionProposal;
+    }
+    const response = await axios.get(url);
+    const jsonData = response.data;
+    const title = jsonData.body?.title;
+    const abstract = jsonData.body?.abstract;
+    govActionProposal = {
+      title: title?.['@value'],
+      abstract: abstract?.['@value'],
+      govMetadataUrl: url,
+    };
+
+    return govActionProposal;
+  }
+
+  async getNonValidMetadataUrl(
+    url: string,
+  ): Promise<Partial<GovActionProposalDto>> {
+    let govActionProposal: Partial<GovActionProposalDto>;
+    if (!url.includes('http') || !url.includes('https')) {
+      govActionProposal = {
+        govMetadataUrl: url,
+      };
+    }
+    return govActionProposal;
+  }
+}

@@ -1,11 +1,8 @@
 import {
-  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import * as fs from 'fs';
-import * as path from 'path';
 import {
   InjectDataSource,
   InjectEntityManager,
@@ -25,16 +22,15 @@ import { PageOptionsDto } from '../../util/pagination/dto/page-options.dto';
 import { ConfigService } from '@nestjs/config';
 import { GovActionProposalDto } from '../../governance-action-proposal/dto/gov-action-proposal.dto';
 import { GovActionProposalService } from '../../governance-action-proposal/services/gov-action-proposal.service';
-import axios from 'axios';
 import { GovActionProposalMapper } from '../../governance-action-proposal/mapper/gov-action-proposal.mapper';
 import { GovActionProposalRequest } from '../../governance-action-proposal/dto/gov-action-proposal.request';
+import { CommonService } from 'src/common/common-service';
 
 @Injectable()
-export class VoteService {
-  private logger = new Logger(VoteService.name);
+export class VoteService extends CommonService {
   constructor(
     @InjectDataSource(CONNECTION_NAME_DB_SYNC)
-    private dataSource: DataSource,
+    dataSource: DataSource,
     @InjectRepository(HotAddress)
     private readonly hotAddressRepository: Repository<HotAddress>,
     @InjectRepository(Vote)
@@ -45,14 +41,16 @@ export class VoteService {
     private readonly entityManager: EntityManager,
     private readonly configService: ConfigService,
     private readonly govActionProposalService: GovActionProposalService,
-  ) {}
+  ) {
+    super(dataSource);
+    this.logger = new Logger(VoteService.name);
+  }
 
   async storeVoteData(voteRequest: VoteRequest[]): Promise<void> {
     const votes = await this.prepareVotes(voteRequest);
     const govActionProposalRequest: GovActionProposalRequest[] =
       await this.getGovActionProposalsFromDbSync(voteRequest);
     try {
-      // TODO: ask Aca should we store gaps from votes with valid urls that don't have abstract & title
       await this.govActionProposalService.storeGovActionProposalData(
         govActionProposalRequest,
       );
@@ -143,48 +141,6 @@ export class VoteService {
     return govActionProposalDtos;
   }
 
-  private async getGovActionProposalFromUrl(
-    url: string,
-  ): Promise<Partial<GovActionProposalDto>> {
-    try {
-      let govActionProposal: Partial<GovActionProposalDto> =
-        await this.getNonValidMetadataUrl(url);
-      if (govActionProposal) {
-        return govActionProposal;
-      }
-      const response = await axios.get(url);
-      const jsonData = response.data;
-      const title: string = jsonData.body?.title;
-      const abstract: string = jsonData.body?.abstract;
-      if (!title || !abstract) {
-        throw new BadRequestException(
-          'This url does not contain required data',
-        );
-      }
-      govActionProposal = {
-        title: title?.['@value'],
-        abstract: abstract?.['@value'],
-        govMetadataUrl: url,
-      };
-
-      return govActionProposal;
-    } catch (err) {
-      this.logger.error(err);
-    }
-  }
-
-  private async getNonValidMetadataUrl(
-    url: string,
-  ): Promise<Partial<GovActionProposalDto>> {
-    let govActionProposal: Partial<GovActionProposalDto>;
-    if (!url.includes('http') || !url.includes('https')) {
-      govActionProposal = {
-        govMetadataUrl: url,
-      };
-    }
-    return govActionProposal;
-  }
-
   async getVoteDataFromDbSync(
     mapHotAddresses: Map<string, string>,
   ): Promise<VoteRequest[]> {
@@ -226,33 +182,6 @@ export class VoteService {
       });
     }
     return results;
-  }
-
-  private async getDataFromSqlFile(
-    filePath: string,
-    whereInArray: string[],
-  ): Promise<object[]> {
-    const fullPath = path.resolve(__dirname, filePath);
-    let query = fs.readFileSync(fullPath, 'utf-8');
-    const placeholders = whereInArray
-      .map((_, index) => `$${index + 1}`)
-      .join(', ');
-    query = query.replace(':whereInArray', placeholders);
-
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    let result: object[];
-    try {
-      await queryRunner.startTransaction();
-      result = await queryRunner.manager.query(query, whereInArray);
-      await queryRunner.commitTransaction();
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw error;
-    } finally {
-      await queryRunner.release();
-      return result;
-    }
   }
 
   async countHotAddressPages(): Promise<number> {
