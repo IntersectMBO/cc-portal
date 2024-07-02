@@ -5,6 +5,7 @@ export const PATHS = {
   latestUpdates: "/latest-updates",
   myActions: "/my-actions",
   governanceActions: "/governance-actions",
+  logout: "/logout",
   admin: {
     home: "/admin",
     dashboard: "/admin/dashboard",

@@ -11,3 +11,4 @@ export * from "./getProposalTypeLabel";
 export * from "./helpers";
 export * from "./useDebounce";
 export * from "./useManageQueryParams";
+export * from "./routes";
