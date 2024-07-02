@@ -15,22 +15,6 @@ jobs:
         with:
           ref: develop
 
-      - name: Deploy to Digital Ocean droplet via SSH action
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.DEVELOP_HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSHKEY }}
-          script: |
-            eval `ssh-agent -s`
-            ssh-add cc
-            cd cc-portal \
-            && git pull origin develop \
-            && docker compose up -d --force-recreate --build \
-            && docker container exec -it postgres sh \
-            && psql -U BEdev24 -d cc-portal \
-               -c "
-               - name: Deploy to Digital Ocean droplet via SSH action
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DEVELOP_HOST }}
