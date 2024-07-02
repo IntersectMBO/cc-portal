@@ -23,5 +23,6 @@ export * from "./OutlinedLightButton";
 export * from "./ClickOutside";
 export * from "./ContentWrapper";
 export * from "./GovActionStatusPill";
+export * from "./ShowMoreButton";
 
 export * from "./types";

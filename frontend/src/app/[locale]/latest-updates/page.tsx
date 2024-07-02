@@ -30,7 +30,10 @@ export default async function LatestUpdatesPage({
               description="latestUpdates.description"
             />
           ) : (
-            <LatestUpdates latestUpdates={latestUpdates} />
+            <LatestUpdates
+              latestUpdates={latestUpdates.data}
+              paginationMeta={latestUpdates.meta}
+            />
           )}
         </Suspense>
       </ContentWrapper>

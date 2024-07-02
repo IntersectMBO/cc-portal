@@ -51,4 +51,14 @@ export class IpfsMapper {
 
     return contentDto;
   }
+
+  // static ipfsContentToReasoning(ipfsContentDto: IpfsContentDto): Reasoning {
+  //   const reasoning = new Reasoning();
+  //   reasoning.cid = ipfsContentDto.cid;
+  //   reasoning.url = ipfsContentDto.url;
+  //   reasoning.blake2b = ipfsContentDto.blake2b;
+  //   reasoning.title = ipfsContentDto.title;
+
+  //   return reasoning;
+  // }
 }

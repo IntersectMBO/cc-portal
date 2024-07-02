@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { ICONS } from "@consts";
 import { UserListItem } from "..";
 import { UserAvatar } from "../../molecules/UserCard";
-import { formatDisplayDate } from "@utils";
+import { formatDisplayDate, truncateText } from "@utils";
 
 export const MembersCard = ({
   id,
@@ -44,7 +44,7 @@ export const MembersCard = ({
           <Typography variant="headline5">{name} </Typography>
 
           <Typography fontWeight={400} variant="body1">
-            {description}
+            {truncateText(description, 150)}
           </Typography>
         </Box>
       </Box>

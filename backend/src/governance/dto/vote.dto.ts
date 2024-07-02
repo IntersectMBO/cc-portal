@@ -10,7 +10,7 @@ export class VoteDto {
   voteValue: VoteValue;
   reasoningTitle: string;
   reasoningComment: string;
-  govProposalId: number;
+  govProposalId: string;
   govProposalTitle: string;
   govProposalType: string;
   govProposalResolved: boolean;

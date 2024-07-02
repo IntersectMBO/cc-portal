@@ -7,6 +7,7 @@ import {
   DecodedToken,
   FetchUserData,
   LoginResponse,
+  PaginationMeta,
   Permissions,
 } from "./requests";
 import {
@@ -18,7 +19,9 @@ import {
   GovActionStatus,
   PreviewReasoningModalState,
 } from "@/components/organisms";
+
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
+const DEFAULT_PAGINATION_LIMIT = 2;
 
 export async function isTokenExpired(token): Promise<boolean> {
   try {
@@ -127,22 +130,30 @@ export async function getUser(id: string): Promise<FetchUserData> {
 
 export async function getUsersAdmin({
   search,
+  page = 1,
+  limit = DEFAULT_PAGINATION_LIMIT,
+  searchParams,
 }: {
   search?: string;
-}): Promise<FetchUserData[]> {
+  page?: number;
+  limit?: number;
+  searchParams?: URLSearchParams;
+}): Promise<{ data: FetchUserData[]; meta: PaginationMeta }> {
   try {
     const token = getAccessToken();
     const { userId } = await decodeUserToken();
-
-    const res: { data: FetchUserData[] } = await axiosInstance.get(
-      `/api/users/${userId}/search-admin?${search ? `search=${search}` : ""}`,
-      {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      }
-    );
-    return res.data;
+    const res: { data: FetchUserData[]; meta: PaginationMeta } =
+      await axiosInstance.get(
+        `/api/users/${userId}/search-admin?${
+          search ? `search=${search}` : ""
+        }&${page ? `page=${page}` : ""}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        }
+      );
+    return res;
   } catch (error) {
     console.log("error get users admin", error);
   }
@@ -151,42 +162,53 @@ export async function getUsersAdmin({
 export async function getMembers({
   search,
   sortBy,
+  page = 1,
+  limit = DEFAULT_PAGINATION_LIMIT,
 }: {
   search?: string;
   sortBy?: string;
-}): Promise<FetchUserData[]> {
+  page?: number;
+  limit?: number;
+  searchParams?: any;
+}): Promise<{ data: FetchUserData[]; meta: PaginationMeta }> {
   try {
-    const res: { data: FetchUserData[] } = await axiosInstance.get(
-      `/api/users/cc-member/search?${search ? `search=${search}` : ""}&${
-        sortBy ? `sortBy=${sortBy}` : ""
-      }`
-    );
-    return res.data;
+    const res: { data: FetchUserData[]; meta: PaginationMeta } =
+      await axiosInstance.get(
+        `/api/users/cc-member/search?${search ? `search=${search}` : ""}&${
+          sortBy ? `sortBy=${sortBy}` : ""
+        }&${page ? `page=${page}` : ""}&limit=${limit}`
+      );
+    return res;
   } catch (error) {
     console.log("error get members", error);
   }
 }
 
 export async function getLatestUpdates({
+  page = 1,
+  limit = DEFAULT_PAGINATION_LIMIT,
   search,
   govActionType,
   vote,
   sortBy,
 }: {
+  page?: number;
+  limit?: number;
   search?: string;
   govActionType?: string;
   vote?: string;
   sortBy?: string;
-}): Promise<VotesTableI[]> {
+}): Promise<{ data: VotesTableI[]; meta: PaginationMeta }> {
   try {
-    const res: { data: VotesTableI[] } = await axiosInstance.get(
-      `/api/governance/votes/search?${search ? `search=${search}` : ""}&${
-        govActionType ? `filter.govActionType=$in:${govActionType}` : ""
-      }&${vote ? `filter.vote=$in:${vote}` : ""}&${
-        sortBy ? `sortBy=${sortBy}` : ""
-      }`
-    );
-    return res.data;
+    const res: { data: VotesTableI[]; meta: PaginationMeta } =
+      await axiosInstance.get(
+        `/api/governance/votes/search?${search ? `search=${search}` : ""}&${
+          govActionType ? `filter.govActionType=$in:${govActionType}` : ""
+        }&${vote ? `filter.vote=$in:${vote}` : ""}&${
+          sortBy ? `sortBy=${sortBy}` : ""
+        }&${page ? `page=${page}` : ""}&limit=${limit}`
+      );
+    return res;
   } catch (error) {
     console.log("error get latest updates", error);
   }

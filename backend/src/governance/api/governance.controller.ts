@@ -1,13 +1,15 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
-  ParseIntPipe,
   ParseUUIDPipe,
+  Post,
   UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -23,6 +25,8 @@ import { VOTE_PAGINATION_CONFIG } from '../util/pagination/votes-pagination.conf
 import { GovernanceActionMetadataResponse } from './response/gov-action-metadata.response';
 import { GAP_PAGINATION_CONFIG } from '../util/pagination/gap-pagination.config';
 import { GovernanceActionProposalResponse } from './response/gov-action-proposal.response';
+import { ReasoningRequest } from './request/reasoning.request';
+import { ReasoningResponse } from './response/reasoning.response';
 @ApiTags('Governance')
 @Controller('governance')
 export class GovernanceController {
@@ -40,7 +44,7 @@ export class GovernanceController {
   })
   @Get('proposals/:id')
   async findOne(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
   ): Promise<GovernanceActionMetadataResponse> {
     return await this.governanceFacade.findGovActionProposalById(id);
   }
@@ -107,5 +111,32 @@ export class GovernanceController {
     @Paginate() query: PaginateQuery,
   ): Promise<PaginatedResponse<VoteResponse>> {
     return await this.governanceFacade.searchGovVotes(query, id);
+  }
+
+  @ApiOperation({
+    summary: 'Add reasoning to governance action proposals',
+  })
+  @ApiBearerAuth('JWT-auth')
+  @ApiBody({ type: ReasoningRequest })
+  @ApiResponse({
+    status: 200,
+    description: 'Reasoning added successfully',
+    type: ReasoningResponse,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Reasoning already exists for this user',
+  })
+  @UseGuards(JwtAuthGuard, UserPathGuard)
+  @Post('reasoning/users/:id')
+  async addReasoning(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() reasoningRequest: ReasoningRequest,
+  ): Promise<ReasoningResponse> {
+    return await this.governanceFacade.addReasoning(id, reasoningRequest);
   }
 }
