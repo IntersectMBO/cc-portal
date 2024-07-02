@@ -55,7 +55,7 @@ export interface ResponseErrorI {
   statusCode?: number;
 }
 
-interface FetchUsersAdminI extends ResponseErrorI {
+export interface FetchUsersAdminI extends ResponseErrorI {
   data?: FetchUserData[];
   meta?: PaginationMeta;
 }
