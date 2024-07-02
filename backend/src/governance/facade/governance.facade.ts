@@ -28,11 +28,11 @@ export class GovernanceFacade {
 
   async addReasoning(
     userId: string,
+    proposalId: string,
     reasoningRequest: ReasoningRequest,
   ): Promise<ReasoningResponse> {
-    const govActionDto = await this.governanceService.findGovProposalById(
-      reasoningRequest.govActionProposalId,
-    );
+    const govActionDto =
+      await this.governanceService.findGovProposalById(proposalId);
     const reasoningJson = await this.createReasoningJson(
       reasoningRequest,
       govActionDto,
@@ -65,6 +65,18 @@ export class GovernanceFacade {
     const ipfsContentDto =
       await this.ipfsService.addReasoningToIpfs(reasoningJson);
     return ipfsContentDto;
+  }
+
+  async getReasoning(
+    userId: string,
+    proposalId: string,
+  ): Promise<ReasoningResponse> {
+    const response =
+      await this.governanceService.findReasoningForUserByProposalId(
+        userId,
+        proposalId,
+      );
+    return GovernanceMapper.reasoningDtoToResponse(response);
   }
 
   async findGovActionProposalById(

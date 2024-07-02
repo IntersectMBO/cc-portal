@@ -48,7 +48,8 @@ export class GovernanceActionProposalResponse {
   metadataUrl: string;
 
   @ApiProperty({
-    description: 'Vote Status for a Given Governance Action Proposal for a particular user.',
+    description:
+      'Vote Status for a Given Governance Action Proposal for a particular user.',
     example: 'Pending',
   })
   @Expose({ name: 'vote_status' })

@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   ParseUUIDPipe,
   Post,
   UseGuards,
@@ -63,7 +64,7 @@ export class GovernanceController {
     status: 404,
     description: 'Governance action proposal with {id} not found',
   })
-  @Get('proposals/users/:id/search')
+  @Get('users/:id/proposals/search')
   @UseGuards(JwtAuthGuard, UserPathGuard)
   async searchGovActionProposalsPaginated(
     @Param('id', ParseUUIDPipe) id: string,
@@ -104,7 +105,7 @@ export class GovernanceController {
     isArray: true,
     type: PaginatedResponse<VoteResponse>,
   })
-  @Get('votes/users/:id/search')
+  @Get('users/:id/votes/search')
   @UseGuards(JwtAuthGuard, UserPathGuard)
   async searchUserActivityPaginated(
     @Param('id', ParseUUIDPipe) id: string,
@@ -132,11 +133,43 @@ export class GovernanceController {
     description: 'Reasoning already exists for this user',
   })
   @UseGuards(JwtAuthGuard, UserPathGuard)
-  @Post('reasoning/users/:id')
+  @Post('users/:id/proposals/:proposalId/reasoning')
   async addReasoning(
     @Param('id', ParseUUIDPipe) id: string,
+    @Param('proposalId', ParseIntPipe) proposalId: string,
     @Body() reasoningRequest: ReasoningRequest,
   ): Promise<ReasoningResponse> {
-    return await this.governanceFacade.addReasoning(id, reasoningRequest);
+    return await this.governanceFacade.addReasoning(
+      id,
+      proposalId,
+      reasoningRequest,
+    );
+  }
+
+  @ApiOperation({
+    summary: 'Get my reasoning for an action proposal',
+  })
+  @ApiBearerAuth('JWT-auth')
+  @ApiBody({ type: ReasoningRequest })
+  @ApiResponse({
+    status: 200,
+    description: 'Reasoning retrieved successfully',
+    type: ReasoningResponse,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Reasoning not found',
+  })
+  @UseGuards(JwtAuthGuard, UserPathGuard)
+  @Get('users/:id/proposals/:proposalId/reasoning')
+  async getReasoning(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('proposalId', ParseUUIDPipe) proposalId: string,
+  ): Promise<ReasoningResponse> {
+    return await this.governanceFacade.getReasoning(id, proposalId);
   }
 }

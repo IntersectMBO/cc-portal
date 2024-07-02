@@ -77,17 +77,24 @@ export class GovernanceService {
   }
 
   async addReasoning(reasoningDto: ReasoningDto): Promise<ReasoningDto> {
-    /*const existing = await this.reasoningRepository.findOne({
-      where: {
-        userId: reasoningDto.userId,
-        govActionProposalId: reasoningDto.govActionProposalId,
-      },
-    });
-    if (existing) {
-      throw new ConflictException(`Reasoning already exists for this user`);
-    }*/
     const reasoning = this.reasoningRepository.create(reasoningDto);
     const savedReasoning = await this.reasoningRepository.save(reasoning);
     return GovernanceMapper.reasoningToDto(savedReasoning);
+  }
+
+  async findReasoningForUserByProposalId(
+    userId: string,
+    proposalId: string,
+  ): Promise<ReasoningDto> {
+    const reasoning = await this.reasoningRepository.findOne({
+      where: {
+        userId: userId,
+        govActionProposalId: proposalId,
+      },
+    });
+    if (!reasoning) {
+      throw new NotFoundException(`Reasoning not found`);
+    }
+    return GovernanceMapper.reasoningToDto(reasoning);
   }
 }
