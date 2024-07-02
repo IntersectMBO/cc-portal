@@ -36,18 +36,19 @@ export const AddMemberModal = () => {
   const role = useWatch({ control, name: "role" });
 
   const onSubmit = async (data: AddMemberFormData) => {
-    try {
-      if (isAdminRole(data.role)) {
-        await registerAdmin(data.email, data.permissions);
-      } else {
-        await registerUser(data.email);
-      }
-      router.refresh();
-      addSuccessAlert(t("addMember.alerts.success"));
-      closeModal();
-    } catch (error) {
-      addErrorAlert(t("addMember.alerts.error"));
+    let res;
+    if (isAdminRole(data.role)) {
+      res = await registerAdmin(data.email, data.permissions);
+    } else {
+      res = await registerUser(data.email);
     }
+    if (res?.error) {
+      addErrorAlert(res.error);
+    } else {
+      addSuccessAlert(t("addMember.alerts.success"));
+    }
+    closeModal();
+    router.refresh();
   };
 
   return (

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Grid } from "@mui/material";
 import { UsersListItem } from "./UsersListItem";
@@ -11,22 +11,32 @@ import { isEmpty } from "@utils";
 import { usePagination } from "@/lib/utils/usePagination";
 import { ShowMoreButton } from "@atoms";
 import { useSearchParams } from "next/navigation";
+import { useSnackbar } from "@/context/snackbar";
 
 export function UsersList({
   usersList,
   paginationMeta,
+  error,
 }: {
   usersList: UserListItem[];
   paginationMeta: PaginationMeta;
+  error?: string;
 }) {
   const searchParams = useSearchParams();
+  const { addErrorAlert } = useSnackbar();
   const { data, pagination, isLoading, loadMore } = usePagination(
     usersList,
     paginationMeta,
     (page) => getUsersAdmin({ page, search: searchParams.get("search") })
   );
 
-  if (isEmpty(data)) {
+  useEffect(() => {
+    if (error) {
+      addErrorAlert(error);
+    }
+  }, [error]);
+
+  if (isEmpty(data) || error) {
     return <NotFound title="members.title" description="members.description" />;
   }
   return (

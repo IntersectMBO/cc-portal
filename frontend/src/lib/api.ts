@@ -9,6 +9,8 @@ import {
   LoginResponse,
   PaginationMeta,
   Permissions,
+  ResponseErrorI,
+  FetchUsersAdminI,
 } from "./requests";
 import {
   ConstitutionByCid,
@@ -20,10 +22,11 @@ import {
   PreviewReasoningModalState,
 } from "@/components/organisms";
 
+import { getTranslations } from "next-intl/server";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 const DEFAULT_PAGINATION_LIMIT = 2;
 
-export async function isTokenExpired(token): Promise<boolean> {
+export async function isTokenExpired(token: string): Promise<boolean> {
   try {
     // Decode the token without verifying the signature to get the payload
     const decodedToken = jwt.decode(token) as { exp: number };
@@ -138,13 +141,14 @@ export async function getUsersAdmin({
   page?: number;
   limit?: number;
   searchParams?: URLSearchParams;
-}): Promise<{ data: FetchUserData[]; meta: PaginationMeta }> {
+}): Promise<FetchUsersAdminI> {
+  const token = getAccessToken();
+
   try {
-    const token = getAccessToken();
-    const { userId } = await decodeUserToken();
+    const decodedToken = await decodeUserToken();
     const res: { data: FetchUserData[]; meta: PaginationMeta } =
       await axiosInstance.get(
-        `/api/users/${userId}/search-admin?${
+        `/api/users/${decodedToken?.userId}/search-admin?${
           search ? `search=${search}` : ""
         }&${page ? `page=${page}` : ""}&limit=${limit}`,
         {
@@ -155,7 +159,15 @@ export async function getUsersAdmin({
       );
     return res;
   } catch (error) {
-    console.log("error get users admin", error);
+    const t = await getTranslations();
+    const customErrorMessage =
+      !token &&
+      error.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("General.errors.somethingWentWrong"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 
@@ -332,9 +344,9 @@ export async function getReasoningData(id: string) {
 }
 
 export async function registerUser(email: string) {
-  try {
-    const token = getAccessToken();
+  const token = getAccessToken();
 
+  try {
     const res = await axiosInstance.post(
       "/api/auth/register-user",
       {
@@ -348,14 +360,22 @@ export async function registerUser(email: string) {
     );
     return res;
   } catch (error) {
-    console.log("error register user", error);
+    const t = await getTranslations();
+    const customErrorMessage =
+      !token &&
+      error.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("Modals.addMember.alerts.error"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 
 export async function registerAdmin(email: string, permissions: Permissions[]) {
-  try {
-    const token = getAccessToken();
+  const token = getAccessToken();
 
+  try {
     const res = await axiosInstance.post(
       "/api/auth/register-admin",
       {
@@ -370,22 +390,44 @@ export async function registerAdmin(email: string, permissions: Permissions[]) {
     );
     return res;
   } catch (error) {
-    console.log("error register admin");
+    const t = await getTranslations();
+    const customErrorMessage =
+      !token &&
+      error.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("Modals.addMember.alerts.error"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 
-export async function editUser(id: string, data: FormData) {
+export async function editUser(
+  id: string,
+  data: FormData
+): Promise<ResponseErrorI | FetchUserData> {
+  const token = getAccessToken();
   try {
-    const token = getAccessToken();
-    const response = await axiosInstance.patch(`/api/users/${id}`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response: FetchUserData = await axiosInstance.patch(
+      `/api/users/${id}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return response;
   } catch (error) {
-    console.log("ERROREDIT", error, "ERROREDIT");
-    throw error;
+    const t = await getTranslations();
+    const customErrorMessage =
+      !token &&
+      error.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("Modals.signUp.alerts.error"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 
@@ -416,9 +458,9 @@ export async function getConstitutionByCid(
 }
 
 export async function uploadConstitution(data: FormData) {
-  try {
-    const token = getAccessToken();
+  const token = getAccessToken();
 
+  try {
     const response = await axiosInstance.post("/api/constitution", data, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -426,14 +468,28 @@ export async function uploadConstitution(data: FormData) {
     });
     return response.data;
   } catch (error) {
-    throw error;
+    const t = await getTranslations();
+    let errorMessage = t("Modals.uploadConstitution.alerts.error");
+    if (token && error.res?.statusCode === 401) {
+      errorMessage = t(`General.errors.sessionExpired`);
+    } else if (error.res?.statusCode === 409) {
+      errorMessage = t(`Modals.uploadConstitution.alerts.409`);
+    }
+
+    return {
+      error: errorMessage,
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 
-export async function uploadUserPhoto(userId: string, data: FormData) {
+export async function uploadUserPhoto(
+  userId: string,
+  data: FormData
+): Promise<ResponseErrorI | FetchUserData> {
   const token = getAccessToken();
   try {
-    const response = await axiosInstance.patch(
+    const response: FetchUserData = await axiosInstance.patch(
       `/api/users/${userId}/profile-photo`,
       data,
       {
@@ -442,8 +498,16 @@ export async function uploadUserPhoto(userId: string, data: FormData) {
         },
       }
     );
-    return response.data;
+    return response;
   } catch (error) {
-    throw error;
+    const t = await getTranslations();
+    const customErrorMessage =
+      !token &&
+      error.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("Modals.signUp.alerts.error"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }

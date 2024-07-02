@@ -49,3 +49,13 @@ export interface PaginationMeta {
   has_previous_page: boolean;
   has_next_page: boolean;
 }
+
+export interface ResponseErrorI {
+  error?: string;
+  statusCode?: number;
+}
+
+interface FetchUsersAdminI extends ResponseErrorI {
+  data?: FetchUserData[];
+  meta?: PaginationMeta;
+}
