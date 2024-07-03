@@ -25,6 +25,5 @@ jobs:
             ssh-add cc
             cd cc-portal \
             && git pull origin develop \
-            && docker compose up -d --build --force-recreate \
-            && docker image rm $(docker image ls -f "dangling=true")
+            && docker compose up -d
     
