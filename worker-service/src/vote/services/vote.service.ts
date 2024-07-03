@@ -23,7 +23,6 @@ import { ConfigService } from '@nestjs/config';
 import { GovActionProposalDto } from '../../governance-action-proposal/dto/gov-action-proposal.dto';
 import { GovActionProposalService } from '../../governance-action-proposal/services/gov-action-proposal.service';
 import { GovActionProposalMapper } from '../../governance-action-proposal/mapper/gov-action-proposal.mapper';
-import { GovActionProposalRequest } from '../../governance-action-proposal/dto/gov-action-proposal.request';
 import { CommonService } from 'src/common/common-service';
 
 @Injectable()
@@ -48,9 +47,6 @@ export class VoteService extends CommonService {
 
   async storeVoteData(voteRequests: VoteRequest[]): Promise<void> {
     const votes = await this.prepareVotes(voteRequests);
-    // 1. Check if they are already within our DB - if yes do nothing
-    // 2. If not - get GAP data from db + from metadata url
-    // If there is data from metadata url, insert remaining stuff regardless
     try {
       await this.entityManager.transaction(async () => {
         return await this.voteRepository.save(votes);
@@ -67,6 +63,10 @@ export class VoteService extends CommonService {
     const votes = [];
     const existingGAPs = await this.findGAPsForVotes(voteRequests);
     for (let i = 0; i < voteRequests.length; i++) {
+      const existingGAP = await this.findGAPForVote(
+        voteRequests[i],
+        existingGAPs,
+      );
       const vote: Partial<Vote> = {
         id: voteRequests[i].id,
         userId: voteRequests[i].userId,
@@ -75,12 +75,9 @@ export class VoteService extends CommonService {
         title: voteRequests[i].reasoningTitle,
         comment: voteRequests[i].comment,
         submitTime: new Date(voteRequests[i].submitTime),
+        govActionProposal: existingGAP,
       };
-      const GAPExistsForVote = await this.checkGAPExistsForVote(
-        voteRequests[i],
-        existingGAPs,
-      );
-      if (!GAPExistsForVote) {
+      if (!existingGAP) {
         const govActionProposal = await this.prepareGAP(voteRequests[i]);
         vote.govActionProposal = govActionProposal;
       }
@@ -106,13 +103,22 @@ export class VoteService extends CommonService {
     return existingGovActionProposals;
   }
 
-  private async checkGAPExistsForVote(
+  private async findGAPForVote(
     voteRequest: VoteRequest,
     existingGAPs: GovActionProposalDto[],
-  ): Promise<boolean> {
-    return existingGAPs.some(
+  ): Promise<GovActionProposal> | null {
+    const foundedGap = existingGAPs.find(
       (gap) => gap.id === voteRequest.govActionProposalId,
     );
+    if (foundedGap) {
+      const govActionProposal = await this.govActionProposalRepository.findOne({
+        where: {
+          id: foundedGap.id,
+        },
+      });
+      return govActionProposal;
+    }
+    return null;
   }
 
   private async prepareGAP(
@@ -167,28 +173,6 @@ export class VoteService extends CommonService {
     const results: VoteRequest[] = [];
     dbData.forEach((vote) => {
       results.push(VoteMapper.dbSyncToVoteRequest(vote, mapHotAddresses));
-    });
-    return results;
-  }
-
-  private async getGovActionProposalsFromDbSync(
-    voteRequests: VoteRequest[],
-  ): Promise<GovActionProposalRequest[]> {
-    const voteIds = voteRequests.map((request) => {
-      return request.id;
-    });
-    const dbData = await this.getDataFromSqlFile(
-      SQL_FILE_PATH.GET_GOV_ACTION_PROPOSALS_FROM_VOTES,
-      voteIds,
-    );
-
-    const results: GovActionProposalRequest[] = [];
-    dbData.forEach((govActionProposal) => {
-      results.push(
-        GovActionProposalMapper.dbSyncToGovActionProposalRequest(
-          govActionProposal,
-        ),
-      );
     });
     return results;
   }

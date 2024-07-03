@@ -45,7 +45,9 @@ export class GovActionProposalFacade {
           perPage,
           offset,
         );
-      await this.producer.addToGovActionQueue(dbSyncData);
+      if (dbSyncData.length > 0) {
+        await this.producer.addToGovActionQueue(dbSyncData);
+      }
       offset += perPage;
     } while (dbSyncData.length === perPage);
   }
