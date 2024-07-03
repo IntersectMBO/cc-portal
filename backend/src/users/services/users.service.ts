@@ -245,8 +245,8 @@ export class UsersService {
     isAdmin: boolean,
   ): Promise<PaginatedDto<UserDto>> {
     const customQuery = isAdmin
-      ? this.createAdminSearchQuery()
-      : this.createUserSearchQuery();
+      ? this.returnAdminSearchQuery()
+      : this.returnUserSearchQuery();
 
     const result = await this.paginator.paginate(
       query,
@@ -260,14 +260,14 @@ export class UsersService {
     );
   }
 
-  private createAdminSearchQuery(): SelectQueryBuilder<User> {
+  private returnAdminSearchQuery(): SelectQueryBuilder<User> {
     return this.userRepository
       .createQueryBuilder('users')
       .leftJoinAndSelect('users.role', 'role')
       .where('role.code != :code', { code: RoleEnum.SUPER_ADMIN });
   }
 
-  private createUserSearchQuery(): SelectQueryBuilder<User> {
+  private returnUserSearchQuery(): SelectQueryBuilder<User> {
     return this.userRepository
       .createQueryBuilder('users')
       .leftJoinAndSelect('users.role', 'role')

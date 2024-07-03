@@ -1,14 +1,14 @@
 import { FilterOperator, PaginateConfig } from 'nestjs-paginate';
-import { Vote } from 'src/governance/entities/vote.entity';
+import { GovActionProposal } from 'src/governance/entities/gov-action-proposal.entity';
 
-export const GAP_PAGINATION_CONFIG: PaginateConfig<Vote> = {
-  relations: ['govActionProposal'],
-  sortableColumns: ['submitTime', 'govActionProposal.title'],
+export const GAP_PAGINATION_CONFIG: PaginateConfig<GovActionProposal> = {
+  relations: ['reasonings', 'votes'],
+  sortableColumns: ['endTime'],
   filterableColumns: {
+    'reasonings.userId': [FilterOperator.NULL],
+    'votes.id': [FilterOperator.NULL],
     govActionType: [FilterOperator.EQ, FilterOperator.IN],
-    vote: [FilterOperator.EQ, FilterOperator.IN],
-    userId: [FilterOperator.EQ],
   },
-  searchableColumns: ['govActionProposal.title'],
-  defaultSortBy: [['submitTime', 'DESC']],
+  searchableColumns: ['title'],
+  defaultSortBy: [['endTime', 'DESC']],
 };

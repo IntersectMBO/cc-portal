@@ -26,11 +26,11 @@ export class GovernanceActionProposalResponse {
   title: string;
 
   @ApiProperty({
-    description: 'Category of a governance action proposal',
+    description: 'Type of a governance action proposal',
     example: 'InfoAction',
   })
-  @Expose({ name: 'category' })
-  category: string;
+  @Expose({ name: 'type' })
+  type: string;
 
   @ApiProperty({
     description: 'Abstract of a governance action proposal',

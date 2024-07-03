@@ -41,6 +41,7 @@ export class GovernanceFacade {
     const reasoningDto = GovernanceMapper.ipfsContentDtoToReasoningDto(
       ipfsContentDto,
       userId,
+      proposalId,
       reasoningRequest,
     );
     const response = await this.governanceService.addReasoning(reasoningDto);
@@ -90,8 +91,13 @@ export class GovernanceFacade {
     query: PaginateQuery,
     userId: string,
   ): Promise<PaginatedResponse<GovernanceActionProposalResponse>> {
-    //TODO Impl
-    return null;
+    const gapPaginatedDto =
+      await this.governanceService.searchGovActionProposals(query, userId);
+
+    return new PaginationDtoMapper<
+      GovActionProposalDto,
+      GovernanceActionProposalResponse
+    >().dtoToResponse(gapPaginatedDto, GovernanceMapper.voteDtoToResponse);
   }
 
   async searchGovVotes(

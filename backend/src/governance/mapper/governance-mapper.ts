@@ -41,10 +41,10 @@ export class GovernanceMapper {
     voteDto.govProposalId = vote.govActionProposal?.id;
     voteDto.govProposalTitle = vote.govActionProposal?.title;
     voteDto.voteSubmitTime = vote.submitTime;
-    voteDto.govProposalType = vote.govActionType;
+    voteDto.govProposalType = vote.govActionProposal.govActionType;
     voteDto.govProposalStatus =
       GovActionProposalStatus[vote.govActionProposal.status];
-    voteDto.govProposalEndTime = vote.endTime;
+    voteDto.govProposalEndTime = vote.govActionProposal.endTime;
 
     return voteDto;
   }
@@ -76,6 +76,7 @@ export class GovernanceMapper {
   static ipfsContentDtoToReasoningDto(
     ipfsContentDto: IpfsContentDto,
     userId: string,
+    proposalId: string,
     reasoningRequest: ReasoningRequest,
   ): ReasoningDto {
     const reasoningDto = new ReasoningDto();
@@ -84,8 +85,7 @@ export class GovernanceMapper {
     reasoningDto.blake2b = ipfsContentDto.blake2b;
     reasoningDto.json = ipfsContentDto.contents;
     reasoningDto.userId = userId;
-    reasoningDto.govActionProposalId =
-      reasoningRequest.govActionProposalId.toString();
+    reasoningDto.govActionProposalId = proposalId;
     reasoningDto.title = reasoningRequest.title;
     reasoningDto.content = reasoningRequest.content;
     return reasoningDto;
