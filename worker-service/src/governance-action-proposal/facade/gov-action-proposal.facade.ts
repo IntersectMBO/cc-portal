@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { CronJob } from 'cron';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { JOB_NAME_GOV_ACTIONS_SYNC } from '../../common/constants/bullmq.constants';
+import { GovActionProposalRequest } from '../dto/gov-action-proposal.request';
 
 @Injectable()
 export class GovActionProposalFacade {
@@ -33,26 +34,20 @@ export class GovActionProposalFacade {
   }
 
   async syncGovActionProposalTable() {
-    //TODO This should be refactored with LIMIT + OFFSET Calls directly from DB sync, there is no need to fetch all ids first
-    const govActionProposalIdsArray: object[] =
-      await this.govActionProposalService.getGovActionProposalIds();
-
     const perPage: number = Number(
       this.configService.getOrThrow('GOV_ACTION_PROPOSALS_PER_PAGE'),
     );
-    for (let i = 0; i <= govActionProposalIdsArray.length; i += perPage) {
-      const chunk: object[] = govActionProposalIdsArray.slice(i, i + perPage);
-      const govActionProposalIdsValues: string[] = chunk.map(
-        (obj) => (obj as any).id,
-      );
-
-      this.logger.log(govActionProposalIdsValues);
-      const dbSyncData =
+    let offset: number = 0;
+    let dbSyncData: GovActionProposalRequest[];
+    do {
+      dbSyncData =
         await this.govActionProposalService.getGovActionProposalDataFromDbSync(
-          govActionProposalIdsValues,
+          perPage,
+          offset,
         );
       await this.producer.addToGovActionQueue(dbSyncData);
-    }
+      offset += perPage;
+    } while (dbSyncData.length === perPage);
   }
 
   private getCronExpression(): string {

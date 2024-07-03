@@ -16,6 +16,31 @@ export abstract class CommonService {
     protected dataSource: DataSource,
   ) {}
 
+  async getPaginatedDataFromSqlFile(
+    filePath: string,
+    perPage: number,
+    offset: number,
+  ): Promise<object[]> {
+    const fullPath = path.resolve(__dirname, filePath);
+    let query = fs.readFileSync(fullPath, 'utf-8');
+    query = query.replace(':limit', perPage.toString());
+    query = query.replace(':offset', offset.toString());
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    let result: object[];
+    try {
+      await queryRunner.startTransaction();
+      result = await queryRunner.manager.query(query);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+      return result;
+    }
+  }
+
   async getDataFromSqlFile(
     filePath: string,
     whereInArray: string[],

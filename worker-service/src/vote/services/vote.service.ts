@@ -51,12 +51,7 @@ export class VoteService extends CommonService {
     // 1. Check if they are already within our DB - if yes do nothing
     // 2. If not - get GAP data from db + from metadata url
     // If there is data from metadata url, insert remaining stuff regardless
-    const govActionProposalRequests: GovActionProposalRequest[] =
-      await this.getGovActionProposalsFromDbSync(voteRequests);
     try {
-      await this.govActionProposalService.storeGovActionProposalData(
-        govActionProposalRequests,
-      );
       await this.entityManager.transaction(async () => {
         return await this.voteRepository.save(votes);
       });
@@ -70,56 +65,73 @@ export class VoteService extends CommonService {
     voteRequests: VoteRequest[],
   ): Promise<Partial<Vote[]>> {
     const votes = [];
-    const govActionProposalIds: string[] = [];
-    voteRequests.forEach((voteRequest) => {
-      govActionProposalIds.push(voteRequest.govActionProposalId);
-    });
-    const existingGovActionProposal =
-      await this.findGovActionProposalFromIds(govActionProposalIds);
+    const existingGAPs = await this.findGAPsForVotes(voteRequests);
     for (let i = 0; i < voteRequests.length; i++) {
-      if (existingGovActionProposal[i]) {
-        continue;
-      }
-      const govActionProposal = await this.prepareGovActionProposal(
-        voteRequests[i],
-      );
-      if (!govActionProposal) {
-        continue;
-      }
-      const vote = {
+      const vote: Partial<Vote> = {
         id: voteRequests[i].id,
         userId: voteRequests[i].userId,
         hotAddress: voteRequests[i].hotAddress,
         vote: voteRequests[i].vote,
         title: voteRequests[i].reasoningTitle,
         comment: voteRequests[i].comment,
-        submitTime: voteRequests[i].submitTime,
-        govActionProposal: voteRequests[i].govActionProposalId,
+        submitTime: new Date(voteRequests[i].submitTime),
       };
+      const GAPExistsForVote = await this.checkGAPExistsForVote(
+        voteRequests[i],
+        existingGAPs,
+      );
+      if (!GAPExistsForVote) {
+        const govActionProposal = await this.prepareGAP(voteRequests[i]);
+        vote.govActionProposal = govActionProposal;
+      }
       votes.push(vote);
     }
     return votes;
   }
 
-  private async prepareGovActionProposal(
-    voteRequest: VoteRequest,
-  ): Promise<Partial<GovActionProposal>> {
-    let govActionProposal: GovActionProposal;
+  private async findGAPsForVotes(
+    voteRequests: VoteRequest[],
+  ): Promise<GovActionProposalDto[]> {
+    const govActionProposalIds: string[] = [];
+    voteRequests.forEach((voteRequest) => {
+      govActionProposalIds.push(voteRequest.govActionProposalId);
+    });
+    // unique govActionProposalIds
+    const govActionProposalIdsUnique: string[] = [
+      ...new Set(govActionProposalIds),
+    ];
+    const existingGovActionProposals = await this.findGovActionProposalFromIds(
+      govActionProposalIdsUnique,
+    );
+    return existingGovActionProposals;
+  }
 
+  private async checkGAPExistsForVote(
+    voteRequest: VoteRequest,
+    existingGAPs: GovActionProposalDto[],
+  ): Promise<boolean> {
+    return existingGAPs.some(
+      (gap) => gap.id === voteRequest.govActionProposalId,
+    );
+  }
+
+  private async prepareGAP(
+    voteRequest: VoteRequest,
+  ): Promise<GovActionProposal> {
     const govActionProposalDto: Partial<GovActionProposalDto> =
       await this.getGovActionProposalFromUrl(voteRequest.govMetadataUrl);
-    if (govActionProposalDto) {
-      govActionProposalDto.id = voteRequest.govActionProposalId;
-      govActionProposalDto.votingAnchorId = voteRequest.votingAnchorId;
-      govActionProposalDto.status = voteRequest.status;
-      govActionProposalDto.endTime = voteRequest.endTime;
-      govActionProposalDto.txHash = voteRequest.txHash;
-      govActionProposalDto.govActionType = voteRequest.govActionType;
-      govActionProposalDto.govMetadataUrl = voteRequest.govMetadataUrl;
+    govActionProposalDto.id = voteRequest.govActionProposalId;
+    govActionProposalDto.votingAnchorId = voteRequest.votingAnchorId;
+    govActionProposalDto.status = voteRequest.status;
+    govActionProposalDto.endTime = voteRequest.endTime;
+    govActionProposalDto.txHash = Buffer.from(voteRequest.txHash).toString(
+      'hex',
+    );
+    govActionProposalDto.govActionType = voteRequest.govActionType;
+    govActionProposalDto.govMetadataUrl = voteRequest.govMetadataUrl;
 
-      govActionProposal =
-        this.govActionProposalRepository.create(govActionProposalDto);
-    }
+    const govActionProposal =
+      this.govActionProposalRepository.create(govActionProposalDto);
 
     return govActionProposal;
   }
@@ -153,12 +165,9 @@ export class VoteService extends CommonService {
       addresses,
     );
     const results: VoteRequest[] = [];
-    if (dbData.length > 0) {
-      dbData.forEach((vote) => {
-        results.push(VoteMapper.dbSyncToVoteRequest(vote, mapHotAddresses));
-      });
-    }
-
+    dbData.forEach((vote) => {
+      results.push(VoteMapper.dbSyncToVoteRequest(vote, mapHotAddresses));
+    });
     return results;
   }
 

@@ -55,7 +55,6 @@ export class GovActionProposalService extends CommonService {
     for (const request of requests) {
       const govMetadataUrl = request.govMetadataUrl;
       const axiosData = await this.getGovActionProposalFromUrl(govMetadataUrl);
-      const hash = request.txHash;
       const govActionProposal = {
         id: request.id,
         votingAnchorId: request.votingAnchorId,
@@ -63,7 +62,7 @@ export class GovActionProposalService extends CommonService {
         govMetadataUrl: request.govMetadataUrl,
         endTime: request?.endTime,
         status: request.status,
-        txHash: hash,
+        txHash: request.txHash,
         title: axiosData?.title,
         abstract: axiosData?.abstract,
       };
@@ -73,30 +72,24 @@ export class GovActionProposalService extends CommonService {
     return govActionProposals;
   }
 
-  async getGovActionProposalIds(): Promise<object[]> {
-    const govActionProposalIds: object[] = await this.getDataFromSqlFileByPath(
-      SQL_FILE_PATH.GET_GOV_ACTION_PROPOSAL_IDS,
-    );
-    return govActionProposalIds;
-  }
-
   async getGovActionProposalDataFromDbSync(
-    govActionProposalIdsValues: string[],
+    perPage: number,
+    offset: number,
   ): Promise<GovActionProposalRequest[]> {
-    const dbData = await this.getDataFromSqlFile(
+    const dbData = await this.getPaginatedDataFromSqlFile(
       SQL_FILE_PATH.GET_GOV_ACTION_PROPOSALS_DATA,
-      govActionProposalIdsValues,
+      perPage,
+      offset,
     );
     const results: GovActionProposalRequest[] = [];
-    if (dbData.length > 0) {
-      dbData.forEach((govActionProposal) => {
-        results.push(
-          GovActionProposalMapper.dbSyncToGovActionProposalRequest(
-            govActionProposal,
-          ),
-        );
-      });
-    }
+
+    dbData.forEach((govActionProposal) => {
+      results.push(
+        GovActionProposalMapper.dbSyncToGovActionProposalRequest(
+          govActionProposal,
+        ),
+      );
+    });
 
     return results;
   }

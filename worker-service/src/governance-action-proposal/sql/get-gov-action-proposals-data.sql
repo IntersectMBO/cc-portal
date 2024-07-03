@@ -16,7 +16,4 @@ from gov_action_proposal gap
 left join tx vp_tx on vp_tx.id = gap.tx_id
 left join epoch gap_exp_epoch on gap_exp_epoch.id = gap.expiration
 left join voting_anchor va on va.id = gap.voting_anchor_id
-where gap.id in (:whereInArray)
-
--- There is also on chain author info if necessary, if we want to use on-chain author (cc-member) names instead of our db names
--- left join off_chain_vote_author ocva on ocva.off_chain_vote_data_id = ocvd.id
+limit :limit offset :offset;
