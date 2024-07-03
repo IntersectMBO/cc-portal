@@ -63,6 +63,7 @@ export class VoteService extends CommonService {
     const votes = [];
     const existingGAPs = await this.findGAPsForVotes(voteRequests);
     for (let i = 0; i < voteRequests.length; i++) {
+      // returns GAP entity or null
       const existingGAP = await this.findGAPForVote(
         voteRequests[i],
         existingGAPs,
@@ -106,7 +107,7 @@ export class VoteService extends CommonService {
   private async findGAPForVote(
     voteRequest: VoteRequest,
     existingGAPs: GovActionProposalDto[],
-  ): Promise<GovActionProposal> | null {
+  ): Promise<GovActionProposal | null> {
     const foundedGap = existingGAPs.find(
       (gap) => gap.id === voteRequest.govActionProposalId,
     );
