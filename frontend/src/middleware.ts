@@ -29,7 +29,11 @@ export const config = {
     "/members",
     "/admin",
     "/admin/dashboard",
+    "/logout",
     "/(de|en)/:path*",
+    "/((?!api|_next|_vercel|.*\\..*).*)",
+    // However, match all pathnames within `/users`, optionally with a locale prefix
+    "/([\\w-]+)?/users/(.+)",
   ], // Apply middleware to the root path and any path prefixed with supported locales.
 };
 
@@ -41,21 +45,26 @@ export async function middleware(req: NextRequest) {
   const decodedToken = await decodeUserToken();
   const { token, refresh_token } = getAuthCookies();
 
-  if (!!refresh_token && (await isTokenExpired(refresh_token))) {
-    const newRequestHeaders = new Headers(req.headers);
-    newRequestHeaders.set("cookie", "token=; refresh_token=; Max-Age=0");
+  const isRefreshTokenExpired =
+    !!refresh_token && (await isTokenExpired(refresh_token));
+  const isLogoutPage = req.nextUrl.pathname.includes(PATHS.logout);
 
-    const url = new URL(PATHS.home, req.url);
-    url.searchParams.set("logout", "true");
+  // Clear authentication tokens from cookies on Logout page
+  // Logout page, when rendered, clears the user session in the client-side context state,
+  // and redirects the user to the appropriate URL.
+  if (isLogoutPage) {
+    response.cookies.set("token", "", { maxAge: 0 });
+    response.cookies.set("refresh_token", "", { maxAge: 0 });
 
-    const newResponse = NextResponse.redirect(url);
-    newResponse.cookies.set("token", "", { maxAge: 0 });
-    newResponse.cookies.set("refresh_token", "", { maxAge: 0 });
-
-    return newResponse;
+    return response;
   }
 
-  // Check if token is expired and refresh if necessary
+  //Check if access token is expired and redirect to logout page if necessary
+  if (isRefreshTokenExpired) {
+    return NextResponse.redirect(new URL(PATHS.logout, req.url));
+  }
+
+  // Check if access token is expired and refresh if necessary
   if (!!token && (await isTokenExpired(token))) {
     try {
       const newToken = await refreshToken(refresh_token);
@@ -84,11 +93,14 @@ export async function middleware(req: NextRequest) {
   if (isAdminProtectedRoute(req)) {
     if (decodedToken) {
       const { role } = decodedToken;
+      //Allow access only if user is logged in and has admin role
       if (isAnyAdminRole(role)) {
         return response;
       }
+      // If a logged-in user without admin permissions attempts to access the admin dashboard, redirect to the main user app
+      return NextResponse.redirect(new URL(PATHS.home, req.url));
     }
-
+    // If no access token is found, redirect to the admin home page
     return NextResponse.redirect(new URL(PATHS.admin.home, req.url));
   }
 
@@ -97,7 +109,7 @@ export async function middleware(req: NextRequest) {
     if (decodedToken) {
       return response;
     }
-
+    // If no access token is found, redirect to the user home page
     return NextResponse.redirect(new URL(PATHS.home, req.url));
   }
   return response;

@@ -1,14 +1,19 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { PaginationMeta } from "../requests";
+import { PaginationMeta, ResponseErrorI } from "../requests";
 
 interface UsePaginationData {
   data: any[];
   pagination: PaginationMeta;
   isLoading: boolean;
   loadMore: () => Promise<void>;
+}
+
+interface FetchMoreDataResponseI<T> extends ResponseErrorI {
+  data?: T[];
+  meta?: PaginationMeta;
 }
 
 /**
@@ -26,21 +31,24 @@ interface UsePaginationData {
 export const usePagination = <T>(
   list: T[],
   paginationMeta: PaginationMeta,
-  callbackFetch: (page: number) => Promise<{ data: T[]; meta: PaginationMeta }>
+  callbackFetch: (page: number) => Promise<FetchMoreDataResponseI<T>>
 ): UsePaginationData => {
   const [data, setData] = useState<T[]>(list);
   const [page, setPage] = useState<number>(1);
   const [pagination, setPagination] = useState<PaginationMeta>(paginationMeta);
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
-
+  const router = useRouter();
   const loadMore = async () => {
     if (isLoading) return;
     setIsLoading(true);
     try {
       ("use server");
       const newData = await callbackFetch(page + 1);
-      if (newData.data.length > 0) {
+      if (newData?.error) {
+        router.refresh();
+      }
+      if (newData?.data.length > 0) {
         updateState({
           list: [...data, ...newData.data],
           paginationMeta: newData.meta,

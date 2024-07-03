@@ -10,13 +10,14 @@ import { useSnackbar } from "@/context/snackbar";
 import { uploadConstitution } from "@/lib/api";
 import { useModal } from "@context";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const UploadConstitution = () => {
   const { closeModal } = useModal();
   const t = useTranslations("Modals");
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
   const [isSubmitting, setSubmitting] = useState(false);
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -25,17 +26,17 @@ export const UploadConstitution = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    try {
-      setSubmitting(true);
-      const formData = createFormDataObject(data);
-      await uploadConstitution(formData);
+    setSubmitting(true);
+    const formData = createFormDataObject(data);
+    const res = await uploadConstitution(formData);
+    if (res?.error) {
+      addErrorAlert(res.error);
+    } else {
       addSuccessAlert(t("uploadConstitution.alerts.success"));
-      closeModal();
-    } catch (error) {
-      addErrorAlert(t("uploadConstitution.alerts.error"));
-    } finally {
-      setSubmitting(false);
     }
+    closeModal();
+    router.refresh();
+    setSubmitting(false);
   };
   return (
     <ModalWrapper

@@ -19,11 +19,13 @@ import { editUser, uploadUserPhoto } from "@/lib/api";
 import { useEffect } from "react";
 import { useSnackbar } from "@/context/snackbar";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { useRouter } from "next/navigation";
 
 export const SignUpModal = () => {
   const { state, closeModal } = useModal<SignupModalState>();
   const { userSession, user, fetchUserData } = useAppContext();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
+  const router = useRouter();
 
   const t = useTranslations("Modals");
   const {
@@ -43,30 +45,38 @@ export const SignUpModal = () => {
     }
   }, [user, setValue]);
 
-  const uploadImage = async (imageFile) => {
-    try {
-      const formData = new FormData();
-      formData.append("file", imageFile);
+  const handleError = (errorMsg) => {
+    addErrorAlert(errorMsg);
+    closeModal();
+    router.refresh();
+  };
 
-      await uploadUserPhoto(userSession.userId, formData);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      throw error;
+  const uploadImage = async (imageFile) => {
+    const formData = new FormData();
+    formData.append("file", imageFile);
+
+    const res = await uploadUserPhoto(userSession?.userId, formData);
+    if ("error" in res && res?.error) {
+      handleError(res.error);
     }
+    return res;
   };
 
   const onSubmit = async (data) => {
-    try {
-      const { file, ...userData } = data;
-      if (file) {
-        await uploadImage(file);
+    const { file, ...userData } = data;
+    if (file) {
+      const uploadImageRes = await uploadImage(file);
+      if ("error" in uploadImageRes && uploadImageRes?.error) {
+        return;
       }
-      await editUser(userSession.userId, userData);
-      await fetchUserData(userSession.userId);
-      closeModal();
+    }
+    const editUserRes = await editUser(userSession?.userId, userData);
+
+    if ("error" in editUserRes && editUserRes?.error) {
+      handleError(editUserRes.error);
+    } else {
       addSuccessAlert(t("signUp.alerts.success"));
-    } catch (error) {
-      addErrorAlert(t("signUp.alerts.error"));
+      await fetchUserData(userSession?.userId);
     }
   };
 

@@ -2,22 +2,21 @@
 // which is particularly relevant for Next.js applications that support server-side rendering (SSR).
 "use client";
 
-import { getUser, logout as removeCookies } from "@/lib/api";
-import { useRouter, useSearchParams } from "next/navigation";
+import { getUser } from "@/lib/api";
+import { usePathname, useRouter } from "next/navigation";
 // Import createContext and useContext hooks from React to create and consume the context.
 import { createContext, useContext, useEffect, useState } from "react";
 import { ModalProvider } from "./modal";
 import { DecodedToken, FetchUserData } from "@/lib/requests";
 import { SnackbarProvider } from "./snackbar";
-import { PATHS } from "@consts";
-import { isAnyAdminRole } from "@utils";
+import { PATHS, cookieStore } from "@consts";
+import Cookies from "js-cookie";
 
 interface AppContextType {
   userSession: DecodedToken | null;
   setUserSession: (userSession: DecodedToken | null) => void;
   user: FetchUserData | null;
   resetState: () => void;
-  logout: (redirectUrl: string) => void;
   fetchUserData: (userId: string) => Promise<void>;
 }
 
@@ -31,7 +30,8 @@ export function AppContextProvider({ session, children }) {
   const [userSession, setUserSession] = useState<DecodedToken | null>(session);
   const [user, setUser] = useState<FetchUserData | null>();
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const currentPath = usePathname();
+  const authCookie = Cookies.get(cookieStore.token);
 
   async function fetchUserData(userId: string) {
     const userData = await getUser(userId);
@@ -45,29 +45,18 @@ export function AppContextProvider({ session, children }) {
   }, [userSession]);
 
   useEffect(() => {
-    // Logout user if "logout" url query param exists
-    if (searchParams.has("logout") && searchParams.get("logout") === "true") {
-      const role = userSession?.role;
-
-      let redirectUrl = PATHS.home;
-      if (isAnyAdminRole(role)) {
-        redirectUrl = PATHS.admin.home;
-      }
-      logout(redirectUrl);
+    // Reset app state if user is on Logout page
+    if (currentPath.includes(PATHS.logout) || (user && !authCookie)) {
+      resetState();
+      router.refresh();
     }
-  }, [searchParams]);
+  }, [currentPath, authCookie]);
 
   const resetState = () => {
     setUser(null);
     setUserSession(null);
   };
 
-  const logout = async (redirectUrl: string) => {
-    removeCookies();
-    resetState();
-    router.push(redirectUrl);
-    router.refresh();
-  };
   // Render the provider component of your context, passing in the values or functions as the value prop.
   // Any child components will be able to access these values via the useAppContext hook.
   return (
@@ -77,7 +66,6 @@ export function AppContextProvider({ session, children }) {
         setUserSession,
         user,
         resetState,
-        logout,
         fetchUserData,
       }}
     >
