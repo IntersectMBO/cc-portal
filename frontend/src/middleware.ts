@@ -47,7 +47,7 @@ export async function middleware(req: NextRequest) {
 
   const isRefreshTokenExpired =
     !!refresh_token && (await isTokenExpired(refresh_token));
-  const isLogoutPage = req.nextUrl.pathname.includes("logout");
+  const isLogoutPage = req.nextUrl.pathname.includes(PATHS.logout);
 
   // Clear authentication tokens from cookies on Logout page
   // Logout page, when rendered, clears the user session in the client-side context state,
