@@ -6,4 +6,5 @@ export class GovActionProposalRequest {
   status: string;
   endTime: string;
   txHash: string;
+  submitTime: string;
 }

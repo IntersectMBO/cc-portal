@@ -12,6 +12,7 @@ gap_exp_epoch.end_time, -- Should be GAP "Expiry date" info wwhen clicking on sh
 gap.voting_anchor_id, -- Should be anchor id for URL that contins JSon governance action metadata
 va.url, -- Should be a URL that contains JSon governance action metadata
 vp_tx.hash, -- Should be transaction hash from tx table
+gap_block.time gap_submit_time, -- Should be Governance Action Proposal "Submit time"
  case 
     when gap.ratified_epoch is not null then 'RATIFIED'
     when gap.enacted_epoch is not null then 'ENACTED'
@@ -33,5 +34,7 @@ left join off_chain_vote_data ocvd on ocvd.voting_anchor_id = vp.voting_anchor_i
 
 -- Relation for URL that contains governance action metadata
 left join committee_hash ch on ch.id = vp.committee_voter
+left join tx gap_tx on gap_tx.id = gap.tx_id
+left join block gap_block on gap_block.id = gap_tx.block_id
 
 where ch.raw in (:whereInArray) 

@@ -11,6 +11,7 @@ export class GovActionProposalDto {
   status: string;
   endTime: Date;
   txHash: string;
+  submitTime: Date;
   votes: Vote[];
   createdAt: Timestamp;
   updatedAt: Timestamp;

@@ -5,7 +5,7 @@ export class Governance1719326795638 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "gov_action_proposals" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" bigint NOT NULL, "tx_hash" character varying NOT NULL, "voting_anchor_id" bigint NOT NULL, "title" character varying(80), "abstract" character varying(2500), "gov_metadata_url" character varying NOT NULL, "status" character varying NOT NULL, "gov_action_type" character varying NOT NULL, "end_time" TIMESTAMP, CONSTRAINT "PK_761fb8cdf90aec7d72873e63e31" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "gov_action_proposals" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" bigint NOT NULL, "tx_hash" character varying NOT NULL, "voting_anchor_id" bigint NOT NULL, "title" character varying(80), "abstract" character varying(2500), "gov_metadata_url" character varying NOT NULL, "status" character varying NOT NULL, "gov_action_type" character varying NOT NULL, "end_time" TIMESTAMP, "submit_time" TIMESTAMP NOT NULL, CONSTRAINT "PK_761fb8cdf90aec7d72873e63e31" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "votes" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" bigint NOT NULL, "user_id" uuid NOT NULL, "hot_address" character varying NOT NULL, "vote" character varying NOT NULL, "title" character varying, "comment" character varying, "submit_time" TIMESTAMP NOT NULL, "gov_action_proposal_id" bigint, CONSTRAINT "PK_f3d9fd4a0af865152c3f59db8ff" PRIMARY KEY ("id"))`,

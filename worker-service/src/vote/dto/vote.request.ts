@@ -13,4 +13,5 @@ export class VoteRequest {
   status: string;
   endTime: Date;
   txHash: string;
+  govActionProposalSubmitTime: Date;
 }

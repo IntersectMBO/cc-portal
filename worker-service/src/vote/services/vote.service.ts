@@ -130,6 +130,7 @@ export class VoteService extends CommonService {
     );
     govActionProposalDto.govActionType = voteRequest.govActionType;
     govActionProposalDto.govMetadataUrl = voteRequest.govMetadataUrl;
+    govActionProposalDto.submitTime = voteRequest.govActionProposalSubmitTime;
 
     const govActionProposal =
       this.govActionProposalRepository.create(govActionProposalDto);

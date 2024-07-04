@@ -63,6 +63,7 @@ export class GovActionProposalService extends CommonService {
         endTime: request?.endTime,
         status: request.status,
         txHash: request.txHash,
+        submitTime: request.submitTime,
         title: axiosData?.title,
         abstract: axiosData?.abstract,
       };

@@ -59,6 +59,12 @@ export class GovActionProposal extends CommonEntity {
   })
   endTime: Date;
 
+  @Column({
+    name: 'submit_time',
+    type: 'timestamp',
+  })
+  submitTime: Date;
+
   constructor(govActionProposal: Partial<GovActionProposal>) {
     super();
     Object.assign(this, govActionProposal);

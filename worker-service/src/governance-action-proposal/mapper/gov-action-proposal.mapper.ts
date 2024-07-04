@@ -16,7 +16,7 @@ export class GovActionProposalMapper {
     govActionProposalDto.txHash = govActionProposal.txHash;
     govActionProposalDto.status = govActionProposal.status;
     govActionProposalDto.endTime = govActionProposal.endTime;
-
+    govActionProposalDto.submitTime = govActionProposal.submitTime;
     govActionProposalDto.createdAt = govActionProposal.createdAt;
     govActionProposalDto.updatedAt = govActionProposal.updatedAt;
 
@@ -36,6 +36,7 @@ export class GovActionProposalMapper {
     govActionProposalRequest.txHash = Buffer.from(dbSyncData.hash).toString(
       'hex',
     );
+    govActionProposalRequest.submitTime = dbSyncData.time;
 
     return govActionProposalRequest;
   }
