@@ -12,3 +12,4 @@ export * from "./helpers";
 export * from "./useDebounce";
 export * from "./useManageQueryParams";
 export * from "./routes";
+export * from "./useDocumentVisibility";
