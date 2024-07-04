@@ -1,17 +1,24 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { Loading } from "@molecules";
 import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { PATHS } from "@consts";
+import { cookieStore, PATHS } from "@consts";
 import { loginAuthCallback, decodeUserToken } from "@/lib/api";
 import { getRoleBasedHomeRedirectURL } from "@utils";
 import { useAppContext } from "@context";
+import Cookies from "js-cookie";
+import { useSnackbar } from "@/context/snackbar";
+import { useTranslations } from "next-intl";
 
 export default function VerifyLogin({ searchParams }) {
   const router = useRouter();
   const { setUserSession } = useAppContext();
+  const { addErrorAlert } = useSnackbar();
+  const accessToken = useMemo(() => Cookies.get(cookieStore.token), []);
+  const t = useTranslations();
+  let errorAlertShown = false;
 
   useEffect(() => {
     const verifyToken = async (token: string) => {
@@ -26,12 +33,16 @@ export default function VerifyLogin({ searchParams }) {
       }
     };
 
-    if (searchParams && searchParams.token) {
+    if (accessToken && !errorAlertShown) {
+      errorAlertShown = true;
+      addErrorAlert(t("General.errors.sessionExists"), 5000);
+      return router.push(PATHS.logout);
+    } else if (searchParams && searchParams.token) {
       verifyToken(searchParams.token);
     } else {
       router.push(PATHS.home);
     }
-  }, [searchParams]);
+  }, [searchParams, accessToken, errorAlertShown]);
 
   return (
     <Box height="100vh">
