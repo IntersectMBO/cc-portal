@@ -26,7 +26,9 @@ export async function getConstitution(): Promise<any> {
 
     return mdxSource;
   } catch (error) {
-    console.error("Error fetching and processing MDX content:", error);
-    return undefined;
+    return {
+      error: "Error fetching and processing MDX content:",
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
