@@ -10,6 +10,9 @@ export class GovActionProposal extends CommonEntity {
   })
   id: string;
 
+  @Column({ name: 'tx_hash', type: 'varchar' })
+  txHash: string;
+
   @Column({
     name: 'voting_anchor_id',
     type: 'bigint',
@@ -43,6 +46,25 @@ export class GovActionProposal extends CommonEntity {
     type: 'varchar',
   })
   status: string;
+
+  @Column({
+    name: 'gov_action_type',
+    type: 'varchar',
+  })
+  govActionType: string;
+
+  @Column({
+    name: 'end_time',
+    type: 'timestamp',
+    nullable: true,
+  })
+  endTime: Date;
+
+  @Column({
+    name: 'submit_time',
+    type: 'timestamp',
+  })
+  submitTime: Date;
 
   @OneToMany(() => Vote, (votes) => votes.govActionProposal, {
     cascade: true,

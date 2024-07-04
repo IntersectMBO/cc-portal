@@ -1,11 +1,10 @@
-export class GovActionProposalDto {
+export class GovActionProposalRequest {
   id: string;
   votingAnchorId: string;
-  govTitle: string;
-  abstract: string;
   govActionType: string;
   govMetadataUrl: string;
   status: string;
-  endTime: Date;
+  endTime: string;
   txHash: string;
+  submitTime: string;
 }

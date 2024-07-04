@@ -3,13 +3,15 @@ export class VoteRequest {
   hotAddress: string;
   userId: string;
   govActionProposalId: string;
-  votingAnchorId: string;
   vote: string;
-  title: string;
+  reasoningTitle: string;
   comment: string;
-  govActionType: string;
-  endTime: number;
   submitTime: number;
+  votingAnchorId: string;
+  govActionType: string;
   govMetadataUrl: string;
   status: string;
+  endTime: Date;
+  txHash: string;
+  govActionProposalSubmitTime: Date;
 }

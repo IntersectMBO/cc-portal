@@ -2,7 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { Vote } from './src/vote/entities/vote.entity';
 import { DataSource } from 'typeorm';
-import { GovActionProposal } from './src/vote/entities/gov-action-proposal.entity';
+import { GovActionProposal } from './src/governance-action-proposal/entities/gov-action-proposal.entity';
 
 config();
 

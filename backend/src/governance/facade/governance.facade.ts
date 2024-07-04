@@ -51,7 +51,7 @@ export class GovernanceFacade {
     govActionDto: GovActionProposalDto,
   ): Promise<string> {
     const reasoningJson = {
-      govActionProposalHash: govActionDto.hash,
+      govActionProposalTxHash: govActionDto.txHash,
       title: reasoningRequest.title,
       content: reasoningRequest.content,
     };
