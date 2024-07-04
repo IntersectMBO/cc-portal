@@ -17,7 +17,7 @@ export default async function ConstitutionPage({ params: { locale } }) {
       <TopNav />
 
       <Suspense fallback={<Loading />}>
-        {constitution ? (
+        {constitution && !constitution.error ? (
           <Constitution
             constitution={constitution}
             metadata={metadata.reverse()}

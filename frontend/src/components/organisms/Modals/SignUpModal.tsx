@@ -77,6 +77,7 @@ export const SignUpModal = () => {
     } else {
       addSuccessAlert(t("signUp.alerts.success"));
       await fetchUserData(userSession?.userId);
+      closeModal();
     }
   };
 

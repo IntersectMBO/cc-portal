@@ -261,7 +261,8 @@
     "showMore": "Show more",
     "errors": {
       "sessionExpired": "Session expired",
-      "somethingWentWrong": "Something went wrong. Please refresh the page or try again later"
+      "somethingWentWrong": "Something went wrong. Please refresh the page or try again later",
+      "sessionExists": "Session already exists. Please try again."
     }
   }
 }
