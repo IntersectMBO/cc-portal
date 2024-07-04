@@ -6,34 +6,32 @@ import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { PATHS } from "@consts";
 import { loginAuthCallback, decodeUserToken } from "@/lib/api";
-import { isAnyAdminRole } from "@utils";
+import { getRoleBasedHomeRedirectURL } from "@utils";
 import { useAppContext } from "@context";
 
-export default function VerifyLogin({ params: { locale }, searchParams }) {
+export default function VerifyLogin({ searchParams }) {
   const router = useRouter();
   const { setUserSession } = useAppContext();
+
   useEffect(() => {
     const verifyToken = async (token: string) => {
-      try {
-        const response = await loginAuthCallback(token);
+      const response = await loginAuthCallback(token);
+      if (response.error) {
+        router.push(PATHS.home);
+      } else {
         const session = await decodeUserToken();
         setUserSession(session);
-
-        if (isAnyAdminRole(response.user.role)) {
-          router.push(`/${locale}/${PATHS.admin.dashboard}`);
-        } else {
-          router.push(PATHS.constitution);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        router.push(PATHS.home);
+        const redirectURL = getRoleBasedHomeRedirectURL(response?.user.role);
+        router.push(redirectURL);
       }
     };
 
     if (searchParams && searchParams.token) {
       verifyToken(searchParams.token);
+    } else {
+      router.push(PATHS.home);
     }
-  }, []);
+  }, [searchParams]);
 
   return (
     <Box height="100vh">

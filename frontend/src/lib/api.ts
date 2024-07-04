@@ -2,7 +2,7 @@
 
 import axiosInstance from "./axiosInstance";
 import jwt from "jsonwebtoken";
-import { getAccessToken, removeAuthCookies, setAuthCookies } from "@utils";
+import { getAccessToken, setAuthCookies } from "@utils";
 import {
   DecodedToken,
   FetchUserData,
@@ -78,8 +78,13 @@ export async function loginAuthCallback(token: string) {
     setAuthCookies(res.access_token, res.refresh_token);
     return res;
   } catch (error) {
-    console.log("error login authCallback");
-    throw error;
+    const t = await getTranslations();
+    const customErrorMessage =
+      error.res?.statusCode === 401 && t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("General.errors.somethingWentWrong"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 
@@ -92,8 +97,13 @@ export async function registerAuthCallback(token: string) {
     setAuthCookies(res.access_token, res.refresh_token);
     return res;
   } catch (error) {
-    console.log("error register authCallback");
-    throw error;
+    const t = await getTranslations();
+    const customErrorMessage =
+      error.res?.statusCode === 401 && t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("General.errors.somethingWentWrong"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 
@@ -114,14 +124,6 @@ export async function refreshToken(refresh_token: string) {
   }
 }
 
-export async function logout() {
-  try {
-    removeAuthCookies();
-  } catch (error) {
-    console.log("error logout", error);
-  }
-}
-
 export async function getUser(id: string): Promise<FetchUserData> {
   try {
     const res: FetchUserData = await axiosInstance.get(`/api/users/${id}`);
@@ -135,12 +137,10 @@ export async function getUsersAdmin({
   search,
   page = 1,
   limit = DEFAULT_PAGINATION_LIMIT,
-  searchParams,
 }: {
   search?: string;
   page?: number;
   limit?: number;
-  searchParams?: URLSearchParams;
 }): Promise<FetchUsersAdminI> {
   const token = getAccessToken();
 

@@ -8,10 +8,10 @@ import { PATHS } from "@consts";
 import { registerAuthCallback, decodeUserToken } from "@/lib/api";
 import { useAppContext, useModal } from "@context";
 import { SignupModalState } from "@organisms";
-import { isAnyAdminRole } from "@utils";
+import { getRoleBasedHomeRedirectURL, isAnyAdminRole } from "@utils";
 import { useTranslations } from "next-intl";
 
-export default function VerifyRegister({ params: { locale }, searchParams }) {
+export default function VerifyRegister({ searchParams }) {
   const router = useRouter();
   const { setUserSession } = useAppContext();
   const { openModal } = useModal<SignupModalState>();
@@ -19,34 +19,33 @@ export default function VerifyRegister({ params: { locale }, searchParams }) {
 
   useEffect(() => {
     const verifyToken = async (token: string) => {
-      try {
-        await registerAuthCallback(token);
+      const response = await registerAuthCallback(token);
+      if (response.error) {
+        router.push(PATHS.home);
+      } else {
         const session = await decodeUserToken();
         setUserSession(session);
-        if (isAnyAdminRole(session.role)) {
-          router.push(`/${locale}/${PATHS.admin.dashboard}`);
-        } else {
-          router.push(PATHS.home);
+        const redirectURL = getRoleBasedHomeRedirectURL(response?.user.role);
+        router.push(redirectURL);
+        if (!isAnyAdminRole(session.role)) {
+          openModal({
+            type: "signUpModal",
+            state: {
+              showCloseButton: false,
+              title: t("signUp.headline"),
+              description: t("signUp.description"),
+            },
+          });
         }
-
-        openModal({
-          type: "signUpModal",
-          state: {
-            showCloseButton: false,
-            title: t("signUp.headline"),
-            description: t("signUp.description"),
-          },
-        });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        router.push(PATHS.home);
       }
     };
 
     if (searchParams && searchParams.token) {
       verifyToken(searchParams.token);
+    } else {
+      router.push(PATHS.home);
     }
-  }, []);
+  }, [searchParams]);
 
   return (
     <Box height="100vh">
