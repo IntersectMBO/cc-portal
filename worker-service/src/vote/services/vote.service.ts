@@ -22,7 +22,6 @@ import { PageOptionsDto } from '../../util/pagination/dto/page-options.dto';
 import { ConfigService } from '@nestjs/config';
 import { GovActionProposalDto } from '../../governance-action-proposal/dto/gov-action-proposal.dto';
 import { GovActionProposalService } from '../../governance-action-proposal/services/gov-action-proposal.service';
-import { GovActionProposalMapper } from '../../governance-action-proposal/mapper/gov-action-proposal.mapper';
 import { CommonService } from 'src/common/common-service';
 
 @Injectable()
@@ -89,7 +88,7 @@ export class VoteService extends CommonService {
 
   private async findGAPsForVotes(
     voteRequests: VoteRequest[],
-  ): Promise<GovActionProposalDto[]> {
+  ): Promise<GovActionProposal[]> {
     const govActionProposalIds: string[] = [];
     voteRequests.forEach((voteRequest) => {
       govActionProposalIds.push(voteRequest.govActionProposalId);
@@ -106,18 +105,13 @@ export class VoteService extends CommonService {
 
   private async findGAPForVote(
     voteRequest: VoteRequest,
-    existingGAPs: GovActionProposalDto[],
+    existingGAPs: GovActionProposal[],
   ): Promise<GovActionProposal | null> {
-    const foundedGap = existingGAPs.find(
+    const foundGap = existingGAPs.find(
       (gap) => gap.id === voteRequest.govActionProposalId,
     );
-    if (foundedGap) {
-      const govActionProposal = await this.govActionProposalRepository.findOne({
-        where: {
-          id: foundedGap.id,
-        },
-      });
-      return govActionProposal;
+    if (foundGap) {
+      return foundGap;
     }
     return null;
   }
@@ -145,22 +139,14 @@ export class VoteService extends CommonService {
 
   private async findGovActionProposalFromIds(
     govActionProposalIds: string[],
-  ): Promise<GovActionProposalDto[]> {
+  ): Promise<GovActionProposal[]> {
     const govActionProposals = await this.govActionProposalRepository.find({
       where: {
         id: In(govActionProposalIds),
       },
     });
 
-    const govActionProposalDtos: GovActionProposalDto[] = [];
-
-    govActionProposals.forEach((govActionProposal) => {
-      govActionProposalDtos.push(
-        GovActionProposalMapper.govActionProposalToDto(govActionProposal),
-      );
-    });
-
-    return govActionProposalDtos;
+    return govActionProposals;
   }
 
   async getVoteDataFromDbSync(
