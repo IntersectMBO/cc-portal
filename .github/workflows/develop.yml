@@ -25,5 +25,7 @@ jobs:
             ssh-add cc
             cd cc-portal \
             && git pull origin develop \
-            && docker compose up -d
+            && docker compose up -d --build \
+            && docker container exec -it backend npm run typeorm:run-migrations \
+            && docker image rm $(docker image ls -f "dangling=true")
     
