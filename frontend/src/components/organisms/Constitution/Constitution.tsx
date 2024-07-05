@@ -5,8 +5,11 @@ import { Box, Divider, Grid } from "@mui/material";
 import { MDXRemote } from "next-mdx-remote";
 import { useState } from "react";
 import {
+  Code,
   Heading1,
   Heading2,
+  Heading3,
+  ListItem,
   NavDrawer,
   NavTitle,
   Paragraph,
@@ -119,7 +122,10 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
     ),
     h1: Heading1,
     h2: Heading2,
+    h3: Heading3,
     p: Paragraph,
+    li: ListItem,
+    code: Code,
   };
 
   return (
