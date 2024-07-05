@@ -32,9 +32,9 @@ export class TestData1719326858419 implements MigrationInterface {
     await queryRunner.query(
       `-- Hot Addresses
             insert into hot_addresses ("id", "user_id", "address", "created_at") values
-            (uuid_generate_v4(), (select id from users where email = '${standardUserEmail1}'), '\\x5f232509020946fdabc54f215d123da46035278c2896ef4b547dd746', NOW()),
-            (uuid_generate_v4(), (select id from users where email = '${standardUserEmail2}'), '\\xf7e77219a6f50ece3ad55de8144953e80822146f608991843f2399c0', NOW()),
-            (uuid_generate_v4(), (select id from users where email = '${standardUserEmail3}'), '\\xc58f07ddaa48109c37bac9d5422e369ae4695fff7d3027caca23573b', NOW())`,
+            (uuid_generate_v4(), (select id from users where email = '${standardUserEmail1}'), '5f232509020946fdabc54f215d123da46035278c2896ef4b547dd746', NOW()),
+            (uuid_generate_v4(), (select id from users where email = '${standardUserEmail2}'), 'f7e77219a6f50ece3ad55de8144953e80822146f608991843f2399c0', NOW()),
+            (uuid_generate_v4(), (select id from users where email = '${standardUserEmail3}'), 'c58f07ddaa48109c37bac9d5422e369ae4695fff7d3027caca23573b', NOW())`,
     );
 
     await queryRunner.query('commit;');

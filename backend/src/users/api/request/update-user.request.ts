@@ -41,11 +41,9 @@ export class UpdateUserRequest {
   @ValidateIf((e) => e.hotAddress !== '')
   @IsOptional()
   @IsString({ each: true, message: 'Hot address must be a string' })
-  @MinLength(2, { message: `Minimum character length is 2`, each: true })
-  @MaxLength(255, { message: `Maximum character length is 255`, each: true })
-  // @Matches(/^[a-zA-Z0-9_.:\-\/]+$/, {
-  //   message: `Hot address can contain :, -, /`,
-  //   each: true,
-  // })
+  @Matches(/^[a-fA-F0-9]{56}$/, {
+    message: `Hot address must be a 56-character hexadecimal code`,
+    each: true,
+  })
   hotAddress: string;
 }
