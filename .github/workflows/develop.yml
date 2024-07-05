@@ -28,4 +28,4 @@ jobs:
             && git pull origin develop \
             && docker compose up -d --build \
             && docker container exec backend npm run typeorm:run-migrations \
-            && docker image rm $(docker image ls -f "dangling=true")
+            && docker image prune -f
