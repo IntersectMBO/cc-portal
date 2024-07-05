@@ -20,7 +20,7 @@ jobs:
         with:
           host: ${{ secrets.DEVELOP_HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSHKEY }}
+          key: ${{ secrets.SSH_KEY }}
           script: |
             eval `ssh-agent -s`
             ssh-add cc
