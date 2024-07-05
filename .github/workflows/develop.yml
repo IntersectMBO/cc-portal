@@ -27,5 +27,5 @@ jobs:
             cd cc-portal \
             && git pull origin develop \
             && docker compose up -d --build \
-            && docker container exec -i backend npm run typeorm:run-migrations \
+            && docker container exec backend npm run typeorm:run-migrations \
             && docker image rm $(docker image ls -f "dangling=true")
