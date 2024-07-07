@@ -26,7 +26,6 @@ export class Vote extends CommonEntity {
     () => GovActionProposal,
     (govActionProposal) => govActionProposal.id,
     {
-      cascade: true,
       eager: true,
     },
   )

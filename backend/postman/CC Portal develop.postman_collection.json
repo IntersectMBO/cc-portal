@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "4d20299b-0234-4c12-9a30-a77cc28e827c",
+		"_postman_id": "12186bc3-5571-40b3-9ded-cf9fd0b9c3d1",
 		"name": "CC Portal develop",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20133713"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -647,14 +646,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base-url}}/api/governance/919c6053-bac4-439e-ac56-b50fb5896c72",
+							"raw": "{{base-url}}/api/governance/proposals/41",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"governance",
-								"919c6053-bac4-439e-ac56-b50fb5896c72"
+								"proposals",
+								"41"
 							]
 						}
 					},
@@ -697,17 +697,51 @@
 							}
 						],
 						"url": {
-							"raw": "{{base-url}}/api/governance/votes/users/{{userId}}/search",
+							"raw": "{{base-url}}/api/governance/users/{{userId}}/votes/search",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"governance",
-								"votes",
 								"users",
 								"{{userId}}",
+								"votes",
 								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Gov Action Proposals",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/search?search=First",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"governance",
+								"users",
+								"{{userId}}",
+								"proposals",
+								"search"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "First"
+								}
 							]
 						}
 					},
@@ -725,7 +759,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"gov_action_proposal_id\": 2,\n    \"title\": \"test reasoning 2\",\n    \"content\": \"some text of reasoning 2\"\n}",
+							"raw": "{\n    \"title\": \"test reasoning 2\",\n    \"content\": \"some text of reasoning 2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -733,16 +767,46 @@
 							}
 						},
 						"url": {
-							"raw": "{{base-url}}/api/governance/reasoning/users/{{userId}}",
+							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/2/reasoning",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"governance",
-								"reasoning",
 								"users",
-								"{{userId}}"
+								"{{userId}}",
+								"proposals",
+								"2",
+								"reasoning"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reasoning for proposal",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/2/reasoning",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"governance",
+								"users",
+								"{{userId}}",
+								"proposals",
+								"2",
+								"reasoning"
 							]
 						}
 					},

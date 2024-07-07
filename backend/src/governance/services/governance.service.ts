@@ -13,7 +13,7 @@ import { GovActionProposalDto } from '../dto/gov-action-proposal-dto';
 import { Paginator } from 'src/util/pagination/paginator';
 import { ReasoningDto } from '../dto/reasoning.dto';
 import { Reasoning } from '../entities/reasoning.entity';
-import { GAP_PAGINATION_CONFIG } from '../util/pagination/gap-pagination.config';
+import { GOVERNANCE_ACTION_PROPOSAL_CONFIG } from '../util/pagination/gap-pagination.config';
 
 @Injectable()
 export class GovernanceService {
@@ -86,7 +86,7 @@ export class GovernanceService {
     const result = await this.paginator.paginate(
       query,
       customQuery,
-      GAP_PAGINATION_CONFIG,
+      GOVERNANCE_ACTION_PROPOSAL_CONFIG,
     );
 
     return new PaginationEntityMapper<

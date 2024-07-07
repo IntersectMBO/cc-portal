@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { GovActionProposalStatus } from 'src/governance/enums/gov-action-proposal-status.enum';
+import { VoteStatus } from 'src/governance/enums/vote-status.enum';
 
-export class GovernanceActionMetadataResponse {
+export class GovernanceActionProposalSearchResponse {
   @ApiProperty({
     description: 'Unique governance proposal ID',
     example: '1',
@@ -11,8 +12,9 @@ export class GovernanceActionMetadataResponse {
   id: string;
 
   @ApiProperty({
-    description: 'Unique governance proposal transaction hash',
-    example: '1',
+    description: 'Governance action proposal TX hash,',
+    example:
+      '28a5c50e900fbc155a98d78d2081e49ca4d6f004f2604e758a64357119db1b05#0',
   })
   @Expose({ name: 'tx_hash' })
   txHash: string;
@@ -25,12 +27,11 @@ export class GovernanceActionMetadataResponse {
   title: string;
 
   @ApiProperty({
-    description: 'Abstract of a governance action proposal',
-    example:
-      'This is a random abstract of a governance action proposal abstract. No longer than 2500 chars',
+    description: 'Type of a governance action proposal',
+    example: 'InfoAction',
   })
-  @Expose({ name: 'abstract' })
-  abstract: string;
+  @Expose({ name: 'type' })
+  type: string;
 
   @ApiProperty({
     description: 'Metadata URL of a governance action proposal',
@@ -41,19 +42,27 @@ export class GovernanceActionMetadataResponse {
 
   @ApiProperty({
     description:
-      'Returns whether this governance proposal is already resolved (if resolved, cc member should not have an option to manage his vote)',
+      'Returns whether this governance action proposal is already resolved (if resolved, cc member should not have an option to manage his vote)',
     example: 'EXPIRED',
   })
-  @Expose({ name: 'gov_action_proposal_status' })
+  @Expose({ name: 'status' })
   status: GovActionProposalStatus;
 
   @ApiProperty({
     description:
-      'Returns a specific type of a governance proposal to which this vote is related',
-    example: 'ParameterChange',
+      'Vote Status for a Given governance action proposal for a particular user.',
+    example: 'Pending',
   })
-  @Expose({ name: 'gov_action_type' })
-  govActionType: string;
+  @Expose({ name: 'vote_status' })
+  voteStatus: VoteStatus;
+
+  @ApiProperty({
+    type: Date,
+    format: 'date-time',
+    description: 'Submit time of a governance action proposal',
+  })
+  @Expose({ name: 'submit_time' })
+  submitTime: Date;
 
   @ApiProperty({
     type: Date,

@@ -23,9 +23,9 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { UserPathGuard } from 'src/auth/guard/users-path.guard';
 import { ApiPaginationQuery, Paginate, PaginateQuery } from 'nestjs-paginate';
 import { VOTE_PAGINATION_CONFIG } from '../util/pagination/votes-pagination.config';
-import { GovernanceActionMetadataResponse } from './response/gov-action-metadata.response';
-import { GAP_PAGINATION_CONFIG } from '../util/pagination/gap-pagination.config';
 import { GovernanceActionProposalResponse } from './response/gov-action-proposal.response';
+import { GOVERNANCE_ACTION_PROPOSAL_CONFIG } from '../util/pagination/gap-pagination.config';
+import { GovernanceActionProposalSearchResponse } from './response/gov-action-proposal-search.response';
 import { ReasoningRequest } from './request/reasoning.request';
 import { ReasoningResponse } from './response/reasoning.response';
 @ApiTags('Governance')
@@ -33,11 +33,11 @@ import { ReasoningResponse } from './response/reasoning.response';
 export class GovernanceController {
   constructor(private readonly governanceFacade: GovernanceFacade) {}
 
-  @ApiOperation({ summary: 'Find Governance Action proposal metadata by ID' })
+  @ApiOperation({ summary: 'Find Governance Action proposal by ID' })
   @ApiResponse({
     status: 200,
-    description: 'Returned GAP metadata',
-    type: GovernanceActionMetadataResponse,
+    description: 'Returned Governance Action Proposal metadata',
+    type: GovernanceActionProposalResponse,
   })
   @ApiResponse({
     status: 404,
@@ -46,19 +46,19 @@ export class GovernanceController {
   @Get('proposals/:id')
   async findOne(
     @Param('id') id: string,
-  ): Promise<GovernanceActionMetadataResponse> {
+  ): Promise<GovernanceActionProposalResponse> {
     return await this.governanceFacade.findGovActionProposalById(id);
   }
 
-  @ApiOperation({ summary: 'Search GAP' })
+  @ApiOperation({ summary: 'Search Governance Action Proposals' })
   @ApiBearerAuth('JWT-auth')
-  @ApiPaginationQuery(GAP_PAGINATION_CONFIG)
+  @ApiPaginationQuery(GOVERNANCE_ACTION_PROPOSAL_CONFIG)
   @ApiResponse({
     status: 200,
     description:
       'Governance Action Proposals - returns GovernanceActionProposalResponse array within data',
     isArray: true,
-    type: PaginatedResponse<GovernanceActionProposalResponse>,
+    type: PaginatedResponse<GovernanceActionProposalSearchResponse>,
   })
   @ApiResponse({
     status: 404,
@@ -69,7 +69,7 @@ export class GovernanceController {
   async searchGovActionProposalsPaginated(
     @Param('id', ParseUUIDPipe) id: string,
     @Paginate() query: PaginateQuery,
-  ): Promise<PaginatedResponse<GovernanceActionProposalResponse>> {
+  ): Promise<PaginatedResponse<GovernanceActionProposalSearchResponse>> {
     return await this.governanceFacade.searchGovActionProposals(query, id);
   }
 
@@ -168,7 +168,7 @@ export class GovernanceController {
   @Get('users/:id/proposals/:proposalId/reasoning')
   async getReasoning(
     @Param('id', ParseUUIDPipe) id: string,
-    @Param('proposalId', ParseUUIDPipe) proposalId: string,
+    @Param('proposalId', ParseIntPipe) proposalId: string,
   ): Promise<ReasoningResponse> {
     return await this.governanceFacade.getReasoning(id, proposalId);
   }

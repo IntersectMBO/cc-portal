@@ -1,19 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { VoteStatus } from 'src/governance/enums/vote-status.enum';
+import { GovActionProposalStatus } from 'src/governance/enums/gov-action-proposal-status.enum';
 
 export class GovernanceActionProposalResponse {
   @ApiProperty({
-    description: 'Unique governance proposal ID',
+    description: 'Unique governance action proposal ID',
     example: '1',
   })
   @Expose({ name: 'id' })
-  id: number;
+  id: string;
 
   @ApiProperty({
-    description: 'Governance action proposal TX hash,',
-    example:
-      '28a5c50e900fbc155a98d78d2081e49ca4d6f004f2604e758a64357119db1b05#0',
+    description: 'Unique governance action proposal transaction hash',
+    example: '1',
   })
   @Expose({ name: 'tx_hash' })
   txHash: string;
@@ -24,13 +23,6 @@ export class GovernanceActionProposalResponse {
   })
   @Expose({ name: 'title' })
   title: string;
-
-  @ApiProperty({
-    description: 'Type of a governance action proposal',
-    example: 'InfoAction',
-  })
-  @Expose({ name: 'type' })
-  type: string;
 
   @ApiProperty({
     description: 'Abstract of a governance action proposal',
@@ -49,9 +41,33 @@ export class GovernanceActionProposalResponse {
 
   @ApiProperty({
     description:
-      'Vote Status for a Given Governance Action Proposal for a particular user.',
-    example: 'Pending',
+      'Returns whether this governance action proposal is already resolved (if resolved, cc member should not have an option to manage his vote)',
+    example: 'EXPIRED',
   })
-  @Expose({ name: 'vote_status' })
-  voteStatus: VoteStatus;
+  @Expose({ name: 'status' })
+  status: GovActionProposalStatus;
+
+  @ApiProperty({
+    description:
+      'Returns a specific type of a governance action proposal to which this vote is related',
+    example: 'ParameterChange',
+  })
+  @Expose({ name: 'type' })
+  type: string;
+
+  @ApiProperty({
+    type: Date,
+    format: 'date-time',
+    description: 'Submit time of a governance action proposal',
+  })
+  @Expose({ name: 'submit_time' })
+  submitTime: Date;
+
+  @ApiProperty({
+    type: Date,
+    format: 'date-time',
+    description: 'End time of a governance action proposal',
+  })
+  @Expose({ name: 'end_time' })
+  endTime: Date;
 }
