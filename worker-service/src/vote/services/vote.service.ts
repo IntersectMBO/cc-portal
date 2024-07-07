@@ -2,10 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
-import * as fs from 'fs';
-import * as path from 'path';
 import {
   InjectDataSource,
   InjectEntityManager,
@@ -15,23 +12,23 @@ import {
   CONNECTION_NAME_DB_SYNC,
   SQL_FILE_PATH,
 } from '../../common/constants/sql.constants';
-import { DataSource, EntityManager, Repository } from 'typeorm';
+import { DataSource, EntityManager, In, Repository } from 'typeorm';
 import { HotAddress } from '../entities/hotaddress.entity';
 import { VoteMapper } from '../mapper/vote.mapper';
 import { Vote } from '../entities/vote.entity';
 import { VoteRequest } from '../dto/vote.request';
-import { GovActionProposal } from '../entities/gov-action-proposal.entity';
-import { GovActionProposalDto } from '../dto/gov-action-proposal.dto';
+import { GovActionProposal } from '../../governance-action-proposal/entities/gov-action-proposal.entity';
 import { PageOptionsDto } from '../../util/pagination/dto/page-options.dto';
 import { ConfigService } from '@nestjs/config';
-import axios from 'axios';
+import { GovActionProposalDto } from '../../governance-action-proposal/dto/gov-action-proposal.dto';
+import { GovActionProposalService } from '../../governance-action-proposal/services/gov-action-proposal.service';
+import { CommonService } from 'src/common/common-service';
 
 @Injectable()
-export class VoteService {
-  private logger = new Logger(VoteService.name);
+export class VoteService extends CommonService {
   constructor(
     @InjectDataSource(CONNECTION_NAME_DB_SYNC)
-    private dataSource: DataSource,
+    dataSource: DataSource,
     @InjectRepository(HotAddress)
     private readonly hotAddressRepository: Repository<HotAddress>,
     @InjectRepository(Vote)
@@ -41,11 +38,14 @@ export class VoteService {
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
     private readonly configService: ConfigService,
-  ) {}
+    private readonly govActionProposalService: GovActionProposalService,
+  ) {
+    super(dataSource);
+    this.logger = new Logger(VoteService.name);
+  }
 
-  async storeVoteData(voteRequest: VoteRequest[]): Promise<void> {
-    const votes = await this.prepareVotes(voteRequest);
-    console.log(votes);
+  async storeVoteData(voteRequests: VoteRequest[]): Promise<void> {
+    const votes = await this.prepareVotes(voteRequests);
     try {
       await this.entityManager.transaction(async () => {
         return await this.voteRepository.save(votes);
@@ -60,42 +60,77 @@ export class VoteService {
     voteRequests: VoteRequest[],
   ): Promise<Partial<Vote[]>> {
     const votes = [];
+    const existingGAPs = await this.findGAPsForVotes(voteRequests);
     for (let i = 0; i < voteRequests.length; i++) {
-      const govActionProposal = await this.prepareGovActionProposal(
+      // returns GAP entity or null
+      const existingGAP = await this.findGAPForVote(
         voteRequests[i],
+        existingGAPs,
       );
-      const vote = {
+      const vote: Partial<Vote> = {
         id: voteRequests[i].id,
         userId: voteRequests[i].userId,
         hotAddress: voteRequests[i].hotAddress,
         vote: voteRequests[i].vote,
-        title: voteRequests[i].title,
+        title: voteRequests[i].reasoningTitle,
         comment: voteRequests[i].comment,
-        govActionType: voteRequests[i].govActionType,
-        govActionProposal: govActionProposal,
-        status: voteRequests[i].status,
-        endTime: voteRequests[i].endTime,
-        submitTime: voteRequests[i].submitTime,
+        submitTime: new Date(voteRequests[i].submitTime),
+        govActionProposal: existingGAP,
       };
+      if (!existingGAP) {
+        const govActionProposal = await this.prepareGAP(voteRequests[i]);
+        vote.govActionProposal = govActionProposal;
+      }
       votes.push(vote);
     }
     return votes;
   }
 
-  private async prepareGovActionProposal(
-    voteRequest: VoteRequest,
-  ): Promise<Partial<GovActionProposal>> {
-    const existingGovActionProposal = await this.findGovActionProposal(
-      voteRequest.govActionProposalId,
+  private async findGAPsForVotes(
+    voteRequests: VoteRequest[],
+  ): Promise<GovActionProposal[]> {
+    const govActionProposalIds: string[] = [];
+    voteRequests.forEach((voteRequest) => {
+      govActionProposalIds.push(voteRequest.govActionProposalId);
+    });
+    // unique govActionProposalIds
+    const govActionProposalIdsUnique: string[] = [
+      ...new Set(govActionProposalIds),
+    ];
+    const existingGovActionProposals = await this.findGovActionProposalFromIds(
+      govActionProposalIdsUnique,
     );
-    if (existingGovActionProposal) {
-      return existingGovActionProposal;
+    return existingGovActionProposals;
+  }
+
+  private async findGAPForVote(
+    voteRequest: VoteRequest,
+    existingGAPs: GovActionProposal[],
+  ): Promise<GovActionProposal | null> {
+    const foundGap = existingGAPs.find(
+      (gap) => gap.id === voteRequest.govActionProposalId,
+    );
+    if (foundGap) {
+      return foundGap;
     }
+    return null;
+  }
+
+  private async prepareGAP(
+    voteRequest: VoteRequest,
+  ): Promise<GovActionProposal> {
     const govActionProposalDto: Partial<GovActionProposalDto> =
       await this.getGovActionProposalFromUrl(voteRequest.govMetadataUrl);
     govActionProposalDto.id = voteRequest.govActionProposalId;
     govActionProposalDto.votingAnchorId = voteRequest.votingAnchorId;
     govActionProposalDto.status = voteRequest.status;
+    govActionProposalDto.endTime = voteRequest.endTime;
+    govActionProposalDto.txHash = Buffer.from(voteRequest.txHash).toString(
+      'hex',
+    );
+    govActionProposalDto.govActionType = voteRequest.govActionType;
+    govActionProposalDto.govMetadataUrl = voteRequest.govMetadataUrl;
+    govActionProposalDto.submitTime = voteRequest.govActionProposalSubmitTime;
 
     const govActionProposal =
       this.govActionProposalRepository.create(govActionProposalDto);
@@ -103,86 +138,31 @@ export class VoteService {
     return govActionProposal;
   }
 
-  private async findGovActionProposal(
-    govActionProposalId: string,
-  ): Promise<GovActionProposal> {
-    const govActionProposal = this.govActionProposalRepository.findOne({
+  private async findGovActionProposalFromIds(
+    govActionProposalIds: string[],
+  ): Promise<GovActionProposal[]> {
+    const govActionProposals = await this.govActionProposalRepository.find({
       where: {
-        id: govActionProposalId,
+        id: In(govActionProposalIds),
       },
     });
-    return govActionProposal;
-  }
 
-  private async getGovActionProposalFromUrl(
-    url: string,
-  ): Promise<Partial<GovActionProposalDto>> {
-    const response = await axios.get(url);
-    if (response.status == 404) {
-      throw new NotFoundException(
-        `Governance action proposal URL is invalid: ${url}`,
-      );
-    }
-    const jsonData = response.data;
-    let title: string = '';
-    let abstract: string = '';
-    if (jsonData['body'] && jsonData.body['title']) {
-      title = jsonData.body.title;
-    }
-    if (jsonData['body'] && jsonData.body['abstract']) {
-      abstract = jsonData.body.abstract;
-    }
-    const govActionProposal: Partial<GovActionProposalDto> = {
-      title: title['@value'],
-      abstract: abstract['@value'],
-      govMetadataUrl: url,
-    };
-    return govActionProposal;
+    return govActionProposals;
   }
 
   async getVoteDataFromDbSync(
     mapHotAddresses: Map<string, string>,
   ): Promise<VoteRequest[]> {
     const addresses = [...mapHotAddresses.keys()];
-    const dbData = await this.getVotesFromSqlFile(
+    const dbData = await this.getDataFromSqlFile(
       SQL_FILE_PATH.GET_VOTES,
       addresses,
     );
     const results: VoteRequest[] = [];
-    if (dbData.length > 0) {
-      dbData.forEach((vote) => {
-        results.push(VoteMapper.dbSyncToVoteRequest(vote, mapHotAddresses));
-      });
-    }
-
+    dbData.forEach((vote) => {
+      results.push(VoteMapper.dbSyncToVoteRequest(vote, mapHotAddresses));
+    });
     return results;
-  }
-
-  private async getVotesFromSqlFile(
-    filePath: string,
-    whereInArray: string[],
-  ): Promise<object[]> {
-    const fullPath = path.resolve(__dirname, filePath);
-    let query = fs.readFileSync(fullPath, 'utf-8');
-    const placeholders = whereInArray
-      .map((_, index) => `$${index + 1}`)
-      .join(', ');
-    query = query.replace(':whereInArray', placeholders);
-
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    let result: object[];
-    try {
-      await queryRunner.startTransaction();
-      result = await queryRunner.manager.query(query, whereInArray);
-      await queryRunner.commitTransaction();
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw error;
-    } finally {
-      await queryRunner.release();
-      return result;
-    }
   }
 
   async countHotAddressPages(): Promise<number> {

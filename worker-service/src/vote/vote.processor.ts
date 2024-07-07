@@ -2,13 +2,12 @@ import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import {
   JOB_NAME_VOTE_SYNC,
-  QUEUE_NAME_DB_SYNC,
+  QUEUE_NAME_DB_SYNC_VOTES,
 } from '../common/constants/bullmq.constants';
-//import { WorkerHostProcessor } from 'src/common/worker-host.processor';
 import { Logger } from '@nestjs/common';
 import { VoteService } from './services/vote.service';
 
-@Processor(QUEUE_NAME_DB_SYNC)
+@Processor(QUEUE_NAME_DB_SYNC_VOTES)
 export class VoteProcessor extends WorkerHost {
   protected readonly logger = new Logger(VoteProcessor.name);
   constructor(private readonly voteService: VoteService) {
@@ -18,7 +17,7 @@ export class VoteProcessor extends WorkerHost {
   async process(job: Job<any>): Promise<any> {
     switch (job.name) {
       case JOB_NAME_VOTE_SYNC: {
-        this.logger.debug('Data from db-sync');
+        this.logger.debug('Data from db-sync for votes job');
         return job.data;
       }
     }

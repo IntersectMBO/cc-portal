@@ -61,6 +61,12 @@ export class GovActionProposal extends CommonEntity {
   })
   endTime: Date;
 
+  @Column({
+    name: 'submit_time',
+    type: 'timestamp',
+  })
+  submitTime: Date;
+
   @OneToMany(() => Vote, (vote) => vote.govActionProposal)
   votes: Vote[];
 

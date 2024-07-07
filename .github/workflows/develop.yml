@@ -1,29 +1,31 @@
-# name: CI-develop-branch
+name: CI-develop-branch
 
-# on:
-#   push:
-#     branches: [develop]
+on:
+  push:
+    branches: [develop]
 
-#   workflow_dispatch:
+  workflow_dispatch:
 
-# jobs:
-#   deploy_to_do:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout the repo
-#         uses: actions/checkout@v4
-#         with:
-#           ref: develop
+jobs:
+  deploy_to_do:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+        with:
+          ref: develop
 
-#       - name: Deploy to Digital Ocean droplet via SSH action
-#         uses: appleboy/ssh-action@v1.0.3
-#         with:
-#           host: ${{ secrets.DEVELOP_HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           key: ${{ secrets.SSHKEY }}
-#           script: |
-#             eval `ssh-agent -s`
-#             ssh-add cc
-#             cd cc-portal \
-#             && git pull origin develop \
-#             && docker compose up -d --force-recreate --build
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEVELOP_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            eval `ssh-agent -s`
+            ssh-add cc
+            cd cc-portal \
+            && git pull origin develop \
+            && docker compose up -d --build \
+            && docker container exec backend npm run typeorm:run-migrations \
+            && docker image prune -f
