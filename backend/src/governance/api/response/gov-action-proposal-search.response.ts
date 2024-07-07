@@ -50,6 +50,14 @@ export class GovernanceActionProposalSearchResponse {
 
   @ApiProperty({
     description:
+      'Returns whether there is off-chain CC Portal managed reasoning related to a vote for a given governance action proposal for a particular user',
+    example: 'false',
+  })
+  @Expose({ name: 'has_reasoning' })
+  hasReasoning: boolean;
+
+  @ApiProperty({
+    description:
       'Vote Status for a Given governance action proposal for a particular user.',
     example: 'Pending',
   })

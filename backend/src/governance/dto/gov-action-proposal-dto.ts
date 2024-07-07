@@ -10,6 +10,7 @@ export class GovActionProposalDto {
   type: string;
   status: GovActionProposalStatus;
   voteStatus: VoteStatus;
+  hasReasoning: boolean;
   submitTime: Date;
   endTime: Date;
 }

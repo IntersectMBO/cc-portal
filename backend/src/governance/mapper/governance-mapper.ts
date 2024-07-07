@@ -67,6 +67,9 @@ export class GovernanceMapper {
       GovActionProposalStatus[govActionProposal.status];
     govActionProposalDto.voteStatus =
       GovernanceMapper.returnVoteStatusForGovActionProposal(govActionProposal);
+    govActionProposalDto.hasReasoning = !GovernanceMapper.emptyArray(
+      govActionProposal.reasonings,
+    );
     govActionProposalDto.submitTime = govActionProposal.submitTime;
     govActionProposalDto.endTime = govActionProposal.endTime;
 
@@ -124,6 +127,7 @@ export class GovernanceMapper {
     response.metadataUrl = dto.metadataUrl;
     response.status = dto.status;
     response.voteStatus = dto.voteStatus;
+    response.hasReasoning = dto.hasReasoning;
     response.type = dto.type;
     response.submitTime = dto.submitTime;
     response.endTime = dto.endTime;
