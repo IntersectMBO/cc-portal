@@ -9,7 +9,7 @@ import {
   ModalActions,
   Tooltip,
 } from "@atoms";
-import { IMAGES } from "@consts";
+import { IMAGES, PATTERNS, PROFILE_PICTURE_MAX_FILE_SIZE } from "@consts";
 import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -120,7 +120,12 @@ export const SignUpModal = () => {
             }
             errors={errors}
             control={control}
-            {...register("hotAddress")}
+            {...register("hotAddress", {
+              pattern: {
+                value: PATTERNS.hotAddress,
+                message: "Entered value does not match the expected format",
+              },
+            })}
           />
           <ControlledField.TextArea
             placeholder={t("signUp.fields.description.placeholder")}
@@ -140,7 +145,8 @@ export const SignUpModal = () => {
             {...register("file", {
               validate: {
                 fileSize: (file) =>
-                  file.size / (1024 * 1024) < 1 ||
+                  !file ||
+                  file.size / (1024 * 1024) < PROFILE_PICTURE_MAX_FILE_SIZE ||
                   "The file size should be less than 5MB",
               },
             })}
