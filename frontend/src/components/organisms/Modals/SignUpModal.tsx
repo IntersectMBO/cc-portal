@@ -137,7 +137,13 @@ export const SignUpModal = () => {
             errors={errors}
             control={control}
             accept="image/png, image/jpg, image/jpeg"
-            {...register("file")}
+            {...register("file", {
+              validate: {
+                fileSize: (file) =>
+                  file.size / (1024 * 1024) < 1 ||
+                  "The file size should be less than 5MB",
+              },
+            })}
           >
             {t("signUp.fields.upload")}
           </ControlledField.Upload>
