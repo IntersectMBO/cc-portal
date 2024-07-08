@@ -48,42 +48,53 @@ export class VoteResponse {
   reasoningComment: string;
 
   @ApiProperty({
-    description: 'Returns an id of a governance proposal related to a vote',
+    description:
+      'Returns an id of a governance action proposal related to a vote',
     example: '123',
   })
   @Expose({ name: 'gov_action_proposal_id' })
-  govProposalId: string;
+  govActionProposalId: string;
 
   @ApiProperty({
-    description: 'Returns a title of governance proposal related to a vote',
+    description:
+      'Returns a tx hash of a governance action proposal related to a vote',
+    example:
+      '28a5c50e900fbc155a98d78d2081e49ca4d6f004f2604e758a64357119db1b05#0',
+  })
+  @Expose({ name: 'gov_action_proposal_tx_hash' })
+  govActionProposalTxHash: string;
+
+  @ApiProperty({
+    description:
+      'Returns a title of governance action proposal related to a vote',
     example: 'Random title',
   })
   @Expose({ name: 'gov_action_proposal_title' })
-  govProposalTitle: string;
+  govActionProposalTitle: string;
 
   @ApiProperty({
     description:
-      'Returns a specific type of a governance proposal to which this vote is related',
+      'Returns a specific type of a governance action proposal to which this vote is related',
     example: 'ParameterChange',
   })
   @Expose({ name: 'gov_action_proposal_type' })
-  govProposalType: string;
+  govActionProposalType: string;
 
   @ApiProperty({
     description:
-      'Returns whether this governance proposal is already resolved (if resolved, cc member should not have an option to manage his vote)',
+      'Returns whether this governance action proposal is already resolved (if resolved, cc member should not have an option to manage his vote)',
     example: 'false',
   })
   @Expose({ name: 'gov_action_proposal_status' })
-  govProposalStatus: GovActionProposalStatus;
+  govActionProposalStatus: GovActionProposalStatus;
 
   @ApiProperty({
     type: Date,
     format: 'date-time',
-    description: 'End time of a governance proposal',
+    description: 'End time of a governance action proposal',
   })
   @Expose({ name: 'gov_action_proposal_end_time' })
-  govProposalEndTime: Date;
+  govActionProposalEndTime: Date;
 
   @ApiProperty({
     type: Date,
