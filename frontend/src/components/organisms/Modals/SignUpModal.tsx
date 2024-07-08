@@ -136,6 +136,7 @@ export const SignUpModal = () => {
             size="large"
             errors={errors}
             control={control}
+            accept="image/png, image/jpg, image/jpeg"
             {...register("file")}
           >
             {t("signUp.fields.upload")}
