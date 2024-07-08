@@ -119,9 +119,14 @@ export interface VotesTableI {
 }
 
 export interface GovernanceActionTableI {
-  gov_action_proposal_id: string;
-  gov_action_proposal_title?: string;
-  gov_action_proposal_type: string;
-  gov_action_proposal_status: GovActionStatus;
-  abstract: string;
+  id: string;
+  tx_hash: string;
+  title: string;
+  type: string;
+  metadata_url: string;
+  status: GovActionProposalStatus;
+  has_reasoning: false;
+  vote_status: GovActionStatus;
+  submit_time: string;
+  end_time?: string;
 }

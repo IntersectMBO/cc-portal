@@ -42,7 +42,9 @@
   "GovernanceActions": {
     "govAction": "Governance Action",
     "govActionCategoryShort": "GA Category",
-    "status": "Status",
+    "voteStatus": "Vote Status",
+    "gaStatus": "GA Status",
+    "gaID": "GA ID",
     "abstract": "Abstract",
     "actionTitle": "Show more",
     "notAvailable": "Not Available",

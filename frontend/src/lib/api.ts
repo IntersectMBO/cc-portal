@@ -257,7 +257,7 @@ export async function getUserVotes({
 export async function getGovernanceMetadata(id: string): Promise<any> {
   try {
     const res: GovActionMetadata = await axiosInstance.get(
-      `/api/governance/${id}`
+      `/api/governance/proposals/${id}`
     );
     return res;
   } catch (error) {
@@ -278,44 +278,21 @@ export async function getGovernanceActions({
   sortBy?: string;
   userId?: string;
 }): Promise<GovernanceActionTableI[]> {
+  const token = getAccessToken();
+
   try {
-    const res: GovernanceActionTableI[] = [
+    const res = await axiosInstance.get(
+      `/api/governance/users/${userId}/proposals/search`,
       {
-        gov_action_proposal_id: "2",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "PENDING" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
-      },
-      {
-        gov_action_proposal_id: "2",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "VOTED" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit. ",
-      },
-      {
-        gov_action_proposal_id: "16",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "UNVOTED" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
-      },
-      {
-        gov_action_proposal_id: "16",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "UNVOTED" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
-      },
-    ];
-    return res;
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      }
+    );
+
+    return res.data;
   } catch (error) {
-    console.log("error get governance actions", error);
+    console.log("error get governance actions");
   }
 }
 

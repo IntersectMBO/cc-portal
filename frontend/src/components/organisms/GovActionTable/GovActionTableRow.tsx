@@ -6,9 +6,11 @@ import { Box, Grid } from "@mui/material";
 import { UserAvatar } from "@molecules";
 import {
   Button,
+  CopyButton,
   GovActionStatusPill,
   OutlinedLightButton,
   Typography,
+  VotePill,
 } from "@atoms";
 import {
   GovActionModalState,
@@ -20,7 +22,7 @@ import {
 import { customPalette, ICONS } from "@consts";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { truncateText } from "@utils";
+import { getShortenedGovActionId, truncateText } from "@utils";
 import { getProposalTypeLabel } from "@utils";
 import { useModal } from "@context";
 
@@ -29,13 +31,7 @@ interface Props {
 }
 
 export const GovActionTableRow = ({
-  govActions: {
-    abstract,
-    gov_action_proposal_status,
-    gov_action_proposal_id,
-    gov_action_proposal_title,
-    gov_action_proposal_type,
-  },
+  govActions: { id, vote_status, status, title, type, has_reasoning },
 }: Props) => {
   const t = useTranslations("GovernanceActions");
   const govActionModal = useModal<GovActionModalState>();
@@ -44,13 +40,18 @@ export const GovActionTableRow = ({
   const updateReasoningkModal = useModal<OpenPreviewReasoningModal>();
 
   const isDisabled = false; //todo
-  const isUnvoted = gov_action_proposal_status === "UNVOTED";
+  const isUnvoted = vote_status === "UNVOTED";
+  //User can add reasoning in two cases:
+  // 1. User doesn't have vote for selected GA
+  // 2. User has vote for selected GA, but doesn't have reasoning
+  const canAddReasoning =
+    isUnvoted || (!has_reasoning && vote_status === "VOTED");
 
   const openGAModal = () => {
     govActionModal.openModal({
       type: "govActionModal",
       state: {
-        id: gov_action_proposal_id,
+        id,
       },
     });
   };
@@ -62,7 +63,7 @@ export const GovActionTableRow = ({
     updateReasoningkModal.openModal({
       type: "previewReasoningModal",
       state: {
-        id: gov_action_proposal_id,
+        id,
         actionTitle: t("updateReasoning"),
         onActionClick: openUpdateReasoningCallback,
       },
@@ -88,7 +89,7 @@ export const GovActionTableRow = ({
     addReasoningModal.openModal({
       type: "addReasoningModal",
       state: {
-        id: gov_action_proposal_id,
+        id,
         callback: addReasoningCallback,
       },
     });
@@ -137,7 +138,7 @@ export const GovActionTableRow = ({
 
                 <OutlinedLightButton
                   onClick={openGAModal}
-                  disabled={!gov_action_proposal_title}
+                  disabled={!title}
                   startIcon={
                     <Image
                       alt="GA title"
@@ -145,14 +146,12 @@ export const GovActionTableRow = ({
                       height={12}
                       src={ICONS.informationCircle}
                       style={{
-                        opacity: gov_action_proposal_title ? 1 : 0.5,
+                        opacity: title ? 1 : 0.5,
                       }}
                     />
                   }
                 >
-                  {gov_action_proposal_title
-                    ? truncateText(gov_action_proposal_title, 40)
-                    : t("notAvailable")}
+                  {title ? truncateText(title, 15) : t("notAvailable")}
                 </OutlinedLightButton>
               </Grid>
               <TableDivider />
@@ -172,7 +171,7 @@ export const GovActionTableRow = ({
                   {t("govActionCategoryShort")}
                 </Typography>
                 <OutlinedLightButton nonInteractive>
-                  {getProposalTypeLabel(gov_action_proposal_type)}
+                  {getProposalTypeLabel(type)}
                 </OutlinedLightButton>
               </Grid>
               <TableDivider />
@@ -188,11 +187,30 @@ export const GovActionTableRow = ({
                   variant="caption"
                   fontWeight={500}
                 >
-                  {t("status")}
+                  {t("voteStatus")}
                 </Typography>
                 <Box width={85}>
-                  <GovActionStatusPill status={gov_action_proposal_status} />
+                  <GovActionStatusPill status={vote_status} />
                 </Box>
+              </Grid>
+              <TableDivider />
+              <Grid
+                item
+                lg={2}
+                px={{ xxs: 0, lg: 1, xl: 3 }}
+                py={{ xxs: 1.5, lg: 0 }}
+              >
+                <Typography
+                  color={customPalette.neutralGray}
+                  sx={{ marginBottom: 0.5 }}
+                  variant="caption"
+                  fontWeight={500}
+                >
+                  {t("gaStatus")}
+                </Typography>
+                <OutlinedLightButton nonInteractive>
+                  {status}
+                </OutlinedLightButton>
               </Grid>
               <TableDivider />
               <Grid
@@ -207,11 +225,25 @@ export const GovActionTableRow = ({
                   variant="caption"
                   fontWeight={500}
                 >
-                  {t("abstract")}
+                  {t("gaID")}
                 </Typography>
-                <Typography variant="caption">
-                  {abstract ? truncateText(abstract, 100) : t("notAvailable")}
-                </Typography>
+                <Box display="flex">
+                  <Box
+                    px={2.25}
+                    py={0.75}
+                    border={1}
+                    borderColor={customPalette.lightBlue}
+                    borderRadius={100}
+                    display="flex"
+                    flexWrap="nowrap"
+                    gap={1}
+                  >
+                    <CopyButton size={14} text={id} />
+                    <Typography variant="caption">
+                      {getShortenedGovActionId(id)}
+                    </Typography>
+                  </Box>
+                </Box>
               </Grid>
             </Grid>
           </Grid>
@@ -226,11 +258,13 @@ export const GovActionTableRow = ({
               disabled={isDisabled}
               sx={{ whiteSpace: "nowrap" }}
               onClick={() =>
-                isUnvoted ? openAddReasoningModal() : openUpdateReasoningModal()
+                canAddReasoning
+                  ? openAddReasoningModal()
+                  : openUpdateReasoningModal()
               }
               variant="outlined"
             >
-              {isUnvoted ? t("addReasoning") : t("updateReasoning")}
+              {canAddReasoning ? t("addReasoning") : t("updateReasoning")}
             </Button>
           </Grid>
         </Grid>
