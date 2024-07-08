@@ -53,3 +53,9 @@ export const getRoleDropdownList = (userRole) => {
     return adminAddMemberRoleList;
   }
 };
+
+export const PROFILE_PICTURE_MAX_FILE_SIZE = 5;
+
+export const PATTERNS = {
+  hotAddress: /^[a-fA-F0-9]{56}$/,
+};

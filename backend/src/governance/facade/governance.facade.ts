@@ -8,7 +8,8 @@ import { UsersService } from 'src/users/services/users.service';
 import { PaginateQuery } from 'nestjs-paginate';
 import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mapper';
 import { UserPhotoDto } from '../dto/user-photo.dto';
-import { GovernanceActionMetadataResponse } from '../api/response/gov-action-metadata.response';
+import { GovernanceActionProposalResponse } from '../api/response/gov-action-proposal.response';
+import { GovernanceActionProposalSearchResponse } from '../api/response/gov-action-proposal-search.response';
 import { ReasoningResponse } from '../api/response/reasoning.response';
 import { IpfsService } from 'src/ipfs/services/ipfs.service';
 import { ReasoningRequest } from '../api/request/reasoning.request';
@@ -27,11 +28,11 @@ export class GovernanceFacade {
 
   async addReasoning(
     userId: string,
+    proposalId: string,
     reasoningRequest: ReasoningRequest,
   ): Promise<ReasoningResponse> {
-    const govActionDto = await this.governanceService.findGovProposalById(
-      reasoningRequest.govActionProposalId,
-    );
+    const govActionDto =
+      await this.governanceService.findGovProposalById(proposalId);
     const reasoningJson = await this.createReasoningJson(
       reasoningRequest,
       govActionDto,
@@ -40,6 +41,7 @@ export class GovernanceFacade {
     const reasoningDto = GovernanceMapper.ipfsContentDtoToReasoningDto(
       ipfsContentDto,
       userId,
+      proposalId,
       reasoningRequest,
     );
     const response = await this.governanceService.addReasoning(reasoningDto);
@@ -66,11 +68,39 @@ export class GovernanceFacade {
     return ipfsContentDto;
   }
 
+  async getReasoning(
+    userId: string,
+    proposalId: string,
+  ): Promise<ReasoningResponse> {
+    const response =
+      await this.governanceService.findReasoningForUserByProposalId(
+        userId,
+        proposalId,
+      );
+    return GovernanceMapper.reasoningDtoToResponse(response);
+  }
+
   async findGovActionProposalById(
     id: string,
-  ): Promise<GovernanceActionMetadataResponse> {
+  ): Promise<GovernanceActionProposalResponse> {
     const dto = await this.governanceService.findGovProposalById(id);
-    return GovernanceMapper.govActionMetaDtoToResponse(dto);
+    return GovernanceMapper.govActionProposalDtoToResponse(dto);
+  }
+
+  async searchGovActionProposals(
+    query: PaginateQuery,
+    userId: string,
+  ): Promise<PaginatedResponse<GovernanceActionProposalSearchResponse>> {
+    const gapPaginatedDto =
+      await this.governanceService.searchGovActionProposals(query, userId);
+
+    return new PaginationDtoMapper<
+      GovActionProposalDto,
+      GovernanceActionProposalSearchResponse
+    >().dtoToResponse(
+      gapPaginatedDto,
+      GovernanceMapper.govActionProposalDtoToSearchResponse,
+    );
   }
 
   async searchGovVotes(

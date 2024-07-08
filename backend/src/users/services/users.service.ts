@@ -170,10 +170,7 @@ export class UsersService {
     user.description = updateUserDto.description;
 
     if (updateUserDto.hotAddress) {
-      await this.checkUniqueUserHotAddress(
-        user.hotAddresses,
-        updateUserDto.hotAddress,
-      );
+      await this.checkUniqueUserHotAddress(updateUserDto.hotAddress);
 
       const hotAddress = new HotAddress();
       hotAddress.address = updateUserDto.hotAddress;
@@ -204,15 +201,14 @@ export class UsersService {
     return user;
   }
 
-  private async checkUniqueUserHotAddress(
-    existingAddresses: HotAddress[],
-    hotAddress: string,
-  ) {
-    const includes = existingAddresses
-      .map((x) => x.address)
-      .includes(hotAddress);
+  private async checkUniqueUserHotAddress(hotAddress: string) {
+    const existingHotAddress = await this.hotAddressRepository.findOne({
+      where: {
+        address: hotAddress,
+      },
+    });
 
-    if (includes) {
+    if (existingHotAddress) {
       throw new ConflictException(`Address ${hotAddress} already assigned`);
     }
   }
@@ -245,8 +241,8 @@ export class UsersService {
     isAdmin: boolean,
   ): Promise<PaginatedDto<UserDto>> {
     const customQuery = isAdmin
-      ? this.createAdminSearchQuery()
-      : this.createUserSearchQuery();
+      ? this.returnAdminSearchQuery()
+      : this.returnUserSearchQuery();
 
     const result = await this.paginator.paginate(
       query,
@@ -260,14 +256,14 @@ export class UsersService {
     );
   }
 
-  private createAdminSearchQuery(): SelectQueryBuilder<User> {
+  private returnAdminSearchQuery(): SelectQueryBuilder<User> {
     return this.userRepository
       .createQueryBuilder('users')
       .leftJoinAndSelect('users.role', 'role')
       .where('role.code != :code', { code: RoleEnum.SUPER_ADMIN });
   }
 
-  private createUserSearchQuery(): SelectQueryBuilder<User> {
+  private returnUserSearchQuery(): SelectQueryBuilder<User> {
     return this.userRepository
       .createQueryBuilder('users')
       .leftJoinAndSelect('users.role', 'role')
