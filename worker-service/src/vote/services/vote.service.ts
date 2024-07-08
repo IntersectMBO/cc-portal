@@ -153,7 +153,8 @@ export class VoteService extends CommonService {
   async getVoteDataFromDbSync(
     mapHotAddresses: Map<string, string>,
   ): Promise<VoteRequest[]> {
-    const addresses = [...mapHotAddresses.keys()];
+    const prefix = '\\x'; // prefix for each hot address
+    const addresses = [...mapHotAddresses.keys()].map((key) => prefix + key);
     const dbData = await this.getDataFromSqlFile(
       SQL_FILE_PATH.GET_VOTES,
       addresses,

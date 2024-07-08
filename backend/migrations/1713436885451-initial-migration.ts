@@ -11,7 +11,7 @@ export class InitialMigration1713436885451 implements MigrationInterface {
       `CREATE TABLE "permissions" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "code" "public"."permissions_code_enum" NOT NULL, CONSTRAINT "PK_920331560282b8bd21bb02290df" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "hot_addresses" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "address" character varying NOT NULL, "user_id" uuid, CONSTRAINT "PK_12cb54736dc433f949461aad8dd" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "hot_addresses" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP DEFAULT now(), "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "address" character varying NOT NULL, "user_id" uuid, CONSTRAINT "UQ_6815807f18b79151eecbae22f73" UNIQUE ("address"), CONSTRAINT "PK_12cb54736dc433f949461aad8dd" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TYPE "public"."users_status_enum" AS ENUM('active', 'inactive', 'pending')`,
