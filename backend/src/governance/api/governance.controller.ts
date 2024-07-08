@@ -136,7 +136,7 @@ export class GovernanceController {
   @Post('users/:id/proposals/:proposalId/reasoning')
   async addReasoning(
     @Param('id', ParseUUIDPipe) id: string,
-    @Param('proposalId', ParseIntPipe) proposalId: string,
+    @Param('proposalId') proposalId: string,
     @Body() reasoningRequest: ReasoningRequest,
   ): Promise<ReasoningResponse> {
     return await this.governanceFacade.addReasoning(
