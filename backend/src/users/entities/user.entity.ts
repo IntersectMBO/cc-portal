@@ -85,6 +85,12 @@ export class User extends CommonEntity {
   })
   permissions: Permission[];
 
+  @Column({
+    name: 'is_deleted',
+    default: false,
+  })
+  isDeleted: boolean;
+
   constructor(user: Partial<User>) {
     super();
     Object.assign(this, user);

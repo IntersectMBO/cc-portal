@@ -274,4 +274,14 @@ export class UsersService {
       .where('role.code = :code', { code: RoleEnum.USER })
       .andWhere('users.status = :status', { status: UserStatusEnum.ACTIVE });
   }
+
+  async softDelete(id: string): Promise<UserDto> {
+    const user = await this.findEntityById(id);
+    if (user.isDeleted) {
+      throw new ConflictException(`User already deleted`);
+    }
+    user.isDeleted = true;
+    await this.userRepository.save(user);
+    return UserMapper.userToDto(user);
+  }
 }

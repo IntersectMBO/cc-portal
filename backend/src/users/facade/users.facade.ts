@@ -86,4 +86,9 @@ export class UsersFacade {
       UserMapper.mapUserDtoToResponse,
     );
   }
+
+  async softDelete(userId: string): Promise<UserResponse> {
+    const user = await this.usersService.softDelete(userId);
+    return UserMapper.mapUserDtoToResponse(user);
+  }
 }

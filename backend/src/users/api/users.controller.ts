@@ -36,6 +36,8 @@ import { RoleGuard } from '../../auth/guard/role.guard';
 import { PaginatedResponse } from '../../util/pagination/response/paginated.response';
 import { ApiPaginationQuery, Paginate, PaginateQuery } from 'nestjs-paginate';
 import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
+import { PermissionEnum } from '../enums/permission.enum';
+import { Permissions } from 'src/auth/guard/permission.decorator';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -216,5 +218,46 @@ export class UsersController {
   async remove(@Request() req: any, @Param('id', ParseUUIDPipe) id: string) {
     const user = await this.usersFacade.deleteProfilePhoto(id);
     return user;
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Delete a user' })
+  @ApiResponse({
+    status: 200,
+    description: 'User deleted successfully.',
+    type: UserResponse,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden"',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User already deleted',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'identification number of the user',
+    type: String,
+  })
+  @ApiBody({ type: UpdateUserRequest })
+  @HttpCode(200)
+  @Permissions(PermissionEnum.MANAGE_CC_MEMBERS)
+  @UseGuards(JwtAuthGuard, UserPathGuard)
+  @Patch(':id/delete')
+  async softDelete(
+    @Request() req: any,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<UserResponse> {
+    return await this.usersFacade.softDelete(id);
   }
 }
