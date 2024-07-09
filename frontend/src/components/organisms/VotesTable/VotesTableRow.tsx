@@ -5,13 +5,14 @@ import { Card, TableDivider } from "@molecules";
 import { Box, Grid } from "@mui/material";
 import { UserAvatar, UserBasicInfo } from "@molecules";
 import { Button, OutlinedLightButton, Typography, VotePill } from "@atoms";
-import { GovActionModalState, VotesTableI } from "../types";
+import { GovActionModalState } from "../types";
 import { customPalette, ICONS } from "@consts";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { truncateText } from "@utils";
 import { getProposalTypeLabel } from "@utils";
 import { useModal } from "@context";
+import { VotesTableI } from "@/lib/requests";
 
 interface Props {
   votes: VotesTableI;
