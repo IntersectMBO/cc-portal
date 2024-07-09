@@ -14,6 +14,9 @@ import {
 import { PageTitleTabs } from "./PageTitleTabs";
 import { GovActionTable } from "./GovActionTable";
 import { GovernanceActionTableI, PaginationMeta } from "@/lib/requests";
+import { getGovernanceActions } from "@/lib/api";
+import { usePagination } from "@/lib/utils/usePagination";
+import { ShowMoreButton } from "../atoms";
 
 export const GovernanceActions = ({
   actions,
@@ -31,6 +34,22 @@ export const GovernanceActions = ({
   );
   const [sortOpen, setSortOpen] = useState(false);
   const [chosenSorting, setChosenSorting] = useState<string>("");
+  const params: Record<string, string | null> = {
+    search: searchText || null,
+    govActionType:
+      chosenFilters.govActionType?.length > 0
+        ? chosenFilters.govActionType?.join(",")
+        : null,
+    status:
+      chosenFilters.status?.length > 0 ? chosenFilters.status?.join(",") : null,
+    sortBy: chosenSorting || null,
+  };
+
+  const { data, pagination, isLoading, loadMore } = usePagination(
+    actions,
+    paginationMeta,
+    (page) => getGovernanceActions({ page, ...params })
+  );
 
   const closeFilters = useCallback(() => {
     setFiltersOpen(false);
@@ -41,18 +60,6 @@ export const GovernanceActions = ({
   }, []);
 
   useEffect(() => {
-    const params: Record<string, string | null> = {
-      search: searchText || null,
-      govActionType:
-        chosenFilters.govActionType?.length > 0
-          ? chosenFilters.govActionType?.join(",")
-          : null,
-      status:
-        chosenFilters.status?.length > 0
-          ? chosenFilters.status?.join(",")
-          : null,
-      sortBy: chosenSorting || null,
-    };
     updateQueryParams(params);
   }, [searchText, chosenFilters, chosenSorting, updateQueryParams]);
 
@@ -98,14 +105,21 @@ export const GovernanceActions = ({
           />
         </Box>
       </Box>
-      {isEmpty(actions) ? (
+      {isEmpty(data) ? (
         <NotFound
           height="55vh"
           title="governanceAction.title"
           description="governanceAction.description"
         />
       ) : (
-        <GovActionTable govActions={actions} />
+        <>
+          <GovActionTable govActions={data} />
+          <ShowMoreButton
+            isLoading={isLoading}
+            hasNextPage={pagination.has_next_page}
+            callBack={loadMore}
+          />
+        </>
       )}
     </Box>
   );

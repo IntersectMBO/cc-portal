@@ -266,28 +266,33 @@ export async function getGovernanceMetadata(id: string): Promise<any> {
 }
 
 export async function getGovernanceActions({
+  page = 1,
+  limit = DEFAULT_PAGINATION_LIMIT,
   search,
   govActionType,
   status,
   sortBy,
-  userId,
 }: {
+  page?: number;
+  limit?: number;
   search?: string;
   govActionType?: string;
   status?: string;
   sortBy?: string;
-  userId?: string;
 }): Promise<GetGovernanceActionsI> {
   const token = getAccessToken();
+  const user = await decodeUserToken();
 
   try {
     const res: { data: GovernanceActionTableI[]; meta: PaginationMeta } =
       await axiosInstance.get(
-        `/api/governance/users/${userId}/proposals/search?${
+        `/api/governance/users/${user?.userId}/proposals/search?${
           search ? `search=${search}` : ""
         }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
           status ? `filter.status=$in:${status}` : ""
-        }&${sortBy ? `sortBy=${sortBy}` : ""}`,
+        }&${sortBy ? `sortBy=${sortBy}` : ""}&${
+          page ? `page=${page}` : ""
+        }&limit=${limit}`,
         {
           headers: {
             Authorization: `bearer ${token}`,
