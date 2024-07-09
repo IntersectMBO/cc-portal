@@ -1,7 +1,16 @@
+import { GovActionProposalStatus } from '../enums/gov-action-proposal-status.enum';
+import { VoteStatus } from '../enums/vote-status.enum';
+
 export class GovActionProposalDto {
   id: string;
-  hash: string;
+  txHash: string;
   title: string;
   abstract: string;
   metadataUrl: string;
+  type: string;
+  status: GovActionProposalStatus;
+  voteStatus: VoteStatus;
+  hasReasoning: boolean;
+  submitTime: Date;
+  endTime: Date;
 }

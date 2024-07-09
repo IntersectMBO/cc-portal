@@ -5,12 +5,13 @@ import { unstable_setRequestLocale } from "next-intl/server"; // Import function
 import { redirect } from "next/navigation";
 import { PATHS } from "@consts";
 import { decodeUserToken } from "@/lib/api";
+import { isAnyAdminRole } from "@utils";
 
 export default async function AdminHome({ params: { locale } }) {
   unstable_setRequestLocale(locale); // Sets the locale for the request. Use cautiously due to its unstable nature.
   const user = await decodeUserToken();
 
-  if (user) {
+  if (user && isAnyAdminRole(user?.role)) {
     redirect(`/${locale}/${PATHS.admin.dashboard}`);
   }
 

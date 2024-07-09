@@ -9,7 +9,7 @@ import {
   ModalActions,
   Tooltip,
 } from "@atoms";
-import { IMAGES } from "@consts";
+import { IMAGES, PATTERNS, PROFILE_PICTURE_MAX_FILE_SIZE } from "@consts";
 import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -19,11 +19,13 @@ import { editUser, uploadUserPhoto } from "@/lib/api";
 import { useEffect } from "react";
 import { useSnackbar } from "@/context/snackbar";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { useRouter } from "next/navigation";
 
 export const SignUpModal = () => {
   const { state, closeModal } = useModal<SignupModalState>();
   const { userSession, user, fetchUserData } = useAppContext();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
+  const router = useRouter();
 
   const t = useTranslations("Modals");
   const {
@@ -43,30 +45,39 @@ export const SignUpModal = () => {
     }
   }, [user, setValue]);
 
-  const uploadImage = async (imageFile) => {
-    try {
-      const formData = new FormData();
-      formData.append("file", imageFile);
+  const handleError = (errorMsg) => {
+    addErrorAlert(errorMsg);
+    closeModal();
+    router.refresh();
+  };
 
-      await uploadUserPhoto(userSession.userId, formData);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      throw error;
+  const uploadImage = async (imageFile) => {
+    const formData = new FormData();
+    formData.append("file", imageFile);
+
+    const res = await uploadUserPhoto(userSession?.userId, formData);
+    if ("error" in res && res?.error) {
+      handleError(res.error);
     }
+    return res;
   };
 
   const onSubmit = async (data) => {
-    try {
-      const { file, ...userData } = data;
-      if (file) {
-        await uploadImage(file);
+    const { file, ...userData } = data;
+    if (file) {
+      const uploadImageRes = await uploadImage(file);
+      if ("error" in uploadImageRes && uploadImageRes?.error) {
+        return;
       }
-      await editUser(userSession.userId, userData);
-      await fetchUserData(userSession.userId);
-      closeModal();
+    }
+    const editUserRes = await editUser(userSession?.userId, userData);
+
+    if ("error" in editUserRes && editUserRes?.error) {
+      handleError(editUserRes.error);
+    } else {
       addSuccessAlert(t("signUp.alerts.success"));
-    } catch (error) {
-      addErrorAlert(t("signUp.alerts.error"));
+      await fetchUserData(userSession?.userId);
+      closeModal();
     }
   };
 
@@ -109,7 +120,12 @@ export const SignUpModal = () => {
             }
             errors={errors}
             control={control}
-            {...register("hotAddress")}
+            {...register("hotAddress", {
+              pattern: {
+                value: PATTERNS.hotAddress,
+                message: "Entered value does not match the expected format",
+              },
+            })}
           />
           <ControlledField.TextArea
             placeholder={t("signUp.fields.description.placeholder")}
@@ -125,7 +141,15 @@ export const SignUpModal = () => {
             size="large"
             errors={errors}
             control={control}
-            {...register("file")}
+            accept="image/png, image/jpg, image/jpeg"
+            {...register("file", {
+              validate: {
+                fileSize: (file) =>
+                  !file ||
+                  file.size / (1024 * 1024) < PROFILE_PICTURE_MAX_FILE_SIZE ||
+                  "The file size should be less than 5MB",
+              },
+            })}
           >
             {t("signUp.fields.upload")}
           </ControlledField.Upload>

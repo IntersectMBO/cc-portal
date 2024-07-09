@@ -156,7 +156,8 @@
       "upload": "Upload Constitution",
       "alerts": {
         "success": "Upload success",
-        "error": "Upload failed"
+        "error": "Upload failed",
+        "409": "File already exists"
       }
     },
     "compareConstitution": {
@@ -255,5 +256,13 @@
   "Filters": {
     "sortBy": "Sort by",
     "clear": "Clear"
+  },
+  "General": {
+    "showMore": "Show more",
+    "errors": {
+      "sessionExpired": "Session expired",
+      "somethingWentWrong": "Something went wrong. Please refresh the page or try again later",
+      "sessionExists": "Session already exists. Please try again."
+    }
   }
 }

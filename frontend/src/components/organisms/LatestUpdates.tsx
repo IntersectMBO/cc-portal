@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { Typography } from "@atoms";
+import { ShowMoreButton, Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 import { VotesTable } from "./VotesTable";
 import { VotesTableI } from "./types";
@@ -10,11 +10,16 @@ import { NotFound } from "./NotFound";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
 import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING } from "@consts";
+import { PaginationMeta } from "@/lib/requests";
+import { usePagination } from "@/lib/utils/usePagination";
+import { getLatestUpdates } from "@/lib/api";
 
 export const LatestUpdates = ({
   latestUpdates,
+  paginationMeta,
 }: {
   latestUpdates: VotesTableI[];
+  paginationMeta: PaginationMeta;
 }) => {
   const t = useTranslations("LatestUpdates");
   const { updateQueryParams } = useManageQueryParams();
@@ -25,6 +30,21 @@ export const LatestUpdates = ({
   );
   const [sortOpen, setSortOpen] = useState(false);
   const [chosenSorting, setChosenSorting] = useState<string>("");
+  const params: Record<string, string | null> = {
+    search: searchText || null,
+    govActionType:
+      chosenFilters.govActionType?.length > 0
+        ? chosenFilters.govActionType?.join(",")
+        : null,
+    vote: chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
+    sortBy: chosenSorting || null,
+  };
+
+  const { data, pagination, isLoading, loadMore } = usePagination(
+    latestUpdates,
+    paginationMeta,
+    (page) => getLatestUpdates({ page, ...params })
+  );
 
   const closeFilters = useCallback(() => {
     setFiltersOpen(false);
@@ -35,16 +55,6 @@ export const LatestUpdates = ({
   }, []);
 
   useEffect(() => {
-    const params: Record<string, string | null> = {
-      search: searchText || null,
-      govActionType:
-        chosenFilters.govActionType?.length > 0
-          ? chosenFilters.govActionType?.join(",")
-          : null,
-      vote:
-        chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
-      sortBy: chosenSorting || null,
-    };
     updateQueryParams(params);
   }, [searchText, chosenFilters, chosenSorting, updateQueryParams]);
 
@@ -85,11 +95,16 @@ export const LatestUpdates = ({
         />
       ) : (
         <VotesTable
-          votes={latestUpdates}
+          votes={data}
           actionTitle={t("actionTitle")}
           onActionClick={() => console.log("Show Reasoning Modal")}
         />
       )}
+      <ShowMoreButton
+        isLoading={isLoading}
+        hasNextPage={pagination.has_next_page}
+        callBack={loadMore}
+      />
     </Box>
   );
 };

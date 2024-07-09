@@ -40,3 +40,22 @@ export interface FetchUserData {
   created_at: Date;
   updated_at: Date;
 }
+
+export interface PaginationMeta {
+  page: number;
+  per_page: number;
+  item_count: number;
+  page_count: number;
+  has_previous_page: boolean;
+  has_next_page: boolean;
+}
+
+export interface ResponseErrorI {
+  error?: string;
+  statusCode?: number;
+}
+
+export interface FetchUsersAdminI extends ResponseErrorI {
+  data?: FetchUserData[];
+  meta?: PaginationMeta;
+}

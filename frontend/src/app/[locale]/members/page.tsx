@@ -22,7 +22,10 @@ export default async function Members({ params: { locale }, searchParams }) {
           {isEmpty(members) && isEmpty(searchParams) ? (
             <NotFound title="members.title" description="members.description" />
           ) : (
-            <MembersCardList members={members} />
+            <MembersCardList
+              members={members.data}
+              paginationMeta={members.meta}
+            />
           )}
         </Suspense>
       </ContentWrapper>

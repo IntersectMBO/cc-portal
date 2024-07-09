@@ -1,6 +1,6 @@
 import { CommonEntity } from '../../common/entities/common.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { GovActionProposal } from './gov-action-proposal.entity';
+import { GovActionProposal } from '../../governance-action-proposal/entities/gov-action-proposal.entity';
 
 @Entity('votes')
 export class Vote extends CommonEntity {
@@ -52,18 +52,6 @@ export class Vote extends CommonEntity {
     nullable: true,
   })
   comment: string;
-
-  @Column({
-    name: 'gov_action_type',
-    type: 'varchar',
-  })
-  govActionType: string;
-
-  @Column({
-    name: 'end_time',
-    type: 'timestamp',
-  })
-  endTime: Date;
 
   @Column({
     name: 'submit_time',
