@@ -37,14 +37,14 @@ export const GovActionTableRow = ({
   const addReasoningModal = useModal<OpenAddReasoningModalState>();
   const reasoningLinkModal = useModal<OpenReasoningLinkModalState>();
   const updateReasoningkModal = useModal<OpenPreviewReasoningModal>();
+  const isDisabled = status.toLowerCase() !== "active";
+  const isUnvoted = vote_status.toLowerCase() === "unvoted";
 
-  const isDisabled = false; //todo
-  const isUnvoted = vote_status === "UNVOTED";
   //User can add reasoning in two cases:
   // 1. User doesn't have vote for selected GA
   // 2. User has vote for selected GA, but doesn't have reasoning
   const canAddReasoning =
-    isUnvoted || (!has_reasoning && vote_status === "VOTED");
+    isUnvoted || (!has_reasoning && vote_status.toLowerCase() === "voted");
 
   const openGAModal = () => {
     govActionModal.openModal({
