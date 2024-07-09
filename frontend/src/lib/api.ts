@@ -282,7 +282,11 @@ export async function getGovernanceActions({
 
   try {
     const res = await axiosInstance.get(
-      `/api/governance/users/${userId}/proposals/search`,
+      `/api/governance/users/${userId}/proposals/search?${
+        search ? `search=${search}` : ""
+      }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
+        status ? `filter.status=$in:${status}` : ""
+      }&${sortBy ? `sortBy=${sortBy}` : ""}`,
       {
         headers: {
           Authorization: `bearer ${token}`,
