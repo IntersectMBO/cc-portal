@@ -247,6 +247,7 @@ describe('UsersFacade', () => {
         return new ConflictException(`User already deleted`);
       }
       foundUser.isDeleted = true;
+      foundUser.status = UserStatusEnum.INACTIVE;
       return UserMapper.mapUserDtoToResponse(foundUser);
     }),
   };
@@ -470,6 +471,7 @@ describe('UsersFacade', () => {
       const userId = mockUsers[0].id;
       const result = await facade.softDelete(userId);
       expect(result.isDeleted).toEqual(true);
+      expect(result.status).toEqual(UserStatusEnum.INACTIVE);
       expect(mockUserService.softDelete).toHaveBeenCalledWith(userId);
     });
     it(`shouldn't delete a user - user not found by id`, async () => {

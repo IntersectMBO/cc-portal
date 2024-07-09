@@ -718,6 +718,7 @@ describe('UsersService', () => {
         .mockResolvedValueOnce(mockUser);
       const deletedUser = await service.softDelete(mockUser.id);
       expect(deletedUser.isDeleted).toEqual(true);
+      expect(deletedUser.status).toEqual(UserStatusEnum.INACTIVE);
       expect(mockFindEntityById).toHaveBeenCalledWith(mockUser.id);
     });
     it(`shouldn't delete a user - already deleted`, async () => {

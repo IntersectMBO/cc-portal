@@ -277,6 +277,7 @@ export class UsersService {
       throw new ConflictException(`User already deleted`);
     }
     user.isDeleted = true;
+    user.status = UserStatusEnum.INACTIVE;
     await this.userRepository.save(user);
     return UserMapper.userToDto(user);
   }
