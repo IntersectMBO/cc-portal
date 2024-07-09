@@ -16,7 +16,7 @@ export const UploadFileButton = ({
   errorMessage,
   errorStyles,
   name,
-  accept = "image/jpeg",
+  accept, //= "image/jpeg",
   ...buttonProps
 }: UploadFileButtonProps & FormErrorMessageProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
