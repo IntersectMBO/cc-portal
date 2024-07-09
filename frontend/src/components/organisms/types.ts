@@ -1,5 +1,6 @@
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import {
+  AddReasoningResponseI,
   FetchUserData,
   GovActionProposalStatus,
   UserRole,
@@ -55,7 +56,7 @@ export interface GovActionModalState {
 
 export interface OpenAddReasoningModalState {
   id: string;
-  callback: () => void;
+  callback: (response: AddReasoningResponseI) => void;
 }
 
 export interface OpenReasoningLinkModalState {

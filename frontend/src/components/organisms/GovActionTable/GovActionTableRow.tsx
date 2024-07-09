@@ -23,7 +23,7 @@ import Image from "next/image";
 import { getShortenedGovActionId, truncateText } from "@utils";
 import { getProposalTypeLabel } from "@utils";
 import { useModal } from "@context";
-import { GovernanceActionTableI } from "@/lib/requests";
+import { AddReasoningResponseI, GovernanceActionTableI } from "@/lib/requests";
 
 interface Props {
   govActions: GovernanceActionTableI;
@@ -69,19 +69,19 @@ export const GovActionTableRow = ({
     });
   };
 
-  const openReasoningLinkModal = () => {
+  const openReasoningLinkModal = (hash: string, link: string) => {
     reasoningLinkModal.openModal({
       type: "reasoningLinkModal",
       state: {
-        hash: "324rfwdf123abcdH76ADF8utkm",
-        link: "djfs.fems.com",
+        hash,
+        link,
       },
     });
   };
 
-  const addReasoningCallback = () => {
+  const addReasoningCallback = (response: AddReasoningResponseI) => {
     addReasoningModal.closeModal();
-    openReasoningLinkModal();
+    openReasoningLinkModal(response.blake2b, response.url);
   };
 
   const openAddReasoningModal = () => {
@@ -89,7 +89,8 @@ export const GovActionTableRow = ({
       type: "addReasoningModal",
       state: {
         id,
-        callback: addReasoningCallback,
+        callback: (response: AddReasoningResponseI) =>
+          addReasoningCallback(response),
       },
     });
   };

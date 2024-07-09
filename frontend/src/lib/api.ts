@@ -14,6 +14,8 @@ import {
   GetGovernanceActionsI,
   VotesTableI,
   GovernanceActionTableI,
+  AddReasoningResponseI,
+  AddReasoningRequestI,
 } from "./requests";
 import {
   ConstitutionByCid,
@@ -303,6 +305,36 @@ export async function getGovernanceActions({
       );
 
     return res;
+  } catch (error) {
+    const t = await getTranslations();
+    const customErrorMessage =
+      !token &&
+      error.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("General.errors.somethingWentWrong"),
+      statusCode: error.res.statusCode || null,
+    };
+  }
+}
+
+export async function addOrUpdateReasoning({
+  proposalId,
+  ...data
+}: AddReasoningRequestI): Promise<AddReasoningResponseI | ResponseErrorI> {
+  const token = getAccessToken();
+  const user = await decodeUserToken();
+  try {
+    const response: AddReasoningResponseI = await axiosInstance.post(
+      `/api/governance/users/${user?.userId}/proposals/${proposalId}/reasoning`,
+      data,
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      }
+    );
+    return response;
   } catch (error) {
     const t = await getTranslations();
     const customErrorMessage =
