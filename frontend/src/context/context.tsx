@@ -11,6 +11,7 @@ import { DecodedToken, FetchUserData } from "@/lib/requests";
 import { SnackbarProvider } from "./snackbar";
 import { PATHS, cookieStore } from "@consts";
 import Cookies from "js-cookie";
+import { useDocumentVisibility } from "@utils";
 
 interface AppContextType {
   userSession: DecodedToken | null;
@@ -32,6 +33,7 @@ export function AppContextProvider({ session, children }) {
   const router = useRouter();
   const currentPath = usePathname();
   const authCookie = Cookies.get(cookieStore.token);
+  const isDocumentVisible = useDocumentVisibility();
 
   async function fetchUserData(userId: string) {
     const userData = await getUser(userId);
@@ -48,13 +50,13 @@ export function AppContextProvider({ session, children }) {
     // Reset app state if user is on Logout page
     if (currentPath.includes(PATHS.logout) || (user && !authCookie)) {
       resetState();
-      router.refresh();
     }
-  }, [currentPath, authCookie]);
+  }, [currentPath, authCookie, isDocumentVisible]);
 
   const resetState = () => {
     setUser(null);
     setUserSession(null);
+    router.refresh();
   };
 
   // Render the provider component of your context, passing in the values or functions as the value prop.

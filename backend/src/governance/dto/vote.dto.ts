@@ -10,11 +10,11 @@ export class VoteDto {
   voteValue: VoteValue;
   reasoningTitle: string;
   reasoningComment: string;
-  govProposalId: string;
-  govProposalTitle: string;
-  govProposalType: string;
-  govProposalResolved: boolean;
-  govProposalStatus: GovActionProposalStatus;
-  govProposalEndTime: Date;
+  govActionProposalId: string;
+  govActionProposalTxHash: string;
+  govActionProposalTitle: string;
+  govActionProposalType: string;
+  govActionProposalStatus: GovActionProposalStatus;
+  govActionProposalEndTime: Date;
   voteSubmitTime: Date;
 }

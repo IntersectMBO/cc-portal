@@ -9,8 +9,6 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 describe('GovActionProposalFacade', () => {
   let facade: GovActionProposalFacade;
 
-  const mockOffset = 0;
-
   // 10 elements in this array
   const mockFirstGapRequestArray: GovActionProposalRequest[] = [
     {
@@ -180,41 +178,6 @@ describe('GovActionProposalFacade', () => {
         'f6ca72e9fe225c01e1a622d529ad807d668a786cb28d1eb352b8da58b66dd8c2',
     },
   ];
-
-  // 14 elements in this array
-  const mockGapIdsArray: object[] = [
-    { id: '6' },
-    { id: '7' },
-    { id: '8' },
-    { id: '1' },
-    { id: '2' },
-    { id: '23' },
-    { id: '24' },
-    { id: '4' },
-    { id: '3' },
-    { id: '22' },
-    { id: '5' },
-    { id: '9' },
-    { id: '10' },
-    { id: '11' },
-  ];
-
-  // 10 elements in this array
-  const mockFirstGapIdsValuesArray: string[] = [
-    '6',
-    '7',
-    '8',
-    '1',
-    '2',
-    '23',
-    '24',
-    '4',
-    '3',
-    '22',
-  ];
-
-  // 4 elements in this array
-  const mockSecondGapIdsValuesArray: string[] = ['5', '9', '10', '11'];
 
   const mockGovActionProposalService = {
     getGovActionProposalIds: jest.fn(async () => {

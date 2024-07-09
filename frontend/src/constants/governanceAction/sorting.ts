@@ -29,11 +29,11 @@ export const GOVERNANCE_ACTIONS_SORTING: FilterItem[] = [
     label: "Latest first",
   },
   {
-    key: "expireTime:ASC",
+    key: "endTime:ASC",
     label: "Expire first",
   },
   {
-    key: "expireTime:DESC",
+    key: "endTime:DESC",
     label: "Latest expire",
   },
 ];

@@ -3,7 +3,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
 import { VotesTable } from "./VotesTable";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
@@ -11,6 +10,7 @@ import { DataActionsBar } from "../molecules";
 import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING, PATHS } from "@consts";
 import { PageTitleTabs } from "./PageTitleTabs";
 import { useModal } from "@/context";
+import { VotesTableI } from "@/lib/requests";
 
 export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
   const t = useTranslations("MyActions");

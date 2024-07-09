@@ -92,19 +92,27 @@ export const GOVERNANCE_ACTIONS_FILTERS: Record<string, FilterItems> = {
   },
   status: {
     key: "status",
-    title: "Status",
+    title: "GA Status",
     items: [
       {
-        key: "voted",
-        label: "Voted",
+        key: "ACTIVE",
+        label: "Active",
       },
       {
-        key: "unvoted",
-        label: "Unvoted",
+        key: "EXPIRED",
+        label: "Expired",
       },
       {
-        key: "pending",
-        label: "Pending",
+        key: "RATIFIED",
+        label: "Ratified",
+      },
+      {
+        key: "ENACTED",
+        label: "Enacted",
+      },
+      {
+        key: "DROPPED",
+        label: "Dropped ",
       },
     ],
   },
