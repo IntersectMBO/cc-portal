@@ -1,5 +1,5 @@
+import { GovActionStatus } from "@/lib/requests";
 import { Box, Typography } from "@mui/material";
-import { GovActionStatus } from "../organisms";
 
 export const GovActionStatusPill = ({
   status,
