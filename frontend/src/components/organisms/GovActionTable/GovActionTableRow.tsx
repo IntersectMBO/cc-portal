@@ -10,11 +10,9 @@ import {
   GovActionStatusPill,
   OutlinedLightButton,
   Typography,
-  VotePill,
 } from "@atoms";
 import {
   GovActionModalState,
-  GovernanceActionTableI,
   OpenAddReasoningModalState,
   OpenPreviewReasoningModal,
   OpenReasoningLinkModalState,
@@ -25,6 +23,7 @@ import Image from "next/image";
 import { getShortenedGovActionId, truncateText } from "@utils";
 import { getProposalTypeLabel } from "@utils";
 import { useModal } from "@context";
+import { GovernanceActionTableI } from "@/lib/requests";
 
 interface Props {
   govActions: GovernanceActionTableI;

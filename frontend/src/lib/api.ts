@@ -254,7 +254,9 @@ export async function getUserVotes({
   }
 }
 
-export async function getGovernanceMetadata(id: string): Promise<any> {
+export async function getGovernanceMetadata(
+  id: string
+): Promise<GovActionMetadata> {
   try {
     const res: GovActionMetadata = await axiosInstance.get(
       `/api/governance/proposals/${id}`

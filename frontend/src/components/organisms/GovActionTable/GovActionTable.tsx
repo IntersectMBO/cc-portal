@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid } from "@mui/material";
-import { GovernanceActionTableI } from "../types";
 import { GovActionTableRow } from "./GovActionTableRow";
+import { GovernanceActionTableI } from "@/lib/requests";
 
 interface Props {
   govActions: GovernanceActionTableI[];

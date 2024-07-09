@@ -1,5 +1,9 @@
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { FetchUserData, UserRole } from "@/lib/requests";
+import {
+  FetchUserData,
+  GovActionProposalStatus,
+  UserRole,
+} from "@/lib/requests";
 import { Vote } from "../atoms";
 
 export interface ConstitutionMetadata {
@@ -61,9 +65,14 @@ export interface OpenReasoningLinkModalState {
 
 export interface GovActionMetadata {
   id: string;
+  tx_hash: string;
   title: string;
   abstract: string;
-  metadataUrl: string;
+  metadata_url: string;
+  status: GovActionProposalStatus;
+  type: string;
+  submit_time: string;
+  end_time?: string;
 }
 
 export interface OpenPreviewReasoningModal {
