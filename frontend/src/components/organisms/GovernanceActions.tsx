@@ -3,7 +3,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { GovernanceActionTableI, VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
@@ -14,11 +13,14 @@ import {
 } from "@consts";
 import { PageTitleTabs } from "./PageTitleTabs";
 import { GovActionTable } from "./GovActionTable";
+import { GovernanceActionTableI, PaginationMeta } from "@/lib/requests";
 
 export const GovernanceActions = ({
   actions,
+  paginationMeta,
 }: {
   actions: GovernanceActionTableI[];
+  paginationMeta: PaginationMeta;
 }) => {
   const t = useTranslations("MyActions");
   const { updateQueryParams } = useManageQueryParams();

@@ -11,14 +11,14 @@ import {
   Permissions,
   ResponseErrorI,
   FetchUsersAdminI,
+  GetGovernanceActionsI,
+  VotesTableI,
+  GovernanceActionTableI,
 } from "./requests";
 import {
   ConstitutionByCid,
   ConstitutionMetadata,
   GovActionMetadata,
-  GovernanceActionTableI,
-  VotesTableI,
-  GovActionStatus,
   PreviewReasoningModalState,
 } from "@/components/organisms";
 
@@ -277,26 +277,35 @@ export async function getGovernanceActions({
   status?: string;
   sortBy?: string;
   userId?: string;
-}): Promise<GovernanceActionTableI[]> {
+}): Promise<GetGovernanceActionsI> {
   const token = getAccessToken();
 
   try {
-    const res = await axiosInstance.get(
-      `/api/governance/users/${userId}/proposals/search?${
-        search ? `search=${search}` : ""
-      }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
-        status ? `filter.status=$in:${status}` : ""
-      }&${sortBy ? `sortBy=${sortBy}` : ""}`,
-      {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      }
-    );
+    const res: { data: GovernanceActionTableI[]; meta: PaginationMeta } =
+      await axiosInstance.get(
+        `/api/governance/users/${userId}/proposals/search?${
+          search ? `search=${search}` : ""
+        }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
+          status ? `filter.status=$in:${status}` : ""
+        }&${sortBy ? `sortBy=${sortBy}` : ""}`,
+        {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        }
+      );
 
-    return res.data;
+    return res;
   } catch (error) {
-    console.log("error get governance actions");
+    const t = await getTranslations();
+    const customErrorMessage =
+      !token &&
+      error.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("General.errors.somethingWentWrong"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 

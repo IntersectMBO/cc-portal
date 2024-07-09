@@ -1,3 +1,5 @@
+import { Vote } from "@atoms";
+
 export type UserRole = "super_admin" | "admin" | "user" | "alumni" | null;
 
 export interface RoleListObject {
@@ -41,6 +43,48 @@ export interface FetchUserData {
   updated_at: Date;
 }
 
+export interface VotesTableI {
+  user_name: string;
+  user_address: string;
+  user_photo_url?: string;
+  value: Vote;
+  reasoning_title?: string;
+  reasoning_comment?: string;
+  gov_action_proposal_id: string;
+  gov_action_proposal_title?: string;
+  gov_action_proposal_type: string;
+  gov_action_proposal_status: GovActionProposalStatus;
+  gov_action_proposal_end_time: string;
+  vote_submit_time: string;
+}
+
+export enum GovActionProposalStatus {
+  ACTIVE = "ACTIVE",
+  EXPIRED = "EXPIRED",
+  RATIFIED = "RATIFIED",
+  ENACTED = "ENACTED",
+  DROPPED = "DROPPED",
+}
+
+export enum GovActionStatus {
+  PENDING = "PENDING",
+  VOTED = "VOTED",
+  UNVOTED = "UNVOTED",
+}
+
+export interface GovernanceActionTableI {
+  id: string;
+  tx_hash: string;
+  title: string;
+  type: string;
+  metadata_url: string;
+  status: GovActionProposalStatus;
+  has_reasoning: false;
+  vote_status: GovActionStatus;
+  submit_time: string;
+  end_time?: string;
+}
+
 export interface PaginationMeta {
   page: number;
   per_page: number;
@@ -57,5 +101,10 @@ export interface ResponseErrorI {
 
 export interface FetchUsersAdminI extends ResponseErrorI {
   data?: FetchUserData[];
+  meta?: PaginationMeta;
+}
+
+export interface GetGovernanceActionsI extends ResponseErrorI {
+  data?: GovernanceActionTableI[];
   meta?: PaginationMeta;
 }

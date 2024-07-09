@@ -26,7 +26,10 @@ export default async function GovernanceActionsPage({
       <TopNav />
       <ContentWrapper>
         <Suspense fallback={<Loading />}>
-          <GovernanceActions actions={actions} />
+          <GovernanceActions
+            paginationMeta={actions?.meta}
+            actions={actions?.data}
+          />
         </Suspense>
       </ContentWrapper>
       <Footer />
