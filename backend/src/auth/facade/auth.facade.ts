@@ -61,7 +61,7 @@ export class AuthFacade {
   // checkLoginAbility checks whether the user can login according to his status
   async checkLoginAbility(email: string): Promise<void> {
     const user = await this.validateUser(email);
-    if (user.status !== UserStatusEnum.ACTIVE) {
+    if (user.status !== UserStatusEnum.ACTIVE || user.isDeleted === true) {
       throw new BadRequestException(`User is not active`);
     }
   }

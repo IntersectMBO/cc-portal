@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "12186bc3-5571-40b3-9ded-cf9fd0b9c3d1",
+		"_postman_id": "09e2a934-90fc-409c-9673-a0e0f92715d4",
 		"name": "CC Portal develop",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20133713"
 	},
 	"item": [
 		{
@@ -205,6 +206,31 @@
 									"key": "perPage",
 									"value": "3"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/api/users/778f8a09-ce16-41fa-8bb6-bb0dad8d0012/delete",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"778f8a09-ce16-41fa-8bb6-bb0dad8d0012",
+								"delete"
 							]
 						}
 					},
@@ -720,8 +746,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{accessToken}}",
-								"type": "text"
+								"value": "{{accessToken}}"
 							}
 						],
 						"url": {

@@ -38,6 +38,7 @@ import { ApiPaginationQuery, Paginate, PaginateQuery } from 'nestjs-paginate';
 import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
 import { PermissionEnum } from '../enums/permission.enum';
 import { Permissions } from 'src/auth/guard/permission.decorator';
+import { PermissionGuard } from 'src/auth/guard/permission.guard';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -237,7 +238,11 @@ export class UsersController {
   })
   @ApiResponse({
     status: 403,
-    description: 'Forbidden"',
+    description: 'Forbidden resource"',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User with {id} not found"',
   })
   @ApiResponse({
     status: 409,
@@ -246,13 +251,13 @@ export class UsersController {
   @ApiParam({
     name: 'id',
     required: true,
-    description: 'identification number of the user',
+    description: 'Identification number of the user',
     type: String,
   })
   @ApiBody({ type: UpdateUserRequest })
   @HttpCode(200)
   @Permissions(PermissionEnum.MANAGE_CC_MEMBERS)
-  @UseGuards(JwtAuthGuard, UserPathGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @Patch(':id/delete')
   async softDelete(
     @Request() req: any,

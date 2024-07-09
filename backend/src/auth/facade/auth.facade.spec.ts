@@ -86,6 +86,7 @@ describe('AuthFacade', () => {
     hotAddresses: [],
     role: mockRoles[2].code,
     permissions: [],
+    isDeleted: false,
     createdAt: null,
     updatedAt: null,
   };
@@ -100,6 +101,7 @@ describe('AuthFacade', () => {
     hotAddresses: [],
     role: mockRoles[0].code,
     permissions: [mockPermissions[0].code, mockPermissions[1].code],
+    isDeleted: false,
     createdAt: null,
     updatedAt: null,
   };
@@ -115,6 +117,7 @@ describe('AuthFacade', () => {
       hotAddresses: ['sofija123', 'sofija234'],
       role: mockRoles[0].code,
       permissions: [mockPermissions[0].code],
+      isDeleted: false,
       createdAt: null,
       updatedAt: null,
     },
@@ -128,6 +131,7 @@ describe('AuthFacade', () => {
       hotAddresses: ['ivan1', 'ivan2'],
       role: mockRoles[2].code,
       permissions: [],
+      isDeleted: false,
       createdAt: null,
       updatedAt: null,
     },
@@ -197,6 +201,7 @@ describe('AuthFacade', () => {
           hotAddresses: [],
           role: userRole.code,
           permissions: userPermissions.map((permission) => permission.code),
+          isDeleted: false,
           createdAt: null,
           updatedAt: null,
         };
@@ -337,6 +342,7 @@ describe('AuthFacade', () => {
         hotAddresses: ['sofija123', 'sofija234'],
         role: mockRoles[0].code,
         permissions: [mockPermissions[0].code],
+        isDeleted: false,
         createdAt: null,
         updatedAt: null,
       };
@@ -360,6 +366,7 @@ describe('AuthFacade', () => {
         hotAddresses: ['sofija123', 'sofija234'],
         role: mockRoles[0].code,
         permissions: [mockPermissions[0].code],
+        isDeleted: false,
         createdAt: null,
         updatedAt: null,
       };
@@ -382,6 +389,7 @@ describe('AuthFacade', () => {
         hotAddresses: ['sofija123', 'sofija234'],
         role: mockRoles[0].code,
         permissions: [mockPermissions[0].code],
+        isDeleted: false,
         createdAt: null,
         updatedAt: null,
       };
@@ -411,6 +419,7 @@ describe('AuthFacade', () => {
           hotAddresses: ['sofija123', 'sofija234'],
           role: mockRoles[0].code,
           permissions: [mockPermissions[0].code],
+          isDeleted: false,
           createdAt: null,
           updatedAt: null,
         };
@@ -446,6 +455,7 @@ describe('AuthFacade', () => {
           hotAddresses: ['ivan1', 'ivan2'],
           role: mockRoles[2].code,
           permissions: [],
+          isDeleted: false,
           createdAt: null,
           updatedAt: null,
         };
