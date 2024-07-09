@@ -11,14 +11,14 @@ import {
   Permissions,
   ResponseErrorI,
   FetchUsersAdminI,
+  GetGovernanceActionsI,
+  VotesTableI,
+  GovernanceActionTableI,
 } from "./requests";
 import {
   ConstitutionByCid,
   ConstitutionMetadata,
   GovActionMetadata,
-  GovernanceActionTableI,
-  VotesTableI,
-  GovActionStatus,
   PreviewReasoningModalState,
 } from "@/components/organisms";
 
@@ -254,10 +254,12 @@ export async function getUserVotes({
   }
 }
 
-export async function getGovernanceMetadata(id: string): Promise<any> {
+export async function getGovernanceMetadata(
+  id: string
+): Promise<GovActionMetadata> {
   try {
     const res: GovActionMetadata = await axiosInstance.get(
-      `/api/governance/${id}`
+      `/api/governance/proposals/${id}`
     );
     return res;
   } catch (error) {
@@ -266,56 +268,51 @@ export async function getGovernanceMetadata(id: string): Promise<any> {
 }
 
 export async function getGovernanceActions({
+  page = 1,
+  limit = DEFAULT_PAGINATION_LIMIT,
   search,
   govActionType,
   status,
   sortBy,
-  userId,
 }: {
+  page?: number;
+  limit?: number;
   search?: string;
   govActionType?: string;
   status?: string;
   sortBy?: string;
-  userId?: string;
-}): Promise<GovernanceActionTableI[]> {
+}): Promise<GetGovernanceActionsI> {
+  const token = getAccessToken();
+  const user = await decodeUserToken();
+
   try {
-    const res: GovernanceActionTableI[] = [
-      {
-        gov_action_proposal_id: "2",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "PENDING" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
-      },
-      {
-        gov_action_proposal_id: "2",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "VOTED" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit. ",
-      },
-      {
-        gov_action_proposal_id: "16",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "UNVOTED" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
-      },
-      {
-        gov_action_proposal_id: "16",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "UNVOTED" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
-      },
-    ];
+    const res: { data: GovernanceActionTableI[]; meta: PaginationMeta } =
+      await axiosInstance.get(
+        `/api/governance/users/${user?.userId}/proposals/search?${
+          search ? `search=${search}` : ""
+        }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
+          status ? `filter.status=$in:${status}` : ""
+        }&${sortBy ? `sortBy=${sortBy}` : ""}&${
+          page ? `page=${page}` : ""
+        }&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        }
+      );
+
     return res;
   } catch (error) {
-    console.log("error get governance actions", error);
+    const t = await getTranslations();
+    const customErrorMessage =
+      !token &&
+      error.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("General.errors.somethingWentWrong"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 

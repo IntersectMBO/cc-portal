@@ -3,7 +3,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { GovernanceActionTableI, VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
@@ -14,11 +13,17 @@ import {
 } from "@consts";
 import { PageTitleTabs } from "./PageTitleTabs";
 import { GovActionTable } from "./GovActionTable";
+import { GovernanceActionTableI, PaginationMeta } from "@/lib/requests";
+import { getGovernanceActions } from "@/lib/api";
+import { usePagination } from "@/lib/utils/usePagination";
+import { ShowMoreButton } from "../atoms";
 
 export const GovernanceActions = ({
   actions,
+  paginationMeta,
 }: {
   actions: GovernanceActionTableI[];
+  paginationMeta: PaginationMeta;
 }) => {
   const t = useTranslations("MyActions");
   const { updateQueryParams } = useManageQueryParams();
@@ -29,6 +34,22 @@ export const GovernanceActions = ({
   );
   const [sortOpen, setSortOpen] = useState(false);
   const [chosenSorting, setChosenSorting] = useState<string>("");
+  const params: Record<string, string | null> = {
+    search: searchText || null,
+    govActionType:
+      chosenFilters.govActionType?.length > 0
+        ? chosenFilters.govActionType?.join(",")
+        : null,
+    status:
+      chosenFilters.status?.length > 0 ? chosenFilters.status?.join(",") : null,
+    sortBy: chosenSorting || null,
+  };
+
+  const { data, pagination, isLoading, loadMore } = usePagination(
+    actions,
+    paginationMeta,
+    (page) => getGovernanceActions({ page, ...params })
+  );
 
   const closeFilters = useCallback(() => {
     setFiltersOpen(false);
@@ -39,18 +60,6 @@ export const GovernanceActions = ({
   }, []);
 
   useEffect(() => {
-    const params: Record<string, string | null> = {
-      search: searchText || null,
-      govActionType:
-        chosenFilters.govActionType?.length > 0
-          ? chosenFilters.govActionType?.join(",")
-          : null,
-      status:
-        chosenFilters.status?.length > 0
-          ? chosenFilters.status?.join(",")
-          : null,
-      sortBy: chosenSorting || null,
-    };
     updateQueryParams(params);
   }, [searchText, chosenFilters, chosenSorting, updateQueryParams]);
 
@@ -96,14 +105,21 @@ export const GovernanceActions = ({
           />
         </Box>
       </Box>
-      {isEmpty(actions) ? (
+      {isEmpty(data) ? (
         <NotFound
           height="55vh"
           title="governanceAction.title"
           description="governanceAction.description"
         />
       ) : (
-        <GovActionTable govActions={actions} />
+        <>
+          <GovActionTable govActions={data} />
+          <ShowMoreButton
+            isLoading={isLoading}
+            hasNextPage={pagination.has_next_page}
+            callBack={loadMore}
+          />
+        </>
       )}
     </Box>
   );
