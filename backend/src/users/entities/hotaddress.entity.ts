@@ -16,6 +16,7 @@ export class HotAddress extends CommonEntity {
   @Column({
     name: 'address',
     type: 'varchar',
+    unique: true,
   })
   address: string;
 

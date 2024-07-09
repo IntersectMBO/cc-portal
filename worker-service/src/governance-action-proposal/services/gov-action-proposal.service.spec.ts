@@ -119,51 +119,6 @@ const mockFirstGapRequestArray: GovActionProposalRequest[] = [
   },
 ];
 
-// 4 elements in this array
-const mockSecondGapRequestArray: GovActionProposalRequest[] = [
-  {
-    id: '11',
-    votingAnchorId: '168',
-    govActionType: 'InfoAction',
-    govMetadataUrl:
-      'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
-    status: 'DROPPED',
-    endTime: '2024-05-27T22:29:38.000Z',
-    txHash: 'f6ca72e9fe225c01e1a622d529ad807d668a786cb28d1eb352b8da58b66dd8c2',
-    submitTime: '2024-05-22T19:44:26.000Z',
-  },
-  {
-    id: '12',
-    votingAnchorId: '239',
-    govActionType: 'InfoAction',
-    govMetadataUrl: 'https://metadata.cardanoapi.io/data/Info',
-    status: 'DROPPED',
-    endTime: '2024-05-28T22:29:11.000Z',
-    txHash: '94982e5bc55df63d4c0ef871faaa28b10507da7ef8f8a8ebd3f5d1bb586d0034',
-    submitTime: '2024-05-22T23:41:24.000Z',
-  },
-  {
-    id: '13',
-    votingAnchorId: '239',
-    govActionType: 'InfoAction',
-    govMetadataUrl: 'https://metadata.cardanoapi.io/data/Info',
-    status: 'DROPPED',
-    endTime: '2024-05-28T22:29:11.000Z',
-    txHash: 'fa08d949009f6e30195b2ab6570a898cc669c011607423f3e2536a4640eb9f1d',
-    submitTime: '2024-05-22T23:42:22.000Z',
-  },
-  {
-    id: '14',
-    votingAnchorId: '239',
-    govActionType: 'InfoAction',
-    govMetadataUrl: 'https://metadata.cardanoapi.io/data/Info',
-    status: 'DROPPED',
-    endTime: '2024-05-28T22:29:11.000Z',
-    txHash: '4c2121ececebac2a364878d295c959029e55225b426dfea5e0511ae0abc28d50',
-    submitTime: '2024-05-22T23:43:56.000Z',
-  },
-];
-
 // 10 elements in this array
 const mockFirstGAPEntityArray: GovActionProposal[] = [
   {
@@ -314,68 +269,6 @@ const mockFirstGAPEntityArray: GovActionProposal[] = [
   },
 ];
 
-// 4 elements in this array
-const mockSecondGAPEntityArray: GovActionProposal[] = [
-  {
-    id: '5',
-    votingAnchorId: '62',
-    govActionType: 'InfoAction',
-    govMetadataUrl: 'https://bit.ly/3zCH2HL',
-    status: 'DROPPED',
-    submitTime: new Date('2024-05-21 15:18:06.000'),
-    endTime: new Date('2024-05-26T22:29:45.000Z'),
-    txHash: 'cef93aface365b575e1f33987fad4093e2a8a06d31c01a260e0e7db325fc0b50',
-    title: null,
-    abstract: null,
-    createdAt: null,
-    updatedAt: null,
-  },
-  {
-    id: '9',
-    votingAnchorId: '239',
-    govActionType: 'InfoAction',
-    govMetadataUrl: 'https://metadata.cardanoapi.io/data/Info',
-    status: 'DROPPED',
-    submitTime: new Date('2024-05-21 15:18:06.000'),
-    endTime: new Date('2024-05-26T22:29:45.000Z'),
-    txHash: '75d1c676f459f1192c7fd2c73423635a074c5e7b46497e00f44428861f460153',
-    title: 'test',
-    abstract: 'test',
-    createdAt: null,
-    updatedAt: null,
-  },
-  {
-    id: '10',
-    votingAnchorId: '168',
-    govActionType: 'InfoAction',
-    govMetadataUrl:
-      'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
-    status: 'DROPPED',
-    submitTime: new Date('2024-05-21 15:18:06.000'),
-    endTime: new Date('2024-05-26T22:29:45.000Z'),
-    txHash: '9bd2b6547ab8e8ed5c34049d6b984772a8352ac70e92198e1a7f6cdbb12d6397',
-    title: 'test',
-    abstract: 'test',
-    createdAt: null,
-    updatedAt: null,
-  },
-  {
-    id: '11',
-    votingAnchorId: '168',
-    govActionType: 'InfoAction',
-    govMetadataUrl:
-      'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
-    status: 'DROPPED',
-    submitTime: new Date('2024-05-21 15:18:06.000'),
-    endTime: new Date('2024-05-26T22:29:45.000Z'),
-    txHash: 'f6ca72e9fe225c01e1a622d529ad807d668a786cb28d1eb352b8da58b66dd8c2',
-    title: 'test',
-    abstract: 'test',
-    createdAt: null,
-    updatedAt: null,
-  },
-];
-
 // 10 elements in this array
 const mockFirstGAPDbData: object[] = [
   {
@@ -511,69 +404,12 @@ const mockFirstGAPDbData: object[] = [
   },
 ];
 
-// 4 elements in this array
-const mockSecondGAPDbData: object[] = [
-  {
-    id: '11',
-    type: 'InfoAction',
-    end_time: '2024-05-27T22:29:38.000Z',
-    voting_anchor_id: '168',
-    url: 'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
-    hash: new Uint8Array([
-      246, 202, 114, 233, 254, 34, 92, 1, 225, 166, 34, 213, 41, 173, 128, 125,
-      102, 138, 120, 108, 178, 141, 30, 179, 82, 184, 218, 88, 182, 109, 216,
-      194,
-    ]),
-    time: '2024-05-22T19:44:26.000Z',
-    epoch_status: 'DROPPED',
-  },
-  {
-    id: '12',
-    type: 'InfoAction',
-    end_time: '2024-05-28T22:29:11.000Z',
-    voting_anchor_id: '239',
-    url: 'https://metadata.cardanoapi.io/data/Info',
-    hash: new Uint8Array([
-      148, 152, 46, 91, 197, 93, 246, 61, 76, 14, 248, 113, 250, 170, 40, 177,
-      5, 7, 218, 126, 248, 248, 168, 235, 211, 245, 209, 187, 88, 109, 0, 52,
-    ]),
-    time: '2024-05-22T23:41:24.000Z',
-    epoch_status: 'DROPPED',
-  },
-  {
-    id: '13',
-    type: 'InfoAction',
-    end_time: '2024-05-28T22:29:11.000Z',
-    voting_anchor_id: '239',
-    url: 'https://metadata.cardanoapi.io/data/Info',
-    hash: new Uint8Array([
-      250, 8, 217, 73, 0, 159, 110, 48, 25, 91, 42, 182, 87, 10, 137, 140, 198,
-      105, 192, 17, 96, 116, 35, 243, 226, 83, 106, 70, 64, 235, 159, 29,
-    ]),
-    time: '2024-05-22T23:42:22.000Z',
-    epoch_status: 'DROPPED',
-  },
-  {
-    id: '14',
-    type: 'InfoAction',
-    end_time: '2024-05-28T22:29:11.000Z',
-    voting_anchor_id: '239',
-    url: 'https://metadata.cardanoapi.io/data/Info',
-    hash: new Uint8Array([
-      76, 33, 33, 236, 236, 235, 172, 42, 54, 72, 120, 210, 149, 201, 89, 2,
-      158, 85, 34, 91, 66, 109, 254, 165, 224, 81, 26, 224, 171, 194, 141, 80,
-    ]),
-    time: '2024-05-22T23:43:56.000Z',
-    epoch_status: 'DROPPED',
-  },
-];
-
 const mockGAPRepository = {
   save: jest.fn((govActionProposals: GovActionProposal[]) => {
     if (govActionProposals === mockFirstGAPEntityArray) {
       return mockFirstGAPEntityArray;
     }
-    throw new Error('Database Error');
+    throw new InternalServerErrorException('Transaction failed');
   }),
 };
 const mockEntityManager = {

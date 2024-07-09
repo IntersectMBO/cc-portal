@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid } from "@mui/material";
-import { GovernanceActionTableI } from "../types";
 import { GovActionTableRow } from "./GovActionTableRow";
+import { GovernanceActionTableI } from "@/lib/requests";
 
 interface Props {
   govActions: GovernanceActionTableI[];
@@ -10,12 +10,12 @@ interface Props {
 export const GovActionTable = ({ govActions }: Props) => {
   return (
     <Grid container direction="column" gap={0}>
-      {govActions.map((data, index) => {
+      {govActions.map((data) => {
         return (
           <Grid
-            key={index}
+            key={data.id}
             item
-            data-testid={`governance-actions-${data.gov_action_proposal_id}-card`}
+            data-testid={`governance-actions-${data.id}-card`}
           >
             <GovActionTableRow govActions={data} />
           </Grid>

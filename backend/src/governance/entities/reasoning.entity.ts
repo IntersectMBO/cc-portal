@@ -1,5 +1,13 @@
 import { CommonEntity } from '../../common/entities/common.entity';
-import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  Unique,
+} from 'typeorm';
+import { GovActionProposal } from './gov-action-proposal.entity';
 
 @Entity('reasonings')
 @Unique(['userId', 'govActionProposalId'])
@@ -9,6 +17,16 @@ export class Reasoning extends CommonEntity {
     type: 'uuid',
   })
   userId: string;
+
+  @ManyToOne(
+    () => GovActionProposal,
+    (govActionProposal) => govActionProposal.id,
+    {
+      eager: true,
+    },
+  )
+  @JoinColumn({ name: 'gov_action_proposal_id' })
+  govActionProposal: GovActionProposal;
 
   @PrimaryColumn({
     name: 'gov_action_proposal_id',

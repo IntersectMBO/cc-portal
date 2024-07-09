@@ -31,7 +31,7 @@ export class VoteMapper {
 
   private static hotAddressFromBufferToHash(address: Buffer): string {
     const buffer = Buffer.from(address);
-    const hashAddress = '\\x' + buffer.toString('hex');
+    const hashAddress = buffer.toString('hex');
     return hashAddress;
   }
 }

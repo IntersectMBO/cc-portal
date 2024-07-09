@@ -42,7 +42,9 @@
   "GovernanceActions": {
     "govAction": "Governance Action",
     "govActionCategoryShort": "GA Category",
-    "status": "Status",
+    "voteStatus": "Vote Status",
+    "gaStatus": "GA Status",
+    "gaID": "GA ID",
     "abstract": "Abstract",
     "actionTitle": "Show more",
     "notAvailable": "Not Available",
@@ -216,7 +218,11 @@
       }
     },
     "govActionModal": {
-      "govActionId": "Governance Action ID"
+      "govActionId": "Governance Action ID",
+      "govActionCategory": "Governance Action Category",
+      "gaStatus": "Governance Action Status",
+      "submitTime": "Submit time",
+      "endTime": "End time"
     }
   },
   "AdminDashboard": {
@@ -261,7 +267,8 @@
     "showMore": "Show more",
     "errors": {
       "sessionExpired": "Session expired",
-      "somethingWentWrong": "Something went wrong. Please refresh the page or try again later"
+      "somethingWentWrong": "Something went wrong. Please refresh the page or try again later",
+      "sessionExists": "Session already exists. Please try again."
     }
   }
 }

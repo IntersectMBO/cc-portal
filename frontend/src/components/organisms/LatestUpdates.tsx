@@ -5,12 +5,11 @@ import { Box } from "@mui/material";
 import { ShowMoreButton, Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 import { VotesTable } from "./VotesTable";
-import { VotesTableI } from "./types";
 import { NotFound } from "./NotFound";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
 import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING } from "@consts";
-import { PaginationMeta } from "@/lib/requests";
+import { PaginationMeta, VotesTableI } from "@/lib/requests";
 import { usePagination } from "@/lib/utils/usePagination";
 import { getLatestUpdates } from "@/lib/api";
 

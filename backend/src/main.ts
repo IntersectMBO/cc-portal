@@ -9,6 +9,7 @@ import {
 import { LoggerFactory } from './util/logger-factory';
 import { CamelCasePipe } from './common/pipes/camel-case.pipe';
 import * as cookieParser from 'cookie-parser';
+import * as morgan from 'morgan';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
@@ -16,6 +17,18 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: logger,
   });
+
+  const morganFormat =
+    ':method :url :status :res[content-length] - :response-time ms';
+  app.use(
+    morgan(morganFormat, {
+      stream: {
+        write: (message) => {
+          logger.log(message);
+        },
+      },
+    }),
+  );
 
   app.useGlobalPipes(
     new CamelCasePipe(),

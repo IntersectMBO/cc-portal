@@ -2,7 +2,7 @@
 
 import axiosInstance from "./axiosInstance";
 import jwt from "jsonwebtoken";
-import { getAccessToken, removeAuthCookies, setAuthCookies } from "@utils";
+import { getAccessToken, setAuthCookies } from "@utils";
 import {
   DecodedToken,
   FetchUserData,
@@ -11,14 +11,14 @@ import {
   Permissions,
   ResponseErrorI,
   FetchUsersAdminI,
+  GetGovernanceActionsI,
+  VotesTableI,
+  GovernanceActionTableI,
 } from "./requests";
 import {
   ConstitutionByCid,
   ConstitutionMetadata,
   GovActionMetadata,
-  GovernanceActionTableI,
-  VotesTableI,
-  GovActionStatus,
   PreviewReasoningModalState,
 } from "@/components/organisms";
 
@@ -78,8 +78,13 @@ export async function loginAuthCallback(token: string) {
     setAuthCookies(res.access_token, res.refresh_token);
     return res;
   } catch (error) {
-    console.log("error login authCallback");
-    throw error;
+    const t = await getTranslations();
+    const customErrorMessage =
+      error.res?.statusCode === 401 && t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("General.errors.somethingWentWrong"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 
@@ -92,8 +97,13 @@ export async function registerAuthCallback(token: string) {
     setAuthCookies(res.access_token, res.refresh_token);
     return res;
   } catch (error) {
-    console.log("error register authCallback");
-    throw error;
+    const t = await getTranslations();
+    const customErrorMessage =
+      error.res?.statusCode === 401 && t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("General.errors.somethingWentWrong"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 
@@ -114,14 +124,6 @@ export async function refreshToken(refresh_token: string) {
   }
 }
 
-export async function logout() {
-  try {
-    removeAuthCookies();
-  } catch (error) {
-    console.log("error logout", error);
-  }
-}
-
 export async function getUser(id: string): Promise<FetchUserData> {
   try {
     const res: FetchUserData = await axiosInstance.get(`/api/users/${id}`);
@@ -135,12 +137,10 @@ export async function getUsersAdmin({
   search,
   page = 1,
   limit = DEFAULT_PAGINATION_LIMIT,
-  searchParams,
 }: {
   search?: string;
   page?: number;
   limit?: number;
-  searchParams?: URLSearchParams;
 }): Promise<FetchUsersAdminI> {
   const token = getAccessToken();
 
@@ -254,10 +254,12 @@ export async function getUserVotes({
   }
 }
 
-export async function getGovernanceMetadata(id: string): Promise<any> {
+export async function getGovernanceMetadata(
+  id: string
+): Promise<GovActionMetadata> {
   try {
     const res: GovActionMetadata = await axiosInstance.get(
-      `/api/governance/${id}`
+      `/api/governance/proposals/${id}`
     );
     return res;
   } catch (error) {
@@ -266,56 +268,51 @@ export async function getGovernanceMetadata(id: string): Promise<any> {
 }
 
 export async function getGovernanceActions({
+  page = 1,
+  limit = DEFAULT_PAGINATION_LIMIT,
   search,
   govActionType,
   status,
   sortBy,
-  userId,
 }: {
+  page?: number;
+  limit?: number;
   search?: string;
   govActionType?: string;
   status?: string;
   sortBy?: string;
-  userId?: string;
-}): Promise<GovernanceActionTableI[]> {
+}): Promise<GetGovernanceActionsI> {
+  const token = getAccessToken();
+  const user = await decodeUserToken();
+
   try {
-    const res: GovernanceActionTableI[] = [
-      {
-        gov_action_proposal_id: "2",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "PENDING" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
-      },
-      {
-        gov_action_proposal_id: "2",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "VOTED" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit. ",
-      },
-      {
-        gov_action_proposal_id: "16",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "UNVOTED" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
-      },
-      {
-        gov_action_proposal_id: "16",
-        gov_action_proposal_title: "Title name",
-        gov_action_proposal_type: "HardForkInitiation",
-        gov_action_proposal_status: "UNVOTED" as GovActionStatus,
-        abstract:
-          "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
-      },
-    ];
+    const res: { data: GovernanceActionTableI[]; meta: PaginationMeta } =
+      await axiosInstance.get(
+        `/api/governance/users/${user?.userId}/proposals/search?${
+          search ? `search=${search}` : ""
+        }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
+          status ? `filter.status=$in:${status}` : ""
+        }&${sortBy ? `sortBy=${sortBy}` : ""}&${
+          page ? `page=${page}` : ""
+        }&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        }
+      );
+
     return res;
   } catch (error) {
-    console.log("error get governance actions", error);
+    const t = await getTranslations();
+    const customErrorMessage =
+      !token &&
+      error.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("General.errors.somethingWentWrong"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 

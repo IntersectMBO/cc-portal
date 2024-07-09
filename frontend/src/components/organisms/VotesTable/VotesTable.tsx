@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid } from "@mui/material";
-import { VotesTableI } from "../types";
 import { VotesTableRow } from "./VotesTableRow";
+import { VotesTableI } from "@/lib/requests";
 
 interface Props {
   votes: VotesTableI[];

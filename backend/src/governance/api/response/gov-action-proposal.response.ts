@@ -2,16 +2,16 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { GovActionProposalStatus } from 'src/governance/enums/gov-action-proposal-status.enum';
 
-export class GovernanceActionMetadataResponse {
+export class GovernanceActionProposalResponse {
   @ApiProperty({
-    description: 'Unique governance proposal ID',
+    description: 'Unique governance action proposal ID',
     example: '1',
   })
   @Expose({ name: 'id' })
   id: string;
 
   @ApiProperty({
-    description: 'Unique governance proposal transaction hash',
+    description: 'Unique governance action proposal transaction hash',
     example: '1',
   })
   @Expose({ name: 'tx_hash' })
@@ -41,24 +41,32 @@ export class GovernanceActionMetadataResponse {
 
   @ApiProperty({
     description:
-      'Returns whether this governance proposal is already resolved (if resolved, cc member should not have an option to manage his vote)',
+      'Returns whether this governance action proposal is already resolved (if resolved, cc member should not have an option to manage his vote)',
     example: 'EXPIRED',
   })
-  @Expose({ name: 'gov_action_proposal_status' })
+  @Expose({ name: 'status' })
   status: GovActionProposalStatus;
 
   @ApiProperty({
     description:
-      'Returns a specific type of a governance proposal to which this vote is related',
+      'Returns a specific type of a governance action proposal to which this vote is related',
     example: 'ParameterChange',
   })
-  @Expose({ name: 'gov_action_type' })
-  govActionType: string;
+  @Expose({ name: 'type' })
+  type: string;
 
   @ApiProperty({
     type: Date,
     format: 'date-time',
-    description: 'End time of a governance proposal',
+    description: 'Submit time of a governance action proposal',
+  })
+  @Expose({ name: 'submit_time' })
+  submitTime: Date;
+
+  @ApiProperty({
+    type: Date,
+    format: 'date-time',
+    description: 'End time of a governance action proposal',
   })
   @Expose({ name: 'end_time' })
   endTime: Date;
