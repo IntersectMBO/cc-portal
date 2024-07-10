@@ -29,7 +29,7 @@ export class MagicRegisterStrategy extends PassportStrategy(
           destination,
           href,
         );
-        this.authFacade.sendEmail(emailDto);
+        await this.authFacade.sendEmail(emailDto);
         this.logger.log(`sending email to ${destination}, with link ${href}`);
       },
       verify: async (payload, callback) =>
