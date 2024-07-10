@@ -17,13 +17,14 @@ import {
   OpenPreviewReasoningModal,
   OpenReasoningLinkModalState,
 } from "../types";
-import { customPalette, ICONS } from "@consts";
+import { customPalette, ICONS, PATHS } from "@consts";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { getShortenedGovActionId, truncateText } from "@utils";
 import { getProposalTypeLabel } from "@utils";
 import { useModal } from "@context";
 import { ReasoningResponseI, GovernanceActionTableI } from "@/lib/requests";
+import { useRouter } from "next/navigation";
 
 interface Props {
   govActions: GovernanceActionTableI;
@@ -38,6 +39,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
   const updateReasoningModal = useModal<OpenPreviewReasoningModal>();
   const isDisabled = status.toLowerCase() !== "active";
   const isUnvoted = vote_status.toLowerCase() === "unvoted";
+  const router = useRouter();
   //User can add reasoning in two cases:
   // 1. User doesn't have vote for selected GA
   // 2. User has vote for selected GA, but doesn't have reasoning
@@ -79,6 +81,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
 
   const addReasoningCallback = (response: ReasoningResponseI) => {
     addReasoningModal.closeModal();
+    router.push(`${PATHS.governanceActions}?page=1`);
     openReasoningLinkModal(response.blake2b, response.url);
   };
 
