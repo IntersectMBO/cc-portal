@@ -10,19 +10,20 @@ import {
   Tooltip,
 } from "@atoms";
 import { IMAGES, PATTERNS, PROFILE_PICTURE_MAX_FILE_SIZE } from "@consts";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
 import { SignupModalState } from "../types";
 import { editUser, uploadUserPhoto } from "@/lib/api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSnackbar } from "@/context/snackbar";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useRouter } from "next/navigation";
 
 export const SignUpModal = () => {
   const { state, closeModal } = useModal<SignupModalState>();
+  const [isSubmitting, setSubmitting] = useState(false);
   const { userSession, user, fetchUserData } = useAppContext();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
   const router = useRouter();
@@ -63,10 +64,12 @@ export const SignUpModal = () => {
   };
 
   const onSubmit = async (data) => {
+    setSubmitting(true);
     const { file, ...userData } = data;
     if (file) {
       const uploadImageRes = await uploadImage(file);
       if ("error" in uploadImageRes && uploadImageRes?.error) {
+        setSubmitting(false);
         return;
       }
     }
@@ -79,6 +82,7 @@ export const SignUpModal = () => {
       await fetchUserData(userSession?.userId);
       closeModal();
     }
+    setSubmitting(false);
   };
 
   return (
@@ -144,6 +148,12 @@ export const SignUpModal = () => {
             accept="image/png, image/jpg, image/jpeg"
             {...register("file", {
               validate: {
+                fileType: (file) =>
+                  !file ||
+                  file.type === "image/png" ||
+                  file.type === "image/jpg" ||
+                  file.type === "image/jpeg" ||
+                  "The file type should be jpg, png or jpeg",
                 fileSize: (file) =>
                   !file ||
                   file.size / (1024 * 1024) < PROFILE_PICTURE_MAX_FILE_SIZE ||
@@ -159,9 +169,18 @@ export const SignUpModal = () => {
             }}
           >
             {state.showCloseButton ? (
-              <ModalActions />
+              <ModalActions isSubmitting={isSubmitting} />
             ) : (
-              <Button type="submit">{t("common.confirm")}</Button>
+              <Button
+                startIcon={
+                  isSubmitting && (
+                    <CircularProgress color="inherit" size="14px" />
+                  )
+                }
+                type="submit"
+              >
+                {t("common.confirm")}
+              </Button>
             )}
           </Box>
         </ModalContents>
