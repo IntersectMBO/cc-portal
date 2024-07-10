@@ -78,7 +78,10 @@ export interface GovActionMetadata {
 }
 
 export interface OpenPreviewReasoningModal {
-  govAction: GovernanceActionTableI;
+  govAction: Pick<
+    GovernanceActionTableI,
+    "id" | "type" | "submit_time" | "end_time"
+  >;
   onActionClick?: (id: string) => void;
   actionTitle?: string;
 }
