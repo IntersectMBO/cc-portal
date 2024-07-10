@@ -81,7 +81,7 @@ export interface OpenPreviewReasoningModal {
   govAction: Pick<
     GovernanceActionTableI,
     "id" | "type" | "submit_time" | "end_time"
-  >;
+  > & { vote?: Vote };
   onActionClick?: (id: string) => void;
   actionTitle?: string;
 }

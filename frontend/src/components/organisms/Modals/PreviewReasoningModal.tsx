@@ -8,6 +8,7 @@ import {
   Tooltip,
   Button,
   OutlinedLightButton,
+  VotePill,
 } from "@atoms";
 import { customPalette, IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
@@ -74,7 +75,6 @@ export const PreviewReasoningModal = () => {
       >
         {t("previewReasoning.description")}
       </Typography>
-
       <Box
         sx={{
           borderTopLeftRadius: 20,
@@ -117,44 +117,54 @@ export const PreviewReasoningModal = () => {
             {getProposalTypeLabel(govAction.type)}
           </OutlinedLightButton>
         </Box>
+        {govAction.vote && (
+          <Box mt={3}>
+            <Typography color="neutralGray" variant="caption">
+              {t("previewReasoning.voted")}
+            </Typography>
+            <Box display="flex" mt={0.25}>
+              <VotePill vote={govAction.vote} />
+            </Box>
+          </Box>
+        )}
       </Box>
-
-      <Box
-        bgcolor="#D6E2FF80"
-        display="flex"
-        flexDirection="row"
-        justifyContent="center"
-        alignItems="center"
-        py={0.75}
-      >
-        <Typography sx={{ flexWrap: "nowrap", mr: 1 }} variant="caption">
-          {t("previewReasoning.submissionDate")}
-        </Typography>
-        <Typography
-          fontWeight={600}
-          sx={{ flexWrap: "nowrap" }}
-          variant="caption"
+      {govAction.submit_time && (
+        <Box
+          bgcolor="#D6E2FF80"
+          display="flex"
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="center"
+          py={0.75}
         >
-          {formatDisplayDate(govAction.submit_time)}
-        </Typography>
-        <Tooltip
-          heading={t("previewReasoning.tooltips.submissionDate.heading")}
-          paragraphOne={t(
-            "previewReasoning.tooltips.submissionDate.paragraphOne"
-          )}
-          placement="bottom-end"
-          arrow
-        >
-          <InfoOutlinedIcon
-            style={{
-              color: "#ADAEAD",
-            }}
-            sx={{ ml: 0.7 }}
-            fontSize="small"
-          />
-        </Tooltip>
-      </Box>
-
+          <Typography sx={{ flexWrap: "nowrap", mr: 1 }} variant="caption">
+            {t("previewReasoning.submissionDate")}
+          </Typography>
+          <Typography
+            fontWeight={600}
+            sx={{ flexWrap: "nowrap" }}
+            variant="caption"
+          >
+            {formatDisplayDate(govAction.submit_time)}
+          </Typography>
+          <Tooltip
+            heading={t("previewReasoning.tooltips.submissionDate.heading")}
+            paragraphOne={t(
+              "previewReasoning.tooltips.submissionDate.paragraphOne"
+            )}
+            placement="bottom-end"
+            arrow
+          >
+            <InfoOutlinedIcon
+              style={{
+                color: "#ADAEAD",
+              }}
+              sx={{ ml: 0.7 }}
+              fontSize="small"
+            />
+          </Tooltip>
+        </Box>
+      )}{" "}
       {govAction.end_time && (
         <Box
           data-testid="expiry-date"
@@ -196,7 +206,6 @@ export const PreviewReasoningModal = () => {
           </Tooltip>
         </Box>
       )}
-
       <Box
         bgcolor="white"
         px={{ xs: 1.4, md: 3 }}
