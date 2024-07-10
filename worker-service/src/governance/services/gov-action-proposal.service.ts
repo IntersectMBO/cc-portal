@@ -13,10 +13,10 @@ import {
   SQL_FILE_PATH,
 } from '../../common/constants/sql.constants';
 import { DataSource, EntityManager, Repository } from 'typeorm';
-import { GovActionProposal } from '../../governance-action-proposal/entities/gov-action-proposal.entity';
 import { GovActionProposalRequest } from '../dto/gov-action-proposal.request';
 import { GovActionProposalMapper } from '../mapper/gov-action-proposal.mapper';
 import { CommonService } from 'src/common/common-service';
+import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 
 @Injectable()
 export class GovActionProposalService extends CommonService {

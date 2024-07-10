@@ -3,9 +3,9 @@ import { Job } from 'bullmq';
 import {
   JOB_NAME_VOTE_SYNC,
   QUEUE_NAME_DB_SYNC_VOTES,
-} from '../common/constants/bullmq.constants';
+} from '../../../common/constants/bullmq.constants';
 import { Logger } from '@nestjs/common';
-import { VoteService } from './services/vote.service';
+import { VoteService } from '../../services/vote.service';
 
 @Processor(QUEUE_NAME_DB_SYNC_VOTES)
 export class VoteProcessor extends WorkerHost {

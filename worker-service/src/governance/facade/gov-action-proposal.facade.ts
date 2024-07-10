@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GovActionProposalService } from '../services/gov-action-proposal.service';
-import { GovActionProposalProducer } from '../gov-action-proposal.producer';
+import { GovActionProposalProducer } from '../queues/producers/gov-action-proposal.producer';
 import { ConfigService } from '@nestjs/config';
 import { CronJob } from 'cron';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { JOB_NAME_GOV_ACTIONS_SYNC } from '../../common/constants/bullmq.constants';
 import { GovActionProposalRequest } from '../dto/gov-action-proposal.request';
+import { GovActionProposalService } from '../services/gov-action-proposal.service';
 
 @Injectable()
 export class GovActionProposalFacade {

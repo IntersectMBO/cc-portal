@@ -1,4 +1,4 @@
-import { VoteProducer } from '../vote.producer';
+import { VoteProducer } from '../queues/producers/vote.producer';
 import { Injectable, Logger } from '@nestjs/common';
 import { VoteService } from '../services/vote.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
