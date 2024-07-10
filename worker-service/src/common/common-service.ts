@@ -8,7 +8,6 @@ import axios from 'axios';
 import { GovActionProposalDto } from '../governance/dto/gov-action-proposal.dto';
 
 export abstract class CommonService {
-  //TODO After merging gap + votes into governance module, this will become obsolete
   protected logger = new Logger(CommonService.name);
 
   constructor(
