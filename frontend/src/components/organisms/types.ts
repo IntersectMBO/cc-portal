@@ -1,9 +1,10 @@
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import {
-  AddReasoningResponseI,
+  ReasoningResponseI,
   FetchUserData,
   GovActionProposalStatus,
   UserRole,
+  GovernanceActionTableI,
 } from "@/lib/requests";
 import { Vote } from "../atoms";
 
@@ -56,7 +57,7 @@ export interface GovActionModalState {
 
 export interface OpenAddReasoningModalState {
   id: string;
-  callback: (response: AddReasoningResponseI) => void;
+  callback: (response: ReasoningResponseI) => void;
 }
 
 export interface OpenReasoningLinkModalState {
@@ -77,7 +78,7 @@ export interface GovActionMetadata {
 }
 
 export interface OpenPreviewReasoningModal {
-  id: string;
+  govAction: GovernanceActionTableI;
   onActionClick?: (id: string) => void;
   actionTitle?: string;
 }

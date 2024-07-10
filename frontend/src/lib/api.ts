@@ -14,7 +14,7 @@ import {
   GetGovernanceActionsI,
   VotesTableI,
   GovernanceActionTableI,
-  AddReasoningResponseI,
+  ReasoningResponseI,
   AddReasoningRequestI,
 } from "./requests";
 import {
@@ -321,11 +321,11 @@ export async function getGovernanceActions({
 export async function addOrUpdateReasoning({
   proposalId,
   ...data
-}: AddReasoningRequestI): Promise<AddReasoningResponseI | ResponseErrorI> {
+}: AddReasoningRequestI): Promise<ReasoningResponseI | ResponseErrorI> {
   const token = getAccessToken();
   const user = await decodeUserToken();
   try {
-    const response: AddReasoningResponseI = await axiosInstance.post(
+    const response: ReasoningResponseI = await axiosInstance.post(
       `/api/governance/users/${user?.userId}/proposals/${proposalId}/reasoning`,
       data,
       {
@@ -348,27 +348,23 @@ export async function addOrUpdateReasoning({
   }
 }
 
-export async function getReasoningData(id: string) {
+export async function getReasoningData(
+  proposalId: string
+): Promise<ReasoningResponseI> {
+  const token = getAccessToken();
+  const user = await decodeUserToken();
   try {
-    const response: PreviewReasoningModalState = {
-      title: "Reasoning title 1",
-      description:
-        "Lorem ipsum dolor sit amet consectetur. Neque eleifend sed sit elementum vulputate. At diam orci mauris sit in nulla. Dui id urna aliquet et tempor est mattis. Sit ornare.",
-
-      gov_action_proposal_id: "g_77788675",
-      gov_action_proposal_title: "Title name",
-      gov_action_proposal_type: "HardForkInitiation",
-      abstract:
-        "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
-
-      vote: "yes",
-      submission_date: "2024-05-19T12:49:10.631Z",
-      expiry_date: "2024-06-19T12:49:10.631Z",
-    };
+    const response: ReasoningResponseI = await axiosInstance.get(
+      `/api/governance/users/${user?.userId}/proposals/${proposalId}/reasoning`,
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      }
+    );
     return response;
   } catch (error) {
-    console.log("error get reasoning data", error);
-    throw error;
+    console.log("error get reasoning data", error.statusCode);
   }
 }
 

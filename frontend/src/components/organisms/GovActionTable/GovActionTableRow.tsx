@@ -23,23 +23,21 @@ import Image from "next/image";
 import { getShortenedGovActionId, truncateText } from "@utils";
 import { getProposalTypeLabel } from "@utils";
 import { useModal } from "@context";
-import { AddReasoningResponseI, GovernanceActionTableI } from "@/lib/requests";
+import { ReasoningResponseI, GovernanceActionTableI } from "@/lib/requests";
 
 interface Props {
   govActions: GovernanceActionTableI;
 }
 
-export const GovActionTableRow = ({
-  govActions: { id, vote_status, status, title, type, has_reasoning },
-}: Props) => {
+export const GovActionTableRow = ({ govActions }: Props) => {
   const t = useTranslations("GovernanceActions");
+  const { id, vote_status, status, title, type, has_reasoning } = govActions;
   const govActionModal = useModal<GovActionModalState>();
   const addReasoningModal = useModal<OpenAddReasoningModalState>();
   const reasoningLinkModal = useModal<OpenReasoningLinkModalState>();
-  const updateReasoningkModal = useModal<OpenPreviewReasoningModal>();
+  const updateReasoningModal = useModal<OpenPreviewReasoningModal>();
   const isDisabled = status.toLowerCase() !== "active";
   const isUnvoted = vote_status.toLowerCase() === "unvoted";
-
   //User can add reasoning in two cases:
   // 1. User doesn't have vote for selected GA
   // 2. User has vote for selected GA, but doesn't have reasoning
@@ -55,14 +53,14 @@ export const GovActionTableRow = ({
     });
   };
   const openUpdateReasoningCallback = () => {
-    updateReasoningkModal.closeModal();
+    updateReasoningModal.closeModal();
     openAddReasoningModal();
   };
   const openUpdateReasoningModal = () => {
-    updateReasoningkModal.openModal({
+    updateReasoningModal.openModal({
       type: "previewReasoningModal",
       state: {
-        id,
+        govAction: govActions,
         actionTitle: t("updateReasoning"),
         onActionClick: openUpdateReasoningCallback,
       },
@@ -79,7 +77,7 @@ export const GovActionTableRow = ({
     });
   };
 
-  const addReasoningCallback = (response: AddReasoningResponseI) => {
+  const addReasoningCallback = (response: ReasoningResponseI) => {
     addReasoningModal.closeModal();
     openReasoningLinkModal(response.blake2b, response.url);
   };
@@ -89,7 +87,7 @@ export const GovActionTableRow = ({
       type: "addReasoningModal",
       state: {
         id,
-        callback: (response: AddReasoningResponseI) =>
+        callback: (response: ReasoningResponseI) =>
           addReasoningCallback(response),
       },
     });

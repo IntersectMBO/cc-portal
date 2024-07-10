@@ -11,7 +11,6 @@ import {
 import { customPalette, IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
 import { useModal } from "@context";
-import { useSnackbar } from "@/context/snackbar";
 import { CopyCard } from "@molecules";
 import { OpenReasoningLinkModalState } from "../types";
 import { truncateText, getShortenedGovActionId } from "@utils";
@@ -23,7 +22,6 @@ export const ReasoningLinkModal = () => {
     closeModal,
     state: { hash, link },
   } = useModal<OpenReasoningLinkModalState>();
-  const { addSuccessAlert, addErrorAlert } = useSnackbar();
 
   return (
     <ModalWrapper

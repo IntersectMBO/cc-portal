@@ -7,8 +7,8 @@ import {
   Typography,
   Tooltip,
   Button,
-  VotePill,
   OutlinedLightButton,
+  GovActionStatusPill,
 } from "@atoms";
 import { customPalette, IMAGES } from "@consts";
 import { useTranslations } from "next-intl";
@@ -29,18 +29,19 @@ import {
   formatDisplayDate,
 } from "@utils";
 import { useSnackbar } from "@/context/snackbar";
+import { ReasoningContentsI, ReasoningResponseI } from "@/lib/requests";
 
+interface Reasoning extends Omit<ReasoningResponseI, "contents"> {
+  contents: ReasoningContentsI;
+}
 export const PreviewReasoningModal = () => {
   const t = useTranslations("Modals");
   const {
     closeModal,
-    state: { id, onActionClick, actionTitle },
+    state: { govAction, onActionClick, actionTitle },
   } = useModal<OpenPreviewReasoningModal>();
   const { addErrorAlert } = useSnackbar();
-  const [reasoning, setReasoning] = useState<PreviewReasoningModalState | null>(
-    null
-  );
-
+  const [reasoning, setReasoning] = useState<Reasoning | null>(null);
   const onClose = () => {
     closeModal();
   };
@@ -49,7 +50,7 @@ export const PreviewReasoningModal = () => {
     async function fetchData(id: string) {
       try {
         const response = await getReasoningData(id);
-        setReasoning(response);
+        setReasoning({ ...response, contents: JSON.parse(response.contents) });
       } catch (error) {
         addErrorAlert(t("previewReasoning.alerts.errorFetchingData"));
         closeModal();
@@ -57,10 +58,10 @@ export const PreviewReasoningModal = () => {
       }
     }
 
-    if (id) {
-      fetchData(id);
+    if (govAction?.id) {
+      fetchData(govAction.id);
     }
-  }, [id]);
+  }, [govAction?.id]);
 
   return (
     <ModalWrapper dataTestId="preview-reasoning-modal" sx={{ py: 3, px: 0 }}>
@@ -104,10 +105,10 @@ export const PreviewReasoningModal = () => {
               display="flex"
             >
               <Reasoning
-                title={reasoning.title}
-                description={reasoning.description}
-                link={reasoning?.link}
-                hash={reasoning?.hash}
+                title={reasoning.contents.title}
+                description={reasoning.contents.content}
+                link={reasoning.url}
+                hash={reasoning.blake2b}
               />
             </Box>
             <Box mt={3}>
@@ -115,7 +116,7 @@ export const PreviewReasoningModal = () => {
                 {t("previewReasoning.governanceActionId")}
               </Typography>
               <OutlinedLightButton nonInteractive={true}>
-                {getShortenedGovActionId(reasoning.gov_action_proposal_id)}
+                {getShortenedGovActionId(govAction.id)}
               </OutlinedLightButton>
             </Box>
             <Box mt={3} data-testid="governance-action-type">
@@ -123,7 +124,7 @@ export const PreviewReasoningModal = () => {
                 {t("previewReasoning.governanceActionCategory")}
               </Typography>
               <OutlinedLightButton nonInteractive={true}>
-                {getProposalTypeLabel(reasoning.gov_action_proposal_type)}
+                {getProposalTypeLabel(govAction.type)}
               </OutlinedLightButton>
             </Box>
             <Box mt={3}>
@@ -131,7 +132,7 @@ export const PreviewReasoningModal = () => {
                 {t("previewReasoning.voted")}
               </Typography>
               <Box display="flex" mt={0.25}>
-                <VotePill vote={reasoning.vote} />
+                <GovActionStatusPill status={govAction.vote_status} />
               </Box>
             </Box>
           </Box>
@@ -152,7 +153,7 @@ export const PreviewReasoningModal = () => {
               sx={{ flexWrap: "nowrap" }}
               variant="caption"
             >
-              {formatDisplayDate(reasoning.submission_date)}
+              {formatDisplayDate(govAction.submit_time)}
             </Typography>
             <Tooltip
               heading={t("previewReasoning.tooltips.submissionDate.heading")}
@@ -172,45 +173,47 @@ export const PreviewReasoningModal = () => {
             </Tooltip>
           </Box>
 
-          <Box
-            data-testid="expiry-date"
-            bgcolor="rgba(247, 249, 251, 1)"
-            display="flex"
-            flexDirection="row"
-            justifyContent="center"
-            alignItems="center"
-            py={0.75}
-          >
-            <Typography sx={{ flexWrap: "nowrap", mr: 1 }} variant="caption">
-              {t("previewReasoning.expiryDate")}
-            </Typography>
-            <Typography
-              fontWeight={600}
-              sx={{ flexWrap: "nowrap" }}
-              variant="caption"
+          {govAction.end_time && (
+            <Box
+              data-testid="expiry-date"
+              bgcolor="rgba(247, 249, 251, 1)"
+              display="flex"
+              flexDirection="row"
+              justifyContent="center"
+              alignItems="center"
+              py={0.75}
             >
-              {formatDisplayDate(reasoning.expiry_date)}
-            </Typography>
-            <Tooltip
-              heading={t("previewReasoning.tooltips.expiryDate.heading")}
-              paragraphOne={t(
-                "previewReasoning.tooltips.expiryDate.paragraphOne"
-              )}
-              paragraphTwo={t(
-                "previewReasoning.tooltips.expiryDate.paragraphTwo"
-              )}
-              placement="bottom-end"
-              arrow
-            >
-              <InfoOutlinedIcon
-                style={{
-                  color: "#ADAEAD",
-                }}
-                sx={{ ml: 0.7 }}
-                fontSize="small"
-              />
-            </Tooltip>
-          </Box>
+              <Typography sx={{ flexWrap: "nowrap", mr: 1 }} variant="caption">
+                {t("previewReasoning.expiryDate")}
+              </Typography>
+              <Typography
+                fontWeight={600}
+                sx={{ flexWrap: "nowrap" }}
+                variant="caption"
+              >
+                {formatDisplayDate(govAction.end_time)}
+              </Typography>
+              <Tooltip
+                heading={t("previewReasoning.tooltips.expiryDate.heading")}
+                paragraphOne={t(
+                  "previewReasoning.tooltips.expiryDate.paragraphOne"
+                )}
+                paragraphTwo={t(
+                  "previewReasoning.tooltips.expiryDate.paragraphTwo"
+                )}
+                placement="bottom-end"
+                arrow
+              >
+                <InfoOutlinedIcon
+                  style={{
+                    color: "#ADAEAD",
+                  }}
+                  sx={{ ml: 0.7 }}
+                  fontSize="small"
+                />
+              </Tooltip>
+            </Box>
+          )}
 
           <Box
             bgcolor="white"
@@ -220,7 +223,7 @@ export const PreviewReasoningModal = () => {
           >
             {onActionClick && (
               <Button
-                onClick={() => onActionClick(id)}
+                onClick={() => onActionClick(govAction.id)}
                 variant="contained"
                 size="large"
                 sx={{

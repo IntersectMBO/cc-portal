@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/context/snackbar";
 import { OpenAddReasoningModalState } from "../types";
 import { addOrUpdateReasoning } from "@/lib/api";
-import { AddReasoningResponseI } from "@/lib/requests";
+import { ReasoningResponseI } from "@/lib/requests";
 
 interface AddReasoningFormData {
   title: string;
@@ -44,7 +44,7 @@ export const AddReasoningModal = () => {
     } else {
       router.refresh();
       addSuccessAlert(t("addReasoning.alerts.success"));
-      callback(response as AddReasoningResponseI);
+      callback(response as ReasoningResponseI);
     }
   };
 

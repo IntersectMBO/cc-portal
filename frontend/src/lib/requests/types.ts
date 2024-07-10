@@ -109,13 +109,22 @@ export interface GetGovernanceActionsI extends ResponseErrorI {
   meta?: PaginationMeta;
 }
 
-export interface AddReasoningRequestI {
-  proposalId: string;
+export interface GetReasoningResponseI {
   title: string;
   content: string;
 }
 
-export interface AddReasoningResponseI {
+export interface AddReasoningRequestI extends GetReasoningResponseI {
+  proposalId: string;
+}
+
+export interface ReasoningContentsI {
+  content: string;
+  govActionProposalTxHash: string;
+  title: string;
+}
+
+export interface ReasoningResponseI {
   cid: string;
   url: string;
   blake2b: string;
