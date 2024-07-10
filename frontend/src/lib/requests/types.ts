@@ -108,3 +108,25 @@ export interface GetGovernanceActionsI extends ResponseErrorI {
   data?: GovernanceActionTableI[];
   meta?: PaginationMeta;
 }
+
+export interface GetReasoningResponseI {
+  title: string;
+  content: string;
+}
+
+export interface AddReasoningRequestI extends GetReasoningResponseI {
+  proposalId: string;
+}
+
+export interface ReasoningContentsI {
+  content: string;
+  govActionProposalTxHash: string;
+  title: string;
+}
+
+export interface ReasoningResponseI {
+  cid: string;
+  url: string;
+  blake2b: string;
+  contents: string;
+}

@@ -11,6 +11,7 @@ import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING, PATHS } from "@consts";
 import { PageTitleTabs } from "./PageTitleTabs";
 import { useModal } from "@/context";
 import { VotesTableI } from "@/lib/requests";
+import { OpenPreviewReasoningModal } from "./types";
 
 export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
   const t = useTranslations("MyActions");
@@ -22,13 +23,19 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
   );
   const [sortOpen, setSortOpen] = useState(false);
   const [chosenSorting, setChosenSorting] = useState<string>("");
-  const { openModal } = useModal();
+  const { openModal } = useModal<OpenPreviewReasoningModal>();
 
-  const openReasoningModal = (id: string) => {
+  const openReasoningModal = (action: VotesTableI) => {
     openModal({
       type: "previewReasoningModal",
       state: {
-        id,
+        govAction: {
+          id: action.gov_action_proposal_id,
+          type: action.gov_action_proposal_type,
+          submit_time: null, //todo, update BE response
+          end_time: action.gov_action_proposal_end_time,
+          vote: action.value,
+        },
       },
     });
   };
@@ -106,7 +113,7 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
         <VotesTable
           votes={actions}
           actionTitle={t("actionTitle")}
-          onActionClick={(id) => openReasoningModal(id)}
+          onActionClick={(action) => openReasoningModal(action)}
           //  isDisabled={(data) => data.gov_action_proposal_status !== "ACTIVE"}
         />
       )}

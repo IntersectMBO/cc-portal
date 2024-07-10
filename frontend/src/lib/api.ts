@@ -14,6 +14,8 @@ import {
   GetGovernanceActionsI,
   VotesTableI,
   GovernanceActionTableI,
+  ReasoningResponseI,
+  AddReasoningRequestI,
 } from "./requests";
 import {
   ConstitutionByCid,
@@ -316,27 +318,53 @@ export async function getGovernanceActions({
   }
 }
 
-export async function getReasoningData(id: string) {
+export async function addOrUpdateReasoning({
+  proposalId,
+  ...data
+}: AddReasoningRequestI): Promise<ReasoningResponseI | ResponseErrorI> {
+  const token = getAccessToken();
+  const user = await decodeUserToken();
   try {
-    const response: PreviewReasoningModalState = {
-      title: "Reasoning title 1",
-      description:
-        "Lorem ipsum dolor sit amet consectetur. Neque eleifend sed sit elementum vulputate. At diam orci mauris sit in nulla. Dui id urna aliquet et tempor est mattis. Sit ornare.",
-
-      gov_action_proposal_id: "g_77788675",
-      gov_action_proposal_title: "Title name",
-      gov_action_proposal_type: "HardForkInitiation",
-      abstract:
-        "Lorem ipsum dolor sit amet consectetur. Amet orci adipiscing proin duis nibh. Sed id amet integer ultrices lobortis. Velit.",
-
-      vote: "yes",
-      submission_date: "2024-05-19T12:49:10.631Z",
-      expiry_date: "2024-06-19T12:49:10.631Z",
-    };
+    const response: ReasoningResponseI = await axiosInstance.post(
+      `/api/governance/users/${user?.userId}/proposals/${proposalId}/reasoning`,
+      data,
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      }
+    );
     return response;
   } catch (error) {
-    console.log("error get reasoning data", error);
-    throw error;
+    const t = await getTranslations();
+    const customErrorMessage =
+      !token &&
+      error.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("General.errors.somethingWentWrong"),
+      statusCode: error.res.statusCode || null,
+    };
+  }
+}
+
+export async function getReasoningData(
+  proposalId: string
+): Promise<ReasoningResponseI> {
+  const token = getAccessToken();
+  const user = await decodeUserToken();
+  try {
+    const response: ReasoningResponseI = await axiosInstance.get(
+      `/api/governance/users/${user?.userId}/proposals/${proposalId}/reasoning`,
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    console.log("error get reasoning data", error.statusCode);
   }
 }
 

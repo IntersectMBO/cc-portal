@@ -17,29 +17,29 @@ import {
   OpenPreviewReasoningModal,
   OpenReasoningLinkModalState,
 } from "../types";
-import { customPalette, ICONS } from "@consts";
+import { customPalette, ICONS, PATHS } from "@consts";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { getShortenedGovActionId, truncateText } from "@utils";
 import { getProposalTypeLabel } from "@utils";
 import { useModal } from "@context";
-import { GovernanceActionTableI } from "@/lib/requests";
+import { ReasoningResponseI, GovernanceActionTableI } from "@/lib/requests";
+import { useRouter } from "next/navigation";
 
 interface Props {
   govActions: GovernanceActionTableI;
 }
 
-export const GovActionTableRow = ({
-  govActions: { id, vote_status, status, title, type, has_reasoning },
-}: Props) => {
+export const GovActionTableRow = ({ govActions }: Props) => {
   const t = useTranslations("GovernanceActions");
+  const { id, vote_status, status, title, type, has_reasoning } = govActions;
   const govActionModal = useModal<GovActionModalState>();
   const addReasoningModal = useModal<OpenAddReasoningModalState>();
   const reasoningLinkModal = useModal<OpenReasoningLinkModalState>();
-  const updateReasoningkModal = useModal<OpenPreviewReasoningModal>();
+  const updateReasoningModal = useModal<OpenPreviewReasoningModal>();
   const isDisabled = status.toLowerCase() !== "active";
   const isUnvoted = vote_status.toLowerCase() === "unvoted";
-
+  const router = useRouter();
   //User can add reasoning in two cases:
   // 1. User doesn't have vote for selected GA
   // 2. User has vote for selected GA, but doesn't have reasoning
@@ -55,33 +55,34 @@ export const GovActionTableRow = ({
     });
   };
   const openUpdateReasoningCallback = () => {
-    updateReasoningkModal.closeModal();
+    updateReasoningModal.closeModal();
     openAddReasoningModal();
   };
   const openUpdateReasoningModal = () => {
-    updateReasoningkModal.openModal({
+    updateReasoningModal.openModal({
       type: "previewReasoningModal",
       state: {
-        id,
+        govAction: govActions,
         actionTitle: t("updateReasoning"),
         onActionClick: openUpdateReasoningCallback,
       },
     });
   };
 
-  const openReasoningLinkModal = () => {
+  const openReasoningLinkModal = (hash: string, link: string) => {
     reasoningLinkModal.openModal({
       type: "reasoningLinkModal",
       state: {
-        hash: "324rfwdf123abcdH76ADF8utkm",
-        link: "djfs.fems.com",
+        hash,
+        link,
       },
     });
   };
 
-  const addReasoningCallback = () => {
+  const addReasoningCallback = (response: ReasoningResponseI) => {
     addReasoningModal.closeModal();
-    openReasoningLinkModal();
+    router.push(`${PATHS.governanceActions}?page=1`);
+    openReasoningLinkModal(response.blake2b, response.url);
   };
 
   const openAddReasoningModal = () => {
@@ -89,7 +90,8 @@ export const GovActionTableRow = ({
       type: "addReasoningModal",
       state: {
         id,
-        callback: addReasoningCallback,
+        callback: (response: ReasoningResponseI) =>
+          addReasoningCallback(response),
       },
     });
   };

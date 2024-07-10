@@ -61,6 +61,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           outline: "none",
           padding: "12px 14px",
           resize: "none",
+          overflow: "scroll",
         }}
         maxLength={maxLength}
         ref={textAraeRef}

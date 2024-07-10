@@ -6,6 +6,7 @@ import { customPalette } from "@consts";
 import { useTranslations } from "next-intl";
 import { Box } from "@mui/material";
 import { ReasoningI } from "../organisms";
+import { truncateText, getShortenedGovActionId } from "@utils";
 
 export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
   const t = useTranslations("GovernanceAction");
@@ -33,7 +34,7 @@ export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
               {t("Link")}
             </Typography>
             <OutlinedLightButton nonInteractive={true}>
-              {link}
+              {truncateText(link, 20)}
             </OutlinedLightButton>
           </Box>
           <Box display="flex" flexDirection="column" gap={0.5}>
@@ -45,7 +46,7 @@ export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
               {t("Hash")}
             </Typography>
             <OutlinedLightButton nonInteractive={true}>
-              {hash}
+              {getShortenedGovActionId(hash, 10)}
             </OutlinedLightButton>
           </Box>
         </Box>
