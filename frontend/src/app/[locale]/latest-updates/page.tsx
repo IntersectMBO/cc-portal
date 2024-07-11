@@ -24,15 +24,15 @@ export default async function LatestUpdatesPage({
       <TopNav />
       <ContentWrapper>
         <Suspense fallback={<Loading />}>
-          {isEmpty(latestUpdates) && isEmpty(searchParams) ? (
+          {isEmpty(latestUpdates?.data) && isEmpty(searchParams) ? (
             <NotFound
               title="latestUpdates.title"
               description="latestUpdates.description"
             />
           ) : (
             <LatestUpdates
-              latestUpdates={latestUpdates.data}
-              paginationMeta={latestUpdates.meta}
+              latestUpdates={latestUpdates?.data}
+              paginationMeta={latestUpdates?.meta}
             />
           )}
         </Suspense>

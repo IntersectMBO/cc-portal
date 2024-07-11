@@ -10,10 +10,19 @@ import { DataActionsBar } from "../molecules";
 import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING, PATHS } from "@consts";
 import { PageTitleTabs } from "./PageTitleTabs";
 import { useModal } from "@/context";
-import { VotesTableI } from "@/lib/requests";
+import { PaginationMeta, VotesTableI } from "@/lib/requests";
 import { OpenPreviewReasoningModal } from "./types";
+import { getUserVotes } from "@/lib/api";
+import { usePagination } from "@/lib/utils/usePagination";
+import { ShowMoreButton } from "../atoms";
 
-export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
+export const MyActions = ({
+  actions,
+  paginationMeta,
+}: {
+  actions: VotesTableI[];
+  paginationMeta: PaginationMeta;
+}) => {
   const t = useTranslations("MyActions");
   const { updateQueryParams } = useManageQueryParams();
   const [searchText, setSearchText] = useState<string>("");
@@ -41,6 +50,23 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
       },
     });
   };
+
+  const params: Record<string, string | null> = {
+    search: searchText || null,
+    govActionType:
+      chosenFilters.govActionType?.length > 0
+        ? chosenFilters.govActionType?.join(",")
+        : null,
+    vote: chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
+    sortBy: chosenSorting || null,
+  };
+
+  const { data, pagination, isLoading, loadMore } = usePagination(
+    actions,
+    paginationMeta,
+    (page) => getUserVotes({ page, ...params })
+  );
+
   const closeFilters = useCallback(() => {
     setFiltersOpen(false);
   }, []);
@@ -50,16 +76,6 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
   }, []);
 
   useEffect(() => {
-    const params: Record<string, string | null> = {
-      search: searchText || null,
-      govActionType:
-        chosenFilters.govActionType?.length > 0
-          ? chosenFilters.govActionType?.join(",")
-          : null,
-      vote:
-        chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
-      sortBy: chosenSorting || null,
-    };
     updateQueryParams(params);
   }, [searchText, chosenFilters, chosenSorting, updateQueryParams]);
 
@@ -105,19 +121,26 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
           />
         </Box>
       </Box>
-      {isEmpty(actions) ? (
+      {isEmpty(data) ? (
         <NotFound
           height="55vh"
           title="myActions.title"
           description="myActions.description"
         />
       ) : (
-        <VotesTable
-          votes={actions}
-          actionTitle={t("actionTitle")}
-          onActionClick={(action) => openReasoningModal(action)}
-          //  isDisabled={(data) => data.gov_action_proposal_status !== "ACTIVE"}
-        />
+        <>
+          <VotesTable
+            votes={data}
+            actionTitle={t("actionTitle")}
+            onActionClick={(action) => openReasoningModal(action)}
+            //  isDisabled={(data) => data.gov_action_proposal_status !== "ACTIVE"}
+          />
+          <ShowMoreButton
+            isLoading={isLoading}
+            hasNextPage={pagination.has_next_page}
+            callBack={loadMore}
+          />
+        </>
       )}
     </Box>
   );

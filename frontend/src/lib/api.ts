@@ -229,28 +229,34 @@ export async function getLatestUpdates({
 }
 
 export async function getUserVotes({
+  page = 1,
+  limit = DEFAULT_PAGINATION_LIMIT,
   search,
   govActionType,
   vote,
   sortBy,
   userId,
 }: {
+  page?: number;
+  limit?: number;
   search?: string;
   govActionType?: string;
   vote?: string;
   sortBy?: string;
   userId?: string;
-}): Promise<VotesTableI[]> {
+}): Promise<{ data: VotesTableI[]; meta: PaginationMeta }> {
   try {
-    const res: { data: VotesTableI[] } = await axiosInstance.get(
-      `/api/governance/votes/search?filter.userId=$eq:${userId}&${
-        search ? `search=${search}` : ""
-      }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
-        vote ? `filter.vote=$in:${vote}` : ""
-      }&${sortBy ? `sortBy=${sortBy}` : ""}`
-    );
-    console.log("res", res.data);
-    return res.data;
+    const res: { data: VotesTableI[]; meta: PaginationMeta } =
+      await axiosInstance.get(
+        `/api/governance/votes/search?filter.userId=$eq:${userId}&${
+          search ? `search=${search}` : ""
+        }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
+          vote ? `filter.vote=$in:${vote}` : ""
+        }&${sortBy ? `sortBy=${sortBy}` : ""}&${
+          page ? `page=${page}` : ""
+        }&limit=${limit}`
+      );
+    return res;
   } catch (error) {
     console.log("error get latest updates", error);
   }
