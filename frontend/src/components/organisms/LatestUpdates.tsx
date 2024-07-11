@@ -106,24 +106,26 @@ export const LatestUpdates = ({
           />
         </Box>
       </Box>
-      {isEmpty(latestUpdates) ? (
+      {isEmpty(data) ? (
         <NotFound
           height="55vh"
           title="latestUpdates.title"
           description="latestUpdates.description"
         />
       ) : (
-        <VotesTable
-          votes={data}
-          actionTitle={t("actionTitle")}
-          onActionClick={(action) => openReasoningModal(action)}
-        />
+        <>
+          <VotesTable
+            votes={data}
+            actionTitle={t("actionTitle")}
+            onActionClick={(action) => openReasoningModal(action)}
+          />
+          <ShowMoreButton
+            isLoading={isLoading}
+            hasNextPage={pagination.has_next_page}
+            callBack={loadMore}
+          />
+        </>
       )}
-      <ShowMoreButton
-        isLoading={isLoading}
-        hasNextPage={pagination.has_next_page}
-        callBack={loadMore}
-      />
     </Box>
   );
 };
