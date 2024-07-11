@@ -32,7 +32,8 @@ interface Props {
 
 export const GovActionTableRow = ({ govActions }: Props) => {
   const t = useTranslations("GovernanceActions");
-  const { id, vote_status, status, title, type, has_reasoning } = govActions;
+  const { id, vote_status, status, title, type, has_reasoning, tx_hash } =
+    govActions;
   const govActionModal = useModal<GovActionModalState>();
   const addReasoningModal = useModal<OpenAddReasoningModalState>();
   const reasoningLinkModal = useModal<OpenReasoningLinkModalState>();
@@ -239,9 +240,9 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                     flexWrap="nowrap"
                     gap={1}
                   >
-                    <CopyButton size={14} text={id} />
+                    <CopyButton size={14} text={tx_hash} />
                     <Typography variant="caption">
-                      {getShortenedGovActionId(id)}
+                      {getShortenedGovActionId(tx_hash)}
                     </Typography>
                   </Box>
                 </Box>

@@ -54,6 +54,51 @@ export const PreviewReasoningModal = () => {
     }
   }, [govAction?.id]);
 
+  const DisplayDate = ({
+    bgColor = "#D6E2FF80",
+    title,
+    date,
+    tooltipHeading,
+    tooltipParagraph,
+    dataTestId,
+  }) => {
+    return (
+      <Box
+        bgcolor={bgColor}
+        display="flex"
+        flexDirection="row"
+        justifyContent="center"
+        alignItems="center"
+        py={0.75}
+        data-testid={dataTestId}
+      >
+        <Typography sx={{ flexWrap: "nowrap", mr: 1 }} variant="caption">
+          {title}
+        </Typography>
+        <Typography
+          fontWeight={600}
+          sx={{ flexWrap: "nowrap" }}
+          variant="caption"
+        >
+          {formatDisplayDate(date)}
+        </Typography>
+        <Tooltip
+          heading={tooltipHeading}
+          paragraphOne={tooltipParagraph}
+          placement="bottom-end"
+          arrow
+        >
+          <InfoOutlinedIcon
+            style={{
+              color: "#ADAEAD",
+            }}
+            sx={{ ml: 0.7 }}
+            fontSize="small"
+          />
+        </Tooltip>
+      </Box>
+    );
+  };
   return (
     <ModalWrapper dataTestId="preview-reasoning-modal" sx={{ py: 3, px: 0 }}>
       <ModalHeader sx={{ px: 3 }}>
@@ -106,7 +151,7 @@ export const PreviewReasoningModal = () => {
             {t("previewReasoning.governanceActionId")}
           </Typography>
           <OutlinedLightButton nonInteractive={true}>
-            {getShortenedGovActionId(govAction.id)}
+            {getShortenedGovActionId(govAction.tx_hash, 20)}
           </OutlinedLightButton>
         </Box>
         <Box mt={3} data-testid="governance-action-type">
@@ -129,83 +174,42 @@ export const PreviewReasoningModal = () => {
         )}
       </Box>
       {govAction.submit_time && (
-        <Box
-          bgcolor="#D6E2FF80"
-          display="flex"
-          flexDirection="row"
-          justifyContent="center"
-          alignItems="center"
-          py={0.75}
-        >
-          <Typography sx={{ flexWrap: "nowrap", mr: 1 }} variant="caption">
-            {t("previewReasoning.submissionDate")}
-          </Typography>
-          <Typography
-            fontWeight={600}
-            sx={{ flexWrap: "nowrap" }}
-            variant="caption"
-          >
-            {formatDisplayDate(govAction.submit_time)}
-          </Typography>
-          <Tooltip
-            heading={t("previewReasoning.tooltips.submissionDate.heading")}
-            paragraphOne={t(
-              "previewReasoning.tooltips.submissionDate.paragraphOne"
-            )}
-            placement="bottom-end"
-            arrow
-          >
-            <InfoOutlinedIcon
-              style={{
-                color: "#ADAEAD",
-              }}
-              sx={{ ml: 0.7 }}
-              fontSize="small"
-            />
-          </Tooltip>
-        </Box>
-      )}{" "}
-      {govAction.end_time && (
-        <Box
-          data-testid="expiry-date"
-          bgcolor="rgba(247, 249, 251, 1)"
-          display="flex"
-          flexDirection="row"
-          justifyContent="center"
-          alignItems="center"
-          py={0.75}
-        >
-          <Typography sx={{ flexWrap: "nowrap", mr: 1 }} variant="caption">
-            {t("previewReasoning.expiryDate")}
-          </Typography>
-          <Typography
-            fontWeight={600}
-            sx={{ flexWrap: "nowrap" }}
-            variant="caption"
-          >
-            {formatDisplayDate(govAction.end_time)}
-          </Typography>
-          <Tooltip
-            heading={t("previewReasoning.tooltips.expiryDate.heading")}
-            paragraphOne={t(
-              "previewReasoning.tooltips.expiryDate.paragraphOne"
-            )}
-            paragraphTwo={t(
-              "previewReasoning.tooltips.expiryDate.paragraphTwo"
-            )}
-            placement="bottom-end"
-            arrow
-          >
-            <InfoOutlinedIcon
-              style={{
-                color: "#ADAEAD",
-              }}
-              sx={{ ml: 0.7 }}
-              fontSize="small"
-            />
-          </Tooltip>
-        </Box>
+        <DisplayDate
+          date={govAction.submit_time}
+          title={t("previewReasoning.submissionDate")}
+          tooltipHeading={t("previewReasoning.tooltips.submissionDate.heading")}
+          tooltipParagraph={t(
+            "previewReasoning.tooltips.submissionDate.paragraphOne"
+          )}
+          dataTestId="submit-date"
+        />
       )}
+      {govAction.vote_submit_time && (
+        <DisplayDate
+          date={govAction.end_time}
+          title={t("previewReasoning.voteSubmissionDate")}
+          tooltipHeading={t(
+            "previewReasoning.tooltips.submissionDate.vote.heading"
+          )}
+          tooltipParagraph={t(
+            "previewReasoning.tooltips.submissionDate.vote.paragraphOne"
+          )}
+          dataTestId="vote-submit-date"
+        />
+      )}
+      {govAction.end_time && (
+        <DisplayDate
+          date={govAction.end_time}
+          title={t("previewReasoning.expiryDate")}
+          tooltipHeading={t("previewReasoning.tooltips.expiryDate.heading")}
+          tooltipParagraph={t(
+            "previewReasoning.tooltips.expiryDate.paragraphTwo"
+          )}
+          dataTestId="expiry-date"
+          bgColor="rgba(247, 249, 251, 1)"
+        />
+      )}
+
       <Box
         bgcolor="white"
         px={{ xs: 1.4, md: 3 }}
