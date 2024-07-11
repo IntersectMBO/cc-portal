@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "09e2a934-90fc-409c-9673-a0e0f92715d4",
+		"_postman_id": "374f247a-1ea9-4c6a-8a4f-5b5eaa052036",
 		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20133713"
@@ -212,7 +212,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete User",
+					"name": "Toggle User Status",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -221,16 +221,25 @@
 								"value": "{{accessToken}}"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"inactive\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{base-url}}/api/users/778f8a09-ce16-41fa-8bb6-bb0dad8d0012/delete",
+							"raw": "{{base-url}}/api/users/dc4ae69c-f70d-45ac-a6e6-f52cf8f9510c/toggle-status",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"778f8a09-ce16-41fa-8bb6-bb0dad8d0012",
-								"delete"
+								"dc4ae69c-f70d-45ac-a6e6-f52cf8f9510c",
+								"toggle-status"
 							]
 						}
 					},
