@@ -31,6 +31,7 @@ export const MyActions = ({ actions }: { actions: VotesTableI[] }) => {
       state: {
         govAction: {
           id: action.gov_action_proposal_id,
+          tx_hash: action.gov_action_proposal_tx_hash,
           type: action.gov_action_proposal_type,
           submit_time: null, //todo, update BE response
           end_time: action.gov_action_proposal_end_time,

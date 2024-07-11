@@ -80,7 +80,7 @@ export interface GovActionMetadata {
 export interface OpenPreviewReasoningModal {
   govAction: Pick<
     GovernanceActionTableI,
-    "id" | "type" | "submit_time" | "end_time"
+    "id" | "type" | "submit_time" | "end_time" | "tx_hash"
   > & { vote?: Vote; vote_submit_time?: string };
   onActionClick?: (id: string) => void;
   actionTitle?: string;

@@ -151,7 +151,7 @@ export const PreviewReasoningModal = () => {
             {t("previewReasoning.governanceActionId")}
           </Typography>
           <OutlinedLightButton nonInteractive={true}>
-            {getShortenedGovActionId(govAction.id)}
+            {getShortenedGovActionId(govAction.tx_hash, 20)}
           </OutlinedLightButton>
         </Box>
         <Box mt={3} data-testid="governance-action-type">

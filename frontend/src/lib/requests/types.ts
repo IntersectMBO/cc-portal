@@ -51,6 +51,7 @@ export interface VotesTableI {
   reasoning_title?: string;
   reasoning_comment?: string;
   gov_action_proposal_id: string;
+  gov_action_proposal_tx_hash: string;
   gov_action_proposal_title?: string;
   gov_action_proposal_type: string;
   gov_action_proposal_status: GovActionProposalStatus;
