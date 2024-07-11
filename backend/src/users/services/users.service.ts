@@ -219,6 +219,8 @@ export class UsersService {
   ): Promise<UserDto> {
     const user = await this.findEntityById(id);
     user.status = userStatus;
+    user.deactivatedAt =
+      userStatus === UserStatusEnum.INACTIVE ? new Date() : null;
     await this.userRepository.save(user);
     return UserMapper.userToDto(user);
   }
@@ -269,16 +271,5 @@ export class UsersService {
       .leftJoinAndSelect('users.role', 'role')
       .where('role.code = :code', { code: RoleEnum.USER })
       .andWhere('users.status = :status', { status: UserStatusEnum.ACTIVE });
-  }
-
-  async softDelete(id: string): Promise<UserDto> {
-    const user = await this.findEntityById(id);
-    if (user.isDeleted) {
-      throw new ConflictException(`User already deleted`);
-    }
-    user.isDeleted = true;
-    user.status = UserStatusEnum.INACTIVE;
-    await this.userRepository.save(user);
-    return UserMapper.userToDto(user);
   }
 }

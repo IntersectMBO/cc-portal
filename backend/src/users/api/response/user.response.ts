@@ -64,11 +64,13 @@ export class UserResponse {
   permissions: string[];
 
   @ApiProperty({
-    description: 'A flag indicating whether the user is deleted or not',
-    example: false,
+    name: 'deactivated_at',
+    type: Date,
+    format: 'date-time',
+    description: 'Time of deactivatinb a user',
   })
-  @Expose({ name: 'id_deleted' })
-  isDeleted: boolean;
+  @Expose({ name: 'deactivated_at' })
+  deactivatedAt: Date;
 
   @ApiProperty({
     name: 'created_at',

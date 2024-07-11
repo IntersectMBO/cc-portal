@@ -55,7 +55,7 @@ describe('UsersFacade', () => {
     },
     {
       id: '2',
-      code: 'add_new_admin',
+      code: 'manage_admins',
       roles: [mockRoles[0], mockRoles[1]],
       users: null,
       createdAt: null,

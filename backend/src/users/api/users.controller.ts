@@ -39,6 +39,7 @@ import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.confi
 import { PermissionEnum } from '../enums/permission.enum';
 import { Permissions } from 'src/auth/guard/permission.decorator';
 import { PermissionGuard } from 'src/auth/guard/permission.guard';
+import { ToggleStatusRequest } from './request/toggle-status.request';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -222,15 +223,11 @@ export class UsersController {
   }
 
   @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Delete a user' })
+  @ApiOperation({ summary: 'Activate / Deactivate User Status' })
   @ApiResponse({
     status: 200,
-    description: 'User deleted successfully.',
+    description: 'User status changed successfully.',
     type: UserResponse,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad Request',
   })
   @ApiResponse({
     status: 401,
@@ -244,25 +241,27 @@ export class UsersController {
     status: 404,
     description: 'User with {id} not found"',
   })
-  @ApiResponse({
-    status: 409,
-    description: 'User already deleted',
-  })
   @ApiParam({
     name: 'id',
     required: true,
     description: 'Identification number of the user',
     type: String,
   })
-  @ApiBody({ type: UpdateUserRequest })
+  @ApiBody({ type: ToggleStatusRequest })
   @HttpCode(200)
   @Permissions(PermissionEnum.MANAGE_CC_MEMBERS)
   @UseGuards(JwtAuthGuard, PermissionGuard)
-  @Patch(':id/delete')
-  async softDelete(
+  @Patch(':id/toggle-status')
+  async toggleStatus(
     @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
+    @Body() toggleStatusRequest: ToggleStatusRequest,
   ): Promise<UserResponse> {
-    return await this.usersFacade.softDelete(id);
+    const permissions: PermissionEnum[] = req.user.permissions;
+    return await this.usersFacade.toggleStatus(
+      id,
+      toggleStatusRequest.status,
+      permissions,
+    );
   }
 }

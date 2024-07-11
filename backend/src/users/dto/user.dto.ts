@@ -11,7 +11,7 @@ export class UserDto {
   hotAddresses: string[];
   role: string;
   permissions: string[];
-  isDeleted: boolean;
+  deactivatedAt: Date;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }

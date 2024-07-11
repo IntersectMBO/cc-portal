@@ -72,7 +72,7 @@ const mockPermissions: Permission[] = [
   },
   {
     id: 'permissionId3',
-    code: 'add_new_admin',
+    code: 'manage_admins',
     roles: [],
     users: [],
     createdAt: null,

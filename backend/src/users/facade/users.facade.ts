@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UsersService } from '../services/users.service';
 import { UserResponse } from '../api/response/user.response';
@@ -12,6 +16,9 @@ import { S3Service } from '../../s3/service/s3.service';
 import { UploadContext } from '../../s3/enums/upload-context';
 import { PaginateQuery } from 'nestjs-paginate';
 import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mapper';
+import { UserStatusEnum } from '../enums/user-status.enum';
+import { PermissionEnum } from '../enums/permission.enum';
+import { RoleEnum } from '../enums/role.enum';
 @Injectable()
 export class UsersFacade {
   constructor(
@@ -87,8 +94,32 @@ export class UsersFacade {
     );
   }
 
-  async softDelete(userId: string): Promise<UserResponse> {
-    const user = await this.usersService.softDelete(userId);
-    return UserMapper.mapUserDtoToResponse(user);
+  async toggleStatus(
+    userId: string,
+    status: UserStatusEnum,
+    permissions: PermissionEnum[],
+  ): Promise<UserResponse> {
+    const user = await this.usersService.findById(userId);
+    this.checkAbilityToggleStatus(user, permissions);
+    const result = await this.usersService.updateUserStatus(user.id, status);
+    return UserMapper.mapUserDtoToResponse(result);
+  }
+
+  /**
+   * Checks whether the logged-in user can change status
+   * @param user - User whose status we change
+   * @param permissions - Permissions of the logged-in user
+   */
+  private checkAbilityToggleStatus(
+    user: UserDto,
+    permissions: PermissionEnum[],
+  ): void {
+    if (
+      user.role === RoleEnum.SUPER_ADMIN ||
+      (user.role === RoleEnum.ADMIN &&
+        !permissions.includes(PermissionEnum.MANAGE_ADMINS))
+    ) {
+      throw new ForbiddenException(`You have no permission for this action`);
+    }
   }
 }

@@ -86,10 +86,11 @@ export class User extends CommonEntity {
   permissions: Permission[];
 
   @Column({
-    name: 'is_deleted',
-    default: false,
+    name: 'deactivated_at',
+    type: 'timestamp',
+    nullable: true,
   })
-  isDeleted: boolean;
+  deactivatedAt: Date;
 
   constructor(user: Partial<User>) {
     super();
