@@ -4,9 +4,12 @@ import { Card, TableDivider } from "@molecules";
 import { Grid } from "@mui/material";
 import { UserAvatar, UserBasicInfo, UserRole, UserStatus } from "@molecules";
 import { UserStatus as UserStatusType } from "@atoms";
-import { UserListItem } from "../types";
+import { OpenDeleteRoleModalState, UserListItem } from "../types";
+import { useAppContext, useModal } from "@/context";
+import { hasManageUserPermission } from "@utils";
 
 export function UsersListItem({
+  id,
   name,
   email,
   role,
@@ -14,8 +17,24 @@ export function UsersListItem({
   profile_photo_url,
 }: Pick<
   UserListItem,
-  "name" | "email" | "role" | "status" | "profile_photo_url"
+  "id" | "name" | "email" | "role" | "status" | "profile_photo_url"
 >) {
+  const { userSession } = useAppContext();
+  const { openModal } = useModal<OpenDeleteRoleModalState>();
+  const allowDeletingUser =
+    status !== "inactive" &&
+    hasManageUserPermission(role, userSession?.permissions);
+
+  const deleteUserRole = () => {
+    openModal({
+      type: "deleteRole",
+      state: {
+        userId: id,
+        status: "inactive",
+      },
+    });
+  };
+
   return (
     <Grid item mb={3}>
       <Card variant="default">
@@ -34,7 +53,11 @@ export function UsersListItem({
               </Grid>
               <TableDivider />
               <Grid item px={{ xxs: 0, lg: 3 }}>
-                <UserRole roles={[role]} />
+                <UserRole
+                  showCloseButton={allowDeletingUser}
+                  roles={[role]}
+                  onClick={deleteUserRole}
+                />
               </Grid>
             </Grid>
           </Grid>

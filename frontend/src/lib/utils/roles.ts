@@ -47,3 +47,22 @@ export const getRoleDisplayValue = (role: UserRole) =>
  */
 export const formatRoleList = (roles: UserRole[]) =>
   roles.map((role) => getRoleDisplayValue(role));
+
+/**
+ * Checks if the current user has permission to manage the specified user role.
+ *
+ * @param roleToManage - The role of the user to be managed.
+ * @param userPermissions - The permissions of the current user.
+ * @returns True if the current user has the necessary permission to manage the specified user role, otherwise false.
+ */
+export const hasManageUserPermission = (
+  roleToManage: UserRole | undefined,
+  userPermissions: string[]
+): boolean => {
+  if (isAnyAdminRole(roleToManage)) {
+    return userPermissions.includes("manage_admins");
+  } else if (isUserRole(roleToManage)) {
+    return userPermissions.includes("manage_cc_members");
+  }
+  return false;
+};

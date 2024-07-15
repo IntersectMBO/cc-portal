@@ -12,10 +12,12 @@ import { OpenDeleteRoleModalState } from "../types";
 import { useSnackbar } from "@/context/snackbar";
 import { toggleUserStatus } from "@/lib/api";
 import { isResponseErrorI } from "@utils";
+import { useRouter } from "next/navigation";
 
 export const DeleteRole = () => {
   const t = useTranslations("Modals");
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
+  const router = useRouter();
 
   const {
     closeModal,
@@ -35,6 +37,7 @@ export const DeleteRole = () => {
     if (!isResponseErrorI(res)) {
       addSuccessAlert(t("deleteRole.alerts.success"));
       closeModal();
+      router.refresh();
     } else {
       addErrorAlert(res.error);
     }

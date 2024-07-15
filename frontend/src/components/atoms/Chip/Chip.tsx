@@ -1,15 +1,15 @@
 import { customPalette, ICONS } from "@consts";
-import { Grid } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import { Typography } from "../Typography";
 
 interface ChipProps {
   label: string;
-  hideCloseButton?: boolean;
+  showCloseButton?: boolean;
   onClick?: () => void;
 }
 export const Chip = ({
   label,
-  hideCloseButton = false,
+  showCloseButton = false,
   onClick,
 }: ChipProps) => (
   <Grid
@@ -23,6 +23,10 @@ export const Chip = ({
     <Typography data-testid={`TODO-type`} variant="caption">
       {label}
     </Typography>
-    {!hideCloseButton && <img src={ICONS.close} onClick={onClick} />}
+    {showCloseButton && (
+      <IconButton onClick={onClick} sx={{ padding: 0 }}>
+        <img src={ICONS.close} />
+      </IconButton>
+    )}
   </Grid>
 );
