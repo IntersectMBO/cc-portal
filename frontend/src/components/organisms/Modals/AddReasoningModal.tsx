@@ -15,15 +15,17 @@ import { useModal } from "@context";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/context/snackbar";
 import { OpenAddReasoningModalState } from "../types";
+import { addOrUpdateReasoning } from "@/lib/api";
+import { ReasoningResponseI } from "@/lib/requests";
 
 interface AddReasoningFormData {
   title: string;
-  reasoning: string;
+  content: string;
 }
 export const AddReasoningModal = () => {
   const t = useTranslations("Modals");
   const {
-    state: { callback },
+    state: { callback, id },
   } = useModal<OpenAddReasoningModalState>();
   const router = useRouter();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
@@ -36,13 +38,13 @@ export const AddReasoningModal = () => {
   } = useForm();
 
   const onSubmit = async (data: AddReasoningFormData) => {
-    try {
+    const response = await addOrUpdateReasoning({ proposalId: id, ...data });
+    if ("error" in response && response?.error) {
+      addErrorAlert(t("addReasoning.alerts.error"));
+    } else {
       router.refresh();
       addSuccessAlert(t("addReasoning.alerts.success"));
-    } catch (error) {
-      addErrorAlert(t("addReasoning.alerts.error"));
-    } finally {
-      callback();
+      callback(response as ReasoningResponseI);
     }
   };
 
@@ -76,7 +78,7 @@ export const AddReasoningModal = () => {
             label={t("addReasoning.fields.reasoning.label")}
             errors={errors}
             control={control}
-            {...register("reasoning", { required: "Reasoning is required" })}
+            {...register("content", { required: "Reasoning is required" })}
           />
 
           <ModalActions />

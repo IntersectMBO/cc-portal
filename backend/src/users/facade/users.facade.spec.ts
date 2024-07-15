@@ -55,7 +55,7 @@ describe('UsersFacade', () => {
     },
     {
       id: '2',
-      code: 'add_new_admin',
+      code: 'manage_admins',
       roles: [mockRoles[0], mockRoles[1]],
       users: null,
       createdAt: null,
@@ -82,6 +82,7 @@ describe('UsersFacade', () => {
       hotAddresses: ['sofija123', 'sofija234'],
       role: mockRoles[0].code,
       permissions: [mockPermissions[0].code],
+      isDeleted: false,
       createdAt: null,
       updatedAt: null,
     },
@@ -95,6 +96,7 @@ describe('UsersFacade', () => {
       hotAddresses: ['ivan1', 'ivan2'],
       role: mockRoles[2].code,
       permissions: [],
+      isDeleted: false,
       createdAt: null,
       updatedAt: null,
     },
@@ -111,6 +113,7 @@ describe('UsersFacade', () => {
       hotAddresses: ['sofija123', 'sofija234'],
       role: mockRoles[0].code,
       permissions: [mockPermissions[0].code],
+      isDeleted: false,
       createdAt: null,
       updatedAt: null,
     },
@@ -124,6 +127,7 @@ describe('UsersFacade', () => {
       hotAddresses: ['ivan1', 'ivan2'],
       role: mockRoles[2].code,
       permissions: [],
+      isDeleted: false,
       createdAt: null,
       updatedAt: null,
     },
@@ -137,6 +141,7 @@ describe('UsersFacade', () => {
       hotAddresses: ['zoran1', 'zoran2'],
       role: mockRoles[2].code,
       permissions: [],
+      isDeleted: false,
       createdAt: null,
       updatedAt: null,
     },
@@ -219,11 +224,32 @@ describe('UsersFacade', () => {
         const usersPaginatedDto: PaginatedDto<UserDto> = {
           items: paginatedUsers,
           itemCount: paginatedUsers.length,
-          pageOptions: null,
+          pageOptions: {
+            page: query.page,
+            perPage: query.limit,
+            skip: currentPosition,
+          },
         };
 
         return usersPaginatedDto;
       }),
+    softDelete: jest.fn().mockImplementation((id) => {
+      let foundUser: UserDto;
+      mockUsers.forEach((item) => {
+        if (id === item.id) {
+          foundUser = item;
+        }
+      });
+      if (!foundUser) {
+        return new NotFoundException(`User with id ${id} not found`);
+      }
+      if (foundUser.isDeleted) {
+        return new ConflictException(`User already deleted`);
+      }
+      foundUser.isDeleted = true;
+      foundUser.status = UserStatusEnum.INACTIVE;
+      return UserMapper.mapUserDtoToResponse(foundUser);
+    }),
   };
 
   const mockS3Service = {
@@ -437,6 +463,39 @@ describe('UsersFacade', () => {
       };
       await facade.searchUsers(query, true);
       expect(mockUserService.searchUsers).toHaveBeenCalledWith(query, true);
+    });
+  });
+
+  describe('Soft delete users', () => {
+    it('should delete a user by id', async () => {
+      const userId = mockUsers[0].id;
+      const result = await facade.softDelete(userId);
+      expect(result.isDeleted).toEqual(true);
+      expect(result.status).toEqual(UserStatusEnum.INACTIVE);
+      expect(mockUserService.softDelete).toHaveBeenCalledWith(userId);
+    });
+    it(`shouldn't delete a user - user not found by id`, async () => {
+      const userId = 'notExistingUser';
+      try {
+        await facade.softDelete(userId);
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.status).toEqual(404);
+        expect(error.message).toEqual(`User with id ${userId} not found`);
+        expect(mockUserService.softDelete).toHaveBeenCalledWith(userId);
+      }
+    });
+    it(`shouldn't delete a user - user already deleted`, async () => {
+      const user = mockUsers[1];
+      user.isDeleted = true;
+      try {
+        await facade.softDelete(user.id);
+      } catch (error) {
+        expect(error).toBeInstanceOf(ConflictException);
+        expect(error.status).toEqual(409);
+        expect(error.message).toEqual(`User already deleted`);
+        expect(mockUserService.softDelete).toHaveBeenCalledWith(user.id);
+      }
     });
   });
 });

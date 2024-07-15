@@ -26,7 +26,11 @@ export default async function MyActionsPage({
       <TopNav />
       <ContentWrapper>
         <Suspense fallback={<Loading />}>
-          <MyActions actions={userActions} />;
+          <MyActions
+            actions={userActions?.data}
+            paginationMeta={userActions?.meta}
+          />
+          ;
         </Suspense>
       </ContentWrapper>
       <Footer />

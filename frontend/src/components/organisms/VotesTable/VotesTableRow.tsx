@@ -18,11 +18,18 @@ interface Props {
   votes: VotesTableI;
   disabled: boolean;
   actionTitle: string;
-  onActionClick: (id: string) => void;
+  onActionClick: (action: VotesTableI) => void;
 }
 
 export const VotesTableRow = ({
-  votes: {
+  votes,
+  disabled,
+  actionTitle,
+  onActionClick,
+}: Props) => {
+  const t = useTranslations("LatestUpdates");
+  const { openModal } = useModal<GovActionModalState>();
+  const {
     user_name,
     user_address,
     user_photo_url,
@@ -31,14 +38,7 @@ export const VotesTableRow = ({
     gov_action_proposal_id,
     gov_action_proposal_title,
     gov_action_proposal_type,
-  },
-  disabled,
-  actionTitle,
-  onActionClick,
-}: Props) => {
-  const t = useTranslations("LatestUpdates");
-  const { openModal } = useModal<GovActionModalState>();
-
+  } = votes;
   const openGAModal = () => {
     openModal({
       type: "govActionModal",
@@ -193,7 +193,7 @@ export const VotesTableRow = ({
             <Button
               disabled={disabled}
               sx={{ whiteSpace: "nowrap" }}
-              onClick={() => onActionClick(gov_action_proposal_id)}
+              onClick={() => onActionClick(votes)}
               variant="outlined"
             >
               {actionTitle}

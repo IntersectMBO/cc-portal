@@ -16,7 +16,11 @@ import { GovActionModalState } from "@organisms";
 import { CopyCard, Loading } from "@molecules";
 import { GovActionMetadata } from "../types";
 import { getGovernanceMetadata } from "@/lib/api";
-import { formatDisplayDate, getProposalTypeLabel } from "@utils";
+import {
+  formatDisplayDate,
+  getProposalTypeLabel,
+  getShortenedGovActionId,
+} from "@utils";
 
 export const GovActionModal = () => {
   const t = useTranslations("Modals");
@@ -73,7 +77,8 @@ export const GovActionModal = () => {
             <Box mt={3}>
               <CopyCard
                 title={t("govActionModal.govActionId")}
-                copyText={state.id}
+                copyText={getShortenedGovActionId(govAction.tx_hash, 20)}
+                copyValue={govAction.tx_hash}
               />
             </Box>
             <Box mt={3} data-testid="governance-action-type">

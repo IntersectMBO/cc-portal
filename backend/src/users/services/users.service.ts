@@ -219,6 +219,8 @@ export class UsersService {
   ): Promise<UserDto> {
     const user = await this.findEntityById(id);
     user.status = userStatus;
+    user.deactivatedAt =
+      userStatus === UserStatusEnum.INACTIVE ? new Date() : null;
     await this.userRepository.save(user);
     return UserMapper.userToDto(user);
   }
