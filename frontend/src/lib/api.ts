@@ -16,6 +16,7 @@ import {
   GovernanceActionTableI,
   ReasoningResponseI,
   AddReasoningRequestI,
+  UserAuthStatus,
 } from "./requests";
 import {
   ConstitutionByCid,
@@ -132,6 +133,39 @@ export async function getUser(id: string): Promise<FetchUserData> {
     return res;
   } catch (error) {
     console.log("error fetching user");
+  }
+}
+
+export async function toggleUserStatus(
+  user_id: string,
+  status: UserAuthStatus
+): Promise<FetchUserData | ResponseErrorI> {
+  const token = getAccessToken();
+  const decodedToken = await decodeUserToken();
+  try {
+    const res: FetchUserData = await axiosInstance.patch(
+      `/api/users/${decodedToken?.userId}/toggle-status`,
+      {
+        user_id,
+        status,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res;
+  } catch (error) {
+    const t = await getTranslations();
+    const customErrorMessage =
+      !token &&
+      error.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t("Modals.deleteRole.alerts.error"),
+      statusCode: error.res.statusCode || null,
+    };
   }
 }
 
