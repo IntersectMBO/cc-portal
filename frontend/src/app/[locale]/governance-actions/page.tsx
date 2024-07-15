@@ -3,7 +3,7 @@ import React, { Suspense } from "react";
 import { unstable_setRequestLocale } from "next-intl/server";
 import { Footer, TopNav, GovernanceActions } from "@organisms";
 import { Loading } from "@molecules";
-import { decodeUserToken, getGovernanceActions } from "@/lib/api";
+import { getGovernanceActions } from "@/lib/api";
 import { ContentWrapper } from "@atoms";
 
 export default async function GovernanceActionsPage({
@@ -17,6 +17,7 @@ export default async function GovernanceActionsPage({
     govActionType: searchParams?.govActionType,
     status: searchParams?.status,
     sortBy: searchParams?.sortBy,
+    page: searchParams?.page,
   });
 
   return (

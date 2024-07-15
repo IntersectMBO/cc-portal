@@ -5,7 +5,7 @@ export const VOTE_PAGINATION_CONFIG: PaginateConfig<Vote> = {
   relations: ['govActionProposal'],
   sortableColumns: ['submitTime', 'govActionProposal.title'],
   filterableColumns: {
-    govActionType: [FilterOperator.EQ, FilterOperator.IN],
+    'govActionProposal.govActionType': [FilterOperator.EQ, FilterOperator.IN],
     vote: [FilterOperator.EQ, FilterOperator.IN],
     userId: [FilterOperator.EQ],
   },

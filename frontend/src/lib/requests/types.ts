@@ -51,6 +51,7 @@ export interface VotesTableI {
   reasoning_title?: string;
   reasoning_comment?: string;
   gov_action_proposal_id: string;
+  gov_action_proposal_tx_hash: string;
   gov_action_proposal_title?: string;
   gov_action_proposal_type: string;
   gov_action_proposal_status: GovActionProposalStatus;
@@ -107,4 +108,26 @@ export interface FetchUsersAdminI extends ResponseErrorI {
 export interface GetGovernanceActionsI extends ResponseErrorI {
   data?: GovernanceActionTableI[];
   meta?: PaginationMeta;
+}
+
+export interface GetReasoningResponseI {
+  title: string;
+  content: string;
+}
+
+export interface AddReasoningRequestI extends GetReasoningResponseI {
+  proposalId: string;
+}
+
+export interface ReasoningContentsI {
+  content: string;
+  govActionProposalTxHash: string;
+  title: string;
+}
+
+export interface ReasoningResponseI {
+  cid: string;
+  url: string;
+  blake2b: string;
+  contents: string;
 }

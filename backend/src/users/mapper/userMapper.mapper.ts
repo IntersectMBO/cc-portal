@@ -24,7 +24,7 @@ export class UserMapper {
     userDto.permissions = user.permissions?.map(
       (permission) => permission.code,
     );
-
+    userDto.deactivatedAt = user.deactivatedAt;
     userDto.createdAt = user.createdAt;
     userDto.updatedAt = user.updatedAt;
 
@@ -78,6 +78,7 @@ export class UserMapper {
     userResponse.status = userDto.status;
     userResponse.role = userDto.role;
     userResponse.permissions = userDto.permissions;
+    userResponse.deactivatedAt = userDto.deactivatedAt;
     userResponse.createdAt = userDto.createdAt;
     userResponse.updatedAt = userDto.updatedAt;
     return userResponse;

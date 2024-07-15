@@ -12,6 +12,8 @@ import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING } from "@consts";
 import { PaginationMeta, VotesTableI } from "@/lib/requests";
 import { usePagination } from "@/lib/utils/usePagination";
 import { getLatestUpdates } from "@/lib/api";
+import { OpenPreviewReasoningModal } from "./types";
+import { useModal } from "@/context";
 
 export const LatestUpdates = ({
   latestUpdates,
@@ -29,6 +31,24 @@ export const LatestUpdates = ({
   );
   const [sortOpen, setSortOpen] = useState(false);
   const [chosenSorting, setChosenSorting] = useState<string>("");
+  const { openModal } = useModal<OpenPreviewReasoningModal>();
+
+  const openReasoningModal = (action: VotesTableI) => {
+    openModal({
+      type: "previewReasoningModal",
+      state: {
+        govAction: {
+          id: action.gov_action_proposal_id,
+          tx_hash: action.gov_action_proposal_tx_hash,
+          type: action.gov_action_proposal_type,
+          submit_time: null, //todo, update BE response
+          end_time: action.gov_action_proposal_end_time,
+          vote: action.value,
+        },
+      },
+    });
+  };
+
   const params: Record<string, string | null> = {
     search: searchText || null,
     govActionType:
@@ -86,24 +106,26 @@ export const LatestUpdates = ({
           />
         </Box>
       </Box>
-      {isEmpty(latestUpdates) ? (
+      {isEmpty(data) ? (
         <NotFound
           height="55vh"
           title="latestUpdates.title"
           description="latestUpdates.description"
         />
       ) : (
-        <VotesTable
-          votes={data}
-          actionTitle={t("actionTitle")}
-          onActionClick={() => console.log("Show Reasoning Modal")}
-        />
+        <>
+          <VotesTable
+            votes={data}
+            actionTitle={t("actionTitle")}
+            onActionClick={(action) => openReasoningModal(action)}
+          />
+          <ShowMoreButton
+            isLoading={isLoading}
+            hasNextPage={pagination.has_next_page}
+            callBack={loadMore}
+          />
+        </>
       )}
-      <ShowMoreButton
-        isLoading={isLoading}
-        hasNextPage={pagination.has_next_page}
-        callBack={loadMore}
-      />
     </Box>
   );
 };

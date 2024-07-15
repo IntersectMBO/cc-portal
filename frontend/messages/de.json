@@ -201,6 +201,7 @@
       "voted": "Voted",
       "submissionDate": "Submission date",
       "expiryDate": "Expiry date",
+      "voteSubmissionDate": "Vote submission date",
       "addNewReasoning": "Add new reasoning",
       "tooltips": {
         "expiryDate": {
@@ -210,7 +211,11 @@
         },
         "submissionDate": {
           "heading": "Submission Date",
-          "paragraphOne": "The date when the governance action was submitted on-chain."
+          "paragraphOne": "The date when the governance action was submitted on-chain.",
+          "vote": {
+            "heading": "Vote Submission Date",
+            "paragraphOne": "The date when the vote was submitted on-chain."
+          }
         }
       },
       "alerts": {

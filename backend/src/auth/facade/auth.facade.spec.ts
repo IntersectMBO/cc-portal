@@ -60,7 +60,7 @@ describe('AuthFacade', () => {
     },
     {
       id: '2',
-      code: 'add_new_admin',
+      code: 'manage_admins',
       roles: [mockRoles[0], mockRoles[1]],
       users: null,
       createdAt: null,
@@ -86,6 +86,7 @@ describe('AuthFacade', () => {
     hotAddresses: [],
     role: mockRoles[2].code,
     permissions: [],
+    deactivatedAt: null,
     createdAt: null,
     updatedAt: null,
   };
@@ -100,6 +101,7 @@ describe('AuthFacade', () => {
     hotAddresses: [],
     role: mockRoles[0].code,
     permissions: [mockPermissions[0].code, mockPermissions[1].code],
+    deactivatedAt: null,
     createdAt: null,
     updatedAt: null,
   };
@@ -115,6 +117,7 @@ describe('AuthFacade', () => {
       hotAddresses: ['sofija123', 'sofija234'],
       role: mockRoles[0].code,
       permissions: [mockPermissions[0].code],
+      deactivatedAt: null,
       createdAt: null,
       updatedAt: null,
     },
@@ -128,6 +131,7 @@ describe('AuthFacade', () => {
       hotAddresses: ['ivan1', 'ivan2'],
       role: mockRoles[2].code,
       permissions: [],
+      deactivatedAt: null,
       createdAt: null,
       updatedAt: null,
     },
@@ -197,6 +201,7 @@ describe('AuthFacade', () => {
           hotAddresses: [],
           role: userRole.code,
           permissions: userPermissions.map((permission) => permission.code),
+          deactivatedAt: null,
           createdAt: null,
           updatedAt: null,
         };
@@ -286,7 +291,7 @@ describe('AuthFacade', () => {
     it('should register a new admin', async () => {
       const createAdminRequest: CreateUserRequest = {
         destination: 'admin@example.com',
-        permissions: ['manage_cc_members', 'add_new_admin'],
+        permissions: ['manage_cc_members', 'manage_admins'],
       };
       const adminRole = RoleEnum.ADMIN;
       const result = await facade.register(createAdminRequest, adminRole);
@@ -337,6 +342,7 @@ describe('AuthFacade', () => {
         hotAddresses: ['sofija123', 'sofija234'],
         role: mockRoles[0].code,
         permissions: [mockPermissions[0].code],
+        deactivatedAt: null,
         createdAt: null,
         updatedAt: null,
       };
@@ -360,6 +366,7 @@ describe('AuthFacade', () => {
         hotAddresses: ['sofija123', 'sofija234'],
         role: mockRoles[0].code,
         permissions: [mockPermissions[0].code],
+        deactivatedAt: null,
         createdAt: null,
         updatedAt: null,
       };
@@ -382,6 +389,7 @@ describe('AuthFacade', () => {
         hotAddresses: ['sofija123', 'sofija234'],
         role: mockRoles[0].code,
         permissions: [mockPermissions[0].code],
+        deactivatedAt: null,
         createdAt: null,
         updatedAt: null,
       };
@@ -397,131 +405,133 @@ describe('AuthFacade', () => {
         expect(e.message).toBe('Unable to activate account');
       }
     });
+  });
 
-    describe('Validate User', () => {
-      it('should validate user by email', async () => {
-        const email = 'sofija@example.com';
-        const userDto: UserDto = {
-          id: '1',
-          name: 'Sofija Dokmanovic',
-          email: 'sofija@example.com',
-          description: 'Lorem ipsum dolor sit amet',
-          profilePhotoUrl: 'https://example.com/profile.jpg',
-          status: UserStatusEnum.ACTIVE,
-          hotAddresses: ['sofija123', 'sofija234'],
-          role: mockRoles[0].code,
-          permissions: [mockPermissions[0].code],
-          createdAt: null,
-          updatedAt: null,
-        };
+  describe('Validate User', () => {
+    it('should validate user by email', async () => {
+      const email = 'sofija@example.com';
+      const userDto: UserDto = {
+        id: '1',
+        name: 'Sofija Dokmanovic',
+        email: 'sofija@example.com',
+        description: 'Lorem ipsum dolor sit amet',
+        profilePhotoUrl: 'https://example.com/profile.jpg',
+        status: UserStatusEnum.ACTIVE,
+        hotAddresses: ['sofija123', 'sofija234'],
+        role: mockRoles[0].code,
+        permissions: [mockPermissions[0].code],
+        deactivatedAt: null,
+        createdAt: null,
+        updatedAt: null,
+      };
 
-        const result = await facade.validateUser(email);
+      const result = await facade.validateUser(email);
 
-        expect(result).toEqual(userDto);
-        expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
-      });
-
-      it('should throw NotFoundException if user is not found', async () => {
-        const email = 'non_existing@example.com';
-
-        try {
-          await facade.validateUser(email);
-        } catch (e) {
-          expect(e).toBeInstanceOf(NotFoundException);
-          expect(e.message).toBe(`User with this email address not found`);
-        }
-        expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
-      });
+      expect(result).toEqual(userDto);
+      expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
     });
 
-    describe('Generate Tokens', () => {
-      it('should generate access and refresh tokens for a user', async () => {
-        const userDto: UserDto = {
-          id: '2',
-          name: 'Ivan Ivanovic',
-          email: 'ivan@example.com',
-          description: 'Lorem ipsum dolor sit amet 2',
-          profilePhotoUrl: 'https://example2.com/profile.jpg',
-          status: UserStatusEnum.ACTIVE,
-          hotAddresses: ['ivan1', 'ivan2'],
-          role: mockRoles[2].code,
-          permissions: [],
-          createdAt: null,
-          updatedAt: null,
-        };
+    it('should throw NotFoundException if user is not found', async () => {
+      const email = 'non_existing@example.com';
 
-        const result = await facade.generateTokens(userDto);
+      try {
+        await facade.validateUser(email);
+      } catch (e) {
+        expect(e).toBeInstanceOf(NotFoundException);
+        expect(e.message).toBe(`User with this email address not found`);
+      }
+      expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
+    });
+  });
 
-        expect(result.accessToken).toEqual(mockTokenResponse.accessToken);
-        expect(result.refreshToken).toEqual(mockTokenResponse.refreshToken);
-        expect(result.user).toEqual(mockTokenResponse.user);
-      });
+  describe('Generate Tokens', () => {
+    it('should generate access and refresh tokens for a user', async () => {
+      const userDto: UserDto = {
+        id: '2',
+        name: 'Ivan Ivanovic',
+        email: 'ivan@example.com',
+        description: 'Lorem ipsum dolor sit amet 2',
+        profilePhotoUrl: 'https://example2.com/profile.jpg',
+        status: UserStatusEnum.ACTIVE,
+        hotAddresses: ['ivan1', 'ivan2'],
+        role: mockRoles[2].code,
+        permissions: [],
+        deactivatedAt: null,
+        createdAt: null,
+        updatedAt: null,
+      };
+
+      const result = await facade.generateTokens(userDto);
+
+      expect(result.accessToken).toEqual(mockTokenResponse.accessToken);
+      expect(result.refreshToken).toEqual(mockTokenResponse.refreshToken);
+      expect(result.user).toEqual(mockTokenResponse.user);
+    });
+  });
+
+  describe('Refresh Access Token', () => {
+    it('should refresh access token', async () => {
+      const refreshToken = 'validRefreshToken';
+
+      mockAuthService.validateRefreshToken.mockReturnValue(
+        mockValidateRefreshTokenPayload,
+      );
+      mockUserService.findByEmail.mockResolvedValue(mockUsers[1]);
+
+      const result = await facade.refreshAccessToken(refreshToken);
+
+      expect(mockAuthService.validateRefreshToken).toHaveBeenCalledWith(
+        refreshToken,
+      );
+      expect(mockUserService.findByEmail).toHaveBeenCalledWith(
+        mockUsers[1].email,
+      );
+
+      expect(result).toEqual(mockTokenResponse);
     });
 
-    describe('Refresh Access Token', () => {
-      it('should refresh access token', async () => {
-        const refreshToken = 'validRefreshToken';
+    it('should throw an error for an invalid refresh token', async () => {
+      const refreshToken = 'invalidRefreshToken';
 
-        mockAuthService.validateRefreshToken.mockReturnValue(
-          mockValidateRefreshTokenPayload,
-        );
-        mockUserService.findByEmail.mockResolvedValue(mockUsers[1]);
+      mockAuthService.validateRefreshToken.mockReturnValue(null);
 
-        const result = await facade.refreshAccessToken(refreshToken);
+      await expect(facade.refreshAccessToken(refreshToken)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
 
-        expect(mockAuthService.validateRefreshToken).toHaveBeenCalledWith(
-          refreshToken,
-        );
-        expect(mockUserService.findByEmail).toHaveBeenCalledWith(
-          mockUsers[1].email,
-        );
+    it('should throw an error if user does not exist', async () => {
+      const refreshToken = 'validRefreshToken';
+      const nonExistantUserPayload = {
+        userId: 'nonexistentUserId',
+        email: '0xnonexistentAddress',
+      };
 
-        expect(result).toEqual(mockTokenResponse);
-      });
+      mockAuthService.validateRefreshToken.mockReturnValue(
+        nonExistantUserPayload,
+      );
+      mockUserService.findByEmail.mockRejectedValue(new NotFoundException());
 
-      it('should throw an error for an invalid refresh token', async () => {
-        const refreshToken = 'invalidRefreshToken';
+      await expect(facade.refreshAccessToken(refreshToken)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
 
-        mockAuthService.validateRefreshToken.mockReturnValue(null);
+    it('should throw an error if user ID does not match', async () => {
+      const refreshToken = 'validRefreshToken';
+      const differentUserPayload = {
+        userId: 'differentUserId',
+        email: mockUsers[1].email,
+      };
 
-        await expect(facade.refreshAccessToken(refreshToken)).rejects.toThrow(
-          UnauthorizedException,
-        );
-      });
+      mockAuthService.validateRefreshToken.mockReturnValue(
+        differentUserPayload,
+      );
+      mockUserService.findByEmail.mockResolvedValue(mockUsers[1]);
 
-      it('should throw an error if user does not exist', async () => {
-        const refreshToken = 'validRefreshToken';
-        const nonExistantUserPayload = {
-          userId: 'nonexistentUserId',
-          email: '0xnonexistentAddress',
-        };
-
-        mockAuthService.validateRefreshToken.mockReturnValue(
-          nonExistantUserPayload,
-        );
-        mockUserService.findByEmail.mockRejectedValue(new NotFoundException());
-
-        await expect(facade.refreshAccessToken(refreshToken)).rejects.toThrow(
-          NotFoundException,
-        );
-      });
-
-      it('should throw an error if user ID does not match', async () => {
-        const refreshToken = 'validRefreshToken';
-        const differentUserPayload = {
-          userId: 'differentUserId',
-          email: mockUsers[1].email,
-        };
-
-        mockAuthService.validateRefreshToken.mockReturnValue(
-          differentUserPayload,
-        );
-        mockUserService.findByEmail.mockResolvedValue(mockUsers[1]);
-
-        await expect(facade.refreshAccessToken(refreshToken)).rejects.toThrow(
-          UnauthorizedException,
-        );
-      });
+      await expect(facade.refreshAccessToken(refreshToken)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 });

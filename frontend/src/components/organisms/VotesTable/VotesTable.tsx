@@ -5,7 +5,7 @@ import { VotesTableI } from "@/lib/requests";
 
 interface Props {
   votes: VotesTableI[];
-  onActionClick: (id: string) => void;
+  onActionClick: (action: VotesTableI) => void;
   actionTitle: string;
   isDisabled?: (data: VotesTableI) => boolean;
 }
