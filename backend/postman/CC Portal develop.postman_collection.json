@@ -223,7 +223,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"status\": \"inactive\"\n}",
+							"raw": "{\n    \"user_id\": \"9c9e412a-31b9-43ab-9732-ace1931afc11\",\n    \"status\": \"inactive\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -231,14 +231,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base-url}}/api/users/dc4ae69c-f70d-45ac-a6e6-f52cf8f9510c/toggle-status",
+							"raw": "{{base-url}}/api/users/{{userId}}/toggle-status",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"dc4ae69c-f70d-45ac-a6e6-f52cf8f9510c",
+								"{{userId}}",
 								"toggle-status"
 							]
 						}

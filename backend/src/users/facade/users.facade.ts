@@ -16,14 +16,15 @@ import { S3Service } from '../../s3/service/s3.service';
 import { UploadContext } from '../../s3/enums/upload-context';
 import { PaginateQuery } from 'nestjs-paginate';
 import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mapper';
-import { UserStatusEnum } from '../enums/user-status.enum';
 import { PermissionEnum } from '../enums/permission.enum';
-import { RoleEnum } from '../enums/role.enum';
+import { ToggleStatusRequest } from '../api/request/toggle-status.request';
+import { RoleFactory } from '../role/role.factory';
 @Injectable()
 export class UsersFacade {
   constructor(
     private readonly usersService: UsersService,
     private readonly s3Service: S3Service,
+    private readonly roleFactory: RoleFactory,
   ) {}
 
   async getAllRoles(): Promise<RoleResponse[]> {
@@ -95,13 +96,15 @@ export class UsersFacade {
   }
 
   async toggleStatus(
-    userId: string,
-    status: UserStatusEnum,
+    toggleStatusRequest: ToggleStatusRequest,
     permissions: PermissionEnum[],
   ): Promise<UserResponse> {
-    const user = await this.usersService.findById(userId);
+    const user = await this.usersService.findById(toggleStatusRequest.userId);
     this.checkAbilityToggleStatus(user, permissions);
-    const result = await this.usersService.updateUserStatus(user.id, status);
+    const result = await this.usersService.updateUserStatus(
+      user.id,
+      toggleStatusRequest.status,
+    );
     return UserMapper.mapUserDtoToResponse(result);
   }
 
@@ -114,11 +117,9 @@ export class UsersFacade {
     user: UserDto,
     permissions: PermissionEnum[],
   ): void {
-    if (
-      user.role === RoleEnum.SUPER_ADMIN ||
-      (user.role === RoleEnum.ADMIN &&
-        !permissions.includes(PermissionEnum.MANAGE_ADMINS))
-    ) {
+    const role = this.roleFactory.getInstance(user.role);
+    const managedBy = role.managedBy();
+    if (!permissions.includes(managedBy)) {
       throw new ForbiddenException(`You have no permission for this action`);
     }
   }

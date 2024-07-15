@@ -10,6 +10,10 @@ import { HotAddress } from './entities/hotaddress.entity';
 import { S3Module } from 'src/s3/s3.module';
 import { RoleController } from './api/role.controller';
 import { Paginator } from 'src/util/pagination/paginator';
+import { RoleFactory } from './role/role.factory';
+import { AdminRole } from './role/role.impl';
+import { SuperAdminRole } from './role/role.impl';
+import { UserRole } from './role/role.impl';
 
 @Module({
   imports: [
@@ -17,7 +21,15 @@ import { Paginator } from 'src/util/pagination/paginator';
     S3Module,
   ],
   controllers: [UsersController, RoleController],
-  providers: [UsersFacade, UsersService, Paginator],
+  providers: [
+    UsersFacade,
+    UsersService,
+    Paginator,
+    RoleFactory,
+    SuperAdminRole,
+    AdminRole,
+    UserRole,
+  ],
   exports: [UsersService],
 })
 export class UsersModule {}

@@ -37,7 +37,6 @@ import { PaginatedResponse } from '../../util/pagination/response/paginated.resp
 import { ApiPaginationQuery, Paginate, PaginateQuery } from 'nestjs-paginate';
 import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
 import { PermissionEnum } from '../enums/permission.enum';
-import { Permissions } from 'src/auth/guard/permission.decorator';
 import { PermissionGuard } from 'src/auth/guard/permission.guard';
 import { ToggleStatusRequest } from './request/toggle-status.request';
 @ApiTags('Users')
@@ -230,6 +229,10 @@ export class UsersController {
     type: UserResponse,
   })
   @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
+  @ApiResponse({
     status: 401,
     description: 'Unauthorized',
   })
@@ -249,8 +252,7 @@ export class UsersController {
   })
   @ApiBody({ type: ToggleStatusRequest })
   @HttpCode(200)
-  @Permissions(PermissionEnum.MANAGE_CC_MEMBERS)
-  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @UseGuards(JwtAuthGuard, UserPathGuard, PermissionGuard)
   @Patch(':id/toggle-status')
   async toggleStatus(
     @Request() req: any,
@@ -259,8 +261,7 @@ export class UsersController {
   ): Promise<UserResponse> {
     const permissions: PermissionEnum[] = req.user.permissions;
     return await this.usersFacade.toggleStatus(
-      id,
-      toggleStatusRequest.status,
+      toggleStatusRequest,
       permissions,
     );
   }
