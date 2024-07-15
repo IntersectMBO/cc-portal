@@ -81,7 +81,7 @@ export class AuthController {
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @HttpCode(201)
   @Post('register-admin')
-  @Permissions(PermissionEnum.ADD_ADMIN)
+  @Permissions(PermissionEnum.MANAGE_ADMINS)
   @UseGuards(JwtAuthGuard, PermissionGuard)
   async registerAdmin(
     @Req() req,

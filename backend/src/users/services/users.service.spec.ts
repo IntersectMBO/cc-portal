@@ -41,6 +41,7 @@ const user: User = {
   },
   permissions: null,
   hotAddresses: null,
+  isDeleted: false,
   createdAt: null,
   updatedAt: null,
 };
@@ -71,7 +72,7 @@ const mockPermissions: Permission[] = [
   },
   {
     id: 'permissionId3',
-    code: 'add_new_admin',
+    code: 'manage_admins',
     roles: [],
     users: [],
     createdAt: null,
@@ -129,6 +130,7 @@ const mockUsers: User[] = [
     status: UserStatusEnum.ACTIVE,
     role: mockRoles[2],
     permissions: [],
+    isDeleted: false,
     createdAt: null,
     updatedAt: null,
   },
@@ -142,6 +144,7 @@ const mockUsers: User[] = [
     status: UserStatusEnum.ACTIVE,
     role: mockRoles[1],
     permissions: [mockPermissions[0], mockPermissions[1]],
+    isDeleted: false,
     createdAt: null,
     updatedAt: null,
   },
@@ -704,6 +707,50 @@ describe('UsersService', () => {
       expect(usersPaginatedDto.items[1].name).toEqual(mockUsers[1].name);
       expect(usersPaginatedDto.items.length).toEqual(2);
       expect(mockPaginator.paginate).toHaveBeenCalled();
+    });
+  });
+
+  describe(`Soft delete users`, () => {
+    it(`should delete a user by id`, async () => {
+      const mockUser = mockUsers[0];
+      const mockFindEntityById = jest
+        .spyOn<any, any>(service, 'findEntityById')
+        .mockResolvedValueOnce(mockUser);
+      const deletedUser = await service.softDelete(mockUser.id);
+      expect(deletedUser.isDeleted).toEqual(true);
+      expect(deletedUser.status).toEqual(UserStatusEnum.INACTIVE);
+      expect(mockFindEntityById).toHaveBeenCalledWith(mockUser.id);
+    });
+    it(`shouldn't delete a user - already deleted`, async () => {
+      const mockUser = mockUsers[0];
+      mockUser.isDeleted = true;
+      jest
+        .spyOn<any, any>(service, 'findEntityById')
+        .mockResolvedValueOnce(mockUser);
+      try {
+        await service.softDelete(mockUser.id);
+      } catch (error) {
+        expect(error).toBeInstanceOf(ConflictException);
+        expect(error.status).toEqual(409);
+        expect(error.message).toEqual(`User already deleted`);
+      }
+    });
+    it(`shouldn't delete a user - user not found`, async () => {
+      const userId = 'notExistingUser';
+      const mockFindEntityById = jest.spyOn<any, any>(
+        service,
+        'findEntityById',
+      );
+      mockFindEntityById.mockImplementation(() => {
+        throw new NotFoundException(`User with id ${userId} not found`);
+      });
+      try {
+        await service.softDelete(userId);
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.status).toEqual(404);
+        expect(error.message).toEqual(`User with id ${userId} not found`);
+      }
     });
   });
 });

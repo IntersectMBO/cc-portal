@@ -64,6 +64,15 @@ export class UserResponse {
   permissions: string[];
 
   @ApiProperty({
+    name: 'deactivated_at',
+    type: Date,
+    format: 'date-time',
+    description: 'Time of deactivatinb a user',
+  })
+  @Expose({ name: 'deactivated_at' })
+  deactivatedAt: Date;
+
+  @ApiProperty({
     name: 'created_at',
     type: Date,
     format: 'date-time',

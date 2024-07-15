@@ -23,7 +23,7 @@ export class TestData1719326858419 implements MigrationInterface {
     await queryRunner.query(
       `-- User Permissions
           insert into user_permissions ("user_id", "permission_id") values
-          ((select id from users where email = '${adminEmail}'), (select id from permissions where code = 'add_new_admin')),
+          ((select id from users where email = '${adminEmail}'), (select id from permissions where code = 'manage_admins')),
           ((select id from users where email = '${adminEmail}'), (select id from permissions where code = 'manage_cc_members')),
           ((select id from users where email = '${adminEmail}'), (select id from permissions where code = 'add_constitution_version'))`,
     );

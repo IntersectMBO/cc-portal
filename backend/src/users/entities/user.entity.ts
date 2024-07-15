@@ -85,6 +85,13 @@ export class User extends CommonEntity {
   })
   permissions: Permission[];
 
+  @Column({
+    name: 'deactivated_at',
+    type: 'timestamp',
+    nullable: true,
+  })
+  deactivatedAt: Date;
+
   constructor(user: Partial<User>) {
     super();
     Object.assign(this, user);
