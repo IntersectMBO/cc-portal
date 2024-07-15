@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UsersService } from '../services/users.service';
 import { UserResponse } from '../api/response/user.response';
@@ -12,11 +16,15 @@ import { S3Service } from '../../s3/service/s3.service';
 import { UploadContext } from '../../s3/enums/upload-context';
 import { PaginateQuery } from 'nestjs-paginate';
 import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mapper';
+import { PermissionEnum } from '../enums/permission.enum';
+import { ToggleStatusRequest } from '../api/request/toggle-status.request';
+import { RoleFactory } from '../role/role.factory';
 @Injectable()
 export class UsersFacade {
   constructor(
     private readonly usersService: UsersService,
     private readonly s3Service: S3Service,
+    private readonly roleFactory: RoleFactory,
   ) {}
 
   async getAllRoles(): Promise<RoleResponse[]> {
@@ -85,5 +93,34 @@ export class UsersFacade {
       usersPaginatedDto,
       UserMapper.mapUserDtoToResponse,
     );
+  }
+
+  async toggleStatus(
+    toggleStatusRequest: ToggleStatusRequest,
+    permissions: PermissionEnum[],
+  ): Promise<UserResponse> {
+    const user = await this.usersService.findById(toggleStatusRequest.userId);
+    this.checkAbilityToggleStatus(user, permissions);
+    const result = await this.usersService.updateUserStatus(
+      user.id,
+      toggleStatusRequest.status,
+    );
+    return UserMapper.mapUserDtoToResponse(result);
+  }
+
+  /**
+   * Checks whether the logged-in user can change status
+   * @param user - User whose status we change
+   * @param permissions - Permissions of the logged-in user
+   */
+  private checkAbilityToggleStatus(
+    user: UserDto,
+    permissions: PermissionEnum[],
+  ): void {
+    const role = this.roleFactory.getInstance(user.role);
+    const managedBy = role.managedBy();
+    if (!permissions.includes(managedBy)) {
+      throw new ForbiddenException(`You have no permission for this action`);
+    }
   }
 }

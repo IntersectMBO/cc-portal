@@ -36,6 +36,9 @@ import { RoleGuard } from '../../auth/guard/role.guard';
 import { PaginatedResponse } from '../../util/pagination/response/paginated.response';
 import { ApiPaginationQuery, Paginate, PaginateQuery } from 'nestjs-paginate';
 import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
+import { PermissionEnum } from '../enums/permission.enum';
+import { PermissionGuard } from 'src/auth/guard/permission.guard';
+import { ToggleStatusRequest } from './request/toggle-status.request';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -216,5 +219,50 @@ export class UsersController {
   async remove(@Request() req: any, @Param('id', ParseUUIDPipe) id: string) {
     const user = await this.usersFacade.deleteProfilePhoto(id);
     return user;
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Activate / Deactivate User Status' })
+  @ApiResponse({
+    status: 200,
+    description: 'User status changed successfully.',
+    type: UserResponse,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden resource"',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User with {id} not found"',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'Identification number of the user',
+    type: String,
+  })
+  @ApiBody({ type: ToggleStatusRequest })
+  @HttpCode(200)
+  @UseGuards(JwtAuthGuard, UserPathGuard, PermissionGuard)
+  @Patch(':id/toggle-status')
+  async toggleStatus(
+    @Request() req: any,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() toggleStatusRequest: ToggleStatusRequest,
+  ): Promise<UserResponse> {
+    const permissions: PermissionEnum[] = req.user.permissions;
+    return await this.usersFacade.toggleStatus(
+      toggleStatusRequest,
+      permissions,
+    );
   }
 }

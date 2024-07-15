@@ -19,7 +19,7 @@ export class SeedValues1713436936953 implements MigrationInterface {
             insert into permissions ("id", "code", "created_at") values
             (uuid_generate_v4(), 'manage_cc_members', NOW()),
             (uuid_generate_v4(), 'add_constitution_version', NOW()),
-            (uuid_generate_v4(), 'add_new_admin', NOW());
+            (uuid_generate_v4(), 'manage_admins', NOW());
             
             commit;`,
     );
@@ -30,7 +30,7 @@ export class SeedValues1713436936953 implements MigrationInterface {
             select roles.id, permissions.id
             from roles
             inner join permissions on permissions.code 
-            in ('manage_cc_members', 'add_constitution_version', 'add_new_admin')
+            in ('manage_cc_members', 'add_constitution_version', 'manage_admins')
             where roles.code = 'super_admin';
 
             insert into role_permissions(role_id, permission_id)
