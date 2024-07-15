@@ -155,7 +155,7 @@ describe('VoteFacade', () => {
     },
   ];
 
-  let mockDbSyncData: object[] = [
+  const mockDbSyncData: object[] = [
     {
       id: '1',
       committee_voter: '7',
@@ -315,46 +315,33 @@ describe('VoteFacade', () => {
       expect(mockVoteProducer.addToVoteQueue).toHaveBeenCalledTimes(1);
     });
 
-    // TODO when debugging the test, it is skipped
-    it(`should not add a job to queue if 'undefined' was returned when calling remote DB`, async () => {
+    it(`should not add a job to queue if no hot addresses exist in database`, async () => {
       jest
-        .spyOn(mockVoteService, 'getVoteDataFromDbSync')
+        .spyOn(mockVoteService, 'countHotAddressPages')
         .mockResolvedValue(undefined);
-
-      mockDbSyncData = [];
-      try {
-        await facade.syncVotesTable();
-      } catch (e) {
-        expect(e).toBeInstanceOf(NotFoundException);
-        expect(e.message).toBe(`There is no db-sync data`);
-        expect(mockConfigService.getOrThrow).toHaveBeenCalled();
-        expect(mockVoteService.getVoteDataFromDbSync).toHaveBeenCalledTimes(1);
-        expect(mockVoteProducer.addToVoteQueue).toHaveBeenCalledTimes(0);
-      }
-    });
-    it('should not add a job to queue if an empty array was returned when fetching data from remote DB', async () => {
-      mockVoteService.getVoteDataFromDbSync.mockImplementationOnce(async () => {
-        return [];
-      });
 
       await facade.syncVotesTable();
 
-      expect(mockVoteService.getVoteDataFromDbSync).toHaveBeenCalledTimes(1);
-      expect(mockVoteProducer.addToVoteQueue).toHaveBeenCalledTimes(1);
+      expect(mockVoteService.countHotAddressPages).toHaveBeenCalledTimes(1);
+      expect(mockVoteService.getVoteDataFromDbSync).not.toHaveBeenCalled();
+      expect(mockVoteProducer.addToVoteQueue).not.toHaveBeenCalled();
     });
 
-    // TODO catch here is skipped
-    it('should not add a job to queue if perPage variable is undefined when fetching data from remote DB', async () => {
-      mockConfigService.getOrThrow.mockReturnValueOnce(undefined);
+    it('should not add a job to queue if an error occurred when fetching data from remote DB', async () => {
+      mockVoteService.getMapHotAddresses.mockImplementation(async () => {
+        return undefined;
+      });
+
       try {
         await facade.syncVotesTable();
-      } catch (e) {
-        expect(e).toBeInstanceOf(TypeError);
-        expect(e.message).toBe(
-          `Cannot read properties of undefined (reading 'length')`,
+      } catch (error) {
+        expect(error).toBeInstanceOf(TypeError);
+        expect(error.message).toBe(
+          `Cannot read properties of undefined (reading 'forEach')`,
         );
+        expect(mockVoteService.getMapHotAddresses).toHaveBeenCalledTimes(1);
         expect(mockVoteService.getVoteDataFromDbSync).toHaveBeenCalledTimes(1);
-        expect(mockVoteProducer.addToVoteQueue).toHaveBeenCalledTimes(0);
+        expect(mockVoteProducer.addToVoteQueue).not.toHaveBeenCalled();
       }
     });
   });

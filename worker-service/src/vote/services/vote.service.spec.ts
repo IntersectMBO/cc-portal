@@ -495,20 +495,47 @@ describe('VoteService', () => {
       expect(mapHotAddresses).toEqual(expectedMapHotAddresses);
     });
 
-    // TODO it does not step into catch block (gives false positive)
-    it('should not return mapped hot addresses if there are no hot addresses', async () => {
+    it('should return an empty array if there are no hot addresses in DB', async () => {
       jest.spyOn(mockHotAddressRepository, 'find').mockReset();
       const page: number = 1;
       const mockEmptyHotAddresses: HotAddress[] = [];
       jest
         .spyOn(mockHotAddressRepository, 'find')
         .mockResolvedValueOnce(mockEmptyHotAddresses);
+      const result = await service.getMapHotAddresses(page);
+      expect(mockHotAddressRepository.find).toHaveBeenCalled();
+      expect(mockConfigService.getOrThrow).toHaveBeenCalledTimes(2);
+      expect(result).toEqual(new Map());
+    });
+
+    it('should throw an error if `HOT_ADDRESSES_PER_PAGE` env variable is not defined', async () => {
+      jest.spyOn(mockHotAddressRepository, 'find').mockReset();
+      jest.spyOn(mockConfigService, 'getOrThrow').mockReset();
+      const page: number = 1;
+      const mockEmptyHotAddresses: HotAddress[] = [];
+      jest
+        .spyOn(mockHotAddressRepository, 'find')
+        .mockResolvedValueOnce(mockEmptyHotAddresses);
+      mockConfigService.getOrThrow.mockImplementation((key: string) => {
+        switch (key) {
+          case 'HOT_ADDRESSES_PER_PAGE':
+            throw TypeError(
+              'Configuration key "HOT_ADDRESSES_PER_PAGE" does not exist',
+            );
+          default:
+            return 0;
+        }
+      });
+
       try {
         await service.getMapHotAddresses(page);
-      } catch (e) {
-        expect(mockHotAddressRepository.find).toHaveBeenCalled();
-        expect(e).toBeInstanceOf(TypeError);
-        expect(e.message).toBe('hotAddresses.forEach is not a function');
+      } catch (error) {
+        expect(error).toBeInstanceOf(TypeError);
+        expect(error.message).toBe(
+          'Configuration key "HOT_ADDRESSES_PER_PAGE" does not exist',
+        );
+        expect(mockHotAddressRepository.find).not.toHaveBeenCalled();
+        expect(mockConfigService.getOrThrow).toHaveBeenCalledTimes(1);
       }
     });
   });
