@@ -47,8 +47,8 @@ export function UsersList({
       direction="column"
       gap={0}
     >
-      {data.map((users, index) => {
-        return <UsersListItem key={index} {...users} />;
+      {data.map((users) => {
+        return <UsersListItem key={users.id} {...users} />;
       })}
       <ShowMoreButton
         isLoading={isLoading}

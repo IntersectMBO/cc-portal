@@ -129,6 +129,10 @@
           "label": "Write DELETE",
           "placeholder": "Write DELETE"
         }
+      },
+      "alerts": {
+        "success": "User successfully deleted",
+        "error": "Error deleting user"
       }
     },
     "addMember": {

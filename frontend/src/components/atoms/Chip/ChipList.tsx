@@ -3,15 +3,21 @@ import { Chip } from "./Chip";
 
 export const ChipList = ({
   list,
-  hideCloseButton,
+  showCloseButton,
+  onClick,
 }: {
   list: string[];
-  hideCloseButton?: boolean;
+  showCloseButton?: boolean;
+  onClick?: () => void;
 }) => (
   <Grid container gap={1}>
-    {list.map((item, index) => (
-      <Grid item key={index}>
-        <Chip hideCloseButton={hideCloseButton} label={item} />
+    {list.map((item) => (
+      <Grid item key={item}>
+        <Chip
+          onClick={onClick}
+          showCloseButton={showCloseButton}
+          label={item}
+        />
       </Grid>
     ))}
   </Grid>

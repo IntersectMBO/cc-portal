@@ -1,3 +1,5 @@
+import { ResponseErrorI } from "../requests";
+
 /**
  * Checks if the given value is an empty object, an empty array, `null`, or `undefined`.
  *
@@ -33,4 +35,15 @@ export const countSelectedFilters = (
     (total, filters) => total + filters.length,
     0
   );
+};
+
+/**
+ * Type guard function to check if an object is of type ResponseErrorI.
+ *
+ * @param obj - The object to check.
+ * @returns A boolean indicating whether the object has an "error" property,
+ *          meaning it is of type ResponseErrorI.
+ */
+export const isResponseErrorI = (obj: any): obj is ResponseErrorI => {
+  return "error" in obj;
 };
