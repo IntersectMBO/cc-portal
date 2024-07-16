@@ -41,7 +41,7 @@ const user: User = {
   },
   permissions: null,
   hotAddresses: null,
-  isDeleted: false,
+  deactivatedAt: null,
   createdAt: null,
   updatedAt: null,
 };
@@ -130,7 +130,7 @@ const mockUsers: User[] = [
     status: UserStatusEnum.ACTIVE,
     role: mockRoles[2],
     permissions: [],
-    isDeleted: false,
+    deactivatedAt: null,
     createdAt: null,
     updatedAt: null,
   },
@@ -144,7 +144,7 @@ const mockUsers: User[] = [
     status: UserStatusEnum.ACTIVE,
     role: mockRoles[1],
     permissions: [mockPermissions[0], mockPermissions[1]],
-    isDeleted: false,
+    deactivatedAt: null,
     createdAt: null,
     updatedAt: null,
   },
@@ -335,7 +335,7 @@ describe('UsersService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-  describe('Create a CC member POST api/auth/register-user && api/auth/register-admin', () => {
+  describe('Create a CC member and admin', () => {
     afterEach(() => {
       jest.clearAllMocks();
     });
@@ -499,7 +499,7 @@ describe('UsersService', () => {
     });
   });
   //TODO This is a bad description - why would user service test know the api where it has been referenced on the upper layers?
-  describe('Fetch all roles GET /api/users/roles', () => {
+  describe('Fetch all roles', () => {
     it('should return all roles', async () => {
       const roles = await service.getAllRoles();
       for (const value of roles) {
@@ -707,50 +707,6 @@ describe('UsersService', () => {
       expect(usersPaginatedDto.items[1].name).toEqual(mockUsers[1].name);
       expect(usersPaginatedDto.items.length).toEqual(2);
       expect(mockPaginator.paginate).toHaveBeenCalled();
-    });
-  });
-
-  describe(`Soft delete users`, () => {
-    it(`should delete a user by id`, async () => {
-      const mockUser = mockUsers[0];
-      const mockFindEntityById = jest
-        .spyOn<any, any>(service, 'findEntityById')
-        .mockResolvedValueOnce(mockUser);
-      const deletedUser = await service.softDelete(mockUser.id);
-      expect(deletedUser.isDeleted).toEqual(true);
-      expect(deletedUser.status).toEqual(UserStatusEnum.INACTIVE);
-      expect(mockFindEntityById).toHaveBeenCalledWith(mockUser.id);
-    });
-    it(`shouldn't delete a user - already deleted`, async () => {
-      const mockUser = mockUsers[0];
-      mockUser.isDeleted = true;
-      jest
-        .spyOn<any, any>(service, 'findEntityById')
-        .mockResolvedValueOnce(mockUser);
-      try {
-        await service.softDelete(mockUser.id);
-      } catch (error) {
-        expect(error).toBeInstanceOf(ConflictException);
-        expect(error.status).toEqual(409);
-        expect(error.message).toEqual(`User already deleted`);
-      }
-    });
-    it(`shouldn't delete a user - user not found`, async () => {
-      const userId = 'notExistingUser';
-      const mockFindEntityById = jest.spyOn<any, any>(
-        service,
-        'findEntityById',
-      );
-      mockFindEntityById.mockImplementation(() => {
-        throw new NotFoundException(`User with id ${userId} not found`);
-      });
-      try {
-        await service.softDelete(userId);
-      } catch (error) {
-        expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.status).toEqual(404);
-        expect(error.message).toEqual(`User with id ${userId} not found`);
-      }
     });
   });
 });

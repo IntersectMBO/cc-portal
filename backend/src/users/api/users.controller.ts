@@ -238,11 +238,11 @@ export class UsersController {
   })
   @ApiResponse({
     status: 403,
-    description: 'Forbidden resource"',
+    description: 'Forbidden resource',
   })
   @ApiResponse({
     status: 404,
-    description: 'User with {id} not found"',
+    description: 'User with {id} not found',
   })
   @ApiParam({
     name: 'id',
