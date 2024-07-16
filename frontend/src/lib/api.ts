@@ -22,12 +22,11 @@ import {
   ConstitutionByCid,
   ConstitutionMetadata,
   GovActionMetadata,
-  PreviewReasoningModalState,
-} from "@/components/organisms";
+} from "@organisms";
 
 import { getTranslations } from "next-intl/server";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
-const DEFAULT_PAGINATION_LIMIT = 2;
+const DEFAULT_PAGINATION_LIMIT = 6;
 
 export async function isTokenExpired(token: string): Promise<boolean> {
   try {

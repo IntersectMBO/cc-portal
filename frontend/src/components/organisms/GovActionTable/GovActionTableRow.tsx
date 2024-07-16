@@ -173,7 +173,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                   {t("govActionCategoryShort")}
                 </Typography>
                 <OutlinedLightButton nonInteractive>
-                  {getProposalTypeLabel(type)}
+                  {truncateText(getProposalTypeLabel(type), 20)}
                 </OutlinedLightButton>
               </Grid>
               <TableDivider />
