@@ -115,13 +115,13 @@ export class GovernanceController {
   }
 
   @ApiOperation({
-    summary: 'Add reasoning to governance action proposals',
+    summary: 'Add rationale to governance action proposals',
   })
   @ApiBearerAuth('JWT-auth')
   @ApiBody({ type: ReasoningRequest })
   @ApiResponse({
     status: 200,
-    description: 'Reasoning added successfully',
+    description: 'Rationale added successfully',
     type: ReasoningResponse,
   })
   @ApiResponse({
@@ -130,10 +130,10 @@ export class GovernanceController {
   })
   @ApiResponse({
     status: 409,
-    description: 'Reasoning already exists for this user',
+    description: 'Rationale already exists for this user',
   })
   @UseGuards(JwtAuthGuard, UserPathGuard)
-  @Post('users/:id/proposals/:proposalId/reasoning')
+  @Post('users/:id/proposals/:proposalId/rationale')
   async addReasoning(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('proposalId') proposalId: string,
@@ -147,13 +147,13 @@ export class GovernanceController {
   }
 
   @ApiOperation({
-    summary: 'Get my reasoning for an action proposal',
+    summary: 'Get my rationale for an action proposal',
   })
   @ApiBearerAuth('JWT-auth')
   @ApiBody({ type: ReasoningRequest })
   @ApiResponse({
     status: 200,
-    description: 'Reasoning retrieved successfully',
+    description: 'Rationale retrieved successfully',
     type: ReasoningResponse,
   })
   @ApiResponse({
@@ -162,10 +162,10 @@ export class GovernanceController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Reasoning not found',
+    description: 'Rationale not found',
   })
   @UseGuards(JwtAuthGuard, UserPathGuard)
-  @Get('users/:id/proposals/:proposalId/reasoning')
+  @Get('users/:id/proposals/:proposalId/rationale')
   async getReasoning(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('proposalId', ParseIntPipe) proposalId: string,
