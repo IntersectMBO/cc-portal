@@ -3,7 +3,7 @@ import { GovernanceService } from './governance.service';
 import { Vote } from '../entities/vote.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { GovActionProposal } from '../entities/gov-action-proposal.entity';
-import { Reasoning } from '../entities/reasoning.entity';
+import { Rationale } from '../entities/rationale.entity';
 import { Paginator } from 'src/util/pagination/paginator';
 import { GovActionProposalDto } from '../dto/gov-action-proposal-dto';
 import { NotFoundException } from '@nestjs/common';
@@ -27,7 +27,7 @@ describe('IpfsService', () => {
       type: 'Type 1',
       status: GovActionProposalStatus.ACTIVE,
       voteStatus: VoteStatus.Voted,
-      hasReasoning: null,
+      hasRationale: null,
       submitTime: null,
       endTime: null,
     },
@@ -40,21 +40,21 @@ describe('IpfsService', () => {
       type: 'Type 1',
       status: GovActionProposalStatus.ACTIVE,
       voteStatus: VoteStatus.Pending,
-      hasReasoning: null,
+      hasRationale: null,
       submitTime: null,
       endTime: null,
     },
   ];
 
-  const mockReasoningDto = {
+  const mockRationaleDto = {
     userId: 'mockedId',
     govActionProposalId: '1',
-    title: 'Reasoning title',
-    content: 'Reasoning content',
-    cid: 'reasoningcid',
-    blake2b: 'reasoningblake2b',
-    url: 'reasoningurl',
-    json: 'reasoningjson',
+    title: 'Rationale title',
+    content: 'Rationale content',
+    cid: 'rationalecid',
+    blake2b: 'rationaleblake2b',
+    url: 'rationaleurl',
+    json: 'rationalejson',
   };
 
   const mockGovActionProposals: GovActionProposal[] = [
@@ -70,7 +70,7 @@ describe('IpfsService', () => {
       submitTime: null,
       endTime: null,
       votes: null,
-      reasonings: null,
+      rationales: null,
       createdAt: null,
       updatedAt: null,
     },
@@ -86,7 +86,7 @@ describe('IpfsService', () => {
       submitTime: null,
       endTime: null,
       votes: null,
-      reasonings: null,
+      rationales: null,
       createdAt: null,
       updatedAt: null,
     },
@@ -260,12 +260,12 @@ describe('IpfsService', () => {
     }),
   };
 
-  const mockReasoningRepository = {
-    create: jest.fn().mockImplementation((reasoning) => {
-      return reasoning;
+  const mockRationaleRepository = {
+    create: jest.fn().mockImplementation((rationale) => {
+      return rationale;
     }),
-    save: jest.fn().mockImplementation((reasoning) => {
-      return reasoning;
+    save: jest.fn().mockImplementation((rationale) => {
+      return rationale;
     }),
     findOne: jest.fn(),
   };
@@ -287,8 +287,8 @@ describe('IpfsService', () => {
           useValue: mockGovActionProposalRepository,
         },
         {
-          provide: getRepositoryToken(Reasoning),
-          useValue: mockReasoningRepository,
+          provide: getRepositoryToken(Rationale),
+          useValue: mockRationaleRepository,
         },
         {
           provide: Paginator,
@@ -328,41 +328,41 @@ describe('IpfsService', () => {
     });
   });
 
-  describe('Find Reasoning For User By ProposalId', () => {
-    it('should find a Reasoning for User by ProposalId', async () => {
+  describe('Find Rationale For User By ProposalId', () => {
+    it('should find a Rationale for User by ProposalId', async () => {
       const userId = 'user1';
       const proposalId = mockGovActionProposals[0].id;
-      const mockFindReasoning = jest
-        .spyOn<any, any>(service, 'findReasoningForUserByProposalId')
-        .mockResolvedValueOnce(mockReasoningDto);
-      const result = await service.findReasoningForUserByProposalId(
+      const mockFindRationale = jest
+        .spyOn<any, any>(service, 'findRationaleForUserByProposalId')
+        .mockResolvedValueOnce(mockRationaleDto);
+      const result = await service.findRationaleForUserByProposalId(
         userId,
         proposalId,
       );
-      expect(result).toEqual(mockReasoningDto);
-      expect(mockFindReasoning).toHaveBeenCalledWith(userId, proposalId);
+      expect(result).toEqual(mockRationaleDto);
+      expect(mockFindRationale).toHaveBeenCalledWith(userId, proposalId);
     });
 
-    it('should not find a Reasoning - Not Found', async () => {
+    it('should not find a Rationale - Not Found', async () => {
       const userId: string = 'UserIdNotExists';
       const proposalId = mockGovActionProposals[0].id;
-      mockReasoningRepository.findOne.mockResolvedValueOnce(null);
+      mockRationaleRepository.findOne.mockResolvedValueOnce(null);
       await expect(
-        service.findReasoningForUserByProposalId(userId, proposalId),
-      ).rejects.toThrow(new NotFoundException(`Reasoning not found`));
+        service.findRationaleForUserByProposalId(userId, proposalId),
+      ).rejects.toThrow(new NotFoundException(`Rationale not found`));
     });
   });
 
-  describe('Add Reasoning', () => {
-    it('should create new reasoning', async () => {
-      const result = await service.addReasoning(mockReasoningDto);
-      expect(result).toEqual(mockReasoningDto);
+  describe('Add Rationale', () => {
+    it('should create new rationale', async () => {
+      const result = await service.addRationale(mockRationaleDto);
+      expect(result).toEqual(mockRationaleDto);
     });
 
-    it('should update reasoning', async () => {
-      const reasoning = { ...mockReasoningDto, id: '1' };
-      const result = await service.addReasoning(reasoning);
-      expect(result).toEqual(mockReasoningDto);
+    it('should update rationale', async () => {
+      const rationale = { ...mockRationaleDto, id: '1' };
+      const result = await service.addRationale(rationale);
+      expect(result).toEqual(mockRationaleDto);
     });
   });
 
@@ -377,7 +377,7 @@ describe('IpfsService', () => {
       mockPaginator.paginate.mockResolvedValueOnce(paginatedValueVote);
       const votePaginatedDto: PaginatedDto<VoteDto> =
         await service.searchGovVotes(query);
-      expect(votePaginatedDto.items[0].reasoningTitle).toEqual(vote.title);
+      expect(votePaginatedDto.items[0].rationaleTitle).toEqual(vote.title);
       expect(votePaginatedDto.items.length).toEqual(1);
       expect(mockPaginator.paginate).toHaveBeenCalled();
     });
@@ -409,10 +409,10 @@ describe('IpfsService', () => {
       mockPaginator.paginate.mockResolvedValueOnce(paginatedMultiValueVote);
       const votesPaginatedDto: PaginatedDto<VoteDto> =
         await service.searchGovVotes(query);
-      expect(votesPaginatedDto.items[0].reasoningTitle).toEqual(
+      expect(votesPaginatedDto.items[0].rationaleTitle).toEqual(
         mockVotes[0].title,
       );
-      expect(votesPaginatedDto.items[1].reasoningTitle).toEqual(
+      expect(votesPaginatedDto.items[1].rationaleTitle).toEqual(
         mockVotes[1].title,
       );
       expect(votesPaginatedDto.items.length).toEqual(2);
@@ -429,10 +429,10 @@ describe('IpfsService', () => {
       mockPaginator.paginate.mockResolvedValueOnce(paginatedMultiValueVote);
       const votesPaginatedDto: PaginatedDto<VoteDto> =
         await service.searchGovVotes(query, userId);
-      expect(votesPaginatedDto.items[0].reasoningTitle).toEqual(
+      expect(votesPaginatedDto.items[0].rationaleTitle).toEqual(
         mockVotes[0].title,
       );
-      expect(votesPaginatedDto.items[1].reasoningTitle).toEqual(
+      expect(votesPaginatedDto.items[1].rationaleTitle).toEqual(
         mockVotes[1].title,
       );
       expect(votesPaginatedDto.items.length).toEqual(2);

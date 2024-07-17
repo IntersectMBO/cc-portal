@@ -9,9 +9,9 @@ import {
 } from 'typeorm';
 import { GovActionProposal } from './gov-action-proposal.entity';
 
-@Entity('reasonings')
+@Entity('rationales')
 @Unique(['userId', 'govActionProposalId'])
-export class Reasoning extends CommonEntity {
+export class Rationale extends CommonEntity {
   @PrimaryColumn({
     name: 'user_id',
     type: 'uuid',

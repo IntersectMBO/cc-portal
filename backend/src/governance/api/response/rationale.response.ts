@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-export class ReasoningResponse {
+export class RationaleResponse {
   @ApiProperty({
-    description: 'CID related to a deployed Reasoning',
+    description: 'CID related to a deployed rationale',
     example: 'bafkreib3vbnwp6gvmtj2gktw24ywl7bgq4ecsacmecuioqjpszvh2hjfba',
   })
   @Expose({ name: 'cid' })
@@ -24,7 +24,7 @@ export class ReasoningResponse {
   @Expose({ name: 'blake2b' })
   blake2b: string;
 
-  @ApiProperty({ description: 'Contents of a reasoning in json format' })
+  @ApiProperty({ description: 'Contents of a rationale in json format' })
   @Expose({ name: 'contents' })
   contents: string;
 }

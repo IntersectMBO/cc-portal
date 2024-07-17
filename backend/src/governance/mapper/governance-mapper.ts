@@ -7,10 +7,10 @@ import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 import { Vote } from '../entities/vote.entity';
 import { GovActionProposalStatus } from '../enums/gov-action-proposal-status.enum';
 import { VoteValue } from '../enums/vote-value.enum';
-import { ReasoningResponse } from '../api/response/reasoning.response';
-import { ReasoningDto } from '../dto/reasoning.dto';
-import { ReasoningRequest } from '../api/request/reasoning.request';
-import { Reasoning } from '../entities/reasoning.entity';
+import { RationaleResponse } from '../api/response/rationale.response';
+import { RationaleDto } from '../dto/rationale.dto';
+import { RationaleRequest } from '../api/request/rationale.request';
+import { Rationale } from '../entities/rationale.entity';
 import { GovernanceActionProposalSearchResponse } from '../api/response/gov-action-proposal-search.response';
 import { VoteStatus } from '../enums/vote-status.enum';
 
@@ -21,8 +21,8 @@ export class GovernanceMapper {
     voteResponse.userPhotoUrl = voteDto.userPhotoUrl;
     voteResponse.userAddress = voteDto.userAddress;
     voteResponse.voteValue = voteDto.voteValue;
-    voteResponse.reasoningTitle = voteDto.reasoningTitle;
-    voteResponse.reasoningComment = voteDto.reasoningComment;
+    voteResponse.rationaleTitle = voteDto.rationaleTitle;
+    voteResponse.rationaleComment = voteDto.rationaleComment;
     voteResponse.govActionProposalId = voteDto.govActionProposalId;
     voteResponse.govActionProposalTxHash = voteDto.govActionProposalTxHash;
     voteResponse.govActionProposalTitle = voteDto.govActionProposalTitle;
@@ -39,8 +39,8 @@ export class GovernanceMapper {
     voteDto.userId = vote.userId;
     voteDto.userAddress = vote.hotAddress;
     voteDto.voteValue = VoteValue[vote.vote];
-    voteDto.reasoningTitle = vote.title;
-    voteDto.reasoningComment = vote.comment;
+    voteDto.rationaleTitle = vote.title;
+    voteDto.rationaleComment = vote.comment;
     voteDto.govActionProposalId = vote.govActionProposal?.id;
     voteDto.govActionProposalTxHash = vote.govActionProposal?.txHash;
     voteDto.govActionProposalTitle = vote.govActionProposal?.title;
@@ -67,8 +67,8 @@ export class GovernanceMapper {
       GovActionProposalStatus[govActionProposal.status];
     govActionProposalDto.voteStatus =
       GovernanceMapper.returnVoteStatusForGovActionProposal(govActionProposal);
-    govActionProposalDto.hasReasoning = !GovernanceMapper.emptyArray(
-      govActionProposal.reasonings,
+    govActionProposalDto.hasRationale = !GovernanceMapper.emptyArray(
+      govActionProposal.rationales,
     );
     govActionProposalDto.submitTime = govActionProposal.submitTime;
     govActionProposalDto.endTime = govActionProposal.endTime;
@@ -81,12 +81,12 @@ export class GovernanceMapper {
   ): VoteStatus {
     if (
       GovernanceMapper.emptyArray(govActionProposal.votes) &&
-      GovernanceMapper.emptyArray(govActionProposal.reasonings)
+      GovernanceMapper.emptyArray(govActionProposal.rationales)
     ) {
       return VoteStatus.Unvoted;
     } else if (
       GovernanceMapper.emptyArray(govActionProposal.votes) &&
-      !GovernanceMapper.emptyArray(govActionProposal.reasonings)
+      !GovernanceMapper.emptyArray(govActionProposal.rationales)
     ) {
       return VoteStatus.Pending;
     }
@@ -127,7 +127,7 @@ export class GovernanceMapper {
     response.metadataUrl = dto.metadataUrl;
     response.status = dto.status;
     response.voteStatus = dto.voteStatus;
-    response.hasReasoning = dto.hasReasoning;
+    response.hasRationale = dto.hasRationale;
     response.type = dto.type;
     response.submitTime = dto.submitTime;
     response.endTime = dto.endTime;
@@ -135,39 +135,39 @@ export class GovernanceMapper {
     return response;
   }
 
-  static ipfsContentDtoToReasoningDto(
+  static ipfsContentDtoToRationaleDto(
     ipfsContentDto: IpfsContentDto,
     userId: string,
     proposalId: string,
-    reasoningRequest: ReasoningRequest,
-  ): ReasoningDto {
-    const reasoningDto = new ReasoningDto();
-    reasoningDto.cid = ipfsContentDto.cid;
-    reasoningDto.url = ipfsContentDto.url;
-    reasoningDto.blake2b = ipfsContentDto.blake2b;
-    reasoningDto.json = ipfsContentDto.contents;
-    reasoningDto.userId = userId;
-    reasoningDto.govActionProposalId = proposalId;
-    reasoningDto.title = reasoningRequest.title;
-    reasoningDto.content = reasoningRequest.content;
-    return reasoningDto;
+    rationaleRequest: RationaleRequest,
+  ): RationaleDto {
+    const rationaleDto = new RationaleDto();
+    rationaleDto.cid = ipfsContentDto.cid;
+    rationaleDto.url = ipfsContentDto.url;
+    rationaleDto.blake2b = ipfsContentDto.blake2b;
+    rationaleDto.json = ipfsContentDto.contents;
+    rationaleDto.userId = userId;
+    rationaleDto.govActionProposalId = proposalId;
+    rationaleDto.title = rationaleRequest.title;
+    rationaleDto.content = rationaleRequest.content;
+    return rationaleDto;
   }
 
-  static reasoningToDto(reasoning: Reasoning): ReasoningDto {
-    const reasoningDto = new ReasoningDto();
-    reasoningDto.userId = reasoning.userId;
-    reasoningDto.govActionProposalId = reasoning.govActionProposalId;
-    reasoningDto.title = reasoning.title;
-    reasoningDto.content = reasoning.content;
-    reasoningDto.cid = reasoning.cid;
-    reasoningDto.blake2b = reasoning.blake2b;
-    reasoningDto.url = reasoning.url;
-    reasoningDto.json = reasoning.json;
-    return reasoningDto;
+  static rationaleToDto(rationale: Rationale): RationaleDto {
+    const rationaleDto = new RationaleDto();
+    rationaleDto.userId = rationale.userId;
+    rationaleDto.govActionProposalId = rationale.govActionProposalId;
+    rationaleDto.title = rationale.title;
+    rationaleDto.content = rationale.content;
+    rationaleDto.cid = rationale.cid;
+    rationaleDto.blake2b = rationale.blake2b;
+    rationaleDto.url = rationale.url;
+    rationaleDto.json = rationale.json;
+    return rationaleDto;
   }
 
-  static reasoningDtoToResponse(dto: ReasoningDto): ReasoningResponse {
-    const response = new ReasoningResponse();
+  static rationaleDtoToResponse(dto: RationaleDto): RationaleResponse {
+    const response = new RationaleResponse();
     response.cid = dto.cid;
     response.blake2b = dto.blake2b;
     response.url = dto.url;

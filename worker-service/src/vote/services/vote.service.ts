@@ -72,7 +72,7 @@ export class VoteService extends CommonService {
         userId: voteRequests[i].userId,
         hotAddress: voteRequests[i].hotAddress,
         vote: voteRequests[i].vote,
-        title: voteRequests[i].reasoningTitle,
+        title: voteRequests[i].rationaleTitle,
         comment: voteRequests[i].comment,
         submitTime: new Date(voteRequests[i].submitTime),
         govActionProposal: existingGAP,

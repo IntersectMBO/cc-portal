@@ -10,9 +10,9 @@ import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mappe
 import { UserPhotoDto } from '../dto/user-photo.dto';
 import { GovernanceActionProposalResponse } from '../api/response/gov-action-proposal.response';
 import { GovernanceActionProposalSearchResponse } from '../api/response/gov-action-proposal-search.response';
-import { ReasoningResponse } from '../api/response/reasoning.response';
+import { RationaleResponse } from '../api/response/rationale.response';
 import { IpfsService } from 'src/ipfs/services/ipfs.service';
-import { ReasoningRequest } from '../api/request/reasoning.request';
+import { RationaleRequest } from '../api/request/rationale.request';
 import { IpfsContentDto } from 'src/ipfs/dto/ipfs-content.dto';
 import { GovActionProposalDto } from '../dto/gov-action-proposal-dto';
 
@@ -26,58 +26,58 @@ export class GovernanceFacade {
     private readonly ipfsService: IpfsService,
   ) {}
 
-  async addReasoning(
+  async addRationale(
     userId: string,
     proposalId: string,
-    reasoningRequest: ReasoningRequest,
-  ): Promise<ReasoningResponse> {
+    rationaleRequest: RationaleRequest,
+  ): Promise<RationaleResponse> {
     const govActionDto =
       await this.governanceService.findGovProposalById(proposalId);
-    const reasoningJson = await this.createReasoningJson(
-      reasoningRequest,
+    const rationaleJson = await this.createRationaleJson(
+      rationaleRequest,
       govActionDto,
     );
-    const ipfsContentDto = await this.addReasoningToIpfs(reasoningJson);
-    const reasoningDto = GovernanceMapper.ipfsContentDtoToReasoningDto(
+    const ipfsContentDto = await this.addRationaleToIpfs(rationaleJson);
+    const rationaleDto = GovernanceMapper.ipfsContentDtoToRationaleDto(
       ipfsContentDto,
       userId,
       proposalId,
-      reasoningRequest,
+      rationaleRequest,
     );
-    const response = await this.governanceService.addReasoning(reasoningDto);
-    return GovernanceMapper.reasoningDtoToResponse(response);
+    const response = await this.governanceService.addRationale(rationaleDto);
+    return GovernanceMapper.rationaleDtoToResponse(response);
   }
 
-  private async createReasoningJson(
-    reasoningRequest: ReasoningRequest,
+  private async createRationaleJson(
+    rationaleRequest: RationaleRequest,
     govActionDto: GovActionProposalDto,
   ): Promise<string> {
-    const reasoningJson = {
+    const rationaleJson = {
       govActionProposalTxHash: govActionDto.txHash,
-      title: reasoningRequest.title,
-      content: reasoningRequest.content,
+      title: rationaleRequest.title,
+      content: rationaleRequest.content,
     };
-    return JSON.stringify(reasoningJson);
+    return JSON.stringify(rationaleJson);
   }
 
-  private async addReasoningToIpfs(
-    reasoningJson: string,
+  private async addRationaleToIpfs(
+    rationaleJson: string,
   ): Promise<IpfsContentDto> {
     const ipfsContentDto =
-      await this.ipfsService.addReasoningToIpfs(reasoningJson);
+      await this.ipfsService.addRationaleToIpfs(rationaleJson);
     return ipfsContentDto;
   }
 
-  async getReasoning(
+  async getRationale(
     userId: string,
     proposalId: string,
-  ): Promise<ReasoningResponse> {
+  ): Promise<RationaleResponse> {
     const response =
-      await this.governanceService.findReasoningForUserByProposalId(
+      await this.governanceService.findRationaleForUserByProposalId(
         userId,
         proposalId,
       );
-    return GovernanceMapper.reasoningDtoToResponse(response);
+    return GovernanceMapper.rationaleDtoToResponse(response);
   }
 
   async findGovActionProposalById(
