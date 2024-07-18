@@ -8,7 +8,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY .htpasswd /etc/nginx/.htpasswd
 
 # Copy cert.pem
-COPY cert.pem /etc/nginx/ssl
+COPY cert.pem /etc/nginx/ssl/cert.pem
 
 # Copy key.pem
-COPY key.pem /etc/nginx/ssl
+COPY key.pem /etc/nginx/ssl/key.pem
