@@ -28,4 +28,4 @@ jobs:
             && git pull origin staging \
             && docker compose up -d --build \
             && docker container exec backend npm run typeorm:run-migrations \
-            && docker image rm prune -f
+            && docker image prune -f
