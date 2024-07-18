@@ -22,6 +22,7 @@ import {
   getProposalTypeLabel,
   getShortenedGovActionId,
   formatDisplayDate,
+  useScreenDimension,
 } from "@utils";
 import { ReasoningContentsI, ReasoningResponseI } from "@/lib/requests";
 
@@ -38,6 +39,7 @@ export const PreviewReasoningModal = () => {
   const onClose = () => {
     closeModal();
   };
+  const { isMobile } = useScreenDimension();
 
   useEffect(() => {
     async function fetchData(id: string) {
@@ -151,7 +153,7 @@ export const PreviewReasoningModal = () => {
             {t("previewReasoning.governanceActionId")}
           </Typography>
           <OutlinedLightButton nonInteractive={true}>
-            {getShortenedGovActionId(govAction.tx_hash, 20)}
+            {getShortenedGovActionId(govAction.tx_hash, isMobile ? 4 : 20)}
           </OutlinedLightButton>
         </Box>
         <Box mt={3} data-testid="governance-action-type">
