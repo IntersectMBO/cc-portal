@@ -1,7 +1,12 @@
 "use client";
 import React from "react";
 
-import { Typography as MUITypography, Grid, SxProps } from "@mui/material";
+import {
+  Typography as MUITypography,
+  Grid,
+  SxProps,
+  Hidden,
+} from "@mui/material";
 import { Button, Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 import { useAppContext, useModal } from "@context";
@@ -27,13 +32,15 @@ export const Footer = ({
       py="20px"
       sx={sx}
     >
+      <Hidden mdDown>
+        <Grid item>
+          <Typography fontWeight={400} variant="caption">
+            {t("copyright")}
+          </Typography>
+        </Grid>
+      </Hidden>
       <Grid item>
-        <Typography fontWeight={400} variant="caption">
-          {t("copyright")}
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Grid container gap={2}>
+        <Grid container flexDirection={{ xs: "column", md: "row" }} gap={2}>
           <Typography fontWeight={400} variant="caption">
             {t("privacyPolicy")}
           </Typography>
@@ -63,13 +70,26 @@ export const Footer = ({
       </Grid>
 
       <Grid item>
-        <Grid container gap={2}>
+        <Grid
+          container
+          gap={{ xs: 0, md: 2 }}
+          justifyContent={{ xs: "center", md: "flex-start" }}
+          flexDirection={{ xs: "column", md: "row" }}
+        >
           <Button startIcon={<img src={ICONS.help} />} variant="text">
             {t("help")}
           </Button>
           <Button variant="outlined">{t("feedback")}</Button>
         </Grid>
       </Grid>
+
+      <Hidden mdUp>
+        <Grid item xs={12} textAlign="center" mt={2}>
+          <Typography fontWeight={400} variant="caption">
+            {t("copyright")}
+          </Typography>
+        </Grid>
+      </Hidden>
     </Grid>
   );
 };
