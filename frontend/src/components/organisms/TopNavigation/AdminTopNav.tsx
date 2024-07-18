@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Hidden, IconButton } from "@mui/material";
 
 import { Button as MUIButton } from "@mui/material";
 import { Button } from "@atoms";
@@ -9,17 +9,20 @@ import { TopNavWrapper } from "./TopNavWrapper";
 import { useTranslations } from "next-intl";
 import { useAppContext, useModal } from "@context";
 import PermissionChecker from "../PermissionChecker";
-import { IMAGES, PATHS } from "@consts";
+import { customPalette, IMAGES, PATHS } from "@consts";
 import Link from "next/link";
 import { Search } from "@molecules";
 import { useManageQueryParams } from "@utils";
+import MenuIcon from "@mui/icons-material/Menu";
+import { DrawerMobile } from "./DrawerMobile";
 
-export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
+export const AdminTopNav = () => {
   const t = useTranslations("Navigation");
   const { openModal } = useModal();
   const { userSession } = useAppContext();
   const [searchText, setSearchText] = useState<string>("");
   const { updateQueryParams } = useManageQueryParams();
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const params: Record<string, string | null> = {
@@ -33,49 +36,85 @@ export const AdminTopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       type: "addMember",
     });
 
-  const addVersion = () => openModal({ type: "uploadConstitution" });
+  const uploadConstitution = () => openModal({ type: "uploadConstitution" });
+
+  const openDrawer = () => {
+    setIsDrawerOpen(true);
+  };
+
+  const getNavItems = () => (
+    <Box
+      display="flex"
+      flexDirection={{ xs: "column", md: "row" }}
+      justifyContent="space-between"
+      width="100%"
+      className="perica"
+    >
+      <Hidden mdDown>
+        <Search setSearchText={setSearchText} />
+      </Hidden>
+      <Grid
+        container
+        gap={2}
+        flexDirection={{ xs: "column", md: "row" }}
+        justifyContent={{ xs: "center", md: "flex-end" }}
+      >
+        <MUIButton
+          startIcon={<img src={IMAGES.bookOpen} />}
+          variant="outlined"
+          href={PATHS.constitution}
+          component={Link}
+        >
+          {t("seeConstituton")}
+        </MUIButton>
+        <PermissionChecker
+          permissions={userSession?.permissions}
+          requiredPermission="manage_cc_members"
+        >
+          <Button size="extraLarge" onClick={addMember} variant="outlined">
+            {t("addNewMember")}
+          </Button>
+        </PermissionChecker>
+        <PermissionChecker
+          permissions={userSession?.permissions}
+          requiredPermission="add_constitution_version"
+        >
+          <Button size="extraLarge" type="submit" onClick={uploadConstitution}>
+            {t("uploadNewVersion")}
+          </Button>
+        </PermissionChecker>
+      </Grid>
+    </Box>
+  );
 
   return (
     <TopNavWrapper
       homeRedirectionPath={PATHS.admin.dashboard}
       sx={{ justifyContent: "flex-Start" }}
     >
-      {isLoggedIn && (
-        <Box
-          display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          width="100%"
+      <Hidden mdUp>
+        <Search setSearchText={setSearchText} />
+      </Hidden>
+
+      <Hidden mdDown>{!!userSession && getNavItems()}</Hidden>
+
+      <Hidden mdUp>
+        <IconButton
+          data-testid="open-drawer-button"
+          onClick={openDrawer}
+          sx={{
+            bgcolor: customPalette.arcticWhite,
+          }}
         >
-          <Search setSearchText={setSearchText} />
-          <Grid container gap={2} justifyContent="flex-end">
-            <MUIButton
-              startIcon={<img src={IMAGES.bookOpen} />}
-              variant="outlined"
-              href={PATHS.constitution}
-              component={Link}
-            >
-              {t("seeConstituton")}
-            </MUIButton>
-            <PermissionChecker
-              permissions={userSession?.permissions}
-              requiredPermission="manage_cc_members"
-            >
-              <Button size="extraLarge" onClick={addMember} variant="outlined">
-                {t("addNewMember")}
-              </Button>
-            </PermissionChecker>
-            <PermissionChecker
-              permissions={userSession?.permissions}
-              requiredPermission="add_constitution_version"
-            >
-              <Button size="extraLarge" type="submit" onClick={addVersion}>
-                {t("uploadNewVersion")}
-              </Button>
-            </PermissionChecker>
-          </Grid>
-        </Box>
-      )}
+          <MenuIcon color="primary" />
+        </IconButton>
+      </Hidden>
+      <DrawerMobile
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+      >
+        {!!userSession && getNavItems()}
+      </DrawerMobile>
     </TopNavWrapper>
   );
 };
