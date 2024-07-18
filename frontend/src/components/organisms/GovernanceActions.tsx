@@ -79,10 +79,11 @@ export const GovernanceActions = ({
       <Box
         paddingBottom={4}
         display="flex"
-        justifyContent="space-between"
-        alignItems="center"
+        justifyContent={{ xs: "flex-start", md: "space-between" }}
+        flexDirection={{ xs: "column", md: "row" }}
+        alignItems={{ xs: "left", md: "center" }}
       >
-        <Box>
+        <Box className="ttt">
           <PageTitleTabs tabs={tabs} />
         </Box>
         <Box display="flex" sx={{ position: "relative" }}>

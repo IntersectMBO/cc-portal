@@ -95,8 +95,9 @@ export const MyActions = ({
       <Box
         paddingBottom={4}
         display="flex"
-        justifyContent="space-between"
-        alignItems="center"
+        justifyContent={{ xs: "flex-start", md: "space-between" }}
+        flexDirection={{ xs: "column", md: "row" }}
+        alignItems={{ xs: "left", md: "center" }}
       >
         <Box>
           <PageTitleTabs tabs={tabs} />

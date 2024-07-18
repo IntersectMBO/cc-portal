@@ -52,7 +52,8 @@ export function MembersCardList({
         paddingBottom={4}
         display="flex"
         justifyContent="space-between"
-        alignItems="center"
+        flexDirection={{ xs: "column", md: "row" }}
+        alignItems={{ xs: "left", md: "center" }}
       >
         <Typography variant="headline4">{t("title")}</Typography>
         <Box display="flex" sx={{ position: "relative" }}>

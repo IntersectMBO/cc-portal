@@ -1,7 +1,7 @@
-import { Card, CopyCard } from "@/components/molecules";
+import { Card } from "@/components/molecules";
 import { customPalette, ICONS } from "@/constants";
 import { getShortenedGovActionId } from "@utils";
-import { Button, CopyButton, OutlinedLightButton, Typography } from "@atoms";
+import { Button, CopyButton, Typography } from "@atoms";
 import { Box, Collapse, Grid } from "@mui/material";
 import React, { ReactNode } from "react";
 
@@ -161,8 +161,9 @@ export const NavDrawer = ({
       px={3}
       py={2}
       sx={{
-        height: "90vh",
         overflow: "scroll",
+        height: { xs: "95vh", md: "90vh" },
+        zIndex: 1,
         backgroundColor: customPalette.arcticWhite,
         "& ol.toc-level-1": {
           paddingInlineStart: 0,
