@@ -28,6 +28,7 @@ import { GOVERNANCE_ACTION_PROPOSAL_CONFIG } from '../util/pagination/gap-pagina
 import { GovernanceActionProposalSearchResponse } from './response/gov-action-proposal-search.response';
 import { ReasoningRequest } from './request/reasoning.request';
 import { ReasoningResponse } from './response/reasoning.response';
+import { ApiExcludeEndpointIfProduction } from 'src/common/decorators/api-exclude-endpoint.decorator';
 @ApiTags('Governance')
 @Controller('governance')
 export class GovernanceController {
@@ -50,6 +51,7 @@ export class GovernanceController {
     return await this.governanceFacade.findGovActionProposalById(id);
   }
 
+  @ApiExcludeEndpointIfProduction()
   @ApiOperation({ summary: 'Search Governance Action Proposals' })
   @ApiBearerAuth('JWT-auth')
   @ApiPaginationQuery(GOVERNANCE_ACTION_PROPOSAL_CONFIG)
@@ -94,6 +96,7 @@ export class GovernanceController {
    * Search endpoint for Votes related to a user that made a request;
    * This is a protected endpoint
    **/
+  @ApiExcludeEndpointIfProduction()
   @ApiOperation({
     summary: 'List of user`s votes related to all governance action proposals',
   })
@@ -114,6 +117,7 @@ export class GovernanceController {
     return await this.governanceFacade.searchGovVotes(query, id);
   }
 
+  @ApiExcludeEndpointIfProduction()
   @ApiOperation({
     summary: 'Add reasoning to governance action proposals',
   })
@@ -146,6 +150,7 @@ export class GovernanceController {
     );
   }
 
+  @ApiExcludeEndpointIfProduction()
   @ApiOperation({
     summary: 'Get my reasoning for an action proposal',
   })
