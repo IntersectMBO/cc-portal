@@ -49,7 +49,12 @@ export const MembersCard = ({
         </Box>
       </Box>
 
-      <Box display="flex" justifyContent="space-between">
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", md: "row" }}
+        justifyContent="space-between"
+        gap={{ xs: 1, md: 0 }}
+      >
         <Button
           variant="outlined"
           size="small"

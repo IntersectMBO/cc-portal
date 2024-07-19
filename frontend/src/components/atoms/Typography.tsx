@@ -21,6 +21,19 @@ export const Typography = ({
     caption: 12,
   }[variant];
 
+  const fontSizeXS = {
+    headline1: 46,
+    headline2: 46,
+    headline3: 36,
+    headline4: 24,
+    headline5: 20,
+    title1: 20,
+    title2: 20,
+    body1: 18,
+    body2: 14,
+    caption: 12,
+  }[variant];
+
   const fontWeight = {
     headline1: 600,
     headline2: 700,
@@ -50,7 +63,7 @@ export const Typography = ({
   return (
     <MUITypography
       color={color}
-      fontSize={fontSize}
+      fontSize={{ xs: fontSizeXS, md: fontSize }}
       fontWeight={fontWeight}
       lineHeight={lineHeight}
       {...props}
