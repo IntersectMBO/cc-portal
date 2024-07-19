@@ -38,7 +38,7 @@ const libp2pOptions = {
     listen: [
       // add a listen address (localhost) to accept TCP connections on a random port
       '/ip4/0.0.0.0/tcp/4001',
-      '/ip4/0.0.0.0/tcp/4001/ws',
+      '/ip4/0.0.0.0/tcp/4003/ws',
       '/ip4/0.0.0.0/udp/4001/quic',
     ]
   },
