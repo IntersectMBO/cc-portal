@@ -37,7 +37,12 @@ export function UsersList({
   }, [error]);
 
   if (isEmpty(data) || error) {
-    return <NotFound title="members.title" description="members.description" />;
+    return (
+      <NotFound
+        title="adminMembers.title"
+        description="adminMembers.description"
+      />
+    );
   }
   return (
     <Grid
