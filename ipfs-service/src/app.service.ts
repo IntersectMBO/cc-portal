@@ -32,15 +32,20 @@ import {
 import { IpfsMapper } from './mapper/ipfs.mapper.js';
 import { IpfsDto } from './dto/ipfs.dto.js';
 import { PeerId } from '@libp2p/interface';
+import { config } from 'dotenv';
+config();
 
 const libp2pOptions = {
   addresses: {
     listen: [
       // add a listen address (localhost) to accept TCP connections on a random port
-      '/ip4/0.0.0.0/tcp/4001',
-      '/ip4/0.0.0.0/tcp/4003/ws',
-      '/ip4/0.0.0.0/udp/4001/quic',
-    ]
+      process.env.LISTEN_TCP_ADDRESS,
+      process.env.LISTEN_WS_ADDRESS,
+      process.env.LISTEN_QUIC_ADDRESS,
+    ],
+    announce: [
+      process.env.ANNOUNCE_TCP_ADDRESS,
+    ],
   },
   transports: [
     tcp(),
@@ -61,7 +66,7 @@ const libp2pOptions = {
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt'
-          ]
+      ]
     })
   ],
   services: {
@@ -190,7 +195,7 @@ export class AppService implements OnModuleInit {
     const ret1 = this.helia.pins.add(cid);
     ret1.next().then((res) => this.logger.log(`Pinned json: ${res.value}`));
 
-    const url = 'https://ipfs.io/ipfs/' + cid.toString()
+    const url = process.env.IPFS_PUBLIC_URL + cid.toString()
 
     return IpfsMapper.ipfsToIpfsDto(cid.toString(), jsonContent, url);
   }
