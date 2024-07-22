@@ -127,6 +127,11 @@ export class AppService implements OnModuleInit {
       this.helia.libp2p
         .getMultiaddrs()
         .forEach((ma) => console.log(ma.toString()));
+      
+      // this logger is for testing purposes and should be removed in the future
+      this.helia.libp2p.addEventListener('peer:discovery', (evt) => {
+        this.logger.log(`found peer: ${ evt.detail.id.toString() }`);
+      });
     }
 
     return this.helia;
