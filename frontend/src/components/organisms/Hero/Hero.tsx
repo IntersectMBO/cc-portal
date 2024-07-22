@@ -50,6 +50,7 @@ export const Hero = ({ children }: HeroProps) => {
           position: { xxs: "absolute", lg: "relative" },
           "& img": {
             width: "100%",
+            maxHeight: "682px",
           },
         }}
       >
