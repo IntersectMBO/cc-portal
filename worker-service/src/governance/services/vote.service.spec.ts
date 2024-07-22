@@ -291,6 +291,12 @@ describe('VoteService', () => {
           return 10;
       }
     }),
+    get: jest.fn((key: string) => {
+      switch (key) {
+        case 'VOTES_JOB_FREQUENCY':
+          return '*/5 * * * * *';
+      }
+    }),
   };
 
   const mockDataSource = {};
@@ -464,7 +470,7 @@ describe('VoteService', () => {
   });
 
   describe('Get map hot addresses', () => {
-    it('should return hot addresses mapped', async () => {
+    it('should return mapped hot addresses', async () => {
       jest.spyOn(mockHotAddressRepository, 'find').mockReset();
       const page: number = 1;
       const hotAddressesResult = [

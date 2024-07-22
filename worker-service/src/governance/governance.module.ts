@@ -7,8 +7,7 @@ import {
   QUEUE_NAME_DB_SYNC_GOV_ACTIONS,
   QUEUE_NAME_DB_SYNC_VOTES,
 } from '../common/constants/bullmq.constants';
-import { GovActionProposalFacade } from './facade/gov-action-proposal.facade';
-import { VoteFacade } from './facade/vote.facade';
+import { GovernanceFacade } from './facade/governance.facade';
 import { VoteService } from './services/vote.service';
 import { VoteProcessor } from './queues/processors/vote.processor';
 import { VoteProducer } from './queues/producers/vote.producer';
@@ -30,11 +29,10 @@ import { User } from './entities/user.entity';
   ],
   providers: [
     GovActionProposalService,
-    GovActionProposalFacade,
+    GovernanceFacade,
     GovActionProposalProducer,
     GovActionsProposalProcessor,
     VoteService,
-    VoteFacade,
     VoteProducer,
     VoteProcessor,
   ],

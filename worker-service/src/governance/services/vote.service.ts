@@ -25,6 +25,8 @@ import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 
 @Injectable()
 export class VoteService extends CommonService {
+  private cronInterval: string;
+
   constructor(
     @InjectDataSource(CONNECTION_NAME_DB_SYNC)
     dataSource: DataSource,
@@ -39,7 +41,13 @@ export class VoteService extends CommonService {
     private readonly configService: ConfigService,
   ) {
     super(dataSource);
+    this.cronInterval =
+      this.configService.get<string>('VOTES_JOB_FREQUENCY') || '0 * * * * *';
     this.logger = new Logger(VoteService.name);
+  }
+
+  getCronExpression(): string {
+    return this.cronInterval;
   }
 
   async storeVoteData(voteRequests: VoteRequest[]): Promise<void> {

@@ -6,6 +6,7 @@ import { EntityManager } from 'typeorm';
 import { GovActionProposalRequest } from '../dto/gov-action-proposal.request';
 import { InternalServerErrorException } from '@nestjs/common';
 import { SQL_FILE_PATH } from '../../common/constants/sql.constants';
+import { ConfigService } from '@nestjs/config';
 
 describe('GovActionProposalService', () => {
   const mockPerPage = 10;
@@ -448,6 +449,15 @@ describe('GovActionProposalService', () => {
     }),
   };
 
+  const mockConfigService = {
+    get: jest.fn((key: string) => {
+      switch (key) {
+        case 'GOV_ACTION_PROPOSALS_JOB_FREQUENCY':
+          return 10;
+      }
+    }),
+  };
+
   let service: GovActionProposalService;
 
   beforeEach(async () => {
@@ -463,6 +473,7 @@ describe('GovActionProposalService', () => {
           useValue: mockGAPRepository,
         },
         { provide: EntityManager, useValue: mockEntityManager },
+        { provide: ConfigService, useValue: mockConfigService },
       ],
     }).compile();
     service = module.get<GovActionProposalService>(GovActionProposalService);
