@@ -63,8 +63,8 @@ export const CompareConstitutionModal = () => {
       variant="wide"
       scrollable
       sx={{
-        maxWidth: { xs: "90%", lg: 1072 },
-        width: { xs: "90% ", lg: 1072 },
+        maxWidth: { xxs: "90%", lg: 1072 },
+        width: { xxs: "90% ", lg: 1072 },
       }}
     >
       <ModalHeader>{t("compareConstitution.headline")}</ModalHeader>
@@ -72,8 +72,8 @@ export const CompareConstitutionModal = () => {
         {currentVersion && targetVersion ? (
           <Card
             sx={{
-              padding: { xs: "32px 0", md: "32px 24px" },
-              width: { xs: "fit-content", md: "auto" },
+              padding: { xxs: "32px 0", md: "32px 24px" },
+              width: { xxs: "fit-content", md: "auto" },
             }}
           >
             <ReactDiffViewer

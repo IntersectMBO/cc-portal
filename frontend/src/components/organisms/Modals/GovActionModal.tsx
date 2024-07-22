@@ -65,7 +65,7 @@ export const GovActionModal = () => {
             </Box>
             {govAction.title}
           </ModalHeader>
-          <Box px={{ xs: 2.25, md: 3 }}>
+          <Box px={{ xxs: 2.25, md: 3 }}>
             <Typography
               variant="body2"
               fontWeight={400}
@@ -142,7 +142,7 @@ export const GovActionModal = () => {
               </Typography>
             </Box>
           )}
-          <Box px={{ xs: 2.25, md: 3 }} pt={2.5}>
+          <Box px={{ xxs: 2.25, md: 3 }} pt={2.5}>
             <Button onClick={onClick} variant="outlined" size="large">
               {t("common.close")}
             </Button>

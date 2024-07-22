@@ -50,10 +50,10 @@ export const DataActionsBar: FC<DataActionsBarProps> = ({ ...props }) => {
   return (
     <>
       <Box
-        width={{ xs: "100%", md: "auto" }}
+        width={{ xxs: "100%", md: "auto" }}
         alignItems="center"
         display="flex"
-        justifyContent={{ xs: "space-between", md: "flex-start" }}
+        justifyContent={{ xxs: "space-between", md: "flex-start" }}
       >
         <Search setSearchText={setSearchText} />
         <OrderActionsChip

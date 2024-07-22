@@ -63,7 +63,7 @@ export const Typography = ({
   return (
     <MUITypography
       color={color}
-      fontSize={{ xs: fontSizeXS, md: fontSize }}
+      fontSize={{ xxs: fontSizeXS, md: fontSize }}
       fontWeight={fontWeight}
       lineHeight={lineHeight}
       {...props}

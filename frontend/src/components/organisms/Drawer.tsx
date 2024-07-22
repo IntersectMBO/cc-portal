@@ -38,7 +38,7 @@ export const Drawer = ({ children, onClick, isOpen, left = 0, top = 90 }) => {
         <img src={ICONS.menuIcon} onClick={onClick} />
       </Grid>
       <Collapse
-        sx={{ paddingLeft: { xs: 1, md: 3 }, paddingRight: { xs: 1, md: 3 } }}
+        sx={{ paddingLeft: { xxs: 1, md: 3 }, paddingRight: { xxs: 1, md: 3 } }}
         in={isOpen}
         timeout="auto"
         easing="enter"
