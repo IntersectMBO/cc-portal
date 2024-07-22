@@ -24,7 +24,11 @@ export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
         {description}
       </Typography>
       {link && hash && (
-        <Box display="flex" gap={2} flexDirection={{ xs: "column", md: "row" }}>
+        <Box
+          display="flex"
+          gap={2}
+          flexDirection={{ xxs: "column", md: "row" }}
+        >
           <Box display="flex" flexDirection="column" gap={0.5}>
             <Typography
               variant="caption"

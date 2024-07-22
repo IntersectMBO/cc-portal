@@ -12,12 +12,12 @@ export const PageTitleTabs = ({ tabs }: { tabs: Tab[] }) => {
   const isSelectedTab = (path: string) => pathname.includes(path);
 
   return (
-    <Grid container flexWrap="nowrap" gap={3} mb={{ xs: 1, md: 0 }}>
+    <Grid container flexWrap="nowrap" gap={3} mb={{ xxs: 1, md: 0 }}>
       {tabs.map((tab) => (
         <Grid item key={tab.path}>
           <Typography
             sx={{ cursor: "pointer" }}
-            fontSize={{ xs: 20, md: 32 }}
+            fontSize={{ xxs: 20, md: 32 }}
             fontWeight={isSelectedTab(tab.path) ? 600 : 400}
             component="span"
             onClick={() => router.push(tab.path)}

@@ -51,9 +51,9 @@ export const MembersCard = ({
 
       <Box
         display="flex"
-        flexDirection={{ xs: "column", md: "row" }}
+        flexDirection={{ xxs: "column", md: "row" }}
         justifyContent="space-between"
-        gap={{ xs: 1, md: 0 }}
+        gap={{ xxs: 1, md: 0 }}
       >
         <Button
           variant="outlined"

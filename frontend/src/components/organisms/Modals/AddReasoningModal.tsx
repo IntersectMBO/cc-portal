@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   ModalWrapper,
   ModalHeader,
@@ -29,6 +29,7 @@ export const AddReasoningModal = () => {
   } = useModal<OpenAddReasoningModalState>();
   const router = useRouter();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const {
     register,
@@ -38,6 +39,7 @@ export const AddReasoningModal = () => {
   } = useForm();
 
   const onSubmit = async (data: AddReasoningFormData) => {
+    setSubmitting(true);
     const response = await addOrUpdateReasoning({ proposalId: id, ...data });
     if ("error" in response && response?.error) {
       addErrorAlert(t("addReasoning.alerts.error"));
@@ -46,6 +48,7 @@ export const AddReasoningModal = () => {
       addSuccessAlert(t("addReasoning.alerts.success"));
       callback(response as ReasoningResponseI);
     }
+    setSubmitting(false);
   };
 
   return (
@@ -81,7 +84,7 @@ export const AddReasoningModal = () => {
             {...register("content", { required: "Reasoning is required" })}
           />
 
-          <ModalActions />
+          <ModalActions isSubmitting={isSubmitting} />
         </ModalContents>
       </form>
     </ModalWrapper>

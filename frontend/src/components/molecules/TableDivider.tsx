@@ -16,7 +16,7 @@ export const TableDivider = ({
     orientation={orientation}
     flexItem={flexItem}
     sx={{
-      display: { xs: "none", lg: "flex" },
+      display: { xxs: "none", lg: "flex" },
       height: 38,
       alignSelf: "center",
       ...sx,

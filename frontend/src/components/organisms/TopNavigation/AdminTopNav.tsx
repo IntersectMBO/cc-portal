@@ -45,7 +45,7 @@ export const AdminTopNav = () => {
   const getNavItems = () => (
     <Box
       display="flex"
-      flexDirection={{ xs: "column", md: "row" }}
+      flexDirection={{ xxs: "column", md: "row" }}
       justifyContent="space-between"
       width="100%"
       className="perica"
@@ -56,8 +56,8 @@ export const AdminTopNav = () => {
       <Grid
         container
         gap={2}
-        flexDirection={{ xs: "column", md: "row" }}
-        justifyContent={{ xs: "center", md: "flex-end" }}
+        flexDirection={{ xxs: "column", md: "row" }}
+        justifyContent={{ xxs: "center", md: "flex-end" }}
       >
         <MUIButton
           startIcon={<img src={IMAGES.bookOpen} />}

@@ -78,13 +78,13 @@ export const LatestUpdates = ({
   }, [searchText, chosenFilters, chosenSorting, updateQueryParams]);
 
   return (
-    <Box px={{ xs: 3, md: 5 }} py={{ xs: 3, md: 6 }}>
+    <Box px={{ xxs: 3, md: 5 }} py={{ xxs: 3, md: 6 }}>
       <Box
         paddingBottom={4}
         display="flex"
         justifyContent="space-between"
-        flexDirection={{ xs: "column", md: "row" }}
-        alignItems={{ xs: "left", md: "center" }}
+        flexDirection={{ xxs: "column", md: "row" }}
+        alignItems={{ xxs: "left", md: "center" }}
       >
         <Typography variant="headline4">{t("title")}</Typography>
         <Box display="flex" sx={{ position: "relative" }}>

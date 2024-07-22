@@ -130,7 +130,7 @@ export const PreviewReasoningModal = () => {
         }}
         pt={3}
         pb={3}
-        px={{ xs: 2.25, md: 3 }}
+        px={{ xxs: 2.25, md: 3 }}
       >
         {reasoning && (
           <Box
@@ -214,7 +214,7 @@ export const PreviewReasoningModal = () => {
 
       <Box
         bgcolor="white"
-        px={{ xs: 1.4, md: 3 }}
+        px={{ xxs: 1.4, md: 3 }}
         pt={2.5}
         sx={{ borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}
       >

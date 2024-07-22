@@ -31,6 +31,7 @@ export const Footer = ({
       px={{ xxs: 2, sm: 6, md: 8, xl: 10 }}
       py="20px"
       sx={sx}
+      height={{ xxs: "auto", md: "10vh" }}
     >
       <Hidden mdDown>
         <Grid item>
@@ -40,7 +41,12 @@ export const Footer = ({
         </Grid>
       </Hidden>
       <Grid item>
-        <Grid container flexDirection={{ xs: "column", md: "row" }} gap={2}>
+        <Grid
+          container
+          flexDirection={{ xxs: "column", md: "row" }}
+          gap={2}
+          alignItems={{ xxs: "flex-start", md: "center" }}
+        >
           <Typography fontWeight={400} variant="caption">
             {t("privacyPolicy")}
           </Typography>
@@ -53,6 +59,8 @@ export const Footer = ({
               {t("AreYouCCMember")}
               <MUITypography
                 component="span"
+                fontSize="12px"
+                lineHeight="16px"
                 sx={{ cursor: "pointer", ml: { xxs: 0, md: 1 } }}
                 fontWeight={500}
                 variant="caption"
@@ -72,9 +80,9 @@ export const Footer = ({
       <Grid item>
         <Grid
           container
-          gap={{ xs: 0, md: 2 }}
-          justifyContent={{ xs: "center", md: "flex-start" }}
-          flexDirection={{ xs: "column", md: "row" }}
+          gap={{ xxs: 0, md: 2 }}
+          justifyContent={{ xxs: "center", md: "flex-start" }}
+          flexDirection={{ xxs: "column", md: "row" }}
         >
           <Button startIcon={<img src={ICONS.help} />} variant="text">
             {t("help")}
@@ -84,7 +92,7 @@ export const Footer = ({
       </Grid>
 
       <Hidden mdUp>
-        <Grid item xs={12} textAlign="center" mt={2}>
+        <Grid item xxs={12} textAlign="center" mt={2}>
           <Typography fontWeight={400} variant="caption">
             {t("copyright")}
           </Typography>
