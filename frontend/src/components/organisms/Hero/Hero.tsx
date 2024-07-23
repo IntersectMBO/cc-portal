@@ -31,7 +31,7 @@ export const Hero = ({ children }: HeroProps) => {
           variant="title1"
           sx={{
             maxWidth: 630,
-            my: 5,
+            my: { xxs: 2, md: 5 },
             whiteSpace: "pre-line",
           }}
         >
@@ -50,6 +50,7 @@ export const Hero = ({ children }: HeroProps) => {
           position: { xxs: "absolute", lg: "relative" },
           "& img": {
             width: "100%",
+            maxHeight: "682px",
           },
         }}
       >

@@ -7,7 +7,10 @@ export interface RoleListObject {
   label: string;
 }
 
-export type Permissions = "manage_cc_members" | "add_constitution_version";
+export type Permissions =
+  | "manage_admins"
+  | "manage_cc_members"
+  | "add_constitution_version";
 
 export interface PermissionsListObject {
   value: Permissions;

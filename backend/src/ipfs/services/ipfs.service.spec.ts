@@ -55,6 +55,13 @@ describe('IpfsService', () => {
     createdDate: format(mockIpfsMetadata.createdAt.toString(), 'dd.MM.yyyy'),
   };
 
+  const mockIpfsJsonResponse = {
+    cid: 'bafkreia7jwjhpugfruuzj4i24vxkj4zeonhutkr6pwhvoiemehq3dvoua4',
+    url: 'https://ipfs.io/ipfs/bafkreia7jwjhpugfruuzj4i24vxkj4zeonhutkr6pwhvoiemehq3dvoua4',
+    contents: 'Test content',
+    blake2b: 'd3720cb57039221dd82204a482aec252dc9eb895d38a5a937bfb2a03aa0824ca',
+  };
+
   const mockConfigService = {
     getOrThrow: jest.fn().mockImplementation((url) => {
       if (url === 'IPFS_SERVICE_URL') {
@@ -68,6 +75,12 @@ describe('IpfsService', () => {
     count: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
+  };
+
+  const mockJson = {
+    govActionProposalHash: '14f114e22702213ba6421f80ad30b0c026fd58d27aa5e86326',
+    title: 'Test title',
+    content: 'Test content',
   };
 
   beforeEach(async () => {
@@ -210,6 +223,38 @@ describe('IpfsService', () => {
       const result = await service.findAllMetadata();
 
       expect(result).toEqual([]);
+    });
+  });
+
+  describe('Add JSON to IPFS', () => {
+    it('should add JSON to IPFS', async () => {
+      const mockSendReasoningToIpfsService = jest
+        .spyOn<any, any>(service, 'sendReasoningToIpfs')
+        .mockResolvedValueOnce(mockIpfsJsonResponse);
+
+      const result = await service.addReasoningToIpfs(mockJson);
+
+      expect(mockSendReasoningToIpfsService).toHaveBeenCalled();
+      expect(result).toEqual(mockIpfsJsonResponse);
+    });
+
+    it('should throw an error when trying to add JSON to IPFS', async () => {
+      const mockEmptyJson = {};
+      const mockSendReasoningToIpfsService = jest
+        .spyOn<any, any>(service, 'sendReasoningToIpfs')
+        .mockResolvedValueOnce(mockIpfsJsonResponse);
+
+      try {
+        await service.addReasoningToIpfs(mockEmptyJson);
+      } catch (err) {
+        expect(mockSendReasoningToIpfsService).toHaveBeenCalledWith(
+          mockEmptyJson,
+        );
+        expect(err).toBeInstanceOf(InternalServerErrorException);
+        expect(err.message).toBe(
+          `Error when add reasoning to the IPFS service`,
+        );
+      }
     });
   });
 });

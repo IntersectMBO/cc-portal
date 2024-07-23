@@ -1,7 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersFacade } from './users.facade';
 import { UsersService } from '../services/users.service';
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserStatusEnum } from '../enums/user-status.enum';
 import { UserDto } from '../dto/user.dto';
 import { Permission } from '../entities/permission.entity';
@@ -13,6 +17,9 @@ import { UserResponse } from '../api/response/user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
 import { PaginateQuery } from 'nestjs-paginate';
+import { ToggleStatusRequest } from '../api/request/toggle-status.request';
+import { PermissionEnum } from '../enums/permission.enum';
+import { RoleFactory } from '../role/role.factory';
 
 describe('UsersFacade', () => {
   let facade: UsersFacade;
@@ -82,7 +89,7 @@ describe('UsersFacade', () => {
       hotAddresses: ['sofija123', 'sofija234'],
       role: mockRoles[0].code,
       permissions: [mockPermissions[0].code],
-      isDeleted: false,
+      deactivatedAt: null,
       createdAt: null,
       updatedAt: null,
     },
@@ -96,7 +103,7 @@ describe('UsersFacade', () => {
       hotAddresses: ['ivan1', 'ivan2'],
       role: mockRoles[2].code,
       permissions: [],
-      isDeleted: false,
+      deactivatedAt: null,
       createdAt: null,
       updatedAt: null,
     },
@@ -113,7 +120,7 @@ describe('UsersFacade', () => {
       hotAddresses: ['sofija123', 'sofija234'],
       role: mockRoles[0].code,
       permissions: [mockPermissions[0].code],
-      isDeleted: false,
+      deactivatedAt: null,
       createdAt: null,
       updatedAt: null,
     },
@@ -127,7 +134,7 @@ describe('UsersFacade', () => {
       hotAddresses: ['ivan1', 'ivan2'],
       role: mockRoles[2].code,
       permissions: [],
-      isDeleted: false,
+      deactivatedAt: null,
       createdAt: null,
       updatedAt: null,
     },
@@ -141,7 +148,7 @@ describe('UsersFacade', () => {
       hotAddresses: ['zoran1', 'zoran2'],
       role: mockRoles[2].code,
       permissions: [],
-      isDeleted: false,
+      deactivatedAt: null,
       createdAt: null,
       updatedAt: null,
     },
@@ -176,7 +183,7 @@ describe('UsersFacade', () => {
         }
       });
       if (!foundUser) {
-        return new NotFoundException(`User with id ${id} not found`);
+        throw new NotFoundException(`User with id ${id} not found`);
       }
       return foundUser;
     }),
@@ -233,27 +240,15 @@ describe('UsersFacade', () => {
 
         return usersPaginatedDto;
       }),
-    softDelete: jest.fn().mockImplementation((id) => {
-      let foundUser: UserDto;
-      mockUsers.forEach((item) => {
-        if (id === item.id) {
-          foundUser = item;
-        }
-      });
-      if (!foundUser) {
-        return new NotFoundException(`User with id ${id} not found`);
-      }
-      if (foundUser.isDeleted) {
-        return new ConflictException(`User already deleted`);
-      }
-      foundUser.isDeleted = true;
-      foundUser.status = UserStatusEnum.INACTIVE;
-      return UserMapper.mapUserDtoToResponse(foundUser);
-    }),
+    updateUserStatus: jest.fn(),
   };
 
   const mockS3Service = {
     deleteFile: jest.fn(),
+  };
+
+  const mockRoleFactory = {
+    getInstance: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -264,6 +259,10 @@ describe('UsersFacade', () => {
         {
           provide: UsersService,
           useValue: mockUserService,
+        },
+        {
+          provide: RoleFactory,
+          useValue: mockRoleFactory,
         },
       ],
     }).compile();
@@ -466,35 +465,112 @@ describe('UsersFacade', () => {
     });
   });
 
-  describe('Soft delete users', () => {
-    it('should delete a user by id', async () => {
-      const userId = mockUsers[0].id;
-      const result = await facade.softDelete(userId);
-      expect(result.isDeleted).toEqual(true);
-      expect(result.status).toEqual(UserStatusEnum.INACTIVE);
-      expect(mockUserService.softDelete).toHaveBeenCalledWith(userId);
+  describe(`Activate/Deactivate user's status`, () => {
+    it('should deactivate a user by id', async () => {
+      const user = mockUsers[1];
+      const request: ToggleStatusRequest = {
+        userId: user.id,
+        status: UserStatusEnum.INACTIVE,
+      };
+      const permissions: PermissionEnum[] = [PermissionEnum.MANAGE_CC_MEMBERS];
+      const updatedUser: UserDto = { ...user, status: UserStatusEnum.INACTIVE };
+      const userResponse: UserResponse =
+        UserMapper.mapUserDtoToResponse(updatedUser);
+      mockRoleFactory.getInstance.mockReturnValue({
+        managedBy: () => PermissionEnum.MANAGE_CC_MEMBERS,
+      });
+      mockUserService.updateUserStatus.mockResolvedValue(updatedUser);
+      const result = await facade.toggleStatus(request, permissions);
+      expect(mockUserService.findById).toHaveBeenCalledWith(request.userId);
+      expect(mockUserService.updateUserStatus).toHaveBeenCalledWith(
+        user.id,
+        request.status,
+      );
+      expect(result).toEqual(userResponse);
     });
-    it(`shouldn't delete a user - user not found by id`, async () => {
-      const userId = 'notExistingUser';
+
+    it('should deactivate an admin', async () => {
+      const user = mockUsers[0];
+      const request: ToggleStatusRequest = {
+        userId: user.id,
+        status: UserStatusEnum.INACTIVE,
+      };
+      const permissions: PermissionEnum[] = [
+        PermissionEnum.MANAGE_CC_MEMBERS,
+        PermissionEnum.MANAGE_ADMINS,
+      ];
+      const updatedUser: UserDto = { ...user, status: UserStatusEnum.INACTIVE };
+      const userResponse: UserResponse =
+        UserMapper.mapUserDtoToResponse(updatedUser);
+      mockRoleFactory.getInstance.mockReturnValue({
+        managedBy: () => PermissionEnum.MANAGE_ADMINS,
+      });
+      mockUserService.updateUserStatus.mockResolvedValue(updatedUser);
+      const result = await facade.toggleStatus(request, permissions);
+      expect(mockUserService.findById).toHaveBeenCalledWith(request.userId);
+      expect(mockUserService.updateUserStatus).toHaveBeenCalledWith(
+        user.id,
+        request.status,
+      );
+      expect(result).toEqual(userResponse);
+    });
+
+    it(`shouldn't deactivate an admin - no permission`, async () => {
+      const user = mockUsers[0];
+      const request: ToggleStatusRequest = {
+        userId: user.id,
+        status: UserStatusEnum.INACTIVE,
+      };
+      const permissions: PermissionEnum[] = [PermissionEnum.MANAGE_CC_MEMBERS];
+      mockRoleFactory.getInstance.mockReturnValue({
+        managedBy: () => PermissionEnum.MANAGE_ADMINS,
+      });
       try {
-        await facade.softDelete(userId);
+        await facade.toggleStatus(request, permissions);
+      } catch (error) {
+        expect(error).toBeInstanceOf(ForbiddenException);
+        expect(error.status).toEqual(403);
+        expect(error.message).toEqual(`You have no permission for this action`);
+      }
+    });
+
+    it(`shouldn't deactivate a super admin - no permission`, async () => {
+      const user = mockUsers[0];
+      const request: ToggleStatusRequest = {
+        userId: user.id,
+        status: UserStatusEnum.INACTIVE,
+      };
+      const permissions: PermissionEnum[] = [
+        PermissionEnum.MANAGE_CC_MEMBERS,
+        PermissionEnum.MANAGE_ADMINS,
+      ];
+      mockRoleFactory.getInstance.mockReturnValue({
+        managedBy: () => null,
+      });
+      try {
+        await facade.toggleStatus(request, permissions);
+      } catch (error) {
+        expect(error).toBeInstanceOf(ForbiddenException);
+        expect(error.status).toEqual(403);
+        expect(error.message).toEqual(`You have no permission for this action`);
+      }
+    });
+
+    it(`shouldn't deactivate a user - user not found by id`, async () => {
+      const request: ToggleStatusRequest = {
+        userId: 'notExistingUser',
+        status: UserStatusEnum.INACTIVE,
+      };
+      const permissions: PermissionEnum[] = [PermissionEnum.MANAGE_CC_MEMBERS];
+      try {
+        await facade.toggleStatus(request, permissions);
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
         expect(error.status).toEqual(404);
-        expect(error.message).toEqual(`User with id ${userId} not found`);
-        expect(mockUserService.softDelete).toHaveBeenCalledWith(userId);
-      }
-    });
-    it(`shouldn't delete a user - user already deleted`, async () => {
-      const user = mockUsers[1];
-      user.isDeleted = true;
-      try {
-        await facade.softDelete(user.id);
-      } catch (error) {
-        expect(error).toBeInstanceOf(ConflictException);
-        expect(error.status).toEqual(409);
-        expect(error.message).toEqual(`User already deleted`);
-        expect(mockUserService.softDelete).toHaveBeenCalledWith(user.id);
+        expect(error.message).toEqual(
+          `User with id ${request.userId} not found`,
+        );
+        expect(mockUserService.findById).toHaveBeenCalledWith(request.userId);
       }
     });
   });

@@ -6,7 +6,7 @@ import { Button } from "../atoms";
 import { useModal } from "@context";
 import { FetchUserData } from "@/lib/requests";
 import { useTranslations } from "next-intl";
-import { Grid } from "@mui/material";
+import { Grid, Hidden } from "@mui/material";
 import { UserAvatar } from "@molecules";
 
 export default function UserProfileButton({
@@ -48,39 +48,76 @@ export default function UserProfileButton({
   };
 
   return (
-    <div>
-      <Button
-        id="basic-button"
-        size="extraLarge"
-        aria-controls={open ? "basic-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        onClick={handleClick}
-        sx={{ minWidth: 170 }}
-        startIcon={
-          <UserAvatar
-            src={user?.profile_photo_url || IMAGES.avatar}
-            width={20}
-            height={20}
-          />
-        }
-        endIcon={<img width={20} height={20} src={ICONS.chevronDown} />}
-      >
-        {user?.name || "User"}
-      </Button>
+    <>
+      <Hidden mdDown>
+        <Button
+          id="basic-button"
+          size="extraLarge"
+          aria-controls={open ? "basic-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleClick}
+          sx={{ minWidth: 170 }}
+          startIcon={
+            <UserAvatar
+              src={user?.profile_photo_url || IMAGES.avatar}
+              width={20}
+              height={20}
+            />
+          }
+          endIcon={<img width={20} height={20} src={ICONS.chevronDown} />}
+        >
+          {user?.name || "User"}
+        </Button>
 
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-        PaperProps={{
-          style: { backgroundColor: "transparent", boxShadow: "none" },
-        }}
-      >
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+          PaperProps={{
+            style: { backgroundColor: "transparent", boxShadow: "none" },
+          }}
+        >
+          <Grid
+            container
+            direction="column"
+            sx={{ minWidth: 170, width: "100%" }}
+            gap={0.5}
+          >
+            <Button
+              size="medium"
+              variant="outlined"
+              onClick={editProfile}
+              startIcon={<img width={20} height={20} src={ICONS.edit} />}
+            >
+              {t("Navigation.editProfile")}
+            </Button>
+            <Button
+              size="medium"
+              variant="outlined"
+              onClick={signOut}
+              startIcon={<img width={20} height={20} src={ICONS.logout} />}
+            >
+              {t("Navigation.signOut")}
+            </Button>
+          </Grid>
+        </Menu>
+      </Hidden>
+      <Hidden mdUp>
+        <Grid container gap={2}>
+          <Grid item>
+            <UserAvatar
+              src={user?.profile_photo_url || IMAGES.avatar}
+              width={20}
+              height={20}
+            />
+          </Grid>
+          {user?.name || "User"}
+        </Grid>
         <Grid
           container
           direction="column"
@@ -104,7 +141,7 @@ export default function UserProfileButton({
             {t("Navigation.signOut")}
           </Button>
         </Grid>
-      </Menu>
-    </div>
+      </Hidden>
+    </>
   );
 }

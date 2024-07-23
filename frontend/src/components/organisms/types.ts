@@ -5,6 +5,7 @@ import {
   GovActionProposalStatus,
   UserRole,
   GovernanceActionTableI,
+  UserAuthStatus,
 } from "@/lib/requests";
 import { Vote } from "../atoms";
 
@@ -58,6 +59,11 @@ export interface GovActionModalState {
 export interface OpenAddReasoningModalState {
   id: string;
   callback: (response: ReasoningResponseI) => void;
+}
+
+export interface OpenDeleteRoleModalState {
+  userId: string;
+  status: UserAuthStatus;
 }
 
 export interface OpenReasoningLinkModalState {

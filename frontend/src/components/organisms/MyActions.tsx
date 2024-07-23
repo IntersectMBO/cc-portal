@@ -91,12 +91,13 @@ export const MyActions = ({
   ];
 
   return (
-    <Box px={{ xs: 3, md: 5 }} py={{ xs: 3, md: 6 }}>
+    <Box px={{ xxs: 3, md: 5 }} py={{ xxs: 3, md: 6 }}>
       <Box
         paddingBottom={4}
         display="flex"
-        justifyContent="space-between"
-        alignItems="center"
+        justifyContent={{ xxs: "flex-start", md: "space-between" }}
+        flexDirection={{ xxs: "column", md: "row" }}
+        alignItems={{ xxs: "left", md: "center" }}
       >
         <Box>
           <PageTitleTabs tabs={tabs} />

@@ -7,7 +7,15 @@ import { useTranslations } from "next-intl";
 import { UserRole as UserRoleType } from "@/lib/requests";
 import { formatRoleList } from "@utils";
 
-export const UserRole = ({ roles }: { roles: UserRoleType[] }) => {
+export const UserRole = ({
+  roles,
+  onClick,
+  showCloseButton = false,
+}: {
+  roles: UserRoleType[];
+  onClick?: () => void;
+  showCloseButton?: boolean;
+}) => {
   const t = useTranslations("AdminDashboard");
   const formattedRoleList = formatRoleList(roles);
 
@@ -22,7 +30,11 @@ export const UserRole = ({ roles }: { roles: UserRoleType[] }) => {
         {t("role")}
       </Typography>
 
-      <ChipList hideCloseButton={true} list={formattedRoleList} />
+      <ChipList
+        showCloseButton={showCloseButton}
+        onClick={onClick}
+        list={formattedRoleList}
+      />
     </>
   );
 };

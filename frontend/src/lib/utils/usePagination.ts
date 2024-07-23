@@ -71,7 +71,7 @@ export const usePagination = <T>(
   useEffect(() => {
     // Reset page when new query param is applied
     updateState({ list, paginationMeta, page: 1 });
-  }, [searchParams]);
+  }, [searchParams, list]);
 
   return {
     data,
