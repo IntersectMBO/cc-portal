@@ -1,7 +1,7 @@
-import { Card, CopyCard } from "@/components/molecules";
+import { Card } from "@/components/molecules";
 import { customPalette, ICONS } from "@/constants";
 import { getShortenedGovActionId } from "@utils";
-import { Button, CopyButton, OutlinedLightButton, Typography } from "@atoms";
+import { Button, CopyButton, Typography } from "@atoms";
 import { Box, Collapse, Grid } from "@mui/material";
 import React, { ReactNode } from "react";
 
@@ -144,13 +144,13 @@ export const NavDrawer = ({
   onClick,
   isOpen,
   left = 0,
-  top = { xs: 75, md: 90 },
+  top = { xxs: 75, md: 90 },
 }: {
   children: ReactNode;
   onClick: () => void;
   isOpen: boolean;
   left: number;
-  top: { xs: number; md: number };
+  top: { xxs: number; md: number };
 }) => {
   return (
     <Grid
@@ -161,8 +161,9 @@ export const NavDrawer = ({
       px={3}
       py={2}
       sx={{
-        height: "90vh",
         overflow: "scroll",
+        height: { xxs: "95vh", md: "90vh" },
+        zIndex: 1,
         backgroundColor: customPalette.arcticWhite,
         "& ol.toc-level-1": {
           paddingInlineStart: 0,
@@ -204,7 +205,7 @@ export const NavDrawer = ({
       </Grid>
       <Collapse
         sx={{
-          height: { xs: "90vh", md: "80vh" },
+          height: { xxs: "90vh", md: "80vh" },
           overflow: "scroll",
           background: "#FBFBFF",
         }}
@@ -228,15 +229,15 @@ export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
         justifyContent="space-between"
         alignItems={{ lg: "center" }}
       >
-        <Grid item xs={6} lg={"auto"}>
+        <Grid item xxs={6} lg={"auto"}>
           <Typography variant="body1">{title}</Typography>
           <Typography variant="caption">{description}</Typography>
         </Grid>
-        <Grid item xs={6} lg="auto">
+        <Grid item xxs={6} lg="auto">
           <Box
             display="flex"
-            alignItems={{ xs: "center" }}
-            justifyContent={{ xs: "flex-end" }}
+            alignItems={{ xxs: "center" }}
+            justifyContent={{ xxs: "flex-end" }}
           >
             <Box
               px={2.25}
@@ -255,7 +256,7 @@ export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={12} lg="auto" mt={{ xs: 2, md: 0 }}>
+        <Grid item xxs={12} lg="auto" mt={{ xxs: 2, md: 0 }}>
           <Button
             sx={{ width: "100%" }}
             size="medium"

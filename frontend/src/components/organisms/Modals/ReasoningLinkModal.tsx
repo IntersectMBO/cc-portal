@@ -13,7 +13,11 @@ import { useTranslations } from "next-intl";
 import { useModal } from "@context";
 import { CopyCard } from "@molecules";
 import { OpenReasoningLinkModalState } from "../types";
-import { truncateText, getShortenedGovActionId } from "@utils";
+import {
+  truncateText,
+  getShortenedGovActionId,
+  useScreenDimension,
+} from "@utils";
 import { Box } from "@mui/material";
 
 export const ReasoningLinkModal = () => {
@@ -22,6 +26,7 @@ export const ReasoningLinkModal = () => {
     closeModal,
     state: { hash, link },
   } = useModal<OpenReasoningLinkModalState>();
+  const { isMobile } = useScreenDimension();
 
   return (
     <ModalWrapper
@@ -44,12 +49,12 @@ export const ReasoningLinkModal = () => {
         <CopyCard
           title={t("reasoningLink.hash")}
           copyValue={hash}
-          copyText={getShortenedGovActionId(hash, 20)}
+          copyText={getShortenedGovActionId(hash, isMobile ? 4 : 20)}
         />
         <CopyCard
           title={t("reasoningLink.reasoningLink")}
           copyValue={link}
-          copyText={truncateText(link, 50)}
+          copyText={truncateText(link, isMobile ? 20 : 50)}
         />
         <Box>
           <Button onClick={closeModal} variant="outlined" size="large">

@@ -13,3 +13,4 @@ export * from "./useDebounce";
 export * from "./useManageQueryParams";
 export * from "./routes";
 export * from "./useDocumentVisibility";
+export * from "./useScreenDimension";

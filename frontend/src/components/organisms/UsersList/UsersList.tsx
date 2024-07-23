@@ -37,12 +37,17 @@ export function UsersList({
   }, [error]);
 
   if (isEmpty(data) || error) {
-    return <NotFound title="members.title" description="members.description" />;
+    return (
+      <NotFound
+        title="adminMembers.title"
+        description="adminMembers.description"
+      />
+    );
   }
   return (
     <Grid
-      px={{ xs: 3, md: 5 }}
-      py={{ xs: 3, md: 6 }}
+      px={{ xxs: 3, md: 5 }}
+      py={{ xxs: 3, md: 6 }}
       container
       direction="column"
       gap={0}

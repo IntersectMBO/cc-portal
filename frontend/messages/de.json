@@ -239,9 +239,13 @@
     "status": "Status"
   },
   "NotFound": {
-    "members": {
+    "adminMembers": {
       "title": "No members found",
       "description": "Add new members"
+    },
+    "members": {
+      "title": "No members found",
+      "description": "There is currently no members. Please check back later for updates"
     },
     "latestUpdates": {
       "title": "No votes found",
