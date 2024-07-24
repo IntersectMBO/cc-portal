@@ -1,6 +1,6 @@
 import { CommonEntity } from '../../common/entities/common.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { GovActionProposal } from '../../governance-action-proposal/entities/gov-action-proposal.entity';
+import { GovActionProposal } from './gov-action-proposal.entity';
 
 @Entity('votes')
 export class Vote extends CommonEntity {
