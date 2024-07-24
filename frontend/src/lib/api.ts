@@ -263,7 +263,9 @@ export async function getLatestUpdates({
     const res: { data: VotesTableI[]; meta: PaginationMeta } =
       await axiosInstance.get(
         `/api/governance/votes/search?${search ? `search=${search}` : ""}&${
-          govActionType ? `filter.govActionType=$in:${govActionType}` : ""
+          govActionType
+            ? `filter.govActionProposal.govActionType=$in:${govActionType}`
+            : ""
         }&${vote ? `filter.vote=$in:${vote}` : ""}&${
           sortBy ? `sortBy=${sortBy}` : ""
         }&${page ? `page=${page}` : ""}&limit=${limit}`
@@ -301,11 +303,13 @@ export async function getUserVotes({
       await axiosInstance.get(
         `/api/governance/votes/search?filter.userId=$eq:${userId}&${
           search ? `search=${search}` : ""
-        }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
-          vote ? `filter.vote=$in:${vote}` : ""
-        }&${sortBy ? `sortBy=${sortBy}` : ""}&${
-          page ? `page=${page}` : ""
-        }&limit=${limit}`
+        }&${
+          govActionType
+            ? `filter.govActionProposal.govActionType=$in:${govActionType}`
+            : ""
+        }&${vote ? `filter.vote=$in:${vote}` : ""}&${
+          sortBy ? `sortBy=${sortBy}` : ""
+        }&${page ? `page=${page}` : ""}&limit=${limit}`
       );
     return res;
   } catch (error) {
