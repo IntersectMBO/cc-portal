@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GovActionProposal } from './entities/gov-action-proposal.entity';
 import { GovActionProposalService } from './services/gov-action-proposal.service';
@@ -16,6 +16,9 @@ import { GovActionProposalProducer } from './queues/producers/gov-action-proposa
 import { HotAddress } from './entities/hotaddress.entity';
 import { Vote } from './entities/vote.entity';
 import { User } from './entities/user.entity';
+import { Scheduler } from './jobs/scheduler';
+import { SyncGovVotesJob } from './jobs/impl/sync-gov-votes.job';
+import { SyncGovActionProposalsJob } from './jobs/impl/sync-gov-action-proposals';
 
 @Module({
   imports: [
@@ -37,4 +40,15 @@ import { User } from './entities/user.entity';
     VoteProcessor,
   ],
 })
-export class GovernanceModule {}
+export class GovernanceModule implements OnModuleInit {
+  constructor(
+    private readonly scheduler: Scheduler,
+    private readonly syncGovVotesJob: SyncGovVotesJob,
+    private readonly syncGovActionProposalsJob: SyncGovActionProposalsJob,
+  ) {}
+
+  onModuleInit() {
+    this.scheduler.registerJob(this.syncGovVotesJob);
+    this.scheduler.registerJob(this.syncGovActionProposalsJob);
+  }
+}

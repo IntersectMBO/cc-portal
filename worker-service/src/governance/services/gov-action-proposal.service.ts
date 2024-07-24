@@ -21,7 +21,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GovActionProposalService extends CommonService {
-  private cronInterval: string;
+  // private cronInterval: string;
 
   constructor(
     @InjectDataSource(CONNECTION_NAME_DB_SYNC)
@@ -33,15 +33,15 @@ export class GovActionProposalService extends CommonService {
     private readonly configService: ConfigService,
   ) {
     super(dataSource);
-    this.cronInterval =
-      this.configService.get<string>('GOV_ACTION_PROPOSALS_JOB_FREQUENCY') ||
-      '0 * * * * *';
+    // this.cronInterval =
+    //   this.configService.get<string>('GOV_ACTION_PROPOSALS_JOB_FREQUENCY') ||
+    //   '0 * * * * *';
     this.logger = new Logger(GovActionProposalService.name);
   }
 
-  getCronExpression(): string {
-    return this.cronInterval;
-  }
+  // getCronExpression(): string {
+  //   return this.cronInterval;
+  // }
 
   async storeGovActionProposalData(
     govActionProposalRequests: GovActionProposalRequest[],
