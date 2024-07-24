@@ -8,6 +8,7 @@ import { useModal } from "@context";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
 import { useSnackbar } from "@/context/snackbar";
+import { isResponseErrorI } from "@utils";
 
 export const SignInModal = () => {
   const { closeModal } = useModal();
@@ -22,12 +23,12 @@ export const SignInModal = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    try {
-      await login(data.email);
+    const res = await login(data.email);
+    if (isResponseErrorI(res)) {
+      addErrorAlert(res.error);
+    } else {
       closeModal();
       addSuccessAlert(t("signIn.alerts.success"));
-    } catch (error) {
-      addErrorAlert(t("signIn.alerts.error"));
     }
   };
 

@@ -110,7 +110,8 @@
       },
       "alerts": {
         "success": "Profile successfully updated",
-        "error": "Error updating profile"
+        "error": "Error updating profile",
+        "errorUploadProfilePhoto": "Error uploading photo"
       }
     },
     "editProfile": {
@@ -167,7 +168,10 @@
       }
     },
     "compareConstitution": {
-      "headline": "Compare revisions"
+      "headline": "Compare revisions",
+      "alerts": {
+        "error": "Error fetching revisions"
+      }
     },
     "addReasoning": {
       "headline": "Add reasoning",
@@ -223,7 +227,7 @@
         }
       },
       "alerts": {
-        "errorFetchingData": "Error fetching governance action data"
+        "error": "Error fetching reasoning data"
       }
     },
     "govActionModal": {
@@ -231,7 +235,10 @@
       "govActionCategory": "Governance Action Category",
       "gaStatus": "Governance Action Status",
       "submitTime": "Submit time",
-      "endTime": "End time"
+      "endTime": "End time",
+      "alerts": {
+        "error": "Error fetching governance action data"
+      }
     }
   },
   "AdminDashboard": {
@@ -259,6 +266,10 @@
       "title": "No Constitution available",
       "description": "There is currently no Constitution uploaded. Please check back later for updates"
     },
+    "constitutionMetadata": {
+      "title": "No revisions available",
+      "description": "There is currently no revisions available. Please check back later for updates"
+    },
     "governanceAction": {
       "title": "No governance actions available",
       "description": "There is currently no governance actions. Please check back later for updates"
@@ -281,7 +292,8 @@
     "errors": {
       "sessionExpired": "Session expired",
       "somethingWentWrong": "Something went wrong. Please refresh the page or try again later",
-      "sessionExists": "Session already exists. Please try again."
+      "sessionExists": "Session already exists. Please try again.",
+      "pagination": "Error loading more data"
     }
   }
 }

@@ -21,6 +21,7 @@ import { useModal } from "@/context";
 import { Footer } from "../Footer";
 import { customPalette } from "@consts";
 import { ContentWrapper } from "@/components/atoms";
+import { NotFound } from "../NotFound";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const [isOpen, setIsOpen] = useState(true);
@@ -91,26 +92,35 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
         >
           {tab === "revisions" ? (
             <Grid item justifyContent="flex-end" px={{ xxs: 1, md: 0 }}>
-              {metadata.map(({ title, created_date, cid }) => {
-                return (
-                  <NavCard
-                    onClick={() => {
-                      metadata[0].cid === cid
-                        ? null
-                        : onCompare({ title, created_date, cid });
-                    }}
-                    hash={cid}
-                    title={title}
-                    description={created_date}
-                    buttonLabel={
-                      metadata[0].cid === cid
-                        ? t("drawer.latest")
-                        : t("drawer.compare")
-                    }
-                    key={cid}
-                  />
-                );
-              })}
+              {metadata ? (
+                metadata.map(({ title, created_date, cid }) => {
+                  return (
+                    <NavCard
+                      onClick={() => {
+                        metadata[0].cid === cid
+                          ? null
+                          : onCompare({ title, created_date, cid });
+                      }}
+                      hash={cid}
+                      title={title}
+                      description={created_date}
+                      buttonLabel={
+                        metadata[0].cid === cid
+                          ? t("drawer.latest")
+                          : t("drawer.compare")
+                      }
+                      key={cid}
+                    />
+                  );
+                })
+              ) : (
+                <NotFound
+                  height="auto"
+                  title="constitutionMetadata.title"
+                  description="constitutionMetadata.description"
+                  sx={{ width: "100%" }}
+                />
+              )}
             </Grid>
           ) : (
             <Grid item justifyContent="flex-end">

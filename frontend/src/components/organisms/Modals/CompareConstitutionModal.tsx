@@ -16,6 +16,8 @@ import { useTranslations } from "next-intl";
 import ReactDiffViewer from "react-diff-viewer-continued";
 import { Card, Loading } from "@molecules";
 import { Box } from "@mui/material";
+import { isResponseErrorI } from "@utils";
+import { useSnackbar } from "@/context/snackbar";
 
 export const CompareConstitutionModal = () => {
   const t = useTranslations("Modals");
@@ -23,7 +25,7 @@ export const CompareConstitutionModal = () => {
     state: { base, target },
     closeModal,
   } = useModal<CompareConstitutionModalState>();
-
+  const { addErrorAlert } = useSnackbar();
   const [currentVersion, setCurrentVersion] = useState("");
   const [targetVersion, setTargetVersion] = useState("");
 
@@ -32,13 +34,14 @@ export const CompareConstitutionModal = () => {
       base,
       target,
     }: Pick<CompareConstitutionModalState, "base" | "target">) {
-      try {
-        const currentVersion = await getConstitutionByCid(base.cid);
-        const targetVersion = await getConstitutionByCid(target.cid);
+      const currentVersion = await getConstitutionByCid(base.cid);
+      const targetVersion = await getConstitutionByCid(target.cid);
+      if (isResponseErrorI(currentVersion) || isResponseErrorI(targetVersion)) {
+        closeModal();
+        addErrorAlert(t("compareConstitution.alerts.error"));
+      } else {
         setCurrentVersion(currentVersion.contents);
         setTargetVersion(targetVersion.contents);
-      } catch (error) {
-        console.error("Error fetching version:", error);
       }
     }
 

@@ -17,6 +17,7 @@ import { useSnackbar } from "@/context/snackbar";
 import { OpenAddReasoningModalState } from "../types";
 import { addOrUpdateReasoning } from "@/lib/api";
 import { ReasoningResponseI } from "@/lib/requests";
+import { isResponseErrorI } from "@utils";
 
 interface AddReasoningFormData {
   title: string;
@@ -41,7 +42,7 @@ export const AddReasoningModal = () => {
   const onSubmit = async (data: AddReasoningFormData) => {
     setSubmitting(true);
     const response = await addOrUpdateReasoning({ proposalId: id, ...data });
-    if ("error" in response && response?.error) {
+    if (isResponseErrorI(response)) {
       addErrorAlert(t("addReasoning.alerts.error"));
     } else {
       router.refresh();

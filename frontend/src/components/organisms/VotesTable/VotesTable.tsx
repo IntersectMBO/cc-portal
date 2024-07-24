@@ -18,23 +18,24 @@ export const VotesTable = ({
 }: Props) => {
   return (
     <Grid container direction="column" gap={0}>
-      {votes.map((data, index) => {
-        const disabled = isDisabled && isDisabled(data);
-        return (
-          <Grid
-            key={index}
-            item
-            data-testid={`latest-updates-${data.gov_action_proposal_id}-card`}
-          >
-            <VotesTableRow
-              votes={data}
-              disabled={disabled}
-              onActionClick={onActionClick}
-              actionTitle={actionTitle}
-            />
-          </Grid>
-        );
-      })}
+      {votes &&
+        votes.map((data, index) => {
+          const disabled = isDisabled && isDisabled(data);
+          return (
+            <Grid
+              key={index}
+              item
+              data-testid={`latest-updates-${data.gov_action_proposal_id}-card`}
+            >
+              <VotesTableRow
+                votes={data}
+                disabled={disabled}
+                onActionClick={onActionClick}
+                actionTitle={actionTitle}
+              />
+            </Grid>
+          );
+        })}
     </Grid>
   );
 };

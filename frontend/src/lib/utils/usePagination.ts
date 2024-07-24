@@ -1,5 +1,7 @@
 "use client";
 
+import { useSnackbar } from "@/context/snackbar";
+import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PaginationMeta, ResponseErrorI } from "../requests";
@@ -38,6 +40,9 @@ export const usePagination = <T>(
   const [pagination, setPagination] = useState<PaginationMeta>(paginationMeta);
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
+  const t = useTranslations("General");
+  const { addErrorAlert } = useSnackbar();
+
   const router = useRouter();
   const loadMore = async () => {
     if (isLoading) return;
@@ -46,6 +51,7 @@ export const usePagination = <T>(
       ("use server");
       const newData = await callbackFetch(page + 1);
       if (newData?.error) {
+        addErrorAlert(t("errors.pagination"));
         router.refresh();
       }
       if (newData?.data.length > 0) {
@@ -56,7 +62,7 @@ export const usePagination = <T>(
         });
       }
     } catch (error) {
-      console.error("Error fetching more data:", error);
+      addErrorAlert(t("errors.pagination"));
     } finally {
       setIsLoading(false);
     }

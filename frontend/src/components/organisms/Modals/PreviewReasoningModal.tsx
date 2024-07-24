@@ -23,8 +23,10 @@ import {
   getShortenedGovActionId,
   formatDisplayDate,
   useScreenDimension,
+  isResponseErrorI,
 } from "@utils";
 import { ReasoningContentsI, ReasoningResponseI } from "@/lib/requests";
+import { useSnackbar } from "@/context/snackbar";
 
 interface Reasoning extends Omit<ReasoningResponseI, "contents"> {
   contents: ReasoningContentsI;
@@ -40,14 +42,15 @@ export const PreviewReasoningModal = () => {
     closeModal();
   };
   const { isMobile } = useScreenDimension();
+  const { addErrorAlert } = useSnackbar();
 
   useEffect(() => {
     async function fetchData(id: string) {
-      try {
-        const response = await getReasoningData(id);
+      const response = await getReasoningData(id);
+      if (isResponseErrorI(response)) {
+        addErrorAlert(response.error);
+      } else {
         setReasoning({ ...response, contents: JSON.parse(response.contents) });
-      } catch (error) {
-        console.error("Error fetching reasoning:", error);
       }
     }
 

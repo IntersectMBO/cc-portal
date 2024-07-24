@@ -19,9 +19,11 @@ import { ShowMoreButton } from "../atoms";
 export const MyActions = ({
   actions,
   paginationMeta,
+  error,
 }: {
   actions: VotesTableI[];
   paginationMeta: PaginationMeta;
+  error?: string;
 }) => {
   const t = useTranslations("MyActions");
   const { updateQueryParams } = useManageQueryParams();
@@ -122,7 +124,7 @@ export const MyActions = ({
           />
         </Box>
       </Box>
-      {isEmpty(data) ? (
+      {isEmpty(data) || error ? (
         <NotFound
           height="55vh"
           title="myActions.title"
