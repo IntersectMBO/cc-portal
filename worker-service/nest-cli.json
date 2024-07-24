@@ -6,11 +6,7 @@
     "deleteOutDir": true,
     "assets": [
       {
-        "include": "governance-action-proposal/sql/*.sql",
-        "outDir": "dist/src/"
-      },
-      {
-        "include": "vote/sql/*.sql",
+        "include": "governance/sql/*.sql",
         "outDir": "dist/src/"
       }
     ],

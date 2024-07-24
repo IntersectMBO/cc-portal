@@ -4,9 +4,9 @@ import { Queue } from 'bullmq';
 import {
   JOB_NAME_GOV_ACTIONS_SYNC,
   QUEUE_NAME_DB_SYNC_GOV_ACTIONS,
-} from '../common/constants/bullmq.constants';
+} from '../../../common/constants/bullmq.constants';
 import { randomUUID } from 'crypto';
-import { GovActionProposalRequest } from './dto/gov-action-proposal.request';
+import { GovActionProposalRequest } from '../../dto/gov-action-proposal.request';
 
 @Injectable()
 export class GovActionProposalProducer {

@@ -13,13 +13,16 @@ import {
   SQL_FILE_PATH,
 } from '../../common/constants/sql.constants';
 import { DataSource, EntityManager, Repository } from 'typeorm';
-import { GovActionProposal } from '../../governance-action-proposal/entities/gov-action-proposal.entity';
 import { GovActionProposalRequest } from '../dto/gov-action-proposal.request';
 import { GovActionProposalMapper } from '../mapper/gov-action-proposal.mapper';
 import { CommonService } from 'src/common/common-service';
+import { GovActionProposal } from '../entities/gov-action-proposal.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GovActionProposalService extends CommonService {
+  // private cronInterval: string;
+
   constructor(
     @InjectDataSource(CONNECTION_NAME_DB_SYNC)
     dataSource: DataSource,
@@ -27,10 +30,18 @@ export class GovActionProposalService extends CommonService {
     private readonly govActionProposalRepository: Repository<GovActionProposal>,
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
+    private readonly configService: ConfigService,
   ) {
     super(dataSource);
+    // this.cronInterval =
+    //   this.configService.get<string>('GOV_ACTION_PROPOSALS_JOB_FREQUENCY') ||
+    //   '0 * * * * *';
     this.logger = new Logger(GovActionProposalService.name);
   }
+
+  // getCronExpression(): string {
+  //   return this.cronInterval;
+  // }
 
   async storeGovActionProposalData(
     govActionProposalRequests: GovActionProposalRequest[],

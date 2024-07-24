@@ -3,9 +3,9 @@ import { Job } from 'bullmq';
 import {
   JOB_NAME_GOV_ACTIONS_SYNC,
   QUEUE_NAME_DB_SYNC_GOV_ACTIONS,
-} from '../common/constants/bullmq.constants';
+} from '../../../common/constants/bullmq.constants';
 import { Logger } from '@nestjs/common';
-import { GovActionProposalService } from './services/gov-action-proposal.service';
+import { GovActionProposalService } from '../../services/gov-action-proposal.service';
 
 @Processor(QUEUE_NAME_DB_SYNC_GOV_ACTIONS)
 export class GovActionsProposalProcessor extends WorkerHost {
