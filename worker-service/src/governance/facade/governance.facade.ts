@@ -16,29 +16,7 @@ export class GovernanceFacade {
     private readonly govActionProposalService: GovActionProposalService,
     private readonly voteService: VoteService,
     private readonly configService: ConfigService,
-    // private schedulerRegistry: SchedulerRegistry,
-  ) {
-    // this.addCronJob(
-    //   JOB_NAME_GOV_ACTIONS_SYNC,
-    //   () => this.syncGovActionProposalTable(),
-    //   () => this.govActionProposalService.getCronExpression(),
-    // );
-    // this.addCronJob(
-    //   JOB_NAME_VOTE_SYNC,
-    //   () => this.syncVotesTable(),
-    //   () => this.voteService.getCronExpression(),
-    // );
-  }
-
-  // addCronJob(
-  //   jobName: string,
-  //   jobFunction: () => Promise<void>,
-  //   cron: () => string,
-  // ): void {
-  //   const job = new CronJob(cron(), jobFunction);
-  //   this.schedulerRegistry.addCronJob(jobName, job);
-  //   job.start();
-  // }
+  ) {}
 
   async syncGovActionProposalTable(): Promise<void> {
     const perPage: number = Number(

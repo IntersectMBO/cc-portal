@@ -38,6 +38,9 @@ import { SyncGovActionProposalsJob } from './jobs/impl/sync-gov-action-proposals
     VoteService,
     VoteProducer,
     VoteProcessor,
+    Scheduler,
+    SyncGovVotesJob,
+    SyncGovActionProposalsJob,
   ],
 })
 export class GovernanceModule implements OnModuleInit {
