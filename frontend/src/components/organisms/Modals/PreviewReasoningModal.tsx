@@ -48,7 +48,10 @@ export const PreviewReasoningModal = () => {
     async function fetchData(id: string) {
       const response = await getReasoningData(id);
       if (isResponseErrorI(response)) {
-        addErrorAlert(response.error);
+        if (response.statusCode !== 404) {
+          addErrorAlert(response.error);
+          closeModal();
+        }
       } else {
         setReasoning({ ...response, contents: JSON.parse(response.contents) });
       }
