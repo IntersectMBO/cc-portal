@@ -3,7 +3,8 @@ import React, { Suspense } from "react";
 import { unstable_setRequestLocale } from "next-intl/server"; // Import function to set the request-specific locale (unstable API).
 import { UsersList } from "@organisms";
 import { getUsersAdmin } from "@/lib/api";
-import { Loading } from "@/components/molecules";
+import { Loading } from "@molecules";
+import { isResponseErrorI } from "@utils";
 
 export default async function AdminDashboard({
   params: { locale },
@@ -13,13 +14,14 @@ export default async function AdminDashboard({
   const users = await getUsersAdmin({
     search: searchParams?.search,
   });
+  const hasError = isResponseErrorI(users);
   return (
     <main>
       <Suspense fallback={<Loading />}>
         <UsersList
-          usersList={users.data}
-          paginationMeta={users.meta}
-          error={users.error}
+          usersList={!hasError && users?.data}
+          paginationMeta={!hasError && users?.meta}
+          error={isResponseErrorI(users) && users.error}
         />
       </Suspense>
     </main>

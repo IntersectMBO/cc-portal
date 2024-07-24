@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import { useSnackbar } from "@/context/snackbar";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useRouter } from "next/navigation";
+import { isResponseErrorI } from "@utils";
 
 export const SignUpModal = () => {
   const { state, closeModal } = useModal<SignupModalState>();
@@ -48,7 +49,6 @@ export const SignUpModal = () => {
 
   const handleError = (errorMsg) => {
     addErrorAlert(errorMsg);
-    closeModal();
     router.refresh();
   };
 
@@ -57,7 +57,7 @@ export const SignUpModal = () => {
     formData.append("file", imageFile);
 
     const res = await uploadUserPhoto(userSession?.userId, formData);
-    if ("error" in res && res?.error) {
+    if (isResponseErrorI(res)) {
       handleError(res.error);
     }
     return res;
@@ -68,14 +68,14 @@ export const SignUpModal = () => {
     const { file, ...userData } = data;
     if (file) {
       const uploadImageRes = await uploadImage(file);
-      if ("error" in uploadImageRes && uploadImageRes?.error) {
+      if (isResponseErrorI(uploadImageRes)) {
         setSubmitting(false);
         return;
       }
     }
     const editUserRes = await editUser(userSession?.userId, userData);
 
-    if ("error" in editUserRes && editUserRes?.error) {
+    if (isResponseErrorI(editUserRes)) {
       handleError(editUserRes.error);
     } else {
       addSuccessAlert(t("signUp.alerts.success"));

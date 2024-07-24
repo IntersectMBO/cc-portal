@@ -161,7 +161,6 @@ export const NavDrawer = ({
       px={3}
       py={2}
       sx={{
-        overflow: "scroll",
         height: { xxs: "95vh", md: "90vh" },
         zIndex: 1,
         backgroundColor: customPalette.arcticWhite,
@@ -206,8 +205,10 @@ export const NavDrawer = ({
       <Collapse
         sx={{
           height: { xxs: "90vh", md: "80vh" },
-          overflow: "scroll",
+          overflowY: "scroll",
           background: "#FBFBFF",
+          scrollbarWidth: "thin",
+          scrollbarColor: "#888 #f1f1f1",
         }}
         in={isOpen}
         timeout="auto"

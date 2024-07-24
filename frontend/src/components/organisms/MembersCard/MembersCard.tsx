@@ -52,17 +52,22 @@ export const MembersCard = ({
       <Box
         display="flex"
         flexDirection={{ xxs: "column", md: "row" }}
-        justifyContent="space-between"
+        justifyContent="center"
         gap={{ xxs: 1, md: 0 }}
       >
         <Button
+          sx={{ pointerEvents: "none" }}
           variant="outlined"
           size="small"
           data-testid={`members-${id}-joined`}
         >
           {t("card.joined")} {formatDisplayDate(created_at)}
         </Button>
-        <Button
+
+        {/** 
+         * temporarily hidden
+         * TODO: uncomment and handle button click
+         * <Button
           variant="outlined"
           size="small"
           data-testid={`members-${id}-latest-updates`}
@@ -70,6 +75,7 @@ export const MembersCard = ({
         >
           {t("card.latestUpdates")}
         </Button>
+        */}
       </Box>
     </Box>
   );

@@ -103,7 +103,7 @@ export interface ResponseErrorI {
   statusCode?: number;
 }
 
-export interface FetchUsersAdminI extends ResponseErrorI {
+export interface FetchUsersAdminI {
   data?: FetchUserData[];
   meta?: PaginationMeta;
 }

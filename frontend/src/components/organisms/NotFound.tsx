@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box } from "@mui/material";
+import { Box, SxProps } from "@mui/material";
 import { Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 import { customPalette } from "@/constants";
@@ -9,10 +9,12 @@ export function NotFound({
   title,
   description,
   height = "70vh",
+  sx,
 }: {
   title: string;
   description: string;
   height?: string;
+  sx?: SxProps;
 }) {
   const t = useTranslations("NotFound");
 
@@ -28,6 +30,7 @@ export function NotFound({
           width: { xxs: "80%", md: 500 },
           textAlign: "center",
           border: `1px solid ${customPalette.lightBlue}`,
+          ...sx,
         }}
         px={3}
         py={5}

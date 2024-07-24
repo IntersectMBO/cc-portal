@@ -5,6 +5,7 @@ import { unstable_setRequestLocale } from "next-intl/server"; // Import function
 import { getConstitutionMetadata } from "@/lib/api";
 import { Loading } from "@molecules";
 import { ContentWrapper } from "@/components/atoms";
+import { isResponseErrorI } from "@utils";
 
 export default async function ConstitutionPage({ params: { locale } }) {
   unstable_setRequestLocale(locale); // Sets the locale for the request. Use cautiously due to its unstable nature.
@@ -17,10 +18,10 @@ export default async function ConstitutionPage({ params: { locale } }) {
       <TopNav />
 
       <Suspense fallback={<Loading />}>
-        {constitution && !constitution.error ? (
+        {constitution && !isResponseErrorI(constitution) ? (
           <Constitution
             constitution={constitution}
-            metadata={metadata.reverse()}
+            metadata={!isResponseErrorI(metadata) && metadata.reverse()}
           />
         ) : (
           <>

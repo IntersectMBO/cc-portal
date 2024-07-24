@@ -5,6 +5,7 @@ import { Footer, TopNav, MyActions } from "@organisms";
 import { Loading } from "@molecules";
 import { decodeUserToken, getUserVotes } from "@/lib/api";
 import { ContentWrapper } from "@atoms";
+import { isResponseErrorI } from "@utils";
 
 export default async function MyActionsPage({
   params: { locale },
@@ -20,6 +21,7 @@ export default async function MyActionsPage({
     sortBy: searchParams?.sortBy,
     userId: user?.userId,
   });
+  const hasError = isResponseErrorI(userActions);
 
   return (
     <main>
@@ -27,8 +29,9 @@ export default async function MyActionsPage({
       <ContentWrapper>
         <Suspense fallback={<Loading />}>
           <MyActions
-            actions={userActions?.data}
-            paginationMeta={userActions?.meta}
+            actions={!hasError && userActions?.data}
+            paginationMeta={!hasError && userActions?.meta}
+            error={hasError && userActions.error}
           />
           ;
         </Suspense>

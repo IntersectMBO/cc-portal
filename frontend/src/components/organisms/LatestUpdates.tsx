@@ -18,9 +18,11 @@ import { useModal } from "@/context";
 export const LatestUpdates = ({
   latestUpdates,
   paginationMeta,
+  error,
 }: {
   latestUpdates: VotesTableI[];
   paginationMeta: PaginationMeta;
+  error?: string;
 }) => {
   const t = useTranslations("LatestUpdates");
   const { updateQueryParams } = useManageQueryParams();
@@ -107,7 +109,7 @@ export const LatestUpdates = ({
           />
         </Box>
       </Box>
-      {isEmpty(data) ? (
+      {isEmpty(data) || error ? (
         <NotFound
           height="55vh"
           title="latestUpdates.title"

@@ -2,7 +2,7 @@ const withNextIntl = require("next-intl/plugin")();
 
 const nextConfig = {
   output: "standalone",
-  reactStrictMode: true,
+  reactStrictMode: false,
 };
 
 // This line integrates the NextIntl library with the Next.js configuration.

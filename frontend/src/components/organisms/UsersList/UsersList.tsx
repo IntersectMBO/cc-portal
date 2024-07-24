@@ -52,9 +52,10 @@ export function UsersList({
       direction="column"
       gap={0}
     >
-      {data.map((users) => {
-        return <UsersListItem key={users.id} {...users} />;
-      })}
+      {data &&
+        data.map((users) => {
+          return <UsersListItem key={users.id} {...users} />;
+        })}
       <ShowMoreButton
         isLoading={isLoading}
         hasNextPage={pagination.has_next_page}
