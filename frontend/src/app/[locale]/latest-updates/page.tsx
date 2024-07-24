@@ -4,7 +4,7 @@ import { unstable_setRequestLocale } from "next-intl/server"; // Import function
 import { Footer, LatestUpdates, NotFound, TopNav } from "@organisms";
 import { Loading } from "@molecules";
 import { getLatestUpdates } from "@/lib/api";
-import { isEmpty } from "@utils";
+import { isEmpty, isResponseErrorI } from "@utils";
 import { ContentWrapper } from "@atoms";
 
 export default async function LatestUpdatesPage({
@@ -18,21 +18,22 @@ export default async function LatestUpdatesPage({
     vote: searchParams?.vote,
     sortBy: searchParams?.sortBy,
   });
-
+  const hasError = isResponseErrorI(latestUpdates);
   return (
     <main>
       <TopNav />
       <ContentWrapper>
         <Suspense fallback={<Loading />}>
-          {isEmpty(latestUpdates?.data) && isEmpty(searchParams) ? (
+          {(isEmpty(latestUpdates) || hasError) && isEmpty(searchParams) ? (
             <NotFound
               title="latestUpdates.title"
               description="latestUpdates.description"
             />
           ) : (
             <LatestUpdates
-              latestUpdates={latestUpdates?.data}
-              paginationMeta={latestUpdates?.meta}
+              latestUpdates={!hasError && latestUpdates?.data}
+              paginationMeta={!hasError && latestUpdates?.meta}
+              error={hasError && latestUpdates.error}
             />
           )}
         </Suspense>
