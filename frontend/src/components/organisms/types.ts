@@ -108,3 +108,8 @@ export interface ReasoningI {
   link?: string;
   hash?: string;
 }
+
+export interface TabI {
+  value: string;
+  title: string;
+}

@@ -2,13 +2,13 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { useTranslations } from "next-intl";
 import { NotFound } from "./NotFound";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
 import {
   GOVERNANCE_ACTIONS_FILTERS,
   GOVERNANCE_ACTIONS_SORTING,
+  MY_ACTIONS_TABS,
   PATHS,
 } from "@consts";
 import { PageTitleTabs } from "./PageTitleTabs";
@@ -17,6 +17,7 @@ import { GovernanceActionTableI, PaginationMeta } from "@/lib/requests";
 import { getGovernanceActions } from "@/lib/api";
 import { usePagination } from "@/lib/utils/usePagination";
 import { ShowMoreButton } from "../atoms";
+import { useRouter } from "next/navigation";
 
 export const GovernanceActions = ({
   actions,
@@ -25,8 +26,8 @@ export const GovernanceActions = ({
   actions: GovernanceActionTableI[];
   paginationMeta: PaginationMeta;
 }) => {
-  const t = useTranslations("MyActions");
   const { updateQueryParams } = useManageQueryParams();
+  const router = useRouter();
   const [searchText, setSearchText] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [chosenFilters, setChosenFilters] = useState<Record<string, string[]>>(
@@ -63,17 +64,6 @@ export const GovernanceActions = ({
     updateQueryParams(params);
   }, [searchText, chosenFilters, chosenSorting, updateQueryParams]);
 
-  const tabs = [
-    {
-      path: PATHS.governanceActions,
-      title: t("gaTab"),
-    },
-    {
-      path: PATHS.myActions,
-      title: t("myVotesTab"),
-    },
-  ];
-
   return (
     <Box px={{ xxs: 3, md: 5 }} py={{ xxs: 3, md: 6 }}>
       <Box
@@ -84,7 +74,11 @@ export const GovernanceActions = ({
         alignItems={{ xxs: "left", md: "center" }}
       >
         <Box className="ttt">
-          <PageTitleTabs tabs={tabs} />
+          <PageTitleTabs
+            tabs={MY_ACTIONS_TABS}
+            onChange={(tab) => router.push(tab.value)}
+            selectedValue={PATHS.governanceActions}
+          />
         </Box>
         <Box display="flex" sx={{ position: "relative" }}>
           <DataActionsBar

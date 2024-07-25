@@ -117,28 +117,6 @@ export const Code = ({ children }) => (
   </code>
 );
 
-export const NavTitle = ({
-  label,
-  onClick,
-  isActive,
-}: {
-  label: string;
-  onClick: () => void;
-  isActive: boolean;
-}) => {
-  return (
-    <Button variant="text" size="small" onClick={onClick}>
-      <Typography
-        fontWeight={isActive ? 500 : 400}
-        variant="body1"
-        sx={{ marginRight: 1, whiteSpace: "nowrap" }}
-      >
-        {label}
-      </Typography>
-    </Button>
-  );
-};
-
 export const NavDrawer = ({
   children,
   onClick,
@@ -164,6 +142,9 @@ export const NavDrawer = ({
         height: { xxs: "95vh", md: "90vh" },
         zIndex: 1,
         backgroundColor: customPalette.arcticWhite,
+        "& ol.toc-level": {
+          margin: 0,
+        },
         "& ol.toc-level-1": {
           paddingInlineStart: 0,
 
