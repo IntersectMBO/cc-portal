@@ -436,7 +436,7 @@ export async function getReasoningData(
   } catch (error) {
     const t = await getTranslations();
     return {
-      error: t("Modals.previewReasoning.alerts.error"),
+      error: t("Modals.previewRationale.alerts.error"),
       statusCode: error.res?.statusCode || null,
     };
   }

@@ -34,7 +34,7 @@ export const ReasoningLinkModal = () => {
       icon={IMAGES.pastelReasoning}
     >
       <ModalHeader sx={{ marginTop: "16px" }}>
-        {t("reasoningLink.headline")}
+        {t("rationaleLink.headline")}
       </ModalHeader>
 
       <ModalContents>
@@ -43,16 +43,16 @@ export const ReasoningLinkModal = () => {
           variant="body2"
           fontWeight={400}
         >
-          {t("reasoningLink.description")}
+          {t("rationaleLink.description")}
         </Typography>
 
         <CopyCard
-          title={t("reasoningLink.hash")}
+          title={t("rationaleLink.hash")}
           copyValue={hash}
           copyText={getShortenedGovActionId(hash, isMobile ? 4 : 20)}
         />
         <CopyCard
-          title={t("reasoningLink.reasoningLink")}
+          title={t("rationaleLink.rationaleLink")}
           copyValue={link}
           copyText={truncateText(link, isMobile ? 20 : 50)}
         />

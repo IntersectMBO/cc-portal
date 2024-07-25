@@ -173,7 +173,7 @@ export const VotesTableRow = ({
                   variant="caption"
                   fontWeight={500}
                 >
-                  {t("reasoning")}
+                  {t("rationale")}
                 </Typography>
                 <Typography variant="caption">
                   {reasoning_comment

@@ -118,7 +118,7 @@ export const PreviewReasoningModal = () => {
             src={IMAGES.pastelAddMember}
           />
         </Box>
-        {t("previewReasoning.headline")}
+        {t("previewRationale.headline")}
       </ModalHeader>
       <Typography
         sx={{ px: 3 }}
@@ -126,7 +126,7 @@ export const PreviewReasoningModal = () => {
         fontWeight={400}
         color={customPalette.textGray}
       >
-        {t("previewReasoning.description")}
+        {t("previewRationale.description")}
       </Typography>
       <Box
         sx={{
@@ -156,7 +156,7 @@ export const PreviewReasoningModal = () => {
         )}
         <Box mt={3}>
           <Typography color="neutralGray" variant="caption">
-            {t("previewReasoning.governanceActionId")}
+            {t("previewRationale.governanceActionId")}
           </Typography>
           <OutlinedLightButton nonInteractive={true}>
             {getShortenedGovActionId(govAction.tx_hash, isMobile ? 4 : 20)}
@@ -164,7 +164,7 @@ export const PreviewReasoningModal = () => {
         </Box>
         <Box mt={3} data-testid="governance-action-type">
           <Typography color="neutralGray" variant="caption">
-            {t("previewReasoning.governanceActionCategory")}
+            {t("previewRationale.governanceActionCategory")}
           </Typography>
           <OutlinedLightButton nonInteractive={true}>
             {getProposalTypeLabel(govAction.type)}
@@ -173,7 +173,7 @@ export const PreviewReasoningModal = () => {
         {govAction.vote && (
           <Box mt={3}>
             <Typography color="neutralGray" variant="caption">
-              {t("previewReasoning.voted")}
+              {t("previewRationale.voted")}
             </Typography>
             <Box display="flex" mt={0.25}>
               <VotePill vote={govAction.vote} />
@@ -184,10 +184,10 @@ export const PreviewReasoningModal = () => {
       {govAction.submit_time && (
         <DisplayDate
           date={govAction.submit_time}
-          title={t("previewReasoning.submissionDate")}
-          tooltipHeading={t("previewReasoning.tooltips.submissionDate.heading")}
+          title={t("previewRationale.submissionDate")}
+          tooltipHeading={t("previewRationale.tooltips.submissionDate.heading")}
           tooltipParagraph={t(
-            "previewReasoning.tooltips.submissionDate.paragraphOne"
+            "previewRationale.tooltips.submissionDate.paragraphOne"
           )}
           dataTestId="submit-date"
         />
@@ -195,12 +195,12 @@ export const PreviewReasoningModal = () => {
       {govAction.vote_submit_time && (
         <DisplayDate
           date={govAction.end_time}
-          title={t("previewReasoning.voteSubmissionDate")}
+          title={t("previewRationale.voteSubmissionDate")}
           tooltipHeading={t(
-            "previewReasoning.tooltips.submissionDate.vote.heading"
+            "previewRationale.tooltips.submissionDate.vote.heading"
           )}
           tooltipParagraph={t(
-            "previewReasoning.tooltips.submissionDate.vote.paragraphOne"
+            "previewRationale.tooltips.submissionDate.vote.paragraphOne"
           )}
           dataTestId="vote-submit-date"
         />
@@ -208,10 +208,10 @@ export const PreviewReasoningModal = () => {
       {govAction.end_time && (
         <DisplayDate
           date={govAction.end_time}
-          title={t("previewReasoning.expiryDate")}
-          tooltipHeading={t("previewReasoning.tooltips.expiryDate.heading")}
+          title={t("previewRationale.expiryDate")}
+          tooltipHeading={t("previewRationale.tooltips.expiryDate.heading")}
           tooltipParagraph={t(
-            "previewReasoning.tooltips.expiryDate.paragraphTwo"
+            "previewRationale.tooltips.expiryDate.paragraphTwo"
           )}
           dataTestId="expiry-date"
           bgColor="rgba(247, 249, 251, 1)"
