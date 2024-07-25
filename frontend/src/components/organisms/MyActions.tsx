@@ -7,7 +7,12 @@ import { NotFound } from "./NotFound";
 import { VotesTable } from "./VotesTable";
 import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
 import { DataActionsBar } from "../molecules";
-import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING, PATHS } from "@consts";
+import {
+  LATEST_UPDATES_FILTERS,
+  LATEST_UPDATES_SORTING,
+  MY_ACTIONS_TABS,
+  PATHS,
+} from "@consts";
 import { PageTitleTabs } from "./PageTitleTabs";
 import { useModal } from "@/context";
 import { PaginationMeta, VotesTableI } from "@/lib/requests";
@@ -15,6 +20,7 @@ import { OpenPreviewReasoningModal } from "./types";
 import { getUserVotes } from "@/lib/api";
 import { usePagination } from "@/lib/utils/usePagination";
 import { ShowMoreButton } from "../atoms";
+import { useRouter } from "next/navigation";
 
 export const MyActions = ({
   actions,
@@ -26,6 +32,7 @@ export const MyActions = ({
   error?: string;
 }) => {
   const t = useTranslations("MyActions");
+  const router = useRouter();
   const { updateQueryParams } = useManageQueryParams();
   const [searchText, setSearchText] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -81,17 +88,6 @@ export const MyActions = ({
     updateQueryParams(params);
   }, [searchText, chosenFilters, chosenSorting, updateQueryParams]);
 
-  const tabs = [
-    {
-      path: PATHS.governanceActions,
-      title: t("gaTab"),
-    },
-    {
-      path: PATHS.myActions,
-      title: t("myVotesTab"),
-    },
-  ];
-
   return (
     <Box px={{ xxs: 3, md: 5 }} py={{ xxs: 3, md: 6 }}>
       <Box
@@ -102,7 +98,11 @@ export const MyActions = ({
         alignItems={{ xxs: "left", md: "center" }}
       >
         <Box>
-          <PageTitleTabs tabs={tabs} />
+          <PageTitleTabs
+            tabs={MY_ACTIONS_TABS}
+            onChange={(tab) => router.push(tab.value)}
+            selectedValue={PATHS.myActions}
+          />
         </Box>
         <Box display="flex" sx={{ position: "relative" }}>
           <DataActionsBar

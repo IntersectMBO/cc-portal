@@ -11,7 +11,6 @@ import {
   Heading3,
   ListItem,
   NavDrawer,
-  NavTitle,
   Paragraph,
   NavCard,
 } from "./MDXComponents";
@@ -19,9 +18,10 @@ import { ConstitutionMetadata, ConstitutionProps } from "../types";
 import { useTranslations } from "next-intl";
 import { useModal } from "@/context";
 import { Footer } from "../Footer";
-import { customPalette } from "@consts";
+import { CONSTITUTION_SIDEBAR_TABS, customPalette } from "@consts";
 import { ContentWrapper } from "@/components/atoms";
 import { NotFound } from "../NotFound";
+import { PageTitleTabs } from "../PageTitleTabs";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const [isOpen, setIsOpen] = useState(true);
@@ -55,21 +55,18 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
           flexWrap="nowrap"
         >
           <Grid item xxs={12} md="auto">
-            <NavTitle
-              onClick={() => setTab("revisions")}
-              label={t("drawer.latestRevisions")}
-              isActive={tab === "revisions"}
-            />
-            <NavTitle
-              onClick={() => setTab("")}
-              label={t("drawer.tableOfContents")}
-              isActive={tab === ""}
+            <PageTitleTabs
+              onChange={(tab) => setTab(tab.value)}
+              tabs={CONSTITUTION_SIDEBAR_TABS}
+              selectedValue={tab}
+              sx={{ fontSize: { xxs: 16 } }}
             />
           </Grid>
           <Grid
             item
             xxs={6}
             justifySelf="flex-end"
+            pl={1}
             sx={{ display: { xxs: "none", md: "flex" } }}
           >
             <Divider

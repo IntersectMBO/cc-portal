@@ -1,31 +1,46 @@
-import { Grid, Typography } from "@mui/material";
-import { usePathname, useRouter } from "next/navigation";
+"use client";
+import { customPalette } from "@/constants";
+import { SxProps, Tab, Tabs } from "@mui/material";
+import { TabI } from "./types";
 
-interface Tab {
-  path: string;
-  title: string;
-}
-
-export const PageTitleTabs = ({ tabs }: { tabs: Tab[] }) => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const isSelectedTab = (path: string) => pathname.includes(path);
+//Component creates a set of tabs for navigation.
+//Each tab represents a different page or section.
+export const PageTitleTabs = ({
+  tabs,
+  onChange,
+  selectedValue,
+  sx,
+}: {
+  tabs: TabI[];
+  onChange: (newValue: TabI) => void;
+  selectedValue: string;
+  sx?: SxProps;
+}) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    onChange(tabs[newValue]);
+  };
+  const selectedIndex = tabs.findIndex((item) => item.value === selectedValue);
 
   return (
-    <Grid container flexWrap="nowrap" gap={3} mb={{ xxs: 1, md: 0 }}>
+    <Tabs
+      sx={{ mb: { xxs: 1, md: 0 } }}
+      value={selectedIndex}
+      onChange={handleChange}
+      textColor="secondary"
+      indicatorColor="secondary"
+    >
       {tabs.map((tab) => (
-        <Grid item key={tab.path}>
-          <Typography
-            sx={{ cursor: "pointer" }}
-            fontSize={{ xxs: 20, md: 32 }}
-            fontWeight={isSelectedTab(tab.path) ? 600 : 400}
-            component="span"
-            onClick={() => router.push(tab.path)}
-          >
-            {tab.title}
-          </Typography>
-        </Grid>
+        <Tab
+          key={tab.value}
+          label={tab.title}
+          sx={{
+            textTransform: "none",
+            fontSize: { xxs: 16, md: 32 },
+            color: customPalette.textBlack,
+            ...sx,
+          }}
+        />
       ))}
-    </Grid>
+    </Tabs>
   );
 };
