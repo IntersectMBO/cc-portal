@@ -43,10 +43,10 @@ export const AddReasoningModal = () => {
     setSubmitting(true);
     const response = await addOrUpdateReasoning({ proposalId: id, ...data });
     if (isResponseErrorI(response)) {
-      addErrorAlert(t("addReasoning.alerts.error"));
+      addErrorAlert(t("addRationale.alerts.error"));
     } else {
       router.refresh();
-      addSuccessAlert(t("addReasoning.alerts.success"));
+      addSuccessAlert(t("addRationale.alerts.success"));
       callback(response as ReasoningResponseI);
     }
     setSubmitting(false);
@@ -58,7 +58,7 @@ export const AddReasoningModal = () => {
       icon={IMAGES.pastelReasoning}
     >
       <ModalHeader sx={{ marginTop: "16px" }}>
-        {t("addReasoning.headline")}
+        {t("addRationale.headline")}
       </ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
@@ -67,20 +67,20 @@ export const AddReasoningModal = () => {
             fontWeight={400}
             color={customPalette.textGray}
           >
-            {t("addReasoning.description")}
+            {t("addRationale.description")}
           </Typography>
           <ControlledField.Input
-            label={t("addReasoning.fields.title.label")}
+            label={t("addRationale.fields.title.label")}
             errors={errors}
             control={control}
             {...register("title", { required: "Title is required" })}
           />
 
           <ControlledField.TextArea
-            label={t("addReasoning.fields.reasoning.label")}
+            label={t("addRationale.fields.rationale.label")}
             errors={errors}
             control={control}
-            {...register("content", { required: "Reasoning is required" })}
+            {...register("content", { required: "Rationale is required" })}
           />
 
           <ModalActions isSubmitting={isSubmitting} />

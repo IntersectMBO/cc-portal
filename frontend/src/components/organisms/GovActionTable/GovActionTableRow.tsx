@@ -64,7 +64,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
       type: "previewReasoningModal",
       state: {
         govAction: govActions,
-        actionTitle: t("updateReasoning"),
+        actionTitle: t("updateRationale"),
         onActionClick: openUpdateReasoningCallback,
       },
     });
@@ -266,7 +266,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
               }
               variant="outlined"
             >
-              {canAddReasoning ? t("addReasoning") : t("updateReasoning")}
+              {canAddReasoning ? t("addRationale") : t("updateRationale")}
             </Button>
           </Grid>
         </Grid>

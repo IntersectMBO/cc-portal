@@ -30,7 +30,7 @@
     "govAction": "Governance Action",
     "govActionCategoryShort": "GA Category",
     "voted": "Voted",
-    "reasoning": "Reasoning",
+    "rationale": "Rationale",
     "actionTitle": "Show more",
     "notAvailable": "Not Available"
   },
@@ -48,8 +48,8 @@
     "abstract": "Abstract",
     "actionTitle": "Show more",
     "notAvailable": "Not Available",
-    "addReasoning": "Add Reasoning",
-    "updateReasoning": "Update Reasoning"
+    "addRationale": "Add Rationale",
+    "updateRationale": "Update Rationale"
   },
   "Navigation": {
     "addNewMember": "Add new member",
@@ -167,42 +167,41 @@
         "error": "Error fetching revisions"
       }
     },
-    "addReasoning": {
-      "headline": "Add reasoning",
-      "description": "Please provide reasoning for your vote on specific governance action.",
+    "addRationale": {
+      "headline": "Add rationale",
+      "description": "Please provide rationale for your vote on specific governance action.",
       "fields": {
         "title": {
           "label": "Title"
         },
-        "reasoning": {
-          "label": "Reasoning"
+        "rationale": {
+          "label": "Rationale"
         }
       },
       "alerts": {
-        "success": "New reasoning successfully added",
-        "error": "Error adding new reasoning"
+        "success": "New rationale successfully added",
+        "error": "Error adding new rationale"
       }
     },
-    "reasoningLink": {
-      "headline": "Reasoning link",
+    "rationaleLink": {
+      "headline": "Rationale link",
       "description": "Attach this link to your vote",
       "hash": "Hash",
-      "reasoningLink": "Reasoning link",
+      "rationaleLink": "Rationale link",
       "alerts": {
-        "success": "New reasoning link successfully added",
-        "error": "Error adding new reasoning link"
+        "success": "New rationale link successfully added",
+        "error": "Error adding new rationale link"
       }
     },
-    "previewReasoning": {
-      "headline": "Reasoning",
-      "description": "Please update reasoning for your vote on specific governance action.",
+    "previewRationale": {
+      "headline": "Rationale",
+      "description": "Please update rationale for your vote on specific governance action.",
       "governanceActionCategory": "Governance Action Category",
       "governanceActionId": "Governance Action ID",
       "voted": "Voted",
       "submissionDate": "Submission date",
       "expiryDate": "Expiry date",
       "voteSubmissionDate": "Vote submission date",
-      "addNewReasoning": "Add new reasoning",
       "tooltips": {
         "expiryDate": {
           "heading": "Expiry Date",
@@ -219,7 +218,7 @@
         }
       },
       "alerts": {
-        "error": "Error fetching reasoning data"
+        "error": "Error fetching rationale data"
       }
     },
     "govActionModal": {
