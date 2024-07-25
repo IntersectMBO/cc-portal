@@ -42,7 +42,6 @@ export const SignInModal = () => {
           </Typography>
 
           <ControlledField.Input
-            placeholder={t("signIn.fields.email.placeholder")}
             label={t("signIn.fields.email.label")}
             errors={errors}
             control={control}

@@ -76,11 +76,10 @@
     },
     "signIn": {
       "headline": "Sign In",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "description": "Please fill in the email address you used for registration.",
       "fields": {
         "email": {
-          "label": "Email address",
-          "placeholder": "Text here"
+          "label": "Email address"
         }
       },
       "alerts": {
@@ -90,21 +89,16 @@
     },
     "signUp": {
       "headline": "Sign Up",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
       "fields": {
         "username": {
-          "label": "Username",
-          "placeholder": "Text here"
+          "label": "Username"
         },
         "hotAddress": {
           "label": "Hot address",
-          "placeholder": "Text here",
           "tooltip": "At least one hot address is required for on-chain activity data to be tracked and displayed on the portal"
         },
         "description": {
-          "label": "Description",
-          "placeholder": "Enter a description",
-          "helpfulText": "This is a hint text to help user."
+          "label": "Description"
         },
         "upload": "Upload profile photo"
       },
@@ -123,11 +117,11 @@
       "description": "Are you sure you want to Sign out?"
     },
     "deleteRole": {
-      "headline": "Delete role",
+      "headline": "Change status",
       "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
       "fields": {
         "delete": {
-          "label": "Write DELETE",
+          "label": "Please confirm the action by typing expected below",
           "placeholder": "Write DELETE"
         }
       },
@@ -159,7 +153,7 @@
     },
     "uploadConstitution": {
       "headline": "Upload new version of Constitution",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "description": "Please upload the new version of the constitution.",
       "upload": "Upload Constitution",
       "alerts": {
         "success": "Upload success",
@@ -175,15 +169,13 @@
     },
     "addReasoning": {
       "headline": "Add reasoning",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "description": "Please provide reasoning for your vote on specific governance action.",
       "fields": {
         "title": {
-          "label": "Title",
-          "placeholder": "Text here"
+          "label": "Title"
         },
         "reasoning": {
-          "label": "Reasoning",
-          "placeholder": "Enter reasoning"
+          "label": "Reasoning"
         }
       },
       "alerts": {
@@ -203,7 +195,7 @@
     },
     "previewReasoning": {
       "headline": "Reasoning",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "description": "Please update reasoning for your vote on specific governance action.",
       "governanceActionCategory": "Governance Action Category",
       "governanceActionId": "Governance Action ID",
       "voted": "Voted",
