@@ -146,7 +146,7 @@ export const NavDrawer = ({
           margin: 0,
         },
         "& ol.toc-level-1": {
-          paddingInlineStart: 0,
+          paddingInlineStart: "20px",
 
           "& li": {
             listStyle: "outside !important",
