@@ -30,6 +30,7 @@ import { RoleEnum } from 'src/users/enums/role.enum';
 import { CreateCCMemberRequest } from 'src/users/api/request/create-cc-member.request';
 import { UserMapper } from 'src/users/mapper/userMapper.mapper';
 import { CreateAdminRequest } from 'src/users/api/request/create-admin.request';
+import { ApiConditionalExcludeEndpoint } from 'src/common/decorators/api-conditional-exclude-endpoint.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -40,6 +41,7 @@ export class AuthController {
     private readonly registerStrategy: MagicRegisterStrategy,
   ) {}
 
+  @ApiConditionalExcludeEndpoint()
   @ApiOperation({ summary: 'Register a user. Sending email with a magic link' })
   @ApiBody({ type: CreateCCMemberRequest })
   @ApiResponse({
@@ -67,6 +69,7 @@ export class AuthController {
     return this.registerStrategy.send(req, res);
   }
 
+  @ApiConditionalExcludeEndpoint()
   @ApiOperation({
     summary: 'Register an admin. Sending email with a magic link',
   })
@@ -94,6 +97,7 @@ export class AuthController {
     return this.registerStrategy.send(req, res);
   }
 
+  @ApiConditionalExcludeEndpoint()
   @ApiOperation({
     summary: 'Callback register a user. Click on the magic link',
   })
@@ -119,6 +123,7 @@ export class AuthController {
     return await this.authFacade.generateTokens(user);
   }
 
+  @ApiConditionalExcludeEndpoint()
   @ApiOperation({ summary: 'Login a user. Sending email with a magic link' })
   @ApiBody({ type: LoginRequest })
   @ApiResponse({
@@ -135,6 +140,7 @@ export class AuthController {
     return this.loginStrategy.send(req, res);
   }
 
+  @ApiConditionalExcludeEndpoint()
   @ApiOperation({ summary: 'Callback login a user. Click on the magic link' })
   @ApiParam({
     name: 'token',
@@ -157,6 +163,7 @@ export class AuthController {
     return await this.authFacade.login(user);
   }
 
+  @ApiConditionalExcludeEndpoint()
   @ApiOperation({ summary: 'Refresh access token with refresh token' })
   @ApiBody({ type: RefreshTokenRequest })
   @ApiResponse({

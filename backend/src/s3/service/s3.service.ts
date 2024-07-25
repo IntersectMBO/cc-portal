@@ -1,10 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-/*import {} from //S3Client,
-PutObjectCommand,
-PutObjectCommandInput,
-PutObjectCommandOutput,
-'@aws-sdk/client-s3';
-*/
 import { ConfigService } from '@nestjs/config';
 import * as Minio from 'minio';
 import { UploadContext } from '../enums/upload-context';
@@ -57,32 +51,4 @@ export class S3Service {
     const fileName = decodeURIComponent(fileNameWithQueryParams.split('?')[0]);
     return fileName;
   }
-  //if we migrate to aws
-  /*
-  async uploadFile(file: Express.Multer.File, key: string): Promise<string> {
-    const bucket = this.configService.get<string>('aws_bucket');
-    const bufferArray = Object.values(file.buffer);
-    const buffer = Buffer.from(bufferArray);
-    const input: PutObjectCommandInput = {
-      Body: buffer,
-      Bucket: bucket,
-      Key: key,
-      ContentType: file.mimetype,
-      ACL: 'public-read',
-    };
-
-    try {
-      const response: PutObjectCommandOutput = await this.s3.send(
-        new PutObjectCommand(input),
-      );
-      if (response.$metadata.httpStatusCode === 200) {
-        return `https://${bucket}.s3.${this.region}.amazonaws.com/${key}`;
-      }
-      throw new Error('Image not saved in s3!');
-    } catch (err) {
-      this.logger.error('Cannot save file to s3,', err);
-      throw err;
-    }
-  }
-  */
 }
