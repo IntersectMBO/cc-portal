@@ -90,19 +90,13 @@ export const SignUpModal = () => {
       <ModalHeader>{state.title}</ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
-          <Typography variant="body1" fontWeight={500}>
-            {state.description}
-          </Typography>
-
           <ControlledField.Input
-            placeholder={t("signUp.fields.username.placeholder")}
             label={t("signUp.fields.username.label")}
             errors={errors}
             control={control}
             {...register("name", { required: "Username is required" })}
           />
           <ControlledField.Input
-            placeholder={t("signUp.fields.hotAddress.placeholder")}
             label={
               <Tooltip
                 heading={t("signUp.fields.hotAddress.label")}
@@ -132,9 +126,7 @@ export const SignUpModal = () => {
             })}
           />
           <ControlledField.TextArea
-            placeholder={t("signUp.fields.description.placeholder")}
             label={t("signUp.fields.description.label")}
-            helpfulText={t("signUp.fields.description.helpfulText")}
             errors={errors}
             control={control}
             {...register("description")}

@@ -70,7 +70,6 @@ export const AddReasoningModal = () => {
             {t("addReasoning.description")}
           </Typography>
           <ControlledField.Input
-            placeholder={t("addReasoning.fields.title.placeholder")}
             label={t("addReasoning.fields.title.label")}
             errors={errors}
             control={control}
@@ -78,7 +77,6 @@ export const AddReasoningModal = () => {
           />
 
           <ControlledField.TextArea
-            placeholder={t("addReasoning.fields.reasoning.placeholder")}
             label={t("addReasoning.fields.reasoning.label")}
             errors={errors}
             control={control}
