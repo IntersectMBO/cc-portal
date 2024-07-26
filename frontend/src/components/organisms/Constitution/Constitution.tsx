@@ -29,7 +29,9 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const { openModal } = useModal();
   const t = useTranslations("Constitution");
 
-  const onCompare = (target: Omit<ConstitutionMetadata, "version">) => {
+  const onCompare = (
+    target: Pick<ConstitutionMetadata, "title" | "created_date" | "cid">
+  ) => {
     openModal({
       type: "compareConstitutionModal",
       state: {
@@ -90,7 +92,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
           {tab === "revisions" ? (
             <Grid item justifyContent="flex-end" px={{ xxs: 1, md: 0 }}>
               {metadata ? (
-                metadata.map(({ title, created_date, cid }) => {
+                metadata.map(({ title, created_date, cid, blake2b, url }) => {
                   return (
                     <NavCard
                       onClick={() => {
@@ -98,7 +100,8 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                           ? null
                           : onCompare({ title, created_date, cid });
                       }}
-                      hash={cid}
+                      url={url}
+                      hash={blake2b}
                       title={title}
                       description={created_date}
                       buttonLabel={

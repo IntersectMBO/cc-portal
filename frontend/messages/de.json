@@ -15,7 +15,8 @@
       "compare": "Compare",
       "latestRevisions": "Latest Revisions",
       "tableOfContents": "Content",
-      "latest": "Latest"
+      "latest": "Latest",
+      "ipfsLink": "IPFS link"
     }
   },
   "Members": {

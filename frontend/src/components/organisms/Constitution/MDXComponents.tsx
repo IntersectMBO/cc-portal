@@ -1,9 +1,12 @@
 import { Card } from "@/components/molecules";
 import { customPalette, ICONS } from "@/constants";
 import { getShortenedGovActionId } from "@utils";
-import { Button, CopyButton, Typography } from "@atoms";
-import { Box, Collapse, Grid } from "@mui/material";
+import { Button, CopyButton, Tooltip, Typography } from "@atoms";
+import { Box, Collapse, Grid, IconButton } from "@mui/material";
 import React, { ReactNode } from "react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 const Anchor = ({ id, offset = "-20vh " }) => {
   return (
@@ -203,52 +206,91 @@ export const NavDrawer = ({
   );
 };
 
-export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
-  <Box mb={2}>
-    <Card sx={{ px: 3, py: 2 }}>
-      <Grid
-        container
-        justifyContent="space-between"
-        alignItems={{ lg: "center" }}
-      >
-        <Grid item xxs={6} lg={"auto"}>
-          <Typography variant="body1">{title}</Typography>
-          <Typography variant="caption">{description}</Typography>
+export const NavCard = ({
+  onClick,
+  title,
+  description,
+  buttonLabel,
+  hash,
+  url,
+}) => {
+  const t = useTranslations("Constitution");
+  return (
+    <Box mb={2}>
+      <Card sx={{ px: 3, py: 2 }}>
+        <Grid
+          container
+          justifyContent="space-between"
+          alignItems={{ lg: "center" }}
+        >
+          <Grid item xxs={6} lg={"auto"}>
+            <Typography variant="body1">{title}</Typography>
+            <Typography variant="caption">{description}</Typography>
+          </Grid>
+          <Grid item xxs={6} lg="auto">
+            {hash && (
+              <Box
+                display="flex"
+                alignItems={{ xxs: "center" }}
+                justifyContent={{ xxs: "flex-end" }}
+              >
+                <Box
+                  px={2.25}
+                  py={0.75}
+                  border={1}
+                  borderColor={customPalette.lightBlue}
+                  borderRadius={100}
+                  display="flex"
+                  flexWrap="nowrap"
+                  gap={1}
+                >
+                  <CopyButton size={14} text={hash} />
+                  <Typography variant="caption">
+                    {getShortenedGovActionId(hash)}
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+          </Grid>
+          <Grid item xxs={12} lg="auto" mt={{ xxs: 2, md: 0 }}>
+            <Grid container gap={2} alignItems="center">
+              {url && (
+                <Tooltip
+                  heading={t("drawer.ipfsLink")}
+                  paragraphOne={url}
+                  placement="bottom-end"
+                  arrow
+                >
+                  <Link
+                    style={{ height: "18px" }}
+                    href={url}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <Image
+                      alt="Ipfs link"
+                      width={18}
+                      height={18}
+                      src={ICONS.externalLink}
+                    />
+                  </Link>
+                </Tooltip>
+              )}
+
+              <Grid item>
+                <Button
+                  sx={{ width: "100%" }}
+                  size="medium"
+                  onClick={onClick}
+                  variant="outlined"
+                >
+                  {buttonLabel}
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item xxs={6} lg="auto">
-          <Box
-            display="flex"
-            alignItems={{ xxs: "center" }}
-            justifyContent={{ xxs: "flex-end" }}
-          >
-            <Box
-              px={2.25}
-              py={0.75}
-              border={1}
-              borderColor={customPalette.lightBlue}
-              borderRadius={100}
-              display="flex"
-              flexWrap="nowrap"
-              gap={1}
-            >
-              <CopyButton size={14} text={hash} />
-              <Typography variant="caption">
-                {getShortenedGovActionId(hash)}
-              </Typography>
-            </Box>
-          </Box>
-        </Grid>
-        <Grid item xxs={12} lg="auto" mt={{ xxs: 2, md: 0 }}>
-          <Button
-            sx={{ width: "100%" }}
-            size="medium"
-            onClick={onClick}
-            variant="outlined"
-          >
-            {buttonLabel}
-          </Button>
-        </Grid>
-      </Grid>
-    </Card>
-  </Box>
-);
+      </Card>
+    </Box>
+  );
+};
