@@ -21,9 +21,6 @@ RUN npm install
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Install the specific module that requires building from source
-RUN npm install --build-from-source node-datachannel
-
 # Expose the ports that the application will run on
 EXPOSE 3001
 EXPOSE 4001
