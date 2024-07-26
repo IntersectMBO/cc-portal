@@ -6,6 +6,9 @@ RUN apt-get update && \
     apt-get install -y build-essential cmake && \
     rm -rf /var/lib/apt/lists/*
 
+# Upgrade npm to the latest version
+RUN npm install -g npm@latest
+
 # Set the working directory inside the container
 WORKDIR /app
 
