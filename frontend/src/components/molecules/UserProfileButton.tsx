@@ -32,7 +32,6 @@ export default function UserProfileButton({
       state: {
         showCloseButton: true,
         title: t("Modals.editProfile.headline"),
-        description: t("Modals.editProfile.description"),
       },
     });
     handleClose();
