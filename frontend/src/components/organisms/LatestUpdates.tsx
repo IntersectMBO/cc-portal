@@ -18,9 +18,11 @@ import { useModal } from "@/context";
 export const LatestUpdates = ({
   latestUpdates,
   paginationMeta,
+  error,
 }: {
   latestUpdates: VotesTableI[];
   paginationMeta: PaginationMeta;
+  error?: string;
 }) => {
   const t = useTranslations("LatestUpdates");
   const { updateQueryParams } = useManageQueryParams();
@@ -78,12 +80,13 @@ export const LatestUpdates = ({
   }, [searchText, chosenFilters, chosenSorting, updateQueryParams]);
 
   return (
-    <Box px={{ xs: 3, md: 5 }} py={{ xs: 3, md: 6 }}>
+    <Box px={{ xxs: 3, md: 5 }} py={{ xxs: 3, md: 6 }}>
       <Box
         paddingBottom={4}
         display="flex"
         justifyContent="space-between"
-        alignItems="center"
+        flexDirection={{ xxs: "column", md: "row" }}
+        alignItems={{ xxs: "left", md: "center" }}
       >
         <Typography variant="headline4">{t("title")}</Typography>
         <Box display="flex" sx={{ position: "relative" }}>
@@ -106,7 +109,7 @@ export const LatestUpdates = ({
           />
         </Box>
       </Box>
-      {isEmpty(data) ? (
+      {isEmpty(data) || error ? (
         <NotFound
           height="55vh"
           title="latestUpdates.title"

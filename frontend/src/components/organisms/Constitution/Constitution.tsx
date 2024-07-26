@@ -11,7 +11,6 @@ import {
   Heading3,
   ListItem,
   NavDrawer,
-  NavTitle,
   Paragraph,
   NavCard,
 } from "./MDXComponents";
@@ -19,8 +18,10 @@ import { ConstitutionMetadata, ConstitutionProps } from "../types";
 import { useTranslations } from "next-intl";
 import { useModal } from "@/context";
 import { Footer } from "../Footer";
-import { customPalette } from "@consts";
+import { CONSTITUTION_SIDEBAR_TABS, customPalette } from "@consts";
 import { ContentWrapper } from "@/components/atoms";
+import { NotFound } from "../NotFound";
+import { PageTitleTabs } from "../PageTitleTabs";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const [isOpen, setIsOpen] = useState(true);
@@ -42,7 +43,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       <NavDrawer
         isOpen={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        top={{ xs: 75, md: 90 }}
+        top={{ xxs: 75, md: 90 }}
         left={0}
       >
         <Grid
@@ -53,23 +54,20 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
           sx={{ marginBottom: 2 }}
           flexWrap="nowrap"
         >
-          <Grid item xs={12} md="auto">
-            <NavTitle
-              onClick={() => setTab("revisions")}
-              label={t("drawer.latestRevisions")}
-              isActive={tab === "revisions"}
-            />
-            <NavTitle
-              onClick={() => setTab("")}
-              label={t("drawer.tableOfContents")}
-              isActive={tab === ""}
+          <Grid item xxs={12} md="auto">
+            <PageTitleTabs
+              onChange={(tab) => setTab(tab.value)}
+              tabs={CONSTITUTION_SIDEBAR_TABS}
+              selectedValue={tab}
+              sx={{ fontSize: { xxs: 16 } }}
             />
           </Grid>
           <Grid
             item
-            xs={6}
+            xxs={6}
             justifySelf="flex-end"
-            sx={{ display: { xs: "none", md: "flex" } }}
+            pl={1}
+            sx={{ display: { xxs: "none", md: "flex" } }}
           >
             <Divider
               color={customPalette.lightBlue}
@@ -86,31 +84,40 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
         <Grid
           container
           direction="column"
-          width={{ xs: "100%", md: "400p", lg: "450px" }}
-          px={{ xs: 1, md: 2 }}
+          width={{ xxs: "100%", md: "400p", lg: "450px" }}
+          px={{ xxs: 1, md: 2 }}
         >
           {tab === "revisions" ? (
-            <Grid item justifyContent="flex-end" px={{ xs: 1, md: 0 }}>
-              {metadata.map(({ title, created_date, cid }) => {
-                return (
-                  <NavCard
-                    onClick={() => {
-                      metadata[0].cid === cid
-                        ? null
-                        : onCompare({ title, created_date, cid });
-                    }}
-                    hash={cid}
-                    title={title}
-                    description={created_date}
-                    buttonLabel={
-                      metadata[0].cid === cid
-                        ? t("drawer.latest")
-                        : t("drawer.compare")
-                    }
-                    key={cid}
-                  />
-                );
-              })}
+            <Grid item justifyContent="flex-end" px={{ xxs: 1, md: 0 }}>
+              {metadata ? (
+                metadata.map(({ title, created_date, cid }) => {
+                  return (
+                    <NavCard
+                      onClick={() => {
+                        metadata[0].cid === cid
+                          ? null
+                          : onCompare({ title, created_date, cid });
+                      }}
+                      hash={cid}
+                      title={title}
+                      description={created_date}
+                      buttonLabel={
+                        metadata[0].cid === cid
+                          ? t("drawer.latest")
+                          : t("drawer.compare")
+                      }
+                      key={cid}
+                    />
+                  );
+                })
+              ) : (
+                <NotFound
+                  height="auto"
+                  title="constitutionMetadata.title"
+                  description="constitutionMetadata.description"
+                  sx={{ width: "100%" }}
+                />
+              )}
             </Grid>
           ) : (
             <Grid item justifyContent="flex-end">
@@ -135,10 +142,10 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       position="relative"
       justifyContent="flex-end"
     >
-      <Grid mt={3} item xs={10} md={isOpen ? 8 : 11}>
+      <Grid mt={3} item xxs={10} md={isOpen ? 8 : 11}>
         <ContentWrapper>
-          <Box px={{ xs: 2, md: 5 }}>
-            <Card sx={{ px: { xs: 2, md: 7 }, py: { xs: 1, md: 6 } }}>
+          <Box px={{ xxs: 2, md: 5 }}>
+            <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
               <MDXRemote {...constitution} components={MDXComponents} />
             </Card>
           </Box>

@@ -59,18 +59,18 @@ export const VotesTableRow = ({
       <Card variant="default">
         <Grid
           container
-          flexDirection={{ xs: "column", xl: "row" }}
+          flexDirection={{ xxs: "column", xl: "row" }}
           justifyContent="space-between"
           flexWrap="nowrap"
-          gap={{ xs: 0, xl: 3 }}
+          gap={{ xxs: 0, xl: 3 }}
         >
-          <Grid item xs={12} xl={11}>
+          <Grid item xxs={12} xl={11}>
             <Grid
               container
-              flexDirection={{ xs: "column", lg: "row" }}
+              flexDirection={{ xxs: "column", lg: "row" }}
               flexWrap={{ xxs: "wrap", lg: "nowrap" }}
             >
-              <Grid item xs="auto" lg={3} xl={2} mb={{ xxs: 2, lg: 0 }}>
+              <Grid item xxs="auto" lg={3} xl={2} mb={{ xxs: 2, lg: 0 }}>
                 <Grid container flexWrap="nowrap">
                   <Grid item>
                     <UserAvatar src={user_photo_url} />
@@ -87,7 +87,7 @@ export const VotesTableRow = ({
               <TableDivider />
               <Grid
                 item
-                xs="auto"
+                xxs="auto"
                 lg={3}
                 px={{ xxs: 0, lg: 1, xl: 3 }}
                 py={{ xxs: 1.5, lg: 0 }}
@@ -122,7 +122,7 @@ export const VotesTableRow = ({
               <TableDivider />
               <Grid
                 item
-                xs="auto"
+                xxs="auto"
                 lg={2}
                 px={{ xxs: 0, lg: 1, xl: 3 }}
                 py={{ xxs: 1.5, lg: 0 }}
@@ -173,7 +173,7 @@ export const VotesTableRow = ({
                   variant="caption"
                   fontWeight={500}
                 >
-                  {t("reasoning")}
+                  {t("rationale")}
                 </Typography>
                 <Typography variant="caption">
                   {reasoning_comment
@@ -185,9 +185,9 @@ export const VotesTableRow = ({
           </Grid>
           <Grid
             item
-            xs={12}
+            xxs={12}
             xl={1}
-            textAlign={{ xs: "right", xl: "center" }}
+            textAlign={{ xxs: "right", xl: "center" }}
             mt={{ xxs: 2, xl: 0 }}
           >
             <Button

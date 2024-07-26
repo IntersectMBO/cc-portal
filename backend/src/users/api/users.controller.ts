@@ -39,6 +39,8 @@ import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.confi
 import { PermissionEnum } from '../enums/permission.enum';
 import { PermissionGuard } from 'src/auth/guard/permission.guard';
 import { ToggleStatusRequest } from './request/toggle-status.request';
+import { ApiConditionalExcludeEndpoint } from 'src/common/decorators/api-conditional-exclude-endpoint.decorator';
+
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -56,6 +58,7 @@ export class UsersController {
     return await this.usersFacade.findOne(id);
   }
 
+  @ApiConditionalExcludeEndpoint()
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a user' })
   @ApiResponse({
@@ -117,6 +120,7 @@ export class UsersController {
    Search endpoint for admins and super admin
    Returns all registered users except super admin
    **/
+  @ApiConditionalExcludeEndpoint()
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Search users as admin' })
   @ApiPaginationQuery(USER_PAGINATION_CONFIG)
@@ -136,6 +140,7 @@ export class UsersController {
     return await this.usersFacade.searchUsers(query, true);
   }
 
+  @ApiConditionalExcludeEndpoint()
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a users photo' })
   @ApiBody({
@@ -204,6 +209,7 @@ export class UsersController {
     return await this.usersFacade.updateProfilePhoto(file, id);
   }
 
+  @ApiConditionalExcludeEndpoint()
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Delete photo of user' })
   @ApiResponse({ status: 200, description: 'Photo successfully removed' })
@@ -221,6 +227,7 @@ export class UsersController {
     return user;
   }
 
+  @ApiConditionalExcludeEndpoint()
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Activate / Deactivate User Status' })
   @ApiResponse({

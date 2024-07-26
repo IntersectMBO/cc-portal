@@ -17,15 +17,16 @@ import { HotAddress } from '../entities/hotaddress.entity';
 import { VoteMapper } from '../mapper/vote.mapper';
 import { Vote } from '../entities/vote.entity';
 import { VoteRequest } from '../dto/vote.request';
-import { GovActionProposal } from '../../governance-action-proposal/entities/gov-action-proposal.entity';
 import { PageOptionsDto } from '../../util/pagination/dto/page-options.dto';
 import { ConfigService } from '@nestjs/config';
-import { GovActionProposalDto } from '../../governance-action-proposal/dto/gov-action-proposal.dto';
-import { GovActionProposalService } from '../../governance-action-proposal/services/gov-action-proposal.service';
 import { CommonService } from 'src/common/common-service';
+import { GovActionProposalDto } from '../dto/gov-action-proposal.dto';
+import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 
 @Injectable()
 export class VoteService extends CommonService {
+  // private cronInterval: string;
+
   constructor(
     @InjectDataSource(CONNECTION_NAME_DB_SYNC)
     dataSource: DataSource,
@@ -38,11 +39,16 @@ export class VoteService extends CommonService {
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
     private readonly configService: ConfigService,
-    private readonly govActionProposalService: GovActionProposalService,
   ) {
     super(dataSource);
+    // this.cronInterval =
+    //   this.configService.get<string>('VOTES_JOB_FREQUENCY') || '0 * * * * *';
     this.logger = new Logger(VoteService.name);
   }
+
+  // getCronExpression(): string {
+  //   return this.cronInterval;
+  // }
 
   async storeVoteData(voteRequests: VoteRequest[]): Promise<void> {
     const votes = await this.prepareVotes(voteRequests);

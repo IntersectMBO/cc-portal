@@ -1,7 +1,12 @@
 "use client";
 import React from "react";
 
-import { Typography as MUITypography, Grid, SxProps } from "@mui/material";
+import {
+  Typography as MUITypography,
+  Grid,
+  SxProps,
+  Hidden,
+} from "@mui/material";
 import { Button, Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 import { useAppContext, useModal } from "@context";
@@ -26,14 +31,22 @@ export const Footer = ({
       px={{ xxs: 2, sm: 6, md: 8, xl: 10 }}
       py="20px"
       sx={sx}
+      height={{ xxs: "auto", md: "10vh" }}
     >
+      <Hidden mdDown>
+        <Grid item>
+          <Typography fontWeight={400} variant="caption">
+            {t("copyright")}
+          </Typography>
+        </Grid>
+      </Hidden>
       <Grid item>
-        <Typography fontWeight={400} variant="caption">
-          {t("copyright")}
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Grid container gap={2}>
+        <Grid
+          container
+          flexDirection={{ xxs: "column", md: "row" }}
+          gap={2}
+          alignItems={{ xxs: "flex-start", md: "center" }}
+        >
           <Typography fontWeight={400} variant="caption">
             {t("privacyPolicy")}
           </Typography>
@@ -46,6 +59,8 @@ export const Footer = ({
               {t("AreYouCCMember")}
               <MUITypography
                 component="span"
+                fontSize="12px"
+                lineHeight="16px"
                 sx={{ cursor: "pointer", ml: { xxs: 0, md: 1 } }}
                 fontWeight={500}
                 variant="caption"
@@ -63,13 +78,26 @@ export const Footer = ({
       </Grid>
 
       <Grid item>
-        <Grid container gap={2}>
+        <Grid
+          container
+          gap={{ xxs: 0, md: 2 }}
+          justifyContent={{ xxs: "center", md: "flex-start" }}
+          flexDirection={{ xxs: "column", md: "row" }}
+        >
           <Button startIcon={<img src={ICONS.help} />} variant="text">
             {t("help")}
           </Button>
           <Button variant="outlined">{t("feedback")}</Button>
         </Grid>
       </Grid>
+
+      <Hidden mdUp>
+        <Grid item xxs={12} textAlign="center" mt={2}>
+          <Typography fontWeight={400} variant="caption">
+            {t("copyright")}
+          </Typography>
+        </Grid>
+      </Hidden>
     </Grid>
   );
 };

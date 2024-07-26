@@ -4,9 +4,9 @@ import { Queue } from 'bullmq';
 import {
   JOB_NAME_VOTE_SYNC,
   QUEUE_NAME_DB_SYNC_VOTES,
-} from '../common/constants/bullmq.constants';
+} from '../../../common/constants/bullmq.constants';
 import { randomUUID } from 'crypto';
-import { VoteRequest } from './dto/vote.request';
+import { VoteRequest } from '../../dto/vote.request';
 
 @Injectable()
 export class VoteProducer {

@@ -59,15 +59,20 @@ export async function decodeUserToken(): Promise<DecodedToken | undefined> {
   return;
 }
 
-export async function login(email: FormDataEntryValue): Promise<LoginResponse> {
+export async function login(
+  email: FormDataEntryValue
+): Promise<LoginResponse | ResponseErrorI> {
   try {
     const res: LoginResponse = await axiosInstance.post("/api/auth/login", {
       destination: email,
     });
-    console.log("LOGIN SUCCESS");
     return res;
   } catch (error) {
-    throw error;
+    const t = await getTranslations();
+    return {
+      error: t("Modals.signIn.alerts.error"),
+      statusCode: error.res?.statusCode || null,
+    };
   }
 }
 
@@ -81,11 +86,9 @@ export async function loginAuthCallback(token: string) {
     return res;
   } catch (error) {
     const t = await getTranslations();
-    const customErrorMessage =
-      error.res?.statusCode === 401 && t(`General.errors.sessionExpired`);
     return {
-      error: customErrorMessage || t("General.errors.somethingWentWrong"),
-      statusCode: error.res.statusCode || null,
+      error: t("General.errors.somethingWentWrong"),
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -100,11 +103,9 @@ export async function registerAuthCallback(token: string) {
     return res;
   } catch (error) {
     const t = await getTranslations();
-    const customErrorMessage =
-      error.res?.statusCode === 401 && t(`General.errors.sessionExpired`);
     return {
-      error: customErrorMessage || t("General.errors.somethingWentWrong"),
-      statusCode: error.res.statusCode || null,
+      error: t("General.errors.somethingWentWrong"),
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -126,12 +127,20 @@ export async function refreshToken(refresh_token: string) {
   }
 }
 
-export async function getUser(id: string): Promise<FetchUserData> {
+export async function getUser(
+  id: string
+): Promise<FetchUserData | ResponseErrorI> {
   try {
     const res: FetchUserData = await axiosInstance.get(`/api/users/${id}`);
     return res;
   } catch (error) {
-    console.log("error fetching user");
+    const t = await getTranslations();
+    const customErrorMessage =
+      error.res?.statusCode === 401 && t(`General.errors.sessionExpired`);
+    return {
+      error: customErrorMessage || t(`General.errors.somethingWentWrong`),
+      statusCode: error.res?.statusCode || null,
+    };
   }
 }
 
@@ -163,7 +172,7 @@ export async function toggleUserStatus(
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("Modals.deleteRole.alerts.error"),
-      statusCode: error.res.statusCode || null,
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -176,7 +185,7 @@ export async function getUsersAdmin({
   search?: string;
   page?: number;
   limit?: number;
-}): Promise<FetchUsersAdminI> {
+}): Promise<FetchUsersAdminI | ResponseErrorI> {
   const token = getAccessToken();
 
   try {
@@ -201,7 +210,7 @@ export async function getUsersAdmin({
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("General.errors.somethingWentWrong"),
-      statusCode: error.res.statusCode || null,
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -217,7 +226,7 @@ export async function getMembers({
   page?: number;
   limit?: number;
   searchParams?: any;
-}): Promise<{ data: FetchUserData[]; meta: PaginationMeta }> {
+}): Promise<{ data: FetchUserData[]; meta: PaginationMeta } | ResponseErrorI> {
   try {
     const res: { data: FetchUserData[]; meta: PaginationMeta } =
       await axiosInstance.get(
@@ -227,7 +236,11 @@ export async function getMembers({
       );
     return res;
   } catch (error) {
-    console.log("error get members", error);
+    const t = await getTranslations();
+    return {
+      error: t("General.errors.somethingWentWrong"),
+      statusCode: error.res?.statusCode || null,
+    };
   }
 }
 
@@ -245,19 +258,26 @@ export async function getLatestUpdates({
   govActionType?: string;
   vote?: string;
   sortBy?: string;
-}): Promise<{ data: VotesTableI[]; meta: PaginationMeta }> {
+}): Promise<{ data: VotesTableI[]; meta: PaginationMeta } | ResponseErrorI> {
   try {
     const res: { data: VotesTableI[]; meta: PaginationMeta } =
       await axiosInstance.get(
         `/api/governance/votes/search?${search ? `search=${search}` : ""}&${
-          govActionType ? `filter.govActionType=$in:${govActionType}` : ""
+          govActionType
+            ? `filter.govActionProposal.govActionType=$in:${govActionType}`
+            : ""
         }&${vote ? `filter.vote=$in:${vote}` : ""}&${
           sortBy ? `sortBy=${sortBy}` : ""
         }&${page ? `page=${page}` : ""}&limit=${limit}`
       );
+
     return res;
   } catch (error) {
-    console.log("error get latest updates", error);
+    const t = await getTranslations();
+    return {
+      error: t("General.errors.somethingWentWrong"),
+      statusCode: error.res?.statusCode || null,
+    };
   }
 }
 
@@ -277,34 +297,44 @@ export async function getUserVotes({
   vote?: string;
   sortBy?: string;
   userId?: string;
-}): Promise<{ data: VotesTableI[]; meta: PaginationMeta }> {
+}): Promise<{ data: VotesTableI[]; meta: PaginationMeta } | ResponseErrorI> {
   try {
     const res: { data: VotesTableI[]; meta: PaginationMeta } =
       await axiosInstance.get(
         `/api/governance/votes/search?filter.userId=$eq:${userId}&${
           search ? `search=${search}` : ""
-        }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
-          vote ? `filter.vote=$in:${vote}` : ""
-        }&${sortBy ? `sortBy=${sortBy}` : ""}&${
-          page ? `page=${page}` : ""
-        }&limit=${limit}`
+        }&${
+          govActionType
+            ? `filter.govActionProposal.govActionType=$in:${govActionType}`
+            : ""
+        }&${vote ? `filter.vote=$in:${vote}` : ""}&${
+          sortBy ? `sortBy=${sortBy}` : ""
+        }&${page ? `page=${page}` : ""}&limit=${limit}`
       );
     return res;
   } catch (error) {
-    console.log("error get latest updates", error);
+    const t = await getTranslations();
+    return {
+      error: t("General.errors.somethingWentWrong"),
+      statusCode: error.res?.statusCode || null,
+    };
   }
 }
 
 export async function getGovernanceMetadata(
   id: string
-): Promise<GovActionMetadata> {
+): Promise<GovActionMetadata | ResponseErrorI> {
   try {
     const res: GovActionMetadata = await axiosInstance.get(
       `/api/governance/proposals/${id}`
     );
     return res;
   } catch (error) {
-    console.log("error get latest updates", error);
+    const t = await getTranslations();
+    return {
+      error: t("Modals.govActionModal.alerts.error"),
+      statusCode: error.res?.statusCode || null,
+    };
   }
 }
 
@@ -352,7 +382,7 @@ export async function getGovernanceActions({
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("General.errors.somethingWentWrong"),
-      statusCode: error.res.statusCode || null,
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -382,14 +412,14 @@ export async function addOrUpdateReasoning({
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("General.errors.somethingWentWrong"),
-      statusCode: error.res.statusCode || null,
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
 
 export async function getReasoningData(
   proposalId: string
-): Promise<ReasoningResponseI> {
+): Promise<ReasoningResponseI | ResponseErrorI> {
   const token = getAccessToken();
   const user = await decodeUserToken();
   try {
@@ -401,9 +431,14 @@ export async function getReasoningData(
         },
       }
     );
+
     return response;
   } catch (error) {
-    console.log("error get reasoning data", error.statusCode);
+    const t = await getTranslations();
+    return {
+      error: t("Modals.previewRationale.alerts.error"),
+      statusCode: error.res?.statusCode || null,
+    };
   }
 }
 
@@ -431,7 +466,7 @@ export async function registerUser(email: string) {
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("Modals.addMember.alerts.error"),
-      statusCode: error.res.statusCode || null,
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -461,7 +496,7 @@ export async function registerAdmin(email: string, permissions: Permissions[]) {
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("Modals.addMember.alerts.error"),
-      statusCode: error.res.statusCode || null,
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -490,13 +525,13 @@ export async function editUser(
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("Modals.signUp.alerts.error"),
-      statusCode: error.res.statusCode || null,
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
 
 export async function getConstitutionMetadata(): Promise<
-  ConstitutionMetadata[]
+  ConstitutionMetadata[] | ResponseErrorI
 > {
   try {
     const response: ConstitutionMetadata[] = await axiosInstance.get(
@@ -504,20 +539,28 @@ export async function getConstitutionMetadata(): Promise<
     );
     return response;
   } catch (error) {
-    throw error;
+    const t = await getTranslations();
+    return {
+      error: t("General.errors.somethingWentWrong"),
+      statusCode: error.res?.statusCode || null,
+    };
   }
 }
 
 export async function getConstitutionByCid(
   cid: string
-): Promise<ConstitutionByCid> {
+): Promise<ConstitutionByCid | ResponseErrorI> {
   try {
-    const response: any = await axiosInstance.get(
+    const response: ConstitutionByCid = await axiosInstance.get(
       `/api/constitution/cid/${cid}`
     );
     return response;
   } catch (error) {
-    throw error;
+    const t = await getTranslations();
+    return {
+      error: t("General.errors.somethingWentWrong"),
+      statusCode: error.res?.statusCode || null,
+    };
   }
 }
 
@@ -542,7 +585,7 @@ export async function uploadConstitution(data: FormData) {
 
     return {
       error: errorMessage,
-      statusCode: error.res.statusCode || null,
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -562,6 +605,7 @@ export async function uploadUserPhoto(
         },
       }
     );
+
     return response;
   } catch (error) {
     const t = await getTranslations();
@@ -570,8 +614,9 @@ export async function uploadUserPhoto(
       error.res?.statusCode === 401 &&
       t(`General.errors.sessionExpired`);
     return {
-      error: customErrorMessage || t("Modals.signUp.alerts.error"),
-      statusCode: error.res.statusCode || null,
+      error:
+        customErrorMessage || t("Modals.signUp.alerts.errorUploadProfilePhoto"),
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
