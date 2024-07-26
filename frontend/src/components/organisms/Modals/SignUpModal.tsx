@@ -99,13 +99,13 @@ export const SignUpModal = () => {
           <ControlledField.Input
             label={
               <Tooltip
-                heading={t("signUp.fields.hotAddress.label")}
-                paragraphOne={t("signUp.fields.hotAddress.tooltip")}
+                heading={t("signUp.fields.hotCredential.label")}
+                paragraphOne={t("signUp.fields.hotCredential.tooltip")}
                 placement="bottom-end"
                 arrow
               >
                 <Box width="max-content" display="flex" alignItems="center">
-                  {t("signUp.fields.hotAddress.label")}
+                  {t("signUp.fields.hotCredential.label")}
                   <InfoOutlinedIcon
                     style={{
                       color: "#ADAEAD",

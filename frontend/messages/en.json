@@ -76,7 +76,7 @@
     },
     "signIn": {
       "headline": "Sign In",
-      "description": "Please fill in the email address you used for registration.",
+      "description": "A magic link will be sent to the email address provided. This may take a few minutes.",
       "fields": {
         "email": {
           "label": "Email address"
@@ -93,9 +93,9 @@
         "username": {
           "label": "Username"
         },
-        "hotAddress": {
-          "label": "Hot address",
-          "tooltip": "At least one hot address is required for on-chain activity data to be tracked and displayed on the portal"
+        "hotCredential": {
+          "label": "Hot Credential",
+          "tooltip": "At least one hot credential is required for on-chain activity data to be tracked and displayed on the portal"
         },
         "description": {
           "label": "Description"
@@ -109,8 +109,7 @@
       }
     },
     "editProfile": {
-      "headline": "Edit profile",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget."
+      "headline": "Edit profile"
     },
     "signOut": {
       "headline": "Sign Out",
@@ -118,16 +117,16 @@
     },
     "deleteRole": {
       "headline": "Change status",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "description": "This action will change user status to Inactive.",
       "fields": {
-        "delete": {
+        "confirm": {
           "label": "Please confirm the action by typing expected below",
-          "placeholder": "Write DELETE"
+          "placeholder": "Write CONFIRM"
         }
       },
       "alerts": {
-        "success": "User successfully deleted",
-        "error": "Error deleting user"
+        "success": "User status successfully changed",
+        "error": "Error changing user status"
       }
     },
     "addMember": {
