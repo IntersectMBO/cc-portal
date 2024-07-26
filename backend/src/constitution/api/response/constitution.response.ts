@@ -10,21 +10,6 @@ export class ConstitutionResponse {
   cid: string;
 
   @ApiProperty({
-    description: 'Blake2b hash related to a deployed Constitution',
-    example: 'd9eeada848e4ffcbbb1be73421b47a960885954548aa44b2d46b2d84fb99141c',
-  })
-  @Expose({ name: 'blake2b' })
-  blake2b: string;
-
-  @ApiProperty({
-    description: 'Ipfs URL of the document',
-    example:
-      'https://ipfs.io/ipfs/QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n',
-  })
-  @Expose({ name: 'url' })
-  url: string;
-
-  @ApiProperty({
     description: 'Version of the document',
     example: '1713153716',
   })
