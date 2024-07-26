@@ -117,16 +117,16 @@
     },
     "deleteRole": {
       "headline": "Change status",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "description": "This action will change user status to Inactive.",
       "fields": {
-        "delete": {
+        "confirm": {
           "label": "Please confirm the action by typing expected below",
-          "placeholder": "Write DELETE"
+          "placeholder": "Write CONFIRM"
         }
       },
       "alerts": {
-        "success": "User successfully deleted",
-        "error": "Error deleting user"
+        "success": "User status successfully changed",
+        "error": "Error changing user status"
       }
     },
     "addMember": {
