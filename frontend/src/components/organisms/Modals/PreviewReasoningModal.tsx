@@ -22,9 +22,9 @@ import {
   getProposalTypeLabel,
   getShortenedGovActionId,
   formatDisplayDate,
-  useScreenDimension,
   isResponseErrorI,
 } from "@utils";
+import { useScreenDimension } from "@hooks";
 import { ReasoningContentsI, ReasoningResponseI } from "@/lib/requests";
 import { useSnackbar } from "@/context/snackbar";
 

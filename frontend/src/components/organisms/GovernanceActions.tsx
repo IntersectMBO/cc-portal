@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { NotFound } from "./NotFound";
-import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
+import { countSelectedFilters, isEmpty } from "@utils";
 import { DataActionsBar } from "../molecules";
 import {
   GOVERNANCE_ACTIONS_FILTERS,
@@ -15,7 +15,7 @@ import { PageTitleTabs } from "./PageTitleTabs";
 import { GovActionTable } from "./GovActionTable";
 import { GovernanceActionTableI, PaginationMeta } from "@/lib/requests";
 import { getGovernanceActions } from "@/lib/api";
-import { usePagination } from "@/lib/utils/usePagination";
+import { usePagination, useManageQueryParams } from "@hooks";
 import { ShowMoreButton } from "../atoms";
 import { useRouter } from "next/navigation";
 
