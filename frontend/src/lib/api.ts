@@ -2,7 +2,7 @@
 
 import axiosInstance from "./axiosInstance";
 import jwt from "jsonwebtoken";
-import { getAccessToken, setAuthCookies } from "@utils";
+import { getAccessToken, setAuthCookies, isEmpty } from "@utils";
 import {
   DecodedToken,
   FetchUserData,
@@ -57,6 +57,28 @@ export async function decodeUserToken(): Promise<DecodedToken | undefined> {
     return decoded;
   }
   return;
+}
+
+/**
+ * Constructs a URL with query parameters.
+ * @param path - The base path of the API endpoint.
+ * @param queryParams - An object containing query parameters to be appended to the URL.
+ *                      Only parameters with defined and non-empty values are included.
+ * @returns The constructed URL with the query parameters appended.
+ */
+function buildApiUrl(
+  path: string,
+  queryParams: { [key: string]: string | number }
+): string {
+  const queryString = Object.keys(queryParams)
+    .filter((key) => !isEmpty(queryParams[key]))
+    .map(
+      (key) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`
+    )
+    .join("&");
+
+  return `${path}?${queryString}`;
 }
 
 export async function login(
@@ -190,17 +212,20 @@ export async function getUsersAdmin({
 
   try {
     const decodedToken = await decodeUserToken();
+    const path = buildApiUrl(
+      `/api/users/${decodedToken?.userId}/search-admin`,
+      {
+        search,
+        page,
+        limit,
+      }
+    );
     const res: { data: FetchUserData[]; meta: PaginationMeta } =
-      await axiosInstance.get(
-        `/api/users/${decodedToken?.userId}/search-admin?${
-          search ? `search=${search}` : ""
-        }&${page ? `page=${page}` : ""}&limit=${limit}`,
-        {
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
-        }
-      );
+      await axiosInstance.get(path, {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      });
     return res;
   } catch (error) {
     const t = await getTranslations();
@@ -225,15 +250,16 @@ export async function getMembers({
   sortBy?: string;
   page?: number;
   limit?: number;
-  searchParams?: any;
 }): Promise<{ data: FetchUserData[]; meta: PaginationMeta } | ResponseErrorI> {
   try {
+    const path = buildApiUrl(`/api/users/cc-member/search`, {
+      search,
+      sortBy,
+      page,
+      limit,
+    });
     const res: { data: FetchUserData[]; meta: PaginationMeta } =
-      await axiosInstance.get(
-        `/api/users/cc-member/search?${search ? `search=${search}` : ""}&${
-          sortBy ? `sortBy=${sortBy}` : ""
-        }&${page ? `page=${page}` : ""}&limit=${limit}`
-      );
+      await axiosInstance.get(path);
     return res;
   } catch (error) {
     const t = await getTranslations();
@@ -260,16 +286,17 @@ export async function getLatestUpdates({
   sortBy?: string;
 }): Promise<{ data: VotesTableI[]; meta: PaginationMeta } | ResponseErrorI> {
   try {
+    const path = buildApiUrl(`/api/governance/votes/search`, {
+      page,
+      limit,
+      search,
+      sortBy,
+      "filter.govActionProposal.govActionType":
+        govActionType && `$in:${govActionType}`,
+      "filter.vote": vote && `$in:${vote}`,
+    });
     const res: { data: VotesTableI[]; meta: PaginationMeta } =
-      await axiosInstance.get(
-        `/api/governance/votes/search?${search ? `search=${search}` : ""}&${
-          govActionType
-            ? `filter.govActionProposal.govActionType=$in:${govActionType}`
-            : ""
-        }&${vote ? `filter.vote=$in:${vote}` : ""}&${
-          sortBy ? `sortBy=${sortBy}` : ""
-        }&${page ? `page=${page}` : ""}&limit=${limit}`
-      );
+      await axiosInstance.get(path);
 
     return res;
   } catch (error) {
@@ -299,18 +326,18 @@ export async function getUserVotes({
   userId?: string;
 }): Promise<{ data: VotesTableI[]; meta: PaginationMeta } | ResponseErrorI> {
   try {
+    const path = buildApiUrl(`/api/governance/votes/search`, {
+      page,
+      limit,
+      search,
+      sortBy,
+      "filter.govActionProposal.govActionType":
+        govActionType && `$in:${govActionType}`,
+      "filter.vote": vote && `$in:${vote}`,
+      "filter.userId": `$eq:${userId}`,
+    });
     const res: { data: VotesTableI[]; meta: PaginationMeta } =
-      await axiosInstance.get(
-        `/api/governance/votes/search?filter.userId=$eq:${userId}&${
-          search ? `search=${search}` : ""
-        }&${
-          govActionType
-            ? `filter.govActionProposal.govActionType=$in:${govActionType}`
-            : ""
-        }&${vote ? `filter.vote=$in:${vote}` : ""}&${
-          sortBy ? `sortBy=${sortBy}` : ""
-        }&${page ? `page=${page}` : ""}&limit=${limit}`
-      );
+      await axiosInstance.get(path);
     return res;
   } catch (error) {
     const t = await getTranslations();
@@ -357,21 +384,23 @@ export async function getGovernanceActions({
   const user = await decodeUserToken();
 
   try {
+    const path = buildApiUrl(
+      `/api/governance/users/${user?.userId}/proposals/search`,
+      {
+        page,
+        limit,
+        search,
+        sortBy,
+        "filter.govActionType": govActionType && `$in:${govActionType}`,
+        "filter.status": status && `$in:${status}`,
+      }
+    );
     const res: { data: GovernanceActionTableI[]; meta: PaginationMeta } =
-      await axiosInstance.get(
-        `/api/governance/users/${user?.userId}/proposals/search?${
-          search ? `search=${search}` : ""
-        }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
-          status ? `filter.status=$in:${status}` : ""
-        }&${sortBy ? `sortBy=${sortBy}` : ""}&${
-          page ? `page=${page}` : ""
-        }&limit=${limit}`,
-        {
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
-        }
-      );
+      await axiosInstance.get(path, {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      });
 
     return res;
   } catch (error) {
