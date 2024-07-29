@@ -117,7 +117,7 @@
     },
     "deleteRole": {
       "headline": "Change status",
-      "description": "This action will change user status to Inactive.",
+      "description": "Are you sure you want to change the status?",
       "fields": {
         "confirm": {
           "label": "Please confirm the action by typing expected below",
