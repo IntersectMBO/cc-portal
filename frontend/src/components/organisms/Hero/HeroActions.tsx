@@ -29,13 +29,15 @@ export function HeroActions({ role }: HeroActionsProps) {
             </Button>
           </Grid>
           <Grid item>
-            <Button
-              variant="outlined"
-              size="large"
-              startIcon={<img src={IMAGES.bookOpen} />}
-            >
-              {t("hero.constitutionalCommitteePortal")}
-            </Button>
+            <Link href={PATHS.home}>
+              <Button
+                variant="outlined"
+                size="large"
+                startIcon={<img src={IMAGES.bookOpen} />}
+              >
+                {t("hero.constitutionalCommitteePortal")}
+              </Button>
+            </Link>
           </Grid>
         </>
       ) : (

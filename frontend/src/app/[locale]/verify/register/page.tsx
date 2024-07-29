@@ -20,12 +20,12 @@ export default function VerifyRegister({ searchParams }) {
   const { addErrorAlert } = useSnackbar();
   const t = useTranslations();
   const accessToken = useMemo(() => Cookies.get(cookieStore.token), []);
-  let errorAlertShown = false;
 
   useEffect(() => {
     const verifyToken = async (token: string) => {
       const response = await registerAuthCallback(token);
       if (response.error) {
+        addErrorAlert(t("General.errors.somethingWentWrong"));
         router.push(PATHS.home);
       } else {
         const session = await decodeUserToken();
@@ -38,15 +38,13 @@ export default function VerifyRegister({ searchParams }) {
             state: {
               showCloseButton: false,
               title: t("Modals.signUp.headline"),
-              description: t("Modals.signUp.description"),
             },
           });
         }
       }
     };
 
-    if (accessToken && !errorAlertShown) {
-      errorAlertShown = true;
+    if (accessToken) {
       addErrorAlert(t("General.errors.sessionExists"), 5000);
       return router.push(PATHS.logout);
     } else if (searchParams && searchParams.token) {
@@ -54,7 +52,7 @@ export default function VerifyRegister({ searchParams }) {
     } else {
       router.push(PATHS.home);
     }
-  }, [searchParams, accessToken, errorAlertShown]);
+  }, [searchParams, accessToken]);
 
   return (
     <Box height="100vh">

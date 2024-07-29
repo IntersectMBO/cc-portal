@@ -17,9 +17,11 @@ import { getMembers } from "@/lib/api";
 export function MembersCardList({
   members,
   paginationMeta,
+  error,
 }: {
   members: UserListItem[];
   paginationMeta: PaginationMeta;
+  error?: string;
 }) {
   const t = useTranslations("Members");
 
@@ -47,12 +49,13 @@ export function MembersCardList({
   }, [searchText, chosenSorting, updateQueryParams]);
 
   return (
-    <Box px={{ xs: 3, md: 5 }} py={{ xs: 3, md: 6 }}>
+    <Box px={{ xxs: 3, md: 5 }} py={{ xxs: 3, md: 6 }}>
       <Box
         paddingBottom={4}
         display="flex"
         justifyContent="space-between"
-        alignItems="center"
+        flexDirection={{ xxs: "column", md: "row" }}
+        alignItems={{ xxs: "left", md: "center" }}
       >
         <Typography variant="headline4">{t("title")}</Typography>
         <Box display="flex" sx={{ position: "relative" }}>
@@ -69,7 +72,7 @@ export function MembersCardList({
           />
         </Box>
       </Box>
-      {isEmpty(data) ? (
+      {isEmpty(data) || error ? (
         <NotFound
           height="55vh"
           title="members.title"
@@ -78,22 +81,23 @@ export function MembersCardList({
       ) : (
         <>
           <Grid container>
-            {data.map((members, index) => (
-              <Grid
-                key={index}
-                item
-                xs={12}
-                sm={6}
-                lg={4}
-                data-testid={`members-${members.id}-card`}
-                sx={{
-                  padding: 2,
-                  paddingTop: 0,
-                }}
-              >
-                <MembersCard {...members} />
-              </Grid>
-            ))}
+            {data &&
+              data.map((members, index) => (
+                <Grid
+                  key={index}
+                  item
+                  xxs={12}
+                  sm={6}
+                  lg={4}
+                  data-testid={`members-${members.id}-card`}
+                  sx={{
+                    padding: 2,
+                    paddingTop: 0,
+                  }}
+                >
+                  <MembersCard {...members} />
+                </Grid>
+              ))}
           </Grid>
           <ShowMoreButton
             isLoading={isLoading}

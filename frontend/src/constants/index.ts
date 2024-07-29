@@ -13,3 +13,4 @@ export * from "./font";
 export * from "./cookies";
 export * from "./forms";
 export * from "./governanceAction";
+export * from "./pageTitleTabs";

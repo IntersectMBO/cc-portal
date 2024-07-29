@@ -30,7 +30,7 @@
     "govAction": "Governance Action",
     "govActionCategoryShort": "GA Category",
     "voted": "Voted",
-    "reasoning": "Reasoning",
+    "rationale": "Rationale",
     "actionTitle": "Show more",
     "notAvailable": "Not Available"
   },
@@ -48,8 +48,8 @@
     "abstract": "Abstract",
     "actionTitle": "Show more",
     "notAvailable": "Not Available",
-    "addReasoning": "Add Reasoning",
-    "updateReasoning": "Update Reasoning"
+    "addRationale": "Add Rationale",
+    "updateRationale": "Update Rationale"
   },
   "Navigation": {
     "addNewMember": "Add new member",
@@ -76,11 +76,10 @@
     },
     "signIn": {
       "headline": "Sign In",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "description": "A magic link will be sent to the email address provided. This may take a few minutes.",
       "fields": {
         "email": {
-          "label": "Email address",
-          "placeholder": "Text here"
+          "label": "Email address"
         }
       },
       "alerts": {
@@ -90,49 +89,44 @@
     },
     "signUp": {
       "headline": "Sign Up",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
       "fields": {
         "username": {
-          "label": "Username",
-          "placeholder": "Text here"
+          "label": "Username"
         },
-        "hotAddress": {
-          "label": "Hot address",
-          "placeholder": "Text here",
-          "tooltip": "At least one hot address is required for on-chain activity data to be tracked and displayed on the portal"
+        "hotCredential": {
+          "label": "Hot Credential",
+          "tooltip": "At least one hot credential is required for on-chain activity data to be tracked and displayed on the portal"
         },
         "description": {
-          "label": "Description",
-          "placeholder": "Enter a description",
-          "helpfulText": "This is a hint text to help user."
+          "label": "Description"
         },
         "upload": "Upload profile photo"
       },
       "alerts": {
         "success": "Profile successfully updated",
-        "error": "Error updating profile"
+        "error": "Error updating profile",
+        "errorUploadProfilePhoto": "Error uploading photo"
       }
     },
     "editProfile": {
-      "headline": "Edit profile",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget."
+      "headline": "Edit profile"
     },
     "signOut": {
       "headline": "Sign Out",
       "description": "Are you sure you want to Sign out?"
     },
     "deleteRole": {
-      "headline": "Delete role",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "headline": "Change status",
+      "description": "Are you sure you want to change the status?",
       "fields": {
-        "delete": {
-          "label": "Write DELETE",
-          "placeholder": "Write DELETE"
+        "confirm": {
+          "label": "Please confirm the action by typing expected below",
+          "placeholder": "Write CONFIRM"
         }
       },
       "alerts": {
-        "success": "User successfully deleted",
-        "error": "Error deleting user"
+        "success": "User status successfully changed",
+        "error": "Error changing user status"
       }
     },
     "addMember": {
@@ -158,7 +152,7 @@
     },
     "uploadConstitution": {
       "headline": "Upload new version of Constitution",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "description": "Please upload the new version of the constitution.",
       "upload": "Upload Constitution",
       "alerts": {
         "success": "Upload success",
@@ -167,46 +161,46 @@
       }
     },
     "compareConstitution": {
-      "headline": "Compare revisions"
+      "headline": "Compare revisions",
+      "alerts": {
+        "error": "Error fetching revisions"
+      }
     },
-    "addReasoning": {
-      "headline": "Add reasoning",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+    "addRationale": {
+      "headline": "Add rationale",
+      "description": "Please provide rationale for your vote on specific governance action.",
       "fields": {
         "title": {
-          "label": "Title",
-          "placeholder": "Text here"
+          "label": "Title"
         },
-        "reasoning": {
-          "label": "Reasoning",
-          "placeholder": "Enter reasoning"
+        "rationale": {
+          "label": "Rationale"
         }
       },
       "alerts": {
-        "success": "New reasoning successfully added",
-        "error": "Error adding new reasoning"
+        "success": "New rationale successfully added",
+        "error": "Error adding new rationale"
       }
     },
-    "reasoningLink": {
-      "headline": "Reasoning link",
+    "rationaleLink": {
+      "headline": "Rationale link",
       "description": "Attach this link to your vote",
       "hash": "Hash",
-      "reasoningLink": "Reasoning link",
+      "rationaleLink": "Rationale link",
       "alerts": {
-        "success": "New reasoning link successfully added",
-        "error": "Error adding new reasoning link"
+        "success": "New rationale link successfully added",
+        "error": "Error adding new rationale link"
       }
     },
-    "previewReasoning": {
-      "headline": "Reasoning",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+    "previewRationale": {
+      "headline": "Rationale",
+      "description": "Please update rationale for your vote on specific governance action.",
       "governanceActionCategory": "Governance Action Category",
       "governanceActionId": "Governance Action ID",
       "voted": "Voted",
       "submissionDate": "Submission date",
       "expiryDate": "Expiry date",
       "voteSubmissionDate": "Vote submission date",
-      "addNewReasoning": "Add new reasoning",
       "tooltips": {
         "expiryDate": {
           "heading": "Expiry Date",
@@ -223,7 +217,7 @@
         }
       },
       "alerts": {
-        "errorFetchingData": "Error fetching governance action data"
+        "error": "Error fetching rationale data"
       }
     },
     "govActionModal": {
@@ -231,7 +225,10 @@
       "govActionCategory": "Governance Action Category",
       "gaStatus": "Governance Action Status",
       "submitTime": "Submit time",
-      "endTime": "End time"
+      "endTime": "End time",
+      "alerts": {
+        "error": "Error fetching governance action data"
+      }
     }
   },
   "AdminDashboard": {
@@ -239,9 +236,13 @@
     "status": "Status"
   },
   "NotFound": {
-    "members": {
+    "adminMembers": {
       "title": "No members found",
       "description": "Add new members"
+    },
+    "members": {
+      "title": "No members found",
+      "description": "There is currently no members. Please check back later for updates"
     },
     "latestUpdates": {
       "title": "No votes found",
@@ -254,6 +255,10 @@
     "constitution": {
       "title": "No Constitution available",
       "description": "There is currently no Constitution uploaded. Please check back later for updates"
+    },
+    "constitutionMetadata": {
+      "title": "No revisions available",
+      "description": "There is currently no revisions available. Please check back later for updates"
     },
     "governanceAction": {
       "title": "No governance actions available",
@@ -277,7 +282,8 @@
     "errors": {
       "sessionExpired": "Session expired",
       "somethingWentWrong": "Something went wrong. Please refresh the page or try again later",
-      "sessionExists": "Session already exists. Please try again."
+      "sessionExists": "Session already exists. Please try again.",
+      "pagination": "Error loading more data"
     }
   }
 }

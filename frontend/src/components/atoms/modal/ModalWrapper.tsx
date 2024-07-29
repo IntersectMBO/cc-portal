@@ -58,6 +58,9 @@ export const BaseWrapper = styled("div")<{
   transform: translate(-50%, -50%);
   overflow-y: ${({ scrollable }) => scrollable && "scroll"};
   overflow-x: hidden;
+  @media (max-width: ${700}px) {
+    overflow: scroll;
+  }
 
   ${({ variant }) => {
     if (variant === "modal") {

@@ -28,7 +28,7 @@ export async function getConstitution(): Promise<any> {
   } catch (error) {
     return {
       error: "Error fetching and processing MDX content:",
-      statusCode: error.res.statusCode || null,
+      statusCode: error.res?.statusCode || null,
     };
   }
 }

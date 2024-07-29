@@ -13,7 +13,7 @@ async function AdminLayout({ params: { locale }, children }) {
   }
   return (
     <>
-      {<AdminTopNav isLoggedIn={!!user} />}
+      <AdminTopNav />
       {children}
       {user ? <AdminFooter /> : <Footer showSignIn={false} />}
     </>

@@ -64,7 +64,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
       type: "previewReasoningModal",
       state: {
         govAction: govActions,
-        actionTitle: t("updateReasoning"),
+        actionTitle: t("updateRationale"),
         onActionClick: openUpdateReasoningCallback,
       },
     });
@@ -108,23 +108,23 @@ export const GovActionTableRow = ({ govActions }: Props) => {
       <Card variant="default">
         <Grid
           container
-          flexDirection={{ xs: "column", xl: "row" }}
+          flexDirection={{ xxs: "column", xl: "row" }}
           justifyContent="space-between"
           flexWrap="nowrap"
-          gap={{ xs: 0, xl: 3 }}
+          gap={{ xxs: 0, xl: 3 }}
         >
-          <Grid item xs={12} xl={10}>
+          <Grid item xxs={12} xl={10}>
             <Grid
               container
-              flexDirection={{ xs: "column", lg: "row" }}
+              flexDirection={{ xxs: "column", lg: "row" }}
               flexWrap={{ xxs: "wrap", lg: "nowrap" }}
             >
-              <Grid item xs="auto" mb={{ xxs: 2, lg: 0 }}>
+              <Grid item xxs="auto" mb={{ xxs: 2, lg: 0 }}>
                 <UserAvatar src={ICONS.govAction} />
               </Grid>
               <Grid
                 item
-                xs="auto"
+                xxs="auto"
                 lg={2}
                 px={{ xxs: 0, lg: 1, xl: 3 }}
                 py={{ xxs: 1.5, lg: 0 }}
@@ -159,7 +159,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
               <TableDivider />
               <Grid
                 item
-                xs="auto"
+                xxs="auto"
                 lg={2}
                 px={{ xxs: 0, lg: 1, xl: 3 }}
                 py={{ xxs: 1.5, lg: 0 }}
@@ -251,9 +251,9 @@ export const GovActionTableRow = ({ govActions }: Props) => {
           </Grid>
           <Grid
             item
-            xs={12}
+            xxs={12}
             xl="auto"
-            textAlign={{ xs: "right", xl: "center" }}
+            textAlign={{ xxs: "right", xl: "center" }}
             mt={{ xxs: 2, xl: 0 }}
           >
             <Button
@@ -266,7 +266,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
               }
               variant="outlined"
             >
-              {canAddReasoning ? t("addReasoning") : t("updateReasoning")}
+              {canAddReasoning ? t("addRationale") : t("updateRationale")}
             </Button>
           </Grid>
         </Grid>

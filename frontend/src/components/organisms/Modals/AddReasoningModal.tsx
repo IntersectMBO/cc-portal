@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   ModalWrapper,
   ModalHeader,
@@ -17,6 +17,7 @@ import { useSnackbar } from "@/context/snackbar";
 import { OpenAddReasoningModalState } from "../types";
 import { addOrUpdateReasoning } from "@/lib/api";
 import { ReasoningResponseI } from "@/lib/requests";
+import { isResponseErrorI } from "@utils";
 
 interface AddReasoningFormData {
   title: string;
@@ -29,6 +30,7 @@ export const AddReasoningModal = () => {
   } = useModal<OpenAddReasoningModalState>();
   const router = useRouter();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const {
     register,
@@ -38,14 +40,16 @@ export const AddReasoningModal = () => {
   } = useForm();
 
   const onSubmit = async (data: AddReasoningFormData) => {
+    setSubmitting(true);
     const response = await addOrUpdateReasoning({ proposalId: id, ...data });
-    if ("error" in response && response?.error) {
-      addErrorAlert(t("addReasoning.alerts.error"));
+    if (isResponseErrorI(response)) {
+      addErrorAlert(t("addRationale.alerts.error"));
     } else {
       router.refresh();
-      addSuccessAlert(t("addReasoning.alerts.success"));
+      addSuccessAlert(t("addRationale.alerts.success"));
       callback(response as ReasoningResponseI);
     }
+    setSubmitting(false);
   };
 
   return (
@@ -54,7 +58,7 @@ export const AddReasoningModal = () => {
       icon={IMAGES.pastelReasoning}
     >
       <ModalHeader sx={{ marginTop: "16px" }}>
-        {t("addReasoning.headline")}
+        {t("addRationale.headline")}
       </ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
@@ -63,25 +67,23 @@ export const AddReasoningModal = () => {
             fontWeight={400}
             color={customPalette.textGray}
           >
-            {t("addReasoning.description")}
+            {t("addRationale.description")}
           </Typography>
           <ControlledField.Input
-            placeholder={t("addReasoning.fields.title.placeholder")}
-            label={t("addReasoning.fields.title.label")}
+            label={t("addRationale.fields.title.label")}
             errors={errors}
             control={control}
             {...register("title", { required: "Title is required" })}
           />
 
           <ControlledField.TextArea
-            placeholder={t("addReasoning.fields.reasoning.placeholder")}
-            label={t("addReasoning.fields.reasoning.label")}
+            label={t("addRationale.fields.rationale.label")}
             errors={errors}
             control={control}
-            {...register("content", { required: "Reasoning is required" })}
+            {...register("content", { required: "Rationale is required" })}
           />
 
-          <ModalActions />
+          <ModalActions isSubmitting={isSubmitting} />
         </ModalContents>
       </form>
     </ModalWrapper>

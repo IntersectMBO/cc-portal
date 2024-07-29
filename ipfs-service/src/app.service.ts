@@ -32,15 +32,21 @@ import {
 import { IpfsMapper } from './mapper/ipfs.mapper.js';
 import { IpfsDto } from './dto/ipfs.dto.js';
 import { PeerId } from '@libp2p/interface';
+import { config } from 'dotenv';
+config();
 
 const libp2pOptions = {
   addresses: {
     listen: [
       // add a listen address (localhost) to accept TCP connections on a random port
-      '/ip4/0.0.0.0/tcp/4002',
-      '/ip4/0.0.0.0/tcp/4003/ws',
-      '/ip4/0.0.0.0/udp/4002/quic',
-    ]
+      process.env.LISTEN_TCP_ADDRESS,
+      process.env.LISTEN_WS_ADDRESS,
+      process.env.LISTEN_QUIC_ADDRESS,
+    ],
+    announce: [
+      process.env.ANNOUNCE_TCP_ADDRESS,
+      process.env.ANNOUNCE_WS_ADDRESS,
+    ],
   },
   transports: [
     tcp(),
@@ -56,12 +62,17 @@ const libp2pOptions = {
   peerDiscovery: [
     bootstrap({
       list: [
+        '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt'
-          ]
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
+        '/dns4/node0.preload.ipfs.io/tcp/443/wss/p2p/QmZMxNdpMkewiVZLMRxaNxUeZpDUb34pWjZ1kZvsd16Zic',
+        '/dns4/node1.preload.ipfs.io/tcp/443/wss/p2p/Qmbut9Ywz9YEDrz8ySBSgWyJk41Uvm2QJPhwDJzJyGFsD6',
+        '/dns4/node2.preload.ipfs.io/tcp/443/wss/p2p/QmV7gnbW5VTcJ3oyM2Xk1rdFBJ3kTkvxc87UFGsun29STS',
+        '/dns4/node3.preload.ipfs.io/tcp/443/wss/p2p/QmY7JB6MQXhxHvq7dBDh4HpbH29v4yE9JRadAVpndvzySN'
+      ]
     })
   ],
   services: {
@@ -116,6 +127,11 @@ export class AppService implements OnModuleInit {
       this.helia.libp2p
         .getMultiaddrs()
         .forEach((ma) => console.log(ma.toString()));
+      
+      // this logger is for testing purposes and should be removed in the future
+      this.helia.libp2p.addEventListener('peer:discovery', (evt) => {
+        this.logger.log(`found peer: ${ evt.detail.id.toString() }`);
+      });
     }
 
     return this.helia;
@@ -190,7 +206,7 @@ export class AppService implements OnModuleInit {
     const ret1 = this.helia.pins.add(cid);
     ret1.next().then((res) => this.logger.log(`Pinned json: ${res.value}`));
 
-    const url = 'https://ipfs.io/ipfs/' + cid.toString()
+    const url = process.env.IPFS_PUBLIC_URL + cid.toString()
 
     return IpfsMapper.ipfsToIpfsDto(cid.toString(), jsonContent, url);
   }

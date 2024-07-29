@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import { useSnackbar } from "@/context/snackbar";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useRouter } from "next/navigation";
+import { isResponseErrorI } from "@utils";
 
 export const SignUpModal = () => {
   const { state, closeModal } = useModal<SignupModalState>();
@@ -48,7 +49,6 @@ export const SignUpModal = () => {
 
   const handleError = (errorMsg) => {
     addErrorAlert(errorMsg);
-    closeModal();
     router.refresh();
   };
 
@@ -57,7 +57,7 @@ export const SignUpModal = () => {
     formData.append("file", imageFile);
 
     const res = await uploadUserPhoto(userSession?.userId, formData);
-    if ("error" in res && res?.error) {
+    if (isResponseErrorI(res)) {
       handleError(res.error);
     }
     return res;
@@ -68,14 +68,14 @@ export const SignUpModal = () => {
     const { file, ...userData } = data;
     if (file) {
       const uploadImageRes = await uploadImage(file);
-      if ("error" in uploadImageRes && uploadImageRes?.error) {
+      if (isResponseErrorI(uploadImageRes)) {
         setSubmitting(false);
         return;
       }
     }
     const editUserRes = await editUser(userSession?.userId, userData);
 
-    if ("error" in editUserRes && editUserRes?.error) {
+    if (isResponseErrorI(editUserRes)) {
       handleError(editUserRes.error);
     } else {
       addSuccessAlert(t("signUp.alerts.success"));
@@ -90,28 +90,22 @@ export const SignUpModal = () => {
       <ModalHeader>{state.title}</ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
-          <Typography variant="body1" fontWeight={500}>
-            {state.description}
-          </Typography>
-
           <ControlledField.Input
-            placeholder={t("signUp.fields.username.placeholder")}
             label={t("signUp.fields.username.label")}
             errors={errors}
             control={control}
             {...register("name", { required: "Username is required" })}
           />
           <ControlledField.Input
-            placeholder={t("signUp.fields.hotAddress.placeholder")}
             label={
               <Tooltip
-                heading={t("signUp.fields.hotAddress.label")}
-                paragraphOne={t("signUp.fields.hotAddress.tooltip")}
+                heading={t("signUp.fields.hotCredential.label")}
+                paragraphOne={t("signUp.fields.hotCredential.tooltip")}
                 placement="bottom-end"
                 arrow
               >
                 <Box width="max-content" display="flex" alignItems="center">
-                  {t("signUp.fields.hotAddress.label")}
+                  {t("signUp.fields.hotCredential.label")}
                   <InfoOutlinedIcon
                     style={{
                       color: "#ADAEAD",
@@ -132,9 +126,7 @@ export const SignUpModal = () => {
             })}
           />
           <ControlledField.TextArea
-            placeholder={t("signUp.fields.description.placeholder")}
             label={t("signUp.fields.description.label")}
-            helpfulText={t("signUp.fields.description.helpfulText")}
             errors={errors}
             control={control}
             {...register("description")}

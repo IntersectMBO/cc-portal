@@ -1,7 +1,7 @@
-import { Card, CopyCard } from "@/components/molecules";
+import { Card } from "@/components/molecules";
 import { customPalette, ICONS } from "@/constants";
 import { getShortenedGovActionId } from "@utils";
-import { Button, CopyButton, OutlinedLightButton, Typography } from "@atoms";
+import { Button, CopyButton, Typography } from "@atoms";
 import { Box, Collapse, Grid } from "@mui/material";
 import React, { ReactNode } from "react";
 
@@ -117,40 +117,18 @@ export const Code = ({ children }) => (
   </code>
 );
 
-export const NavTitle = ({
-  label,
-  onClick,
-  isActive,
-}: {
-  label: string;
-  onClick: () => void;
-  isActive: boolean;
-}) => {
-  return (
-    <Button variant="text" size="small" onClick={onClick}>
-      <Typography
-        fontWeight={isActive ? 500 : 400}
-        variant="body1"
-        sx={{ marginRight: 1, whiteSpace: "nowrap" }}
-      >
-        {label}
-      </Typography>
-    </Button>
-  );
-};
-
 export const NavDrawer = ({
   children,
   onClick,
   isOpen,
   left = 0,
-  top = { xs: 75, md: 90 },
+  top = { xxs: 75, md: 90 },
 }: {
   children: ReactNode;
   onClick: () => void;
   isOpen: boolean;
   left: number;
-  top: { xs: number; md: number };
+  top: { xxs: number; md: number };
 }) => {
   return (
     <Grid
@@ -161,11 +139,14 @@ export const NavDrawer = ({
       px={3}
       py={2}
       sx={{
-        height: "90vh",
-        overflow: "scroll",
+        height: { xxs: "95vh", md: "90vh" },
+        zIndex: 1,
         backgroundColor: customPalette.arcticWhite,
+        "& ol.toc-level": {
+          margin: 0,
+        },
         "& ol.toc-level-1": {
-          paddingInlineStart: 0,
+          paddingInlineStart: "20px",
 
           "& li": {
             listStyle: "outside !important",
@@ -204,9 +185,11 @@ export const NavDrawer = ({
       </Grid>
       <Collapse
         sx={{
-          height: { xs: "90vh", md: "80vh" },
-          overflow: "scroll",
+          height: { xxs: "90vh", md: "80vh" },
+          overflowY: "scroll",
           background: "#FBFBFF",
+          scrollbarWidth: "thin",
+          scrollbarColor: "#888 #f1f1f1",
         }}
         in={isOpen}
         timeout="auto"
@@ -228,15 +211,15 @@ export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
         justifyContent="space-between"
         alignItems={{ lg: "center" }}
       >
-        <Grid item xs={6} lg={"auto"}>
+        <Grid item xxs={6} lg={"auto"}>
           <Typography variant="body1">{title}</Typography>
           <Typography variant="caption">{description}</Typography>
         </Grid>
-        <Grid item xs={6} lg="auto">
+        <Grid item xxs={6} lg="auto">
           <Box
             display="flex"
-            alignItems={{ xs: "center" }}
-            justifyContent={{ xs: "flex-end" }}
+            alignItems={{ xxs: "center" }}
+            justifyContent={{ xxs: "flex-end" }}
           >
             <Box
               px={2.25}
@@ -255,7 +238,7 @@ export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={12} lg="auto" mt={{ xs: 2, md: 0 }}>
+        <Grid item xxs={12} lg="auto" mt={{ xxs: 2, md: 0 }}>
           <Button
             sx={{ width: "100%" }}
             size="medium"

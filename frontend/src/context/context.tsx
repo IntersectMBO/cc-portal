@@ -11,7 +11,7 @@ import { DecodedToken, FetchUserData } from "@/lib/requests";
 import { SnackbarProvider } from "./snackbar";
 import { PATHS, cookieStore } from "@consts";
 import Cookies from "js-cookie";
-import { useDocumentVisibility } from "@utils";
+import { isResponseErrorI, useDocumentVisibility } from "@utils";
 
 interface AppContextType {
   userSession: DecodedToken | null;
@@ -37,7 +37,9 @@ export function AppContextProvider({ session, children }) {
 
   async function fetchUserData(userId: string) {
     const userData = await getUser(userId);
-    setUser(userData);
+    if (!isResponseErrorI(userData)) {
+      setUser(userData);
+    }
   }
 
   useEffect(() => {

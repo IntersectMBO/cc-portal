@@ -112,6 +112,7 @@ services:
     container_name: proxy
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - bloxico_local
 

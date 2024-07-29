@@ -40,7 +40,6 @@ export interface UserListItem extends FetchUserData {}
 export interface SignupModalState {
   showCloseButton?: boolean;
   title: string;
-  description: string;
 }
 
 export interface CompareConstitutionModalState {
@@ -107,4 +106,9 @@ export interface ReasoningI {
   description: string;
   link?: string;
   hash?: string;
+}
+
+export interface TabI {
+  value: string;
+  title: string;
 }

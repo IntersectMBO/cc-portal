@@ -1,9 +1,15 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Grid, Hidden, IconButton } from "@mui/material";
 
-import { ICONS, NAV_ITEMS, PATHS, PROTECTED_NAV_ITEMS } from "@consts";
+import {
+  customPalette,
+  ICONS,
+  NAV_ITEMS,
+  PATHS,
+  PROTECTED_NAV_ITEMS,
+} from "@consts";
 import { Link } from "@atoms";
 import { useAppContext } from "@context";
 import { TopNavWrapper } from "./TopNavWrapper";
@@ -11,10 +17,17 @@ import UserProfileButton from "@/components/molecules/UserProfileButton";
 import { isAnyAdminRole, isUserRole } from "@utils";
 import NextLink from "next/link";
 import { useTranslations } from "next-intl";
+import MenuIcon from "@mui/icons-material/Menu";
+import { DrawerMobile } from "./DrawerMobile";
 
 export const TopNav = () => {
   const { userSession, user } = useAppContext();
   const t = useTranslations("Navigation");
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+
+  const openDrawer = () => {
+    setIsDrawerOpen(true);
+  };
 
   const getNavItems = (items = NAV_ITEMS) =>
     items.map((navItem) => (
@@ -49,11 +62,31 @@ export const TopNav = () => {
 
   return (
     <TopNavWrapper homeRedirectionPath={PATHS.home}>
-      <Box>
-        <Grid container gap={4} alignItems="center" flexWrap="nowrap">
-          {userSession ? renderAuthNavItems() : getNavItems()}
-        </Grid>
-      </Box>
+      <Hidden mdDown>
+        <Box>
+          <Grid container gap={4} alignItems="center" flexWrap="nowrap">
+            {userSession ? renderAuthNavItems() : getNavItems()}
+          </Grid>
+        </Box>
+      </Hidden>
+      <Hidden mdUp>
+        <IconButton
+          data-testid="open-drawer-button"
+          onClick={openDrawer}
+          sx={{
+            bgcolor: customPalette.arcticWhite,
+          }}
+        >
+          <MenuIcon color="primary" />
+        </IconButton>
+      </Hidden>
+
+      <DrawerMobile
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+      >
+        {userSession ? renderAuthNavItems() : getNavItems()}
+      </DrawerMobile>
     </TopNavWrapper>
   );
 };
