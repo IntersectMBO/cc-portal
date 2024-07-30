@@ -35,7 +35,11 @@ export const Footer = ({
     >
       <Hidden mdDown>
         <Grid item>
-          <Typography fontWeight={400} variant="caption">
+          <Typography
+            fontWeight={400}
+            variant="caption"
+            data-testid="footer-copy-right-text"
+          >
             {t("copyright")}
           </Typography>
         </Grid>
@@ -47,10 +51,18 @@ export const Footer = ({
           gap={2}
           alignItems={{ xxs: "flex-start", md: "center" }}
         >
-          <Typography fontWeight={400} variant="caption">
+          <Typography
+            fontWeight={400}
+            variant="caption"
+            data-testid="footer-privacy-policy-hyperlink"
+          >
             {t("privacyPolicy")}
           </Typography>
-          <Typography fontWeight={400} variant="caption">
+          <Typography
+            fontWeight={400}
+            variant="caption"
+            data-testid="footer-terms-of-service-hyperlink"
+          >
             {t("termsOfService")}
           </Typography>
 
@@ -70,7 +82,8 @@ export const Footer = ({
                   });
                 }}
               >
-                {t("signIn")}
+                // todo: check this with kiki
+                <span data-testid="footer-sign-in-button">{t("signIn")}</span>
               </MUITypography>
             </Typography>
           )}
@@ -87,7 +100,9 @@ export const Footer = ({
           <Button startIcon={<img src={ICONS.help} />} variant="text">
             {t("help")}
           </Button>
-          <Button variant="outlined">{t("feedback")}</Button>
+          <Button variant="outlined" data-testid="footer-feedback-button">
+            {t("feedback")}
+          </Button>
         </Grid>
       </Grid>
 

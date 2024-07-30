@@ -33,7 +33,8 @@ export const TopNav = () => {
     items.map((navItem) => (
       <Grid item key={navItem.label}>
         <Link
-          data-testid={navItem.dataTestId}
+          // todo: check this selector
+          data-testid="asdf"
           label={navItem.label}
           href={navItem.href}
         />

@@ -39,6 +39,7 @@ export const PageTitleTabs = ({
             color: customPalette.textBlack,
             ...sx,
           }}
+          data-testid={`${tab.value}-tab-button`}
         />
       ))}
     </Tabs>

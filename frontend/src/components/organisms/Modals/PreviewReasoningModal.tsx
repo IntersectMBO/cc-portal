@@ -118,13 +118,17 @@ export const PreviewReasoningModal = () => {
             src={IMAGES.pastelAddMember}
           />
         </Box>
-        {t("previewRationale.headline")}
+        // todo: check this with kiki
+        <span data-testid="rationale-modal-title-text">
+          {t("previewRationale.headline")}
+        </span>
       </ModalHeader>
       <Typography
         sx={{ px: 3 }}
         variant="body2"
         fontWeight={400}
         color={customPalette.textGray}
+        data-testid="rationale-modal-description-text"
       >
         {t("previewRationale.description")}
       </Typography>
@@ -151,6 +155,7 @@ export const PreviewReasoningModal = () => {
               description={reasoning.contents.content}
               link={reasoning.url}
               hash={reasoning.blake2b}
+              data-testid="asdf"
             />
           </Box>
         )}
@@ -162,7 +167,7 @@ export const PreviewReasoningModal = () => {
             {getShortenedGovActionId(govAction.tx_hash, isMobile ? 4 : 20)}
           </OutlinedLightButton>
         </Box>
-        <Box mt={3} data-testid="governance-action-type">
+        <Box mt={3} data-testid="governance-action-type-text">
           <Typography color="neutralGray" variant="caption">
             {t("previewRationale.governanceActionCategory")}
           </Typography>
@@ -175,7 +180,11 @@ export const PreviewReasoningModal = () => {
             <Typography color="neutralGray" variant="caption">
               {t("previewRationale.voted")}
             </Typography>
-            <Box display="flex" mt={0.25}>
+            <Box
+              display="flex"
+              mt={0.25}
+              data-testid={`rationale-modal-vote-text`}
+            >
               <VotePill vote={govAction.vote} />
             </Box>
           </Box>
@@ -189,7 +198,7 @@ export const PreviewReasoningModal = () => {
           tooltipParagraph={t(
             "previewRationale.tooltips.submissionDate.paragraphOne"
           )}
-          dataTestId="submit-date"
+          dataTestId="submit-date-row"
         />
       )}
       {govAction.vote_submit_time && (
@@ -202,7 +211,7 @@ export const PreviewReasoningModal = () => {
           tooltipParagraph={t(
             "previewRationale.tooltips.submissionDate.vote.paragraphOne"
           )}
-          dataTestId="vote-submit-date"
+          dataTestId="vote-submit-date-row"
         />
       )}
       {govAction.end_time && (
@@ -213,8 +222,8 @@ export const PreviewReasoningModal = () => {
           tooltipParagraph={t(
             "previewRationale.tooltips.expiryDate.paragraphTwo"
           )}
-          dataTestId="expiry-date"
           bgColor="rgba(247, 249, 251, 1)"
+          dataTestId="expiry-date-row"
         />
       )}
 
@@ -244,6 +253,7 @@ export const PreviewReasoningModal = () => {
           sx={{
             width: "100%",
           }}
+          data-testid="rationale-modal-close-button"
         >
           {t("common.close")}
         </Button>

@@ -65,6 +65,7 @@ export default function UserProfileButton({
             />
           }
           endIcon={<img width={20} height={20} src={ICONS.chevronDown} />}
+          data-testid="user-profile-menu-button"
         >
           {user?.name || "User"}
         </Button>
@@ -92,6 +93,7 @@ export default function UserProfileButton({
               variant="outlined"
               onClick={editProfile}
               startIcon={<img width={20} height={20} src={ICONS.edit} />}
+              data-testid="edit-profile-button"
             >
               {t("Navigation.editProfile")}
             </Button>
@@ -100,6 +102,7 @@ export default function UserProfileButton({
               variant="outlined"
               onClick={signOut}
               startIcon={<img width={20} height={20} src={ICONS.logout} />}
+              data-testid="sign-out-button"
             >
               {t("Navigation.signOut")}
             </Button>

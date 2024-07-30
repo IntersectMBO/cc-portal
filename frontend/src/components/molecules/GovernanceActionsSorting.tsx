@@ -73,7 +73,10 @@ export const GovernanceActionsSorting = ({
               key={item.key}
               value={item.key}
               control={<Radio data-testid={`${item.key}-radio`} />}
-              label={item.label}
+              // todo: check this with kiki
+              label={
+                <span data-testid={`${item.key}-radio-text`}>{item.label}</span>
+              }
             />
           ))}
         </RadioGroup>

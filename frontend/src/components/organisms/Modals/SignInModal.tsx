@@ -34,10 +34,19 @@ export const SignInModal = () => {
 
   return (
     <ModalWrapper dataTestId="sign-in-modal" icon={IMAGES.pastelSignIn}>
-      <ModalHeader>{t("signIn.headline")}</ModalHeader>
+      <ModalHeader>
+        // todo: check this with kiki
+        <span data-testid="sign-in-modal-title-text">
+          {t("signIn.headline")}
+        </span>
+      </ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
-          <Typography variant="body1" fontWeight={500}>
+          <Typography
+            variant="body1"
+            fontWeight={500}
+            data-testid="sing-in-modal-desciption-text"
+          >
             {t("signIn.description")}
           </Typography>
 
@@ -47,6 +56,7 @@ export const SignInModal = () => {
             control={control}
             type="email"
             {...register("email", { required: "Email is required" })}
+            data-testid="sign-in-modal-input-field"
           />
           <ModalActions />
         </ModalContents>

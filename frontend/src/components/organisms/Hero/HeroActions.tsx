@@ -24,6 +24,7 @@ export function HeroActions({ role }: HeroActionsProps) {
                   type: "signIn",
                 });
               }}
+              data-testid="admin-hero-sign-in-button"
             >
               {t("hero.signIn")}
             </Button>
@@ -34,6 +35,7 @@ export function HeroActions({ role }: HeroActionsProps) {
                 variant="outlined"
                 size="large"
                 startIcon={<img src={IMAGES.bookOpen} />}
+                data-testid="admin-hero-const-comitee-portal-button"
               >
                 {t("hero.constitutionalCommitteePortal")}
               </Button>

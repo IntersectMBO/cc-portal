@@ -164,6 +164,8 @@ export const SignUpModal = () => {
               <ModalActions isSubmitting={isSubmitting} />
             ) : (
               <Button
+              // todo: check this selecctor
+                data-testid="sign-up-modal-button"
                 startIcon={
                   isSubmitting && (
                     <CircularProgress color="inherit" size="14px" />
