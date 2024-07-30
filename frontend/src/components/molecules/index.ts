@@ -4,6 +4,7 @@ export * from "./UserCard";
 export * from "./Loading";
 export * from "./UserProfileButton";
 export * from "./CopyCard";
+export * from "./CopyPill";
 export * from "./TableDivider";
 export * from "./Search";
 export * from "./DataActionsBar";

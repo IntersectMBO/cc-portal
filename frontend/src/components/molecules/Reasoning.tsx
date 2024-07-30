@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
-import { Typography, OutlinedLightButton } from "@atoms";
+import { Typography } from "@atoms";
 import { customPalette } from "@consts";
 import { useTranslations } from "next-intl";
 import { Box } from "@mui/material";
 import { ReasoningI } from "../organisms";
 import { truncateText, getShortenedGovActionId } from "@utils";
+import { CopyPill } from "./CopyPill";
 
 export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
   const t = useTranslations("GovernanceAction");
@@ -37,9 +38,7 @@ export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
             >
               {t("Link")}
             </Typography>
-            <OutlinedLightButton nonInteractive={true}>
-              {truncateText(link, 20)}
-            </OutlinedLightButton>
+            <CopyPill copyValue={link} copyText={truncateText(link, 20)} />
           </Box>
           <Box display="flex" flexDirection="column" gap={0.5}>
             <Typography
@@ -49,9 +48,10 @@ export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
             >
               {t("Hash")}
             </Typography>
-            <OutlinedLightButton nonInteractive={true}>
-              {getShortenedGovActionId(hash, 10)}
-            </OutlinedLightButton>
+            <CopyPill
+              copyValue={hash}
+              copyText={getShortenedGovActionId(hash, 10)}
+            />
           </Box>
         </Box>
       )}

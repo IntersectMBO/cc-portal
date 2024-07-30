@@ -27,6 +27,7 @@ import {
 } from "@utils";
 import { ReasoningContentsI, ReasoningResponseI } from "@/lib/requests";
 import { useSnackbar } from "@/context/snackbar";
+import { CopyPill } from "@/components/molecules";
 
 interface Reasoning extends Omit<ReasoningResponseI, "contents"> {
   contents: ReasoningContentsI;
@@ -158,9 +159,13 @@ export const PreviewReasoningModal = () => {
           <Typography color="neutralGray" variant="caption">
             {t("previewRationale.governanceActionId")}
           </Typography>
-          <OutlinedLightButton nonInteractive={true}>
-            {getShortenedGovActionId(govAction.tx_hash, isMobile ? 4 : 20)}
-          </OutlinedLightButton>
+          <CopyPill
+            copyValue={govAction.tx_hash}
+            copyText={getShortenedGovActionId(
+              govAction.tx_hash,
+              isMobile ? 4 : 20
+            )}
+          />
         </Box>
         <Box mt={3} data-testid="governance-action-type">
           <Typography color="neutralGray" variant="caption">
