@@ -88,10 +88,10 @@
       }
     },
     "signUp": {
-      "headline": "Sign Up",
+      "headline": "Complete your registration",
       "fields": {
-        "username": {
-          "label": "Username"
+        "displayName": {
+          "label": "Display name"
         },
         "hotCredential": {
           "label": "Hot Credential",

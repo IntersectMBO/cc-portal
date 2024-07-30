@@ -91,10 +91,10 @@ export const SignUpModal = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
           <ControlledField.Input
-            label={t("signUp.fields.username.label")}
+            label={t("signUp.fields.displayName.label")}
             errors={errors}
             control={control}
-            {...register("name", { required: "Username is required" })}
+            {...register("name", { required: "Display name is required" })}
           />
           <ControlledField.Input
             label={
