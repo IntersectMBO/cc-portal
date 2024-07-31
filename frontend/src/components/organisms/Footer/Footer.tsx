@@ -11,17 +11,21 @@ import { Button, Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 import { useAppContext, useModal } from "@context";
 import { ICONS } from "@/constants";
+import { useScreenDimension } from "@utils";
 
 export const Footer = ({
   showSignIn = true,
   sx,
+  isFixed = false,
 }: {
   showSignIn?: boolean;
   sx?: SxProps;
+  isFixed?: boolean;
 }) => {
   const t = useTranslations("Footer");
   const { userSession } = useAppContext();
   const { openModal } = useModal();
+  const { isMobile } = useScreenDimension();
 
   return (
     <Grid
@@ -30,8 +34,11 @@ export const Footer = ({
       justifyContent="space-between"
       px={{ xxs: 2, sm: 6, md: 8, xl: 10 }}
       py="20px"
-      sx={sx}
-      height={{ xxs: "auto", md: "10vh" }}
+      sx={
+        isFixed && !isMobile
+          ? { position: "fixed", bottom: 0, backgroundColor: "#FFF", ...sx }
+          : { backgroundColor: "#FFF", ...sx }
+      }
     >
       <Hidden mdDown>
         <Grid item>
