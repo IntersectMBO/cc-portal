@@ -18,7 +18,7 @@ export const Hero = ({ children }: HeroProps) => {
       display="flex"
       flex={1}
       flexDirection="row"
-      overflow="visible"
+      overflow="hidden"
       position="relative"
       px={{ xxs: 2, sm: 5, md: 10 }}
       sx={{ backgroundColor: customPalette.arcticWhite }}
@@ -50,7 +50,7 @@ export const Hero = ({ children }: HeroProps) => {
           position: { xxs: "absolute", lg: "relative" },
           "& img": {
             width: "100%",
-            maxHeight: "682px",
+            maxHeight: "100%",
           },
         }}
       >
