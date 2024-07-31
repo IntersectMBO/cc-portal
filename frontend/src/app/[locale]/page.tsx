@@ -1,6 +1,12 @@
 import React from "react";
 
-import { Footer, Hero, HeroActions, TopNav } from "@organisms";
+import {
+  Footer,
+  Hero,
+  HeroActions,
+  TopNav,
+  FullHeightPageWrapper,
+} from "@organisms";
 import { unstable_setRequestLocale } from "next-intl/server"; // Import function to set the request-specific locale (unstable API).
 import { decodeUserToken } from "@/lib/api";
 import { redirect } from "next/navigation";
@@ -15,11 +21,13 @@ export default async function Home({ params: { locale } }) {
   }
   return (
     <main>
-      <TopNav />
-      <Hero>
-        <HeroActions role="user" />
-      </Hero>
-      <Footer />
+      <FullHeightPageWrapper>
+        <TopNav />
+        <Hero>
+          <HeroActions role="user" />
+        </Hero>
+        <Footer isFixed />
+      </FullHeightPageWrapper>
     </main>
   );
 }
