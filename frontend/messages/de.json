@@ -89,6 +89,7 @@
     },
     "signUp": {
       "headline": "Complete your registration",
+      "description": "You will be using your email to sign in",
       "fields": {
         "displayName": {
           "label": "Display name"

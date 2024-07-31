@@ -90,6 +90,11 @@ export const SignUpModal = () => {
       <ModalHeader>{state.title}</ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContents>
+          {state.description && (
+            <Typography variant="body1" fontWeight={500}>
+              {state.description}
+            </Typography>
+          )}
           <ControlledField.Input
             label={t("signUp.fields.displayName.label")}
             errors={errors}
