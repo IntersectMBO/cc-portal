@@ -38,6 +38,7 @@ export default function VerifyRegister({ searchParams }) {
             state: {
               showCloseButton: false,
               title: t("Modals.signUp.headline"),
+              description: t("Modals.signUp.description"),
             },
           });
         }
