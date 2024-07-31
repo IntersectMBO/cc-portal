@@ -15,6 +15,8 @@ import { IpfsService } from 'src/ipfs/services/ipfs.service';
 import { RationaleRequest } from '../api/request/rationale.request';
 import { IpfsContentDto } from 'src/ipfs/dto/ipfs-content.dto';
 import { GovActionProposalDto } from '../dto/gov-action-proposal-dto';
+import { ICIP100 } from '../interfaces/icip100.interface';
+import { CIP100 } from '../constants/cip100.constants';
 
 @Injectable()
 export class GovernanceFacade {
@@ -31,12 +33,8 @@ export class GovernanceFacade {
     proposalId: string,
     rationaleRequest: RationaleRequest,
   ): Promise<RationaleResponse> {
-    const govActionDto =
-      await this.governanceService.findGovProposalById(proposalId);
-    const rationaleJson = await this.createRationaleJson(
-      rationaleRequest,
-      govActionDto,
-    );
+    const rationaleJson =
+      await this.createRationaleJsonCip100(rationaleRequest);
     const ipfsContentDto = await this.addRationaleToIpfs(rationaleJson);
     const rationaleDto = GovernanceMapper.ipfsContentDtoToRationaleDto(
       ipfsContentDto,
@@ -48,16 +46,74 @@ export class GovernanceFacade {
     return GovernanceMapper.rationaleDtoToResponse(response);
   }
 
-  private async createRationaleJson(
+  private async createRationaleJsonCip100(
     rationaleRequest: RationaleRequest,
-    govActionDto: GovActionProposalDto,
   ): Promise<string> {
-    const rationaleJson = {
-      govActionProposalTxHash: govActionDto.txHash,
-      title: rationaleRequest.title,
-      content: rationaleRequest.content,
+    const cip100: ICIP100 = {
+      '@context': {
+        '@language': CIP100.contextLanguage,
+        hashAlgorithm: CIP100.contextHashAlgorithm,
+        body: {
+          '@id': CIP100.contextBody,
+          '@context': {
+            references: {
+              '@id': CIP100.contextBodyReferences,
+              '@container': '@set',
+              '@context': {
+                governanceMetadata:
+                  CIP100.contextBodyReferencesGovernanceMetadata,
+                other: CIP100.contextBodyReferencesOther,
+                label: CIP100.contextBodyReferencesLabel,
+                uri: CIP100.contextBodyReferencesUri,
+              },
+            },
+            comment: CIP100.contextBodyComment,
+            externalUpdates: {
+              '@id': CIP100.contextBodyExternalUpdates,
+              '@context': {
+                title: CIP100.contextUpdateTitle,
+                uri: CIP100.contextUpdateUri,
+              },
+            },
+          },
+        },
+        authors: {
+          '@id': CIP100.contextAuthors,
+          '@container': '@set',
+          '@context': {
+            did: '@id',
+            name: CIP100.contextAuthorsName,
+            witness: {
+              '@id': CIP100.contextAuthorsWitness,
+              '@context': {
+                witnessAlgorithm: CIP100.contextWitnessAlgorithm,
+                publicKey: CIP100.contextWitnessPublicKey,
+                signature: CIP100.contextWitnessSignature,
+              },
+            },
+          },
+        },
+      },
+      hashAlgorithm: CIP100.hashAlgorithm,
+      authors: [],
+      body: {
+        references: [
+          {
+            '@type': CIP100.bodyReferencesType,
+            label: CIP100.bodyReferencesLaber,
+            uri: CIP100.bodyReferencesUri,
+          },
+        ],
+        comment: rationaleRequest.content,
+        externalUpdates: [
+          {
+            title: rationaleRequest.title,
+            uri: null,
+          },
+        ],
+      },
     };
-    return JSON.stringify(rationaleJson);
+    return JSON.stringify(cip100);
   }
 
   private async addRationaleToIpfs(
