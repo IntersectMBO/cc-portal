@@ -13,7 +13,6 @@ export const Hero = ({ children }: HeroProps) => {
   const t = useTranslations("Index");
   return (
     <Box
-      height="80vh"
       alignItems="center"
       display="flex"
       flex={1}

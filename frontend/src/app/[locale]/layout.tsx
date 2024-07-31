@@ -55,7 +55,7 @@ async function RootLayout({ children, params: { locale } }) {
               <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <RenderModal />
-                <Box mt="80px">{children} </Box>
+                <Box>{children} </Box>
               </ThemeProvider>
             </AppRouterCacheProvider>
           </AppContextProvider>
