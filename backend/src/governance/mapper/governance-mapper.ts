@@ -171,6 +171,7 @@ export class GovernanceMapper {
     response.cid = dto.cid;
     response.blake2b = dto.blake2b;
     response.url = dto.url;
+    response.title = dto.title;
     response.contents = dto.json;
     return response;
   }

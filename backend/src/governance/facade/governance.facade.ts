@@ -97,6 +97,7 @@ export class GovernanceFacade {
       hashAlgorithm: CIP100.hashAlgorithm,
       authors: [],
       body: {
+        references: [],
         comment: rationaleRequest.content,
       },
     };
