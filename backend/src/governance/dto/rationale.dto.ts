@@ -1,4 +1,4 @@
-export class ReasoningDto {
+export class RationaleDto {
   userId: string;
   govActionProposalId: string;
   title: string;
