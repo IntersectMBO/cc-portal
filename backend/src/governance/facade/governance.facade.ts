@@ -97,20 +97,7 @@ export class GovernanceFacade {
       hashAlgorithm: CIP100.hashAlgorithm,
       authors: [],
       body: {
-        references: [
-          {
-            '@type': CIP100.bodyReferencesType,
-            label: CIP100.bodyReferencesLaber,
-            uri: CIP100.bodyReferencesUri,
-          },
-        ],
         comment: rationaleRequest.content,
-        externalUpdates: [
-          {
-            title: rationaleRequest.title,
-            uri: null,
-          },
-        ],
       },
     };
     return JSON.stringify(cip100);
