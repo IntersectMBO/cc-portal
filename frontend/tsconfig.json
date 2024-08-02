@@ -25,7 +25,8 @@
       "@molecules": ["./src/components/molecules/index.ts"],
       "@organisms": ["./src/components/organisms/index.ts"],
       "@utils": ["./src/lib/utils/index.ts"],
-      "@context": ["./src/context/index.ts"]
+      "@context": ["./src/context/index.ts"],
+      "@hooks": ["./src/lib/hooks/index.ts"]
     }
   },
   "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],

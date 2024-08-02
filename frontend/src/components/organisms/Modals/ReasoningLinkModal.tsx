@@ -13,11 +13,9 @@ import { useTranslations } from "next-intl";
 import { useModal } from "@context";
 import { CopyCard } from "@molecules";
 import { OpenReasoningLinkModalState } from "../types";
-import {
-  truncateText,
-  getShortenedGovActionId,
-  useScreenDimension,
-} from "@utils";
+import { truncateText, getShortenedGovActionId } from "@utils";
+import { useScreenDimension } from "@hooks";
+
 import { Box } from "@mui/material";
 
 export const ReasoningLinkModal = () => {
