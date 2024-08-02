@@ -395,7 +395,7 @@ export async function addOrUpdateReasoning({
   const user = await decodeUserToken();
   try {
     const response: ReasoningResponseI = await axiosInstance.post(
-      `/api/governance/users/${user?.userId}/proposals/${proposalId}/reasoning`,
+      `/api/governance/users/${user?.userId}/proposals/${proposalId}/rationale`,
       data,
       {
         headers: {
@@ -424,7 +424,7 @@ export async function getReasoningData(
   const user = await decodeUserToken();
   try {
     const response: ReasoningResponseI = await axiosInstance.get(
-      `/api/governance/users/${user?.userId}/proposals/${proposalId}/reasoning`,
+      `/api/governance/users/${user?.userId}/proposals/${proposalId}/rationale`,
       {
         headers: {
           Authorization: `bearer ${token}`,
