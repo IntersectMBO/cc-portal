@@ -148,8 +148,8 @@ export const PreviewReasoningModal = () => {
             display="flex"
           >
             <Reasoning
-              title={reasoning.contents.title}
-              description={reasoning.contents.content}
+              title={reasoning.title}
+              description={reasoning.contents.body.comment}
               link={reasoning.url}
               hash={reasoning.blake2b}
             />
