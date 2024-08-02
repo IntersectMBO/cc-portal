@@ -11,7 +11,7 @@ import { Button, Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 import { useAppContext, useModal } from "@context";
 import { ICONS } from "@/constants";
-import { useScreenDimension } from "@utils";
+import { useScreenDimension } from "@hooks";
 
 export const Footer = ({
   showSignIn = true,
