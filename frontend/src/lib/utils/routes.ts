@@ -1,4 +1,8 @@
-import { adminProtectedPath, PATHS, userProtectedPaths } from "@consts";
+import {
+  adminProtectedPath,
+  PATHS,
+  userProtectedPaths,
+} from "@/constants/paths";
 import { NextRequest } from "next/server";
 import { UserRole } from "../requests";
 import { isAnyAdminRole } from "./roles";

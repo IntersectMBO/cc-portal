@@ -7,7 +7,6 @@ import {
   formatRoleList,
   hasManageUserPermission,
 } from "../../lib/utils/roles";
-import { rolesList } from "../../constants";
 
 describe("Role Functions", () => {
   // Testing isAnyAdminRole function
