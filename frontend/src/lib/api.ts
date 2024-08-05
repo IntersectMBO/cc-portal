@@ -28,6 +28,20 @@ import { getTranslations } from "next-intl/server";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 const DEFAULT_PAGINATION_LIMIT = 6;
 
+/**
+ * Checks if the provided token is expired.
+ *
+ * This asynchronous function decodes the token to extract the expiration time (`exp` field) and compares it
+ * with the current time to determine if the token has expired.
+ *
+ * If the token cannot be decoded or does not have an expiration time, the function assumes the token is expired.
+ *
+ * @param token - The token to check for expiration.
+ * @returns A Promise that resolves to `true` if the token is expired, or `false` if it is still valid.
+ *
+ * @throws An error if the token does not contain an expiration time or if decoding fails.
+ *
+ */
 export async function isTokenExpired(token: string): Promise<boolean> {
   try {
     // Decode the token without verifying the signature to get the payload
@@ -48,7 +62,13 @@ export async function isTokenExpired(token: string): Promise<boolean> {
   }
 }
 
-// Function to decode the user token stored in the authentication cookie
+/**
+ * This function retrieves the access token from the authentication cookies and
+ * then decodes it to extract user information.
+ *
+ * @returns A Promise that resolves to the decoded token object if the token is present and successfully decoded,
+ *          or `undefined` if no token is found or if the token could not be decoded.
+ */
 export async function decodeUserToken(): Promise<DecodedToken | undefined> {
   const token = getAccessToken();
 
@@ -60,11 +80,19 @@ export async function decodeUserToken(): Promise<DecodedToken | undefined> {
 }
 
 /**
- * Constructs a URL with query parameters.
- * @param path - The base path of the API endpoint.
- * @param queryParams - An object containing query parameters to be appended to the URL.
- *                      Only parameters with defined and non-empty values are included.
- * @returns The constructed URL with the query parameters appended.
+ * This function creates a URL by appending query parameters to a given base path.
+ * It includes only those parameters that have defined and non-empty values.
+ *
+ * @param path - The base path of the API endpoint. This is the URL to which query parameters will be appended.
+ * @param queryParams - An object where each key-value pair represents a query parameter.
+ *                      The key is the parameter name and the value is the parameter value (either string or number).
+ *                      Only parameters with defined and non-empty values are included in the final URL.
+ * @returns The constructed URL with the query parameters appended in the query string format.
+ *
+ * @example
+ * // Example usage:
+ * buildApiUrl('/api/search', { query: 'test', page: 1, limit: null });
+ * // Returns: "/api/search?query=test&page=1"
  */
 function buildApiUrl(
   path: string,
