@@ -58,11 +58,11 @@ export function TopBannerContextProvider({ children }) {
         <Alert
           data-testid={`alert-topBannerPopup`}
           onClose={handleClose}
-          severity="error"
+          severity="warning"
           variant="filled"
           sx={{
             minWidth: { xxs: "100vw" },
-            backgroundColor: "#FF3333",
+            backgroundColor: "#DEA029",
           }}
         >
           {t("message")}
