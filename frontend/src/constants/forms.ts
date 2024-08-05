@@ -1,5 +1,5 @@
 import { PermissionsListObject, RoleListObject } from "@/lib/requests";
-import { isAdminRole, isSuperAdminRole } from "@/lib/utils";
+import { isAdminRole, isSuperAdminRole } from "@/lib/utils/roles";
 
 /**
  * Array containing objects representing different permissions available in the system.
