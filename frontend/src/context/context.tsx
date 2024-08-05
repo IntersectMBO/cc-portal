@@ -13,6 +13,7 @@ import { PATHS, cookieStore } from "@consts";
 import Cookies from "js-cookie";
 import { isResponseErrorI } from "@utils";
 import { useDocumentVisibility } from "@hooks";
+import { TopBannerContextProvider } from "./topBanner";
 
 interface AppContextType {
   userSession: DecodedToken | null;
@@ -75,7 +76,9 @@ export function AppContextProvider({ session, children }) {
       }}
     >
       <ModalProvider>
-        <SnackbarProvider>{children}</SnackbarProvider>
+        <SnackbarProvider>
+          <TopBannerContextProvider>{children}</TopBannerContextProvider>
+        </SnackbarProvider>
       </ModalProvider>
     </AppContext.Provider>
   );

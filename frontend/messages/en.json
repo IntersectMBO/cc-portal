@@ -270,6 +270,9 @@
     "changesSaved": "Changes saved",
     "copiedToClipboard": "Copied to clipboard"
   },
+  "TopBanner": {
+    "message": "This version of the Constitutional Committee Portal is for testing & previewing new features. NONE of the information contained herein comes from Cardano MainNet"
+  },
   "GovernanceAction": {
     "Link": "Link",
     "Hash": "Hash"
