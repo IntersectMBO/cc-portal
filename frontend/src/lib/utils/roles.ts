@@ -1,4 +1,4 @@
-import { rolesList } from "@consts";
+import { rolesList } from "@/constants/forms";
 import { UserRole } from "@/lib/requests";
 
 /**
