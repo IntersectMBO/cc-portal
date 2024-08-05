@@ -11,8 +11,7 @@ import { DecodedToken, FetchUserData } from "@/lib/requests";
 import { SnackbarProvider } from "./snackbar";
 import { PATHS, cookieStore } from "@consts";
 import Cookies from "js-cookie";
-import { isResponseErrorI } from "@utils";
-import { useDocumentVisibility } from "@hooks";
+import { isResponseErrorI, useDocumentVisibility } from "@utils";
 
 interface AppContextType {
   userSession: DecodedToken | null;

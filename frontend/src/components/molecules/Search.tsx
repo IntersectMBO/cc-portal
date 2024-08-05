@@ -1,7 +1,7 @@
 "use client";
 
-import { customPalette } from "@consts";
-import { useDebounce } from "@hooks";
+import { customPalette } from "@/constants";
+import { useDebounce } from "@utils";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputBase } from "@mui/material";
 import { useEffect, useState } from "react";

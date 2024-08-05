@@ -12,7 +12,7 @@ import PermissionChecker from "../PermissionChecker";
 import { customPalette, IMAGES, PATHS } from "@consts";
 import Link from "next/link";
 import { Search } from "@molecules";
-import { useManageQueryParams } from "@hooks";
+import { useManageQueryParams } from "@utils";
 import MenuIcon from "@mui/icons-material/Menu";
 import { DrawerMobile } from "./DrawerMobile";
 
