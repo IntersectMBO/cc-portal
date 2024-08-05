@@ -3,7 +3,9 @@
  * @param data The data object containing properties to be appended to the FormData.
  * @returns A FormData object containing non-empty properties from the data object.
  */
-export const createFormDataObject = (data: FormData): FormData => {
+export const createFormDataObject = (data: {
+  [key: string]: any;
+}): FormData => {
   const formData = new FormData();
   for (const key in data) {
     if (data[key]) {
