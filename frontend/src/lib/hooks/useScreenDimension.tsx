@@ -6,8 +6,29 @@ import { useEffect, useMemo, useState } from "react";
  * such as screen width, whether the device is mobile, and page padding based on the screen width.
  */
 export const useScreenDimension = () => {
-  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 768);
+  const [screenWidth, setScreenWidth] = useState<number>(0);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Check if running on the client side
+    if (typeof window !== "undefined") {
+      // Set initial screen dimensions
+      setScreenWidth(window.innerWidth);
+      setIsMobile(window.innerWidth < 768);
+
+      const handleWindowSizeChange = () => {
+        setScreenWidth(window.innerWidth);
+        setIsMobile(window.innerWidth < 768);
+      };
+
+      window.addEventListener("resize", handleWindowSizeChange);
+
+      return () => {
+        window.removeEventListener("resize", handleWindowSizeChange);
+      };
+    }
+  }, []);
+
   const pagePadding = useMemo(
     () =>
       screenWidth < 768
@@ -21,17 +42,6 @@ export const useScreenDimension = () => {
         : 37,
     [screenWidth]
   );
-
-  function handleWindowSizeChange() {
-    setScreenWidth(window.innerWidth);
-    setIsMobile(window.innerWidth < 768);
-  }
-  useEffect(() => {
-    window.addEventListener("resize", handleWindowSizeChange);
-    return () => {
-      window.removeEventListener("resize", handleWindowSizeChange);
-    };
-  }, []);
 
   return {
     screenWidth,
