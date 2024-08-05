@@ -1,5 +1,4 @@
 import { getProposalTypeLabel } from "../../lib/utils/getProposalTypeLabel";
-import { GOVERNANCE_ACTIONS_FILTERS } from "../../constants/governanceAction/filters";
 
 describe("getProposalTypeLabel", () => {
   it("should return the correct label for a known type", () => {

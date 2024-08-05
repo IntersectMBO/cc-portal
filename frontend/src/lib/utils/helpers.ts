@@ -45,5 +45,5 @@ export const countSelectedFilters = (
  *          meaning it is of type ResponseErrorI.
  */
 export const isResponseErrorI = (obj: any): obj is ResponseErrorI => {
-  return "error" in obj;
+  return obj !== null && typeof obj === "object" && "error" in obj;
 };
