@@ -1,5 +1,5 @@
 "use server";
-import { cookieStore } from "@consts";
+import { cookieStore } from "@/constants/cookies";
 import { cookies } from "next/headers";
 
 // Function to set authentication cookies containing access token and refresh token
