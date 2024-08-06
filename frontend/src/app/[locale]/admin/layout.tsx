@@ -1,7 +1,6 @@
 import { PATHS } from "@/constants";
 import { decodeUserToken } from "@/lib/api";
 import { isAnyAdminRole } from "@utils";
-import { AdminFooter, AdminTopNav, Footer } from "@organisms";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -11,13 +10,7 @@ async function AdminLayout({ params: { locale }, children }) {
   if (user && !isAnyAdminRole(user?.role)) {
     redirect(`/${locale}/${PATHS.home}`);
   }
-  return (
-    <>
-      <AdminTopNav />
-      {children}
-      {user ? <AdminFooter /> : <Footer showSignIn={false} />}
-    </>
-  );
+  return <main>{children}</main>;
 }
 
 export default AdminLayout;

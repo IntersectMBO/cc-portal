@@ -26,8 +26,8 @@ import { VOTE_PAGINATION_CONFIG } from '../util/pagination/votes-pagination.conf
 import { GovernanceActionProposalResponse } from './response/gov-action-proposal.response';
 import { GOVERNANCE_ACTION_PROPOSAL_CONFIG } from '../util/pagination/gap-pagination.config';
 import { GovernanceActionProposalSearchResponse } from './response/gov-action-proposal-search.response';
-import { ReasoningRequest } from './request/reasoning.request';
-import { ReasoningResponse } from './response/reasoning.response';
+import { RationaleRequest } from './request/rationale.request';
+import { RationaleResponse } from './response/rationale.response';
 import { ApiConditionalExcludeEndpoint } from 'src/common/decorators/api-conditional-exclude-endpoint.decorator';
 @ApiTags('Governance')
 @Controller('governance')
@@ -119,14 +119,14 @@ export class GovernanceController {
 
   @ApiConditionalExcludeEndpoint()
   @ApiOperation({
-    summary: 'Add reasoning to governance action proposals',
+    summary: 'Add rationale to governance action proposals',
   })
   @ApiBearerAuth('JWT-auth')
-  @ApiBody({ type: ReasoningRequest })
+  @ApiBody({ type: RationaleRequest })
   @ApiResponse({
     status: 200,
-    description: 'Reasoning added successfully',
-    type: ReasoningResponse,
+    description: 'Rationale added successfully',
+    type: RationaleResponse,
   })
   @ApiResponse({
     status: 401,
@@ -134,32 +134,32 @@ export class GovernanceController {
   })
   @ApiResponse({
     status: 409,
-    description: 'Reasoning already exists for this user',
+    description: 'Rationale already exists for this user',
   })
   @UseGuards(JwtAuthGuard, UserPathGuard)
-  @Post('users/:id/proposals/:proposalId/reasoning')
-  async addReasoning(
+  @Post('users/:id/proposals/:proposalId/rationale')
+  async addRationale(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('proposalId') proposalId: string,
-    @Body() reasoningRequest: ReasoningRequest,
-  ): Promise<ReasoningResponse> {
-    return await this.governanceFacade.addReasoning(
+    @Body() rationaleRequest: RationaleRequest,
+  ): Promise<RationaleResponse> {
+    return await this.governanceFacade.addRationale(
       id,
       proposalId,
-      reasoningRequest,
+      rationaleRequest,
     );
   }
 
   @ApiConditionalExcludeEndpoint()
   @ApiOperation({
-    summary: 'Get my reasoning for an action proposal',
+    summary: 'Get my rationale for an action proposal',
   })
   @ApiBearerAuth('JWT-auth')
-  @ApiBody({ type: ReasoningRequest })
+  @ApiBody({ type: RationaleRequest })
   @ApiResponse({
     status: 200,
-    description: 'Reasoning retrieved successfully',
-    type: ReasoningResponse,
+    description: 'Rationale retrieved successfully',
+    type: RationaleResponse,
   })
   @ApiResponse({
     status: 401,
@@ -167,14 +167,14 @@ export class GovernanceController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Reasoning not found',
+    description: 'Rationale not found',
   })
   @UseGuards(JwtAuthGuard, UserPathGuard)
-  @Get('users/:id/proposals/:proposalId/reasoning')
-  async getReasoning(
+  @Get('users/:id/proposals/:proposalId/rationale')
+  async getRationale(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('proposalId', ParseIntPipe) proposalId: string,
-  ): Promise<ReasoningResponse> {
-    return await this.governanceFacade.getReasoning(id, proposalId);
+  ): Promise<RationaleResponse> {
+    return await this.governanceFacade.getRationale(id, proposalId);
   }
 }

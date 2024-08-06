@@ -2,7 +2,7 @@
 
 import axiosInstance from "./axiosInstance";
 import jwt from "jsonwebtoken";
-import { getAccessToken, setAuthCookies } from "@utils";
+import { getAccessToken, setAuthCookies, isEmpty } from "@utils";
 import {
   DecodedToken,
   FetchUserData,
@@ -28,6 +28,20 @@ import { getTranslations } from "next-intl/server";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 const DEFAULT_PAGINATION_LIMIT = 6;
 
+/**
+ * Checks if the provided token is expired.
+ *
+ * This asynchronous function decodes the token to extract the expiration time (`exp` field) and compares it
+ * with the current time to determine if the token has expired.
+ *
+ * If the token cannot be decoded or does not have an expiration time, the function assumes the token is expired.
+ *
+ * @param token - The token to check for expiration.
+ * @returns A Promise that resolves to `true` if the token is expired, or `false` if it is still valid.
+ *
+ * @throws An error if the token does not contain an expiration time or if decoding fails.
+ *
+ */
 export async function isTokenExpired(token: string): Promise<boolean> {
   try {
     // Decode the token without verifying the signature to get the payload
@@ -48,7 +62,13 @@ export async function isTokenExpired(token: string): Promise<boolean> {
   }
 }
 
-// Function to decode the user token stored in the authentication cookie
+/**
+ * This function retrieves the access token from the authentication cookies and
+ * then decodes it to extract user information.
+ *
+ * @returns A Promise that resolves to the decoded token object if the token is present and successfully decoded,
+ *          or `undefined` if no token is found or if the token could not be decoded.
+ */
 export async function decodeUserToken(): Promise<DecodedToken | undefined> {
   const token = getAccessToken();
 
@@ -57,6 +77,36 @@ export async function decodeUserToken(): Promise<DecodedToken | undefined> {
     return decoded;
   }
   return;
+}
+
+/**
+ * This function creates a URL by appending query parameters to a given base path.
+ * It includes only those parameters that have defined and non-empty values.
+ *
+ * @param path - The base path of the API endpoint. This is the URL to which query parameters will be appended.
+ * @param queryParams - An object where each key-value pair represents a query parameter.
+ *                      The key is the parameter name and the value is the parameter value (either string or number).
+ *                      Only parameters with defined and non-empty values are included in the final URL.
+ * @returns The constructed URL with the query parameters appended in the query string format.
+ *
+ * @example
+ * // Example usage:
+ * buildApiUrl('/api/search', { query: 'test', page: 1, limit: null });
+ * // Returns: "/api/search?query=test&page=1"
+ */
+function buildApiUrl(
+  path: string,
+  queryParams: { [key: string]: string | number }
+): string {
+  const queryString = Object.keys(queryParams)
+    .filter((key) => !isEmpty(queryParams[key]))
+    .map(
+      (key) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`
+    )
+    .join("&");
+
+  return `${path}?${queryString}`;
 }
 
 export async function login(
@@ -190,17 +240,20 @@ export async function getUsersAdmin({
 
   try {
     const decodedToken = await decodeUserToken();
+    const path = buildApiUrl(
+      `/api/users/${decodedToken?.userId}/search-admin`,
+      {
+        search,
+        page,
+        limit,
+      }
+    );
     const res: { data: FetchUserData[]; meta: PaginationMeta } =
-      await axiosInstance.get(
-        `/api/users/${decodedToken?.userId}/search-admin?${
-          search ? `search=${search}` : ""
-        }&${page ? `page=${page}` : ""}&limit=${limit}`,
-        {
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
-        }
-      );
+      await axiosInstance.get(path, {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      });
     return res;
   } catch (error) {
     const t = await getTranslations();
@@ -225,15 +278,16 @@ export async function getMembers({
   sortBy?: string;
   page?: number;
   limit?: number;
-  searchParams?: any;
 }): Promise<{ data: FetchUserData[]; meta: PaginationMeta } | ResponseErrorI> {
   try {
+    const path = buildApiUrl(`/api/users/cc-member/search`, {
+      search,
+      sortBy,
+      page,
+      limit,
+    });
     const res: { data: FetchUserData[]; meta: PaginationMeta } =
-      await axiosInstance.get(
-        `/api/users/cc-member/search?${search ? `search=${search}` : ""}&${
-          sortBy ? `sortBy=${sortBy}` : ""
-        }&${page ? `page=${page}` : ""}&limit=${limit}`
-      );
+      await axiosInstance.get(path);
     return res;
   } catch (error) {
     const t = await getTranslations();
@@ -260,16 +314,17 @@ export async function getLatestUpdates({
   sortBy?: string;
 }): Promise<{ data: VotesTableI[]; meta: PaginationMeta } | ResponseErrorI> {
   try {
+    const path = buildApiUrl(`/api/governance/votes/search`, {
+      page,
+      limit,
+      search,
+      sortBy,
+      "filter.govActionProposal.govActionType":
+        govActionType && `$in:${govActionType}`,
+      "filter.vote": vote && `$in:${vote}`,
+    });
     const res: { data: VotesTableI[]; meta: PaginationMeta } =
-      await axiosInstance.get(
-        `/api/governance/votes/search?${search ? `search=${search}` : ""}&${
-          govActionType
-            ? `filter.govActionProposal.govActionType=$in:${govActionType}`
-            : ""
-        }&${vote ? `filter.vote=$in:${vote}` : ""}&${
-          sortBy ? `sortBy=${sortBy}` : ""
-        }&${page ? `page=${page}` : ""}&limit=${limit}`
-      );
+      await axiosInstance.get(path);
 
     return res;
   } catch (error) {
@@ -299,18 +354,18 @@ export async function getUserVotes({
   userId?: string;
 }): Promise<{ data: VotesTableI[]; meta: PaginationMeta } | ResponseErrorI> {
   try {
+    const path = buildApiUrl(`/api/governance/votes/search`, {
+      page,
+      limit,
+      search,
+      sortBy,
+      "filter.govActionProposal.govActionType":
+        govActionType && `$in:${govActionType}`,
+      "filter.vote": vote && `$in:${vote}`,
+      "filter.userId": `$eq:${userId}`,
+    });
     const res: { data: VotesTableI[]; meta: PaginationMeta } =
-      await axiosInstance.get(
-        `/api/governance/votes/search?filter.userId=$eq:${userId}&${
-          search ? `search=${search}` : ""
-        }&${
-          govActionType
-            ? `filter.govActionProposal.govActionType=$in:${govActionType}`
-            : ""
-        }&${vote ? `filter.vote=$in:${vote}` : ""}&${
-          sortBy ? `sortBy=${sortBy}` : ""
-        }&${page ? `page=${page}` : ""}&limit=${limit}`
-      );
+      await axiosInstance.get(path);
     return res;
   } catch (error) {
     const t = await getTranslations();
@@ -357,21 +412,23 @@ export async function getGovernanceActions({
   const user = await decodeUserToken();
 
   try {
+    const path = buildApiUrl(
+      `/api/governance/users/${user?.userId}/proposals/search`,
+      {
+        page,
+        limit,
+        search,
+        sortBy,
+        "filter.govActionType": govActionType && `$in:${govActionType}`,
+        "filter.status": status && `$in:${status}`,
+      }
+    );
     const res: { data: GovernanceActionTableI[]; meta: PaginationMeta } =
-      await axiosInstance.get(
-        `/api/governance/users/${user?.userId}/proposals/search?${
-          search ? `search=${search}` : ""
-        }&${govActionType ? `filter.govActionType=$in:${govActionType}` : ""}&${
-          status ? `filter.status=$in:${status}` : ""
-        }&${sortBy ? `sortBy=${sortBy}` : ""}&${
-          page ? `page=${page}` : ""
-        }&limit=${limit}`,
-        {
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
-        }
-      );
+      await axiosInstance.get(path, {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      });
 
     return res;
   } catch (error) {
@@ -395,7 +452,7 @@ export async function addOrUpdateReasoning({
   const user = await decodeUserToken();
   try {
     const response: ReasoningResponseI = await axiosInstance.post(
-      `/api/governance/users/${user?.userId}/proposals/${proposalId}/reasoning`,
+      `/api/governance/users/${user?.userId}/proposals/${proposalId}/rationale`,
       data,
       {
         headers: {
@@ -424,7 +481,7 @@ export async function getReasoningData(
   const user = await decodeUserToken();
   try {
     const response: ReasoningResponseI = await axiosInstance.get(
-      `/api/governance/users/${user?.userId}/proposals/${proposalId}/reasoning`,
+      `/api/governance/users/${user?.userId}/proposals/${proposalId}/rationale`,
       {
         headers: {
           Authorization: `bearer ${token}`,

@@ -88,10 +88,11 @@
       }
     },
     "signUp": {
-      "headline": "Sign Up",
+      "headline": "Complete your registration",
+      "description": "You will be using your email to sign in",
       "fields": {
-        "username": {
-          "label": "Username"
+        "displayName": {
+          "label": "Display name"
         },
         "hotCredential": {
           "label": "Hot Credential",
@@ -117,7 +118,7 @@
     },
     "deleteRole": {
       "headline": "Change status",
-      "description": "This action will change user status to Inactive.",
+      "description": "Are you sure you want to change the status?",
       "fields": {
         "confirm": {
           "label": "Please confirm the action by typing expected below",
@@ -268,6 +269,9 @@
   "Snackbar": {
     "changesSaved": "Changes saved",
     "copiedToClipboard": "Copied to clipboard"
+  },
+  "TopBanner": {
+    "message": "This version of the Constitutional Committee Portal is for testing & previewing new features. NONE of the information contained herein comes from Cardano MainNet"
   },
   "GovernanceAction": {
     "Link": "Link",

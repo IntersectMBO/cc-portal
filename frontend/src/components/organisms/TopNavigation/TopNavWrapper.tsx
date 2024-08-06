@@ -24,7 +24,7 @@ export const TopNavWrapper = ({ children, homeRedirectionPath, sx }: Props) => {
         justifyContent: "space-between",
         alignItems: "center",
         flexDirection: "row",
-        position: "fixed",
+        position: "sticky",
         py: { xxs: 2, sm: 3 },
         px: { xxs: 2, sm: 5 },
         "& img": {

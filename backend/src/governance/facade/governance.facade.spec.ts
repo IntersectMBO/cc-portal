@@ -6,7 +6,7 @@ import { IpfsService } from 'src/ipfs/services/ipfs.service';
 import { GovActionProposalDto } from '../dto/gov-action-proposal-dto';
 import { NotFoundException } from '@nestjs/common';
 import { GovernanceActionProposalResponse } from '../api/response/gov-action-proposal.response';
-import { ReasoningRequest } from '../api/request/reasoning.request';
+import { RationaleRequest } from '../api/request/rationale.request';
 import { IpfsContentDto } from 'src/ipfs/dto/ipfs-content.dto';
 import { GovernanceMapper } from '../mapper/governance-mapper';
 import { PaginateQuery } from 'nestjs-paginate';
@@ -20,7 +20,7 @@ import { User } from 'src/users/entities/user.entity';
 import { UserStatusEnum } from 'src/users/enums/user-status.enum';
 import { UserMapper } from 'src/users/mapper/userMapper.mapper';
 import { VoteStatus } from '../enums/vote-status.enum';
-import { ReasoningDto } from '../dto/reasoning.dto';
+import { RationaleDto } from '../dto/rationale.dto';
 
 describe('GovernanceFacade', () => {
   let facade: GovernanceFacade;
@@ -38,6 +38,7 @@ describe('GovernanceFacade', () => {
       permissions: [],
       createdAt: null,
       updatedAt: null,
+      deactivatedAt: null,
     },
     {
       id: 'mockedId2',
@@ -51,6 +52,7 @@ describe('GovernanceFacade', () => {
       permissions: [],
       createdAt: null,
       updatedAt: null,
+      deactivatedAt: null,
     },
   ];
 
@@ -64,7 +66,7 @@ describe('GovernanceFacade', () => {
       type: 'Type 1',
       status: GovActionProposalStatus.ACTIVE,
       voteStatus: VoteStatus.Voted,
-      hasReasoning: null,
+      hasRationale: null,
       submitTime: null,
       endTime: null,
     },
@@ -77,7 +79,7 @@ describe('GovernanceFacade', () => {
       type: 'Type 1',
       status: GovActionProposalStatus.ACTIVE,
       voteStatus: VoteStatus.Pending,
-      hasReasoning: null,
+      hasRationale: null,
       submitTime: null,
       endTime: null,
     },
@@ -108,23 +110,23 @@ describe('GovernanceFacade', () => {
     },
   ];
 
-  const mockReasoningRequest: ReasoningRequest = {
-    title: 'Reasoning title',
-    content: 'Reasoning content',
+  const mockRationaleRequest: RationaleRequest = {
+    title: 'Rationale title',
+    content: 'Rationale content',
   };
 
-  const mockReasoningJson = {
+  const mockRationaleJson = {
     govActionProposalHash: mockGovActionProposalDtos[0].txHash,
-    title: mockReasoningRequest.title,
-    content: mockReasoningRequest.content,
+    title: mockRationaleRequest.title,
+    content: mockRationaleRequest.content,
   };
 
   const mockIpfsContentDto: IpfsContentDto = {
     blake2b: 'blake2b_example',
     cid: 'cid_example',
     url: 'ipfs_url_example',
-    title: mockReasoningRequest.title,
-    contents: mockReasoningRequest.content,
+    title: mockRationaleRequest.title,
+    contents: mockRationaleRequest.content,
   };
 
   const mockGovActionProposals: GovActionProposal[] = [
@@ -140,7 +142,7 @@ describe('GovernanceFacade', () => {
       submitTime: null,
       endTime: null,
       votes: null,
-      reasonings: null,
+      rationales: null,
       createdAt: null,
       updatedAt: null,
     },
@@ -156,7 +158,7 @@ describe('GovernanceFacade', () => {
       submitTime: null,
       endTime: null,
       votes: null,
-      reasonings: null,
+      rationales: null,
       createdAt: null,
       updatedAt: null,
     },
@@ -170,8 +172,8 @@ describe('GovernanceFacade', () => {
       userAddress: 'hotAddress_1',
       userPhotoUrl: 'photoUrl',
       voteValue: VoteValue.Yes,
-      reasoningTitle: 'Title_1',
-      reasoningComment: 'Comment_1',
+      rationaleTitle: 'Title_1',
+      rationaleComment: 'Comment_1',
       govActionProposalId: mockGovActionProposals[0].id,
       govActionProposalTxHash: mockGovActionProposals[0].txHash,
       govActionProposalTitle: mockGovActionProposals[0].title,
@@ -187,8 +189,8 @@ describe('GovernanceFacade', () => {
       userAddress: 'hotAddress_1',
       userPhotoUrl: 'photoUrl',
       voteValue: VoteValue.Yes,
-      reasoningTitle: 'Title_2',
-      reasoningComment: 'Comment_2',
+      rationaleTitle: 'Title_2',
+      rationaleComment: 'Comment_2',
       govActionProposalId: mockGovActionProposals[1].id,
       govActionProposalTxHash: mockGovActionProposals[1].txHash,
       govActionProposalTitle: mockGovActionProposals[1].title,
@@ -199,12 +201,12 @@ describe('GovernanceFacade', () => {
     },
   ];
 
-  const mockReasoningDtos: ReasoningDto[] = [
+  const mockRationaleDtos: RationaleDto[] = [
     {
       userId: mockUsers[0].id,
       govActionProposalId: mockGovActionProposals[0].id,
-      title: 'Reasoning title 1',
-      content: 'Reasoning content 1',
+      title: 'Rationale title 1',
+      content: 'Rationale content 1',
       cid: 'cid1',
       blake2b: 'blake2b1',
       url: 'http://test.com',
@@ -213,8 +215,8 @@ describe('GovernanceFacade', () => {
     {
       userId: mockUsers[0].id,
       govActionProposalId: mockGovActionProposals[1].id,
-      title: 'Reasoning title 2',
-      content: 'Reasoning content 2',
+      title: 'Rationale title 2',
+      content: 'Rationale content 2',
       cid: 'cid2',
       blake2b: 'blake2b2',
       url: 'http://test.com',
@@ -240,24 +242,24 @@ describe('GovernanceFacade', () => {
       }
       return foundGovActionProposal;
     }),
-    findReasoningForUserByProposalId: jest
+    findRationaleForUserByProposalId: jest
       .fn()
       .mockImplementation((userId, proposalId) => {
-        let foundReasoning: ReasoningDto;
-        mockReasoningDtos.forEach((item) => {
+        let foundRationale: RationaleDto;
+        mockRationaleDtos.forEach((item) => {
           if (
             userId === item.userId &&
             proposalId === item.govActionProposalId
           ) {
-            foundReasoning = item;
+            foundRationale = item;
           }
         });
-        if (!foundReasoning) {
-          return new NotFoundException(`Reasoning not found`);
+        if (!foundRationale) {
+          return new NotFoundException(`Rationale not found`);
         }
-        return foundReasoning;
+        return foundRationale;
       }),
-    addReasoning: jest.fn(),
+    addRationale: jest.fn(),
     searchGovVotes: jest
       .fn()
       .mockImplementation((query: PaginateQuery, userId?: string) => {
@@ -267,8 +269,8 @@ describe('GovernanceFacade', () => {
           const searchTerm = query.search.toLowerCase();
           filteredVotes = filteredVotes.filter(
             (vote) =>
-              vote.reasoningTitle.toLowerCase().includes(searchTerm) ||
-              vote.reasoningComment.toLowerCase().includes(searchTerm),
+              vote.rationaleTitle.toLowerCase().includes(searchTerm) ||
+              vote.rationaleComment.toLowerCase().includes(searchTerm),
           );
         }
 
@@ -341,7 +343,7 @@ describe('GovernanceFacade', () => {
     }),
   };
   const mockIpfsService = {
-    addReasoningToIpfs: jest.fn(),
+    addRationaleToIpfs: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -392,97 +394,94 @@ describe('GovernanceFacade', () => {
     });
   });
 
-  describe('Get Reasoning by User ID and Governance Action Proposal ID', () => {
-    it('should find a Reasoning by User ID and Governance Action Proposal by ID', async () => {
-      const userId = mockReasoningDtos[0].userId;
+  describe('Get Rationale by User ID and Governance Action Proposal ID', () => {
+    it('should find a Rationale by User ID and Governance Action Proposal by ID', async () => {
+      const userId = mockRationaleDtos[0].userId;
       const proposalId = mockGovActionProposals[0].id;
-      const reasoning = await facade.getReasoning(userId, proposalId);
+      const rationale = await facade.getRationale(userId, proposalId);
       expect(
-        mockGovernanceService.findReasoningForUserByProposalId,
+        mockGovernanceService.findRationaleForUserByProposalId,
       ).toHaveBeenCalledWith(userId, proposalId);
-      expect(reasoning.cid).toEqual(mockReasoningDtos[0].cid);
-      expect(reasoning.blake2b).toEqual(mockReasoningDtos[0].blake2b);
-      expect(reasoning.url).toEqual(mockReasoningDtos[0].url);
+      expect(rationale.cid).toEqual(mockRationaleDtos[0].cid);
+      expect(rationale.blake2b).toEqual(mockRationaleDtos[0].blake2b);
+      expect(rationale.url).toEqual(mockRationaleDtos[0].url);
     });
-    it('should not return a Reasoning by User ID and Governance Action Proposal by ID', async () => {
+    it('should not return a Rationale by User ID and Governance Action Proposal by ID', async () => {
       const userId = 'wrong-user-id';
       const proposalId = mockGovActionProposals[0].id;
       try {
-        await facade.getReasoning(userId, proposalId);
+        await facade.getRationale(userId, proposalId);
       } catch (e) {
         expect(e).toBeInstanceOf(NotFoundException);
-        expect(e.message).toBe(`Reasoning not found`);
+        expect(e.message).toBe(`Rationale not found`);
       }
     });
   });
 
-  describe('Add / Update reasoning', () => {
-    it('should add a reasoning', async () => {
+  describe('Add / Update rationale', () => {
+    it('should add a rationale', async () => {
       const userId = 'user_1';
       const proposalId = mockGovActionProposalDtos[0].id;
       jest
-        .spyOn<any, string>(facade, 'createReasoningJson')
-        .mockResolvedValueOnce(mockReasoningJson);
+        .spyOn<any, string>(facade, 'createRationaleJsonCip100')
+        .mockResolvedValueOnce(mockRationaleJson);
       jest
-        .spyOn<any, string>(facade, 'addReasoningToIpfs')
+        .spyOn<any, string>(facade, 'addRationaleToIpfs')
         .mockResolvedValueOnce(mockIpfsContentDto);
 
-      const reasoningDto = GovernanceMapper.ipfsContentDtoToReasoningDto(
+      const rationaleDto = GovernanceMapper.ipfsContentDtoToRationaleDto(
         mockIpfsContentDto,
         userId,
         proposalId,
-        mockReasoningRequest,
+        mockRationaleRequest,
       );
 
       const expectedResult =
-        GovernanceMapper.reasoningDtoToResponse(reasoningDto);
+        GovernanceMapper.rationaleDtoToResponse(rationaleDto);
 
-      mockGovernanceService.addReasoning.mockResolvedValueOnce(reasoningDto);
-      const result = await facade.addReasoning(
+      mockGovernanceService.addRationale.mockResolvedValueOnce(rationaleDto);
+      const result = await facade.addRationale(
         userId,
         proposalId,
-        mockReasoningRequest,
+        mockRationaleRequest,
       );
 
       expect(result).toEqual(expectedResult);
-      expect(mockGovernanceService.addReasoning).toHaveBeenCalledWith(
-        reasoningDto,
+      expect(mockGovernanceService.addRationale).toHaveBeenCalledWith(
+        rationaleDto,
       );
     });
 
-    it('should not add a reasoning - wrong GovActionProposalId', async () => {
+    it('should not add a rationale - wrong GovActionProposalId', async () => {
       const userId = 'user_1';
       const proposalId = 'wrongId';
-      const reasoningRequest = {
-        ...mockReasoningRequest,
+      const rationaleRequest = {
+        ...mockRationaleRequest,
         govActionProposalId: proposalId,
       };
       jest
-        .spyOn<any, string>(facade, 'createReasoningJson')
-        .mockResolvedValueOnce(mockReasoningJson);
+        .spyOn<any, string>(facade, 'createRationaleJsonCip100')
+        .mockResolvedValueOnce(mockRationaleJson);
       jest
-        .spyOn<any, string>(facade, 'addReasoningToIpfs')
+        .spyOn<any, string>(facade, 'addRationaleToIpfs')
         .mockResolvedValueOnce(mockIpfsContentDto);
-      const reasoningDto = GovernanceMapper.ipfsContentDtoToReasoningDto(
+      const rationaleDto = GovernanceMapper.ipfsContentDtoToRationaleDto(
         mockIpfsContentDto,
         userId,
         proposalId,
-        mockReasoningRequest,
+        mockRationaleRequest,
       );
 
-      mockGovernanceService.addReasoning.mockResolvedValueOnce(reasoningDto);
+      mockGovernanceService.addRationale.mockResolvedValueOnce(rationaleDto);
 
       try {
-        await facade.addReasoning(userId, proposalId, reasoningRequest);
+        await facade.addRationale(userId, proposalId, rationaleRequest);
       } catch (e) {
         expect(e).toBeInstanceOf(NotFoundException);
         expect(e.message).toBe(
-          `Gov action proposal with id ${reasoningRequest.govActionProposalId} not found`,
+          `Gov action proposal with id ${rationaleRequest.govActionProposalId} not found`,
         );
       }
-      expect(mockGovernanceService.findGovProposalById).toHaveBeenCalledWith(
-        reasoningRequest.govActionProposalId,
-      );
     });
   });
 

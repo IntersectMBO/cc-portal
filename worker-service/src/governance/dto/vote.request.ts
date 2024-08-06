@@ -4,7 +4,7 @@ export class VoteRequest {
   userId: string;
   govActionProposalId: string;
   vote: string;
-  reasoningTitle: string;
+  rationaleTitle: string;
   comment: string;
   submitTime: number;
   votingAnchorId: string;

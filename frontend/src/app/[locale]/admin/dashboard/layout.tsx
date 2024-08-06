@@ -4,6 +4,7 @@ import { isAnyAdminRole } from "@utils";
 import { Box } from "@mui/material";
 import { redirect } from "next/navigation";
 import React from "react";
+import { AdminFooter, AdminTopNav } from "@organisms";
 
 async function DashboardLayout({ params: { locale }, children }) {
   const user = await decodeUserToken();
@@ -11,7 +12,13 @@ async function DashboardLayout({ params: { locale }, children }) {
   if (user && !isAnyAdminRole(user?.role)) {
     redirect(`/${locale}/${PATHS.home}`);
   }
-  return <Box mb={10}>{children}</Box>;
+  return (
+    <>
+      <AdminTopNav />
+      <Box mb={10}>{children}</Box>
+      <AdminFooter />
+    </>
+  );
 }
 
 export default DashboardLayout;

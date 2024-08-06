@@ -12,7 +12,7 @@ import PermissionChecker from "../PermissionChecker";
 import { customPalette, IMAGES, PATHS } from "@consts";
 import Link from "next/link";
 import { Search } from "@molecules";
-import { useManageQueryParams } from "@utils";
+import { useManageQueryParams } from "@hooks";
 import MenuIcon from "@mui/icons-material/Menu";
 import { DrawerMobile } from "./DrawerMobile";
 
@@ -48,7 +48,6 @@ export const AdminTopNav = () => {
       flexDirection={{ xxs: "column", md: "row" }}
       justifyContent="space-between"
       width="100%"
-      className="perica"
     >
       <Hidden mdDown>
         <Search setSearchText={setSearchText} />
@@ -92,29 +91,31 @@ export const AdminTopNav = () => {
       homeRedirectionPath={PATHS.admin.dashboard}
       sx={{ justifyContent: "flex-Start" }}
     >
-      <Hidden mdUp>
-        <Search setSearchText={setSearchText} />
-      </Hidden>
-
-      <Hidden mdDown>{!!userSession && getNavItems()}</Hidden>
-
-      <Hidden mdUp>
-        <IconButton
-          data-testid="open-drawer-button"
-          onClick={openDrawer}
-          sx={{
-            bgcolor: customPalette.arcticWhite,
-          }}
-        >
-          <MenuIcon color="primary" />
-        </IconButton>
-      </Hidden>
-      <DrawerMobile
-        isDrawerOpen={isDrawerOpen}
-        setIsDrawerOpen={setIsDrawerOpen}
-      >
-        {!!userSession && getNavItems()}
-      </DrawerMobile>
+      {!!userSession && (
+        <>
+          <Hidden mdUp>
+            <Search setSearchText={setSearchText} />
+          </Hidden>
+          <Hidden mdDown>{getNavItems()}</Hidden>
+          <Hidden mdUp>
+            <IconButton
+              data-testid="open-drawer-button"
+              onClick={openDrawer}
+              sx={{
+                bgcolor: customPalette.arcticWhite,
+              }}
+            >
+              <MenuIcon color="primary" />
+            </IconButton>
+          </Hidden>
+          <DrawerMobile
+            isDrawerOpen={isDrawerOpen}
+            setIsDrawerOpen={setIsDrawerOpen}
+          >
+            {getNavItems()}
+          </DrawerMobile>
+        </>
+      )}
     </TopNavWrapper>
   );
 };
