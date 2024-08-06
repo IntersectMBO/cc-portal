@@ -14,6 +14,7 @@ import Cookies from "js-cookie";
 import { isResponseErrorI } from "@utils";
 import { useDocumentVisibility } from "@hooks";
 import { TopBannerContextProvider } from "./topBanner";
+import { UsersnapProvider } from "./usersnap";
 
 interface AppContextType {
   userSession: DecodedToken | null;
@@ -77,7 +78,9 @@ export function AppContextProvider({ session, children }) {
     >
       <ModalProvider>
         <SnackbarProvider>
-          <TopBannerContextProvider>{children}</TopBannerContextProvider>
+          <TopBannerContextProvider>
+            <UsersnapProvider>{children}</UsersnapProvider>
+          </TopBannerContextProvider>
         </SnackbarProvider>
       </ModalProvider>
     </AppContext.Provider>

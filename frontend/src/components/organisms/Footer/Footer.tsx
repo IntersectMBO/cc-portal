@@ -12,6 +12,7 @@ import { useTranslations } from "next-intl";
 import { useAppContext, useModal } from "@context";
 import { ICONS } from "@/constants";
 import { useScreenDimension } from "@hooks";
+import { FeedbackButton } from "@/components/molecules";
 
 export const Footer = ({
   showSignIn = true,
@@ -94,7 +95,7 @@ export const Footer = ({
           <Button startIcon={<img src={ICONS.help} />} variant="text">
             {t("help")}
           </Button>
-          <Button variant="outlined">{t("feedback")}</Button>
+          <FeedbackButton title={t("feedback")} />
         </Grid>
       </Grid>
 
