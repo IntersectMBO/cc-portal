@@ -95,7 +95,6 @@ export const Footer = ({
           <Button startIcon={<img src={ICONS.help} />} variant="text">
             {t("help")}
           </Button>
-          <FeedbackButton title={t("feedback")} />
         </Grid>
       </Grid>
 
