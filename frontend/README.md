@@ -129,5 +129,4 @@ The `frontend` folder of a Next.js project using App Router contains several imp
 - **`package.json`**: Defines the project dependencies, scripts, and general metadata about the project. This includes scripts for starting the application, installing dependencies, and other command-line tasks.
 
 ```
-
 ```
