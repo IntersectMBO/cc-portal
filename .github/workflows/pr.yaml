@@ -3,10 +3,10 @@ name: Lint,Test,Security Checks
 on:
   pull_request:
     branches:
-      - dev
-      - qa
-      - pre-prod
-      - main
+      - interim-develop
+      - interim-qa
+      - interim-pre-prod
+      - interim-prod
 
 permissions:
   contents: read

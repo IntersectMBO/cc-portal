@@ -3,10 +3,10 @@ name: Check,Build,Deploy
 on:
   push:
     branches:
-      - dev
-      - qa
-      - pre-prod
-      - main
+      - interim-develop
+      - interim-qa
+      - interim-pre-prod
+      - interim-prod
 
 permissions:
   contents: write
