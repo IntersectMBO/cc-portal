@@ -16,6 +16,7 @@
     "@mui/material": "^5.15.7",
     "@mui/material-nextjs": "^5.15.11",
     "@sentry/nextjs": "^7.100.1",
+    "@usersnap/browser": "^0.0.5",
     "axios": "^1.6.7",
     "cookie": "^0.6.0",
     "date-fns": "^3.6.0",
