@@ -49,6 +49,7 @@ describe('AuthService', () => {
     permissions: [],
     createdAt: null,
     updatedAt: null,
+    deactivatedAt: null,
   };
 
   const mockConfigService = {
