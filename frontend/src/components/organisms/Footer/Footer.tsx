@@ -49,12 +49,12 @@ export const Footer = ({
           </Typography>
         </Grid>
       </Hidden>
-      <Grid item>
+      <Grid item xxs={12} md="auto">
         <Grid
           container
           flexDirection={{ xxs: "column", md: "row" }}
           gap={2}
-          alignItems={{ xxs: "flex-start", md: "center" }}
+          alignItems={"center"}
         >
           <Typography fontWeight={400} variant="caption">
             {t("privacyPolicy")}
@@ -95,7 +95,7 @@ export const Footer = ({
         </Grid>
       </Grid>
 
-      <Grid item>
+      <Grid item minWidth={130}>
         <Grid
           container
           gap={{ xxs: 0, md: 2 }}
@@ -105,7 +105,7 @@ export const Footer = ({
       </Grid>
 
       <Hidden mdUp>
-        <Grid item xxs={12} textAlign="center" mt={2}>
+        <Grid item xxs={12} mt={2}>
           <Typography fontWeight={400} variant="caption">
             {t("copyright")}
           </Typography>
