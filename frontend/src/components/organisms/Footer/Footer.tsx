@@ -6,13 +6,14 @@ import {
   Grid,
   SxProps,
   Hidden,
+  Button as MUIButton,
 } from "@mui/material";
-import { Button, Typography } from "@atoms";
+import { Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 import { useAppContext, useModal } from "@context";
-import { ICONS } from "@/constants";
+import { EXTERNAL_LINKS, ICONS } from "@/constants";
 import { useScreenDimension } from "@hooks";
-import { FeedbackButton } from "@/components/molecules";
+import Link from "next/link";
 
 export const Footer = ({
   showSignIn = true,
@@ -82,6 +83,15 @@ export const Footer = ({
               </MUITypography>
             </Typography>
           )}
+          <MUIButton
+            component={Link}
+            target="_blank"
+            href={EXTERNAL_LINKS.guides}
+            startIcon={<img src={ICONS.help} />}
+            variant="text"
+          >
+            {t("guides")}
+          </MUIButton>
         </Grid>
       </Grid>
 
@@ -91,11 +101,7 @@ export const Footer = ({
           gap={{ xxs: 0, md: 2 }}
           justifyContent={{ xxs: "center", md: "flex-start" }}
           flexDirection={{ xxs: "column", md: "row" }}
-        >
-          <Button startIcon={<img src={ICONS.help} />} variant="text">
-            {t("help")}
-          </Button>
-        </Grid>
+        ></Grid>
       </Grid>
 
       <Hidden mdUp>
