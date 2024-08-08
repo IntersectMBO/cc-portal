@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException, Logger, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHelia } from 'helia';
 import type { HeliaLibp2p } from 'helia';
@@ -25,7 +30,7 @@ import { autoNAT } from '@libp2p/autonat';
 import { ping } from '@libp2p/ping';
 import { uPnPNAT } from '@libp2p/upnp-nat';
 import { mdns } from '@libp2p/mdns';
-import { createDelegatedRoutingV1HttpApiClient } from '@helia/delegated-routing-v1-http-api-client'
+import { createDelegatedRoutingV1HttpApiClient } from '@helia/delegated-routing-v1-http-api-client';
 //import { gossipsub } from '@chainsafe/libp2p-gossipsub';
 //import { webRTC, webRTCDirect } from '@libp2p/webrtc';
 import {
@@ -56,13 +61,8 @@ const libp2pOptions = {
     tcp(),
     webSockets(),
   ],
-  connectionEncryption: [
-    noise()
-  ],
-  streamMuxers: [
-    yamux(),
-    mplex()
-  ],
+  connectionEncryption: [noise()],
+  streamMuxers: [yamux(), mplex()],
   peerDiscovery: [
     mdns(),
     bootstrap({
@@ -71,16 +71,17 @@ const libp2pOptions = {
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
         '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
-        "/ip4/104.131.131.82/udp/4001/quic-v1/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
+        '/ip4/104.131.131.82/udp/4001/quic-v1/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp', 
-      ]
-    })
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
+      ],
+    }),
   ],
   services: {
     autoNAT: autoNAT(),
     dcutr: dcutr(),
-    delegatedRouting: () => createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
+    delegatedRouting: () =>
+      createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
     dht: kadDHT({
       //protocol: '/ipfs/kad/1.0.0',
       //peerInfoMapper: removePrivateAddressesMapper,
@@ -91,10 +92,10 @@ const libp2pOptions = {
     keychain: keychain(),
     ping: ping(),
     relay: circuitRelayServer({
-      advertise: true
+      advertise: true,
     }),
     upnp: uPnPNAT(),
-  }
+  },
 };
 
 @Injectable()
@@ -125,9 +126,9 @@ export class AppService implements OnModuleInit {
       const datastore = new LevelDatastore('ipfs/datastore');
       await datastore.open();
 
-      this.helia = await createHelia({ 
-        blockstore, 
-        datastore, 
+      this.helia = await createHelia({
+        blockstore,
+        datastore,
         libp2p: libp2pOptions,
       });
 
@@ -135,11 +136,6 @@ export class AppService implements OnModuleInit {
       this.helia.libp2p
         .getMultiaddrs()
         .forEach((ma) => console.log(ma.toString()));
-      
-      // this logger is for testing purposes and should be removed in the future
-      // this.helia.libp2p.addEventListener('peer:discovery', (evt) => {
-      //   this.logger.log(`found peer: ${ evt.detail.id.toString() }`);
-      // });  
     }
 
     return this.helia;
@@ -150,10 +146,9 @@ export class AppService implements OnModuleInit {
     const keyName = 'my-key11';
     const existingKeys = await this.helia.libp2p.services.keychain.listKeys();
     // if keyName already exists
-    if (existingKeys.some(x => x.name === keyName)) {
-      this.ipnsPeerId = await this.helia.libp2p.services.keychain.exportPeerId(
-        keyName,
-      );
+    if (existingKeys.some((x) => x.name === keyName)) {
+      this.ipnsPeerId =
+        await this.helia.libp2p.services.keychain.exportPeerId(keyName);
       this.logger.log(`IPNS PeerID: ${this.ipnsPeerId}`);
       return;
     }
@@ -169,88 +164,38 @@ export class AppService implements OnModuleInit {
   }
 
   async addDoc(file: Express.Multer.File): Promise<IpfsDto> {
-    this.fs = unixfs(this.helia);
-    const fileBuffer = Buffer.from(file.buffer);
-    const fileObj = Object.values(fileBuffer);
-
-    // Add doc to IPFS
-    const cid: CID = await this.fs.addBytes(Uint8Array.from(fileObj));
-    this.logger.log(`Added file: ${cid}`);
-
-    // Pin doc
-    const ret1 = this.helia.pins.add(cid);
-    ret1.next().then((res) => this.logger.log(`Pinned: ${res.value}`));
-
-    // Announce CID to the DHT
     try {
-      this.provideCid(cid);
+      this.fs = unixfs(this.helia);
+      const fileBuffer = Buffer.from(file.buffer);
+      const fileObj = Object.values(fileBuffer);
+
+      // Add doc to IPFS
+      const cid: CID = await this.fs.addBytes(Uint8Array.from(fileObj));
+      this.logger.log(`Added file: ${cid}`);
+
+      // Pin doc
+      const ret1 = this.helia.pins.add(cid);
+      ret1.next().then((res) => this.logger.log(`Pinned: ${res.value}`));
+
+      // Announce CID to the DHT
+      this.provideCidtoDHT(cid);
+
+      // Publish the name
+      await this.ipns.publish(this.ipnsPeerId, cid);
+
+      // Resolve the name
+      const result = await this.ipns.resolve(this.ipnsPeerId);
+      this.logger.log(`Result cid: ${result.cid}`);
+      this.logger.log(`Result path: ${result.record.value}`);
+
+      const content = fileBuffer.toString('utf-8');
+
+      return IpfsMapper.ipfsToIpfsDto(cid.toString(), content);
     } catch (error) {
       this.logger.error(`Final error: ${error}`);
       throw new InternalServerErrorException(error);
     }
-
-    // Publish the name
-    await this.ipns.publish(this.ipnsPeerId, cid);
-
-    // Resolve the name
-    const result = await this.ipns.resolve(this.ipnsPeerId);
-    this.logger.log(`Result cid: ${result.cid}`);
-    this.logger.log(`Result path: ${result.record.value}`);
-
-    const content = fileBuffer.toString('utf-8');
-
-    return IpfsMapper.ipfsToIpfsDto(cid.toString(), content);
   }
-
-  
-private provideCid(cid, retryDelay = 1000) {
-  let attempt = 0;
-  let errCode = null;
-  
-  const attemptToProvide = async () => {
-    try {
-      await this.helia.libp2p.contentRouting.provide(cid);
-      this.logger.log(`Announced CID to the DHT: ${cid.toString()}`);
-    } catch (error) {
-      this.logger.error(`Error announcing CID to the DHT: ${error}`);
-      errCode = error.code;
-      if (errCode === 'ERR_QUERY_ABORTED') {
-        attempt++;
-        this.logger.log(`Retrying... (${attempt})`);
-        await new Promise((resolve) => setTimeout(resolve, retryDelay));
-        attemptToProvide(); // Retry
-      } else {
-        this.logger.error(error);
-        throw new InternalServerErrorException(error);
-      }
-    }
-  };
-
-  attemptToProvide();
-}
-
-// private async provideCid(cid, retryDelay = 1000): Promise<void> {
-//   let attempt = 0;
-//   let errCode = null;
-//   do {
-//     try {
-//       await this.helia.libp2p.contentRouting.provide(cid);
-//       this.logger.log(`Announced CID to the DHT: ${cid.toString()}`);
-//       return;
-//     } catch (error) {
-//       this.logger.error(`Error announcing CID to the DHT: ${error}`);
-//       errCode = error.code;
-//       if (errCode === 'ERR_QUERY_ABORTED') {
-//         attempt++;
-//         this.logger.log(`Retrying... (${attempt})`);
-//         await new Promise((resolve) => setTimeout(resolve, retryDelay));
-//       } else {
-//         this.logger.error(error);
-//         throw new InternalServerErrorException(error);
-//       }
-//     }
-//   } while(errCode === 'ERR_QUERY_ABORTED');
-// }
 
   async getDoc(cid: string): Promise<IpfsDto> {
     this.fs = unixfs(this.helia);
@@ -266,17 +211,51 @@ private provideCid(cid, retryDelay = 1000) {
   }
 
   async addJson(json: string): Promise<IpfsDto> {
-    this.fs = unixfs(this.helia);
-    const encoder = new TextEncoder();
-    const jsonContent = JSON.stringify(json);
-    const cid: CID = await this.fs.addBytes(encoder.encode(jsonContent));
-    this.logger.log(`Added json: ${cid}`);
+    try {
+      this.fs = unixfs(this.helia);
+      const encoder = new TextEncoder();
+      const jsonContent = JSON.stringify(json);
+      const cid: CID = await this.fs.addBytes(encoder.encode(jsonContent));
+      this.logger.log(`Added json: ${cid}`);
 
-    const ret1 = this.helia.pins.add(cid);
-    ret1.next().then((res) => this.logger.log(`Pinned json: ${res.value}`));
+      const ret1 = this.helia.pins.add(cid);
+      ret1.next().then((res) => this.logger.log(`Pinned json: ${res.value}`));
 
-    const url = process.env.IPFS_PUBLIC_URL + cid.toString()
+      // Announce CID to the DHT
+      this.provideCidtoDHT(cid);
 
-    return IpfsMapper.ipfsToIpfsDto(cid.toString(), jsonContent, url);
+      const url = process.env.IPFS_PUBLIC_URL + cid.toString();
+
+      return IpfsMapper.ipfsToIpfsDto(cid.toString(), jsonContent, url);
+    } catch (error) {
+      this.logger.error(`Final error: ${error}`);
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  private provideCidtoDHT(cid, retryDelay = 1000) {
+    let attempt = 0;
+    let errCode = null;
+
+    const attemptToProvide = async () => {
+      try {
+        await this.helia.libp2p.contentRouting.provide(cid);
+        this.logger.log(`Announced CID to the DHT: ${cid.toString()}`);
+      } catch (error) {
+        this.logger.error(`Error announcing CID to the DHT: ${error}`);
+        errCode = error.code;
+        if (errCode === 'ERR_QUERY_ABORTED') {
+          attempt++;
+          this.logger.log(`Retrying... (${attempt})`);
+          await new Promise((resolve) => setTimeout(resolve, retryDelay));
+          attemptToProvide(); // Retry
+        } else {
+          this.logger.error(error);
+          throw new InternalServerErrorException(error);
+        }
+      }
+    };
+
+    attemptToProvide();
   }
 }
