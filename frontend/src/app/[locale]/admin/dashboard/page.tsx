@@ -16,14 +16,12 @@ export default async function AdminDashboard({
   });
   const hasError = isResponseErrorI(users);
   return (
-    <main>
-      <Suspense fallback={<Loading />}>
-        <UsersList
-          usersList={!hasError && users?.data}
-          paginationMeta={!hasError && users?.meta}
-          error={isResponseErrorI(users) && users.error}
-        />
-      </Suspense>
-    </main>
+    <Suspense fallback={<Loading />}>
+      <UsersList
+        usersList={!hasError && users?.data}
+        paginationMeta={!hasError && users?.meta}
+        error={isResponseErrorI(users) && users.error}
+      />
+    </Suspense>
   );
 }

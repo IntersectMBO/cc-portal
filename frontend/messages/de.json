@@ -66,7 +66,7 @@
     "termsOfService": "Terms of service",
     "AreYouCCMember": "Are you CC member?",
     "signIn": "Sign In",
-    "help": "Help",
+    "guides": "Guides",
     "feedback": "Feedback"
   },
   "Modals": {
@@ -88,10 +88,11 @@
       }
     },
     "signUp": {
-      "headline": "Sign Up",
+      "headline": "Complete your registration",
+      "description": "You will be using your email to sign in",
       "fields": {
-        "username": {
-          "label": "Username"
+        "displayName": {
+          "label": "Display name"
         },
         "hotCredential": {
           "label": "Hot Credential",
@@ -268,6 +269,9 @@
   "Snackbar": {
     "changesSaved": "Changes saved",
     "copiedToClipboard": "Copied to clipboard"
+  },
+  "TopBanner": {
+    "message": "This version of the Constitutional Committee Portal is for testing & previewing new features. NONE of the information contained herein comes from Cardano MainNet"
   },
   "GovernanceAction": {
     "Link": "Link",

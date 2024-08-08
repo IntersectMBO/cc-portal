@@ -22,11 +22,12 @@ import {
   getProposalTypeLabel,
   getShortenedGovActionId,
   formatDisplayDate,
-  useScreenDimension,
   isResponseErrorI,
 } from "@utils";
+import { useScreenDimension } from "@hooks";
 import { ReasoningContentsI, ReasoningResponseI } from "@/lib/requests";
 import { useSnackbar } from "@/context/snackbar";
+import { CopyPill } from "@/components/molecules";
 
 interface Reasoning extends Omit<ReasoningResponseI, "contents"> {
   contents: ReasoningContentsI;
@@ -151,8 +152,8 @@ export const PreviewReasoningModal = () => {
             display="flex"
           >
             <Reasoning
-              title={reasoning.contents.title}
-              description={reasoning.contents.content}
+              title={reasoning.title}
+              description={reasoning.contents.body.comment}
               link={reasoning.url}
               hash={reasoning.blake2b}
               data-testid="asdf"
@@ -163,9 +164,13 @@ export const PreviewReasoningModal = () => {
           <Typography color="neutralGray" variant="caption">
             {t("previewRationale.governanceActionId")}
           </Typography>
-          <OutlinedLightButton nonInteractive={true}>
-            {getShortenedGovActionId(govAction.tx_hash, isMobile ? 4 : 20)}
-          </OutlinedLightButton>
+          <CopyPill
+            copyValue={govAction.tx_hash}
+            copyText={getShortenedGovActionId(
+              govAction.tx_hash,
+              isMobile ? 4 : 20
+            )}
+          />
         </Box>
         <Box mt={3} data-testid="governance-action-type-text">
           <Typography color="neutralGray" variant="caption">

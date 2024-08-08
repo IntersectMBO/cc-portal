@@ -1,7 +1,8 @@
 import { IMAGES } from "@consts";
-import { OutlinedLightButton, Typography } from "@atoms";
+import { Typography } from "@atoms";
 import { Grid } from "@mui/material";
 import { getShortenedGovActionId } from "@utils";
+import { CopyPill } from "../CopyPill";
 
 export const UserBasicInfo = ({
   name,
@@ -42,9 +43,10 @@ export const UserBasicInfo = ({
       </Grid>
     )}
     {hotAddress && (
-      <OutlinedLightButton nonInteractive={true}>
-        {getShortenedGovActionId(hotAddress)}
-      </OutlinedLightButton>
+      <CopyPill
+        copyValue={hotAddress}
+        copyText={getShortenedGovActionId(hotAddress)}
+      />
     )}
   </Grid>
 );

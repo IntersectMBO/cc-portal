@@ -12,7 +12,7 @@ export function HeroActions({ role }: HeroActionsProps) {
   const { openModal } = useModal();
   const isAmdmin = role === "admin";
   return (
-    <Grid container gap={1}>
+    <Grid container flexDirection={{ xxs: "column", md: "row" }} gap={1}>
       {isAmdmin ? (
         <>
           <Grid item>

@@ -782,7 +782,7 @@
 					"response": []
 				},
 				{
-					"name": "Add Reasoning",
+					"name": "Add Rationale",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -793,7 +793,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"test reasoning 2\",\n    \"content\": \"some text of reasoning 2\"\n}",
+							"raw": "{\n    \"title\": \"test rationale 2\",\n    \"content\": \"some text of rationale 2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -801,7 +801,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/2/reasoning",
+							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/2/rationale",
 							"host": [
 								"{{base-url}}"
 							],
@@ -812,14 +812,14 @@
 								"{{userId}}",
 								"proposals",
 								"2",
-								"reasoning"
+								"rationale"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Reasoning for proposal",
+					"name": "Get Rationale for proposal",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -829,7 +829,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/2/reasoning",
+							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/2/rationale",
 							"host": [
 								"{{base-url}}"
 							],
@@ -840,7 +840,7 @@
 								"{{userId}}",
 								"proposals",
 								"2",
-								"reasoning"
+								"rationale"
 							]
 						}
 					},

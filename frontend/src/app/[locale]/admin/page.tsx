@@ -1,6 +1,12 @@
 import React from "react";
 
-import { Hero, HeroActions } from "@organisms";
+import {
+  AdminTopNav,
+  Footer,
+  FullHeightPageWrapper,
+  Hero,
+  HeroActions,
+} from "@organisms";
 import { unstable_setRequestLocale } from "next-intl/server"; // Import function to set the request-specific locale (unstable API).
 import { redirect } from "next/navigation";
 import { PATHS } from "@consts";
@@ -16,10 +22,12 @@ export default async function AdminHome({ params: { locale } }) {
   }
 
   return (
-    <main>
+    <FullHeightPageWrapper>
+      <AdminTopNav />
       <Hero>
         <HeroActions role="admin" />
       </Hero>
-    </main>
+      <Footer isFixed showSignIn={false} />
+    </FullHeightPageWrapper>
   );
 }
