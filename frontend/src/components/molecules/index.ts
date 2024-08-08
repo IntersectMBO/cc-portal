@@ -11,5 +11,6 @@ export * from "./DataActionsBar";
 export * from "./OrderActionsChip";
 export * from "./GovernanceActionsFilters";
 export * from "./GovernanceActionsSorting";
+export * from "./FeedbackButton";
 
 export * from "./types";

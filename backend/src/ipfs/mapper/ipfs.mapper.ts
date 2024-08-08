@@ -52,13 +52,13 @@ export class IpfsMapper {
     return contentDto;
   }
 
-  // static ipfsContentToReasoning(ipfsContentDto: IpfsContentDto): Reasoning {
-  //   const reasoning = new Reasoning();
-  //   reasoning.cid = ipfsContentDto.cid;
-  //   reasoning.url = ipfsContentDto.url;
-  //   reasoning.blake2b = ipfsContentDto.blake2b;
-  //   reasoning.title = ipfsContentDto.title;
+  // static ipfsContentToRationale(ipfsContentDto: IpfsContentDto): Rationale {
+  //   const rationale = new Rationale();
+  //   rationale.cid = ipfsContentDto.cid;
+  //   rationale.url = ipfsContentDto.url;
+  //   rationale.blake2b = ipfsContentDto.blake2b;
+  //   rationale.title = ipfsContentDto.title;
 
-  //   return reasoning;
+  //   return rationale;
   // }
 }

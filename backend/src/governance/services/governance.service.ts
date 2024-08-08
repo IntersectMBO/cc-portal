@@ -11,8 +11,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 import { GovActionProposalDto } from '../dto/gov-action-proposal-dto';
 import { Paginator } from 'src/util/pagination/paginator';
-import { ReasoningDto } from '../dto/reasoning.dto';
-import { Reasoning } from '../entities/reasoning.entity';
+import { RationaleDto } from '../dto/rationale.dto';
+import { Rationale } from '../entities/rationale.entity';
 import { GOVERNANCE_ACTION_PROPOSAL_CONFIG } from '../util/pagination/gap-pagination.config';
 
 @Injectable()
@@ -24,8 +24,8 @@ export class GovernanceService {
     private readonly voteRepository: Repository<Vote>,
     @InjectRepository(GovActionProposal)
     private readonly govActionMetadataRepository: Repository<GovActionProposal>,
-    @InjectRepository(Reasoning)
-    private readonly reasoningRepository: Repository<Reasoning>,
+    @InjectRepository(Rationale)
+    private readonly rationaleRepository: Repository<Rationale>,
 
     private readonly paginator: Paginator,
   ) {}
@@ -107,32 +107,32 @@ export class GovernanceService {
         { userId: userId },
       )
       .leftJoinAndSelect(
-        'governanceActionProposals.reasonings',
-        'reasoning',
-        'reasoning.userId = :userId',
+        'governanceActionProposals.rationales',
+        'rationale',
+        'rationale.userId = :userId',
         { userId: userId },
       );
   }
 
-  async addReasoning(reasoningDto: ReasoningDto): Promise<ReasoningDto> {
-    const reasoning = this.reasoningRepository.create(reasoningDto);
-    const savedReasoning = await this.reasoningRepository.save(reasoning);
-    return GovernanceMapper.reasoningToDto(savedReasoning);
+  async addRationale(rationaleDto: RationaleDto): Promise<RationaleDto> {
+    const rationale = this.rationaleRepository.create(rationaleDto);
+    const savedRationale = await this.rationaleRepository.save(rationale);
+    return GovernanceMapper.rationaleToDto(savedRationale);
   }
 
-  async findReasoningForUserByProposalId(
+  async findRationaleForUserByProposalId(
     userId: string,
     proposalId: string,
-  ): Promise<ReasoningDto> {
-    const reasoning = await this.reasoningRepository.findOne({
+  ): Promise<RationaleDto> {
+    const rationale = await this.rationaleRepository.findOne({
       where: {
         userId: userId,
         govActionProposalId: proposalId,
       },
     });
-    if (!reasoning) {
-      throw new NotFoundException(`Reasoning not found`);
+    if (!rationale) {
+      throw new NotFoundException(`Rationale not found`);
     }
-    return GovernanceMapper.reasoningToDto(reasoning);
+    return GovernanceMapper.rationaleToDto(rationale);
   }
 }

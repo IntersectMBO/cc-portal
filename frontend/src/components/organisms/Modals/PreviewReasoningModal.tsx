@@ -22,9 +22,9 @@ import {
   getProposalTypeLabel,
   getShortenedGovActionId,
   formatDisplayDate,
-  useScreenDimension,
   isResponseErrorI,
 } from "@utils";
+import { useScreenDimension } from "@hooks";
 import { ReasoningContentsI, ReasoningResponseI } from "@/lib/requests";
 import { useSnackbar } from "@/context/snackbar";
 import { CopyPill } from "@/components/molecules";
@@ -148,8 +148,8 @@ export const PreviewReasoningModal = () => {
             display="flex"
           >
             <Reasoning
-              title={reasoning.contents.title}
-              description={reasoning.contents.content}
+              title={reasoning.title}
+              description={reasoning.contents.body.comment}
               link={reasoning.url}
               hash={reasoning.blake2b}
             />

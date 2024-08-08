@@ -3,8 +3,8 @@ vp.id,
 vp.committee_voter, -- Should be a hot address related to a vote
 vp.gov_action_proposal_id, -- Should be Governance Action ID
 vp.vote, -- The vote itself, should be Yes, No, Abstain
-ocvd.title, -- Should be "Reasoning title"
-ocvd.comment, -- Should be "Reasoning comment"
+ocvd.title, -- Should be "Rationale title"
+ocvd.comment, -- Should be "Rationale comment"
 vp_block.time, -- Should be Vote "Submit date" info when clicking on show more button
 ch.raw,
 gap.type, -- Should be Governance Action Proposal category (ParameterChange, HardForkInitiation, TreasuryWithdrawals...)

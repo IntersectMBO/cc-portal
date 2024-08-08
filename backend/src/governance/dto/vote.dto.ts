@@ -8,8 +8,8 @@ export class VoteDto {
   userAddress: string;
   userPhotoUrl: string;
   voteValue: VoteValue;
-  reasoningTitle: string;
-  reasoningComment: string;
+  rationaleTitle: string;
+  rationaleComment: string;
   govActionProposalId: string;
   govActionProposalTxHash: string;
   govActionProposalTitle: string;

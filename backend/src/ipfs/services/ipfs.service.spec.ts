@@ -228,31 +228,31 @@ describe('IpfsService', () => {
 
   describe('Add JSON to IPFS', () => {
     it('should add JSON to IPFS', async () => {
-      const mockSendReasoningToIpfsService = jest
-        .spyOn<any, any>(service, 'sendReasoningToIpfs')
+      const mockSendRationaleToIpfsService = jest
+        .spyOn<any, any>(service, 'sendRationaleToIpfs')
         .mockResolvedValueOnce(mockIpfsJsonResponse);
 
-      const result = await service.addReasoningToIpfs(mockJson);
+      const result = await service.addRationaleToIpfs(mockJson);
 
-      expect(mockSendReasoningToIpfsService).toHaveBeenCalled();
+      expect(mockSendRationaleToIpfsService).toHaveBeenCalled();
       expect(result).toEqual(mockIpfsJsonResponse);
     });
 
     it('should throw an error when trying to add JSON to IPFS', async () => {
       const mockEmptyJson = {};
-      const mockSendReasoningToIpfsService = jest
-        .spyOn<any, any>(service, 'sendReasoningToIpfs')
+      const mockSendRationaleToIpfsService = jest
+        .spyOn<any, any>(service, 'sendRationaleToIpfs')
         .mockResolvedValueOnce(mockIpfsJsonResponse);
 
       try {
-        await service.addReasoningToIpfs(mockEmptyJson);
+        await service.addRationaleToIpfs(mockEmptyJson);
       } catch (err) {
-        expect(mockSendReasoningToIpfsService).toHaveBeenCalledWith(
+        expect(mockSendRationaleToIpfsService).toHaveBeenCalledWith(
           mockEmptyJson,
         );
         expect(err).toBeInstanceOf(InternalServerErrorException);
         expect(err.message).toBe(
-          `Error when add reasoning to the IPFS service`,
+          `Error when add rationale to the IPFS service`,
         );
       }
     });
