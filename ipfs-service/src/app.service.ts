@@ -233,7 +233,7 @@ export class AppService implements OnModuleInit {
     }
   }
 
-  private provideCidtoDHT(cid, retryDelay = 1000) {
+  private provideCidtoDHT(cid, retryDelay = 60000) {
     let attempt = 0;
     let errCode = null;
 
