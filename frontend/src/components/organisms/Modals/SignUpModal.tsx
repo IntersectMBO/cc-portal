@@ -143,6 +143,7 @@ export const SignUpModal = () => {
             errors={errors}
             control={control}
             accept="image/png, image/jpg, image/jpeg"
+            dataTestId="upload-profile-photo-button"
             {...register("file", {
               validate: {
                 fileType: (file) =>
@@ -169,7 +170,7 @@ export const SignUpModal = () => {
               <ModalActions isSubmitting={isSubmitting} />
             ) : (
               <Button
-              // todo: check this selecctor
+                // todo: check this selecctor
                 data-testid="sign-up-modal-button"
                 startIcon={
                   isSubmitting && (

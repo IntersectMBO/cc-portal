@@ -3,14 +3,8 @@
 import { useCallback } from "react";
 import { Controller, get } from "react-hook-form";
 
-import { Field } from "@molecules";
-
-import {
-  ControlledCheckboxProps,
-  ControlledUploadProps,
-  RenderInputProps,
-} from "./types";
-import { ButtonProps, UploadFileButton } from "@atoms";
+import { ControlledUploadProps, RenderInputProps } from "./types";
+import { UploadFileButton } from "@atoms";
 
 export const Upload = ({
   control,
