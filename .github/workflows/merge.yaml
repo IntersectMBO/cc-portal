@@ -14,7 +14,7 @@ permissions:
   packages: write
 
 env:
-  ENVIRONMENT: ${{ github.ref_name == 'interim-prod' && 'prod-cc-portal' || 'interim-pre-prod' && 'pre-prod-cc-portal' || 'interim-qa' && 'qa-cc-portal' || 'interim-develop' && 'dev-cc-portal' }}
+  ENVIRONMENT: ${{ (github.ref_name == 'interim-prod' && 'prod-cc-portal') || (github.ref_name == 'interim-pre-prod' && 'pre-prod-cc-portal') || (github.ref_name == 'interim-qa' && 'qa-cc-portal') || (github.ref_name == 'interim-develop' && 'dev-cc-portal') }}
 
 jobs:
   check-build-deploy:
