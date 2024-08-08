@@ -203,7 +203,7 @@ export class AppService implements OnModuleInit {
   }
 
   
-private provideCid(cid, retryDelay = 1000) {
+private provideCid(cid, retryDelay = 60000) {
   let attempt = 0;
   let errCode = null;
   
