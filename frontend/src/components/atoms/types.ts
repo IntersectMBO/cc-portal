@@ -30,6 +30,7 @@ export type TypographyProps = Pick<
     | "body1"
     | "body2"
     | "caption";
+  dataTestId?: string;
 };
 
 export type InputProps = InputBaseProps & {

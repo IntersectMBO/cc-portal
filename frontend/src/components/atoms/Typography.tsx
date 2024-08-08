@@ -6,6 +6,7 @@ import { TypographyProps } from "./types";
 export const Typography = ({
   color,
   variant = "body1",
+  dataTestId,
   ...props
 }: TypographyProps) => {
   const fontSize = {
@@ -66,6 +67,7 @@ export const Typography = ({
       fontSize={{ xxs: fontSizeXS, md: fontSize }}
       fontWeight={fontWeight}
       lineHeight={lineHeight}
+      data-testid={dataTestId}
       {...props}
     >
       {props.children}
