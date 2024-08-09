@@ -159,10 +159,10 @@ jobs:
           --project ${{ vars.PROJECT }} \
           --environment $ENVIRONMENT
 
-          # qovery container deploy \
-          #   --organization ${{ vars.ORGANIZATION }} \
-          #   --project ${{ vars.PROJECT }} \
-          #   --environment $ENVIRONMENT \
-          #   --container ${{ matrix.qovery_container_name }} \
-          #   --tag ${{ env.TAG }} \
-          #   --watch
+          qovery container deploy \
+            --organization ${{ vars.ORGANIZATION }} \
+            --project ${{ vars.PROJECT }} \
+            --environment $ENVIRONMENT \
+            --container ${{ matrix.qovery_container_name }} \
+            --tag ${{ env.TAG }} \
+            --watch
