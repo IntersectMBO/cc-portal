@@ -22,6 +22,7 @@ jobs:
             name: frontend-interim
             dockerfile: ./frontend/Dockerfile
             image: ghcr.io/${{ github.repository }}-frontend-interim
+            qovery_container_name: frontend-interim
 
     runs-on: ubuntu-latest
     steps:

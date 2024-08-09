@@ -25,6 +25,7 @@ jobs:
             name: frontend-interim
             dockerfile: ./frontend/Dockerfile
             image: ghcr.io/${{ github.repository }}-frontend-interim
+            qovery_container_name: frontend-interim
 
     runs-on: ubuntu-latest
     steps:
@@ -148,10 +149,15 @@ jobs:
           # Download and install Qovery CLI
           curl -s https://get.qovery.com | bash
 
-          qovery container deploy \
-            --organization ${{ vars.ORGANIZATION }} \
-            --project ${{ vars.PROJECT }} \
-            --environment $ENVIRONMENT \
-            --container ${{ matrix.name }} \
-            --tag ${{ env.TAG }} \
-            --watch
+          qovery container list \
+          --organization ${{ vars.ORGANIZATION }} \
+          --project ${{ vars.PROJECT }} \
+          --environment $ENVIRONMENT
+
+          # qovery container deploy \
+          #   --organization ${{ vars.ORGANIZATION }} \
+          #   --project ${{ vars.PROJECT }} \
+          #   --environment $ENVIRONMENT \
+          #   --container ${{ matrix.qovery_container_name }} \
+          #   --tag ${{ env.TAG }} \
+          #   --watch
