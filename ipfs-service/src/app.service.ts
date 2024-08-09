@@ -44,6 +44,11 @@ import { config } from 'dotenv';
 config();
 
 const libp2pOptions = {
+  config: {
+    dht: {
+      enabled: true
+    }
+  },
   addresses: {
     listen: [
       // add a listen address (localhost) to accept TCP connections on a random port
@@ -51,20 +56,16 @@ const libp2pOptions = {
       process.env.LISTEN_WS_ADDRESS,
       process.env.LISTEN_QUIC_ADDRESS,
     ],
-    // announce: [
-    //   process.env.ANNOUNCE_TCP_ADDRESS,
-    //   process.env.ANNOUNCE_WS_ADDRESS,
-    // ],
   },
   transports: [
-    circuitRelayTransport({ discoverRelays: 1 }),
+    circuitRelayTransport({ discoverRelays: 2 }),
     tcp(),
     webSockets(),
   ],
   connectionEncryption: [noise()],
-  streamMuxers: [yamux(), mplex()],
+  streamMuxers: [yamux()],
   peerDiscovery: [
-    mdns(),
+   mdns(),
     bootstrap({
       list: [
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
@@ -81,10 +82,9 @@ const libp2pOptions = {
     autoNAT: autoNAT(),
     dcutr: dcutr(),
     delegatedRouting: () =>
-      createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
+      createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev/routing/v1'),
     dht: kadDHT({
-      //protocol: '/ipfs/kad/1.0.0',
-      //peerInfoMapper: removePrivateAddressesMapper,
+      protocol: '/ipfs/kad/1.0.0',
       validators: { ipns: ipnsValidator },
       selectors: { ipns: ipnsSelector },
     }),
@@ -233,7 +233,7 @@ export class AppService implements OnModuleInit {
     }
   }
 
-  private provideCidtoDHT(cid, retryDelay = 60000) {
+  private provideCidtoDHT(cid, retryDelay = 2000) {
     let attempt = 0;
     let errCode = null;
 
