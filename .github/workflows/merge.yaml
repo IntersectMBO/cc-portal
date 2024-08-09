@@ -154,12 +154,12 @@ jobs:
           # Download and install Qovery CLI
           curl -s https://get.qovery.com | bash
 
-          qovery application list \
+          qovery container list \
           --organization ${{ vars.ORGANIZATION }} \
           --project ${{ vars.PROJECT }} \
           --environment $ENVIRONMENT
 
-          qovery application deploy \
+          qovery container deploy \
             --organization ${{ vars.ORGANIZATION }} \
             --project ${{ vars.PROJECT }} \
             --environment $ENVIRONMENT \
