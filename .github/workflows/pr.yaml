@@ -23,6 +23,11 @@ jobs:
             dockerfile: ./frontend/Dockerfile
             image: ghcr.io/${{ github.repository }}-frontend-interim
             qovery_container_name: frontend-interim
+          - workdir: ./backend
+            name: cc-portal-api
+            dockerfile: ./backend/Dockerfile
+            image: ghcr.io/${{ github.repository }}-cc-portal-api
+            qovery_container_name: cc-portal-api
 
     runs-on: ubuntu-latest
     steps:
