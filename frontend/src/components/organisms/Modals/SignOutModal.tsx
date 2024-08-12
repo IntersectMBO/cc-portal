@@ -26,7 +26,7 @@ export const SignOutModal = () => {
   return (
     <ModalWrapper dataTestId="sign-out-modal" icon={IMAGES.pastelSignOut}>
       <ModalHeader>
-        <span data-testid="sing-in-modal-title-text">
+        <span data-testid="sing-out-modal-title-text">
           {t("signOut.headline")}
         </span>
       </ModalHeader>
@@ -39,7 +39,7 @@ export const SignOutModal = () => {
           >
             {t("signOut.description")}
           </Typography>
-          <ModalActions />
+          <ModalActions dataTestId="sign-out-modal" />
         </ModalContents>
       </form>
     </ModalWrapper>
