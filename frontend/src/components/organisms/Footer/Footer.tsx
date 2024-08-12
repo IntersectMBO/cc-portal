@@ -85,14 +85,14 @@ export const Footer = ({
                 sx={{ cursor: "pointer", ml: { xxs: 0, md: 1 } }}
                 fontWeight={500}
                 variant="caption"
+                data-testid="footer-sign-in-button"
                 onClick={() => {
                   openModal({
                     type: "signIn",
                   });
                 }}
               >
-                // todo: check this with kiki
-                <span data-testid="footer-sign-in-button">{t("signIn")}</span>
+                <span data-testid="footer-sign-in-text">{t("signIn")}</span>
               </MUITypography>
             </Typography>
           )}
@@ -102,6 +102,7 @@ export const Footer = ({
             href={EXTERNAL_LINKS.guides}
             startIcon={<img src={ICONS.help} />}
             variant="text"
+            data-testid="footer-guides-button"
           >
             {t("guides")}
           </MUIButton>
