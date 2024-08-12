@@ -111,7 +111,7 @@ export const LatestUpdates = ({
       </Box>
       {isEmpty(data) || error ? (
         <NotFound
-          height="55vh"
+          height="50vh"
           title="latestUpdates.title"
           description="latestUpdates.description"
         />
