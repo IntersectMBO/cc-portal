@@ -50,7 +50,10 @@ export const AdminTopNav = () => {
       width="100%"
     >
       <Hidden mdDown>
-        <Search setSearchText={setSearchText} />
+        <Search
+          setSearchText={setSearchText}
+          dataTestId="admin-top-nav-search-input"
+        />
       </Hidden>
       <Grid
         container
@@ -94,7 +97,10 @@ export const AdminTopNav = () => {
       {!!userSession && (
         <>
           <Hidden mdUp>
-            <Search setSearchText={setSearchText} />
+            <Search
+              setSearchText={setSearchText}
+              dataTestId="admin-top-nav-search-input"
+            />
           </Hidden>
           <Hidden mdDown>{getNavItems()}</Hidden>
           <Hidden mdUp>
