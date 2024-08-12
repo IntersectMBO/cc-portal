@@ -32,7 +32,7 @@ export const MultipleSelect = ({
           sx={{ mb: 0.5 }}
           variant="body2"
           {...labelStyles}
-          dataTestId={`${dataTestId}-label`}
+          dataTestId={`${dataTestId}-text`}
         >
           {label}
         </Typography>

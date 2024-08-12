@@ -127,7 +127,7 @@ export function MultipleSelect({
               />
             )}
             <Typography
-              dataTestId={`${dataTestId}--label_${item.value}`}
+              dataTestId={`${dataTestId}-text_${item.value}`}
               variant="body2"
             >
               {item.label}
