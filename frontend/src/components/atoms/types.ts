@@ -10,6 +10,7 @@ import { ButtonProps as MUIButtonProps } from "@mui/material/Button";
 
 export type ButtonProps = Omit<MUIButtonProps, "size"> & {
   size?: "small" | "medium" | "large" | "extraLarge";
+  dataTestId?: string;
 };
 
 export type TypographyProps = Pick<

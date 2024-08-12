@@ -65,7 +65,7 @@ export default function UserProfileButton({
             />
           }
           endIcon={<img width={20} height={20} src={ICONS.chevronDown} />}
-          data-testid="user-profile-menu-button"
+          dataTestId="user-profile-menu-button"
         >
           {user?.name || "User"}
         </Button>

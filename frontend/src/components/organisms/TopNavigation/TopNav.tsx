@@ -33,8 +33,7 @@ export const TopNav = () => {
     items.map((navItem) => (
       <Grid item key={navItem.label}>
         <Link
-          // todo: check this selector
-          data-testid="asdf"
+          dataTestId={`top-nav-${navItem.href.replace("/", "")}-link`}
           label={navItem.label}
           href={navItem.href}
         />
@@ -52,6 +51,7 @@ export const TopNav = () => {
             variant="outlined"
             href={PATHS.admin.dashboard}
             component={NextLink}
+            data-testid="top-nav-admin-dashboard-button"
           >
             {t("adminDashboard")}
           </Button>
