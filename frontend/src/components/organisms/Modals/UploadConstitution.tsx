@@ -66,7 +66,10 @@ export const UploadConstitution = () => {
           >
             {t("uploadConstitution.upload")}
           </ControlledField.Upload>
-          <ModalActions isSubmitting={isSubmitting} />
+          <ModalActions
+            isSubmitting={isSubmitting}
+            dataTestId="upload-constitution-modal"
+          />
         </ModalContents>
       </form>
     </ModalWrapper>

@@ -89,7 +89,7 @@ export const AddMemberModal = () => {
             />
           )}
 
-          <ModalActions />
+          <ModalActions dataTestId="add-member-modal" />
         </ModalContents>
       </form>
     </ModalWrapper>
