@@ -58,7 +58,7 @@ const libp2pOptions = {
     ],
   },
   transports: [
-    circuitRelayTransport({ discoverRelays: 1 }),
+    circuitRelayTransport({ discoverRelays: 2 }),
     tcp(),
     webSockets(),
   ],
