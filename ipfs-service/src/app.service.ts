@@ -58,7 +58,7 @@ const libp2pOptions = {
     ],
   },
   transports: [
-    circuitRelayTransport({ discoverRelays: 2 }),
+    circuitRelayTransport({ discoverRelays: 1 }),
     tcp(),
     webSockets(),
   ],
@@ -78,24 +78,30 @@ const libp2pOptions = {
       ],
     }),
   ],
-  services: {
-    autoNAT: autoNAT(),
-    dcutr: dcutr(),
-    delegatedRouting: () =>
-      createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev/routing/v1'),
-    dht: kadDHT({
-      protocol: '/ipfs/kad/1.0.0',
-      validators: { ipns: ipnsValidator },
-      selectors: { ipns: ipnsSelector },
-    }),
-    identify: identify(),
-    keychain: keychain(),
-    ping: ping(),
-    relay: circuitRelayServer({
-      advertise: true,
-    }),
-    upnp: uPnPNAT(),
-  },
+  // services: {
+  //   autoNAT: autoNAT(),
+  //   dcutr: dcutr(),
+  //   delegatedRouting: () =>
+  //     createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
+  //   dht: kadDHT({
+  //     clientMode: false,
+  //     initialQuerySelfInterval: 1000,
+  //     kBucketSize: 20,
+  //     protocol: '/ipfs/kad/1.0.0',
+  //     maxInboundStreams: 32,
+  //     maxOutboundStreams: 64,
+  //     validators: { ipns: ipnsValidator },
+  //     selectors: { ipns: ipnsSelector },
+  //   }),
+  //   identify: identify(),
+  //   keychain: keychain(),
+  //   ping: ping(),
+  //   relay: circuitRelayServer({
+  //     advertise: true,
+  //     hopTimeout: 60000,
+  //   }),
+  //   upnp: uPnPNAT(),
+  // },
 };
 
 @Injectable()
@@ -178,7 +184,7 @@ export class AppService implements OnModuleInit {
       ret1.next().then((res) => this.logger.log(`Pinned: ${res.value}`));
 
       // Announce CID to the DHT
-      this.provideCidtoDHT(cid);
+      //this.provideCidtoDHT(cid);
 
       // Publish the name
       await this.ipns.publish(this.ipnsPeerId, cid);
@@ -222,7 +228,7 @@ export class AppService implements OnModuleInit {
       ret1.next().then((res) => this.logger.log(`Pinned json: ${res.value}`));
 
       // Announce CID to the DHT
-      this.provideCidtoDHT(cid);
+      //this.provideCidtoDHT(cid);
 
       const url = process.env.IPFS_PUBLIC_URL + cid.toString();
 
@@ -233,7 +239,7 @@ export class AppService implements OnModuleInit {
     }
   }
 
-  private provideCidtoDHT(cid, retryDelay = 2000) {
+  private provideCidtoDHT(cid, retryDelay = 5000) {
     let attempt = 0;
     let errCode = null;
 
@@ -250,6 +256,7 @@ export class AppService implements OnModuleInit {
           await new Promise((resolve) => setTimeout(resolve, retryDelay));
           attemptToProvide(); // Retry
         } else {
+          this.logger.log(`CID: ${cid} has not been announced`);
           this.logger.error(error);
           throw new InternalServerErrorException(error);
         }
