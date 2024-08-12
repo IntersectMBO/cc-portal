@@ -15,7 +15,7 @@ export default async function Members({ params: { locale }, searchParams }) {
   });
   const hasError = isResponseErrorI(members);
   return (
-    <main>
+    <>
       <TopNav />
       <ContentWrapper>
         <Suspense fallback={<Loading />}>
@@ -31,6 +31,6 @@ export default async function Members({ params: { locale }, searchParams }) {
         </Suspense>
       </ContentWrapper>
       <Footer />
-    </main>
+    </>
   );
 }
