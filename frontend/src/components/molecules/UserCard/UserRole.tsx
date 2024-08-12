@@ -34,6 +34,7 @@ export const UserRole = ({
         showCloseButton={showCloseButton}
         onClick={onClick}
         list={formattedRoleList}
+        dataTestId="user-role"
       />
     </>
   );
