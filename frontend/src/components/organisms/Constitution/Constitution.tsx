@@ -45,6 +45,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
         onClick={() => setIsOpen(!isOpen)}
         top={{ xxs: 75, md: 90 }}
         left={0}
+        dataTestId="constitution-nav-drawer"
       >
         <Grid
           container
@@ -145,7 +146,10 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       <Grid mt={3} item xxs={10} md={isOpen ? 8 : 11}>
         <ContentWrapper>
           <Box px={{ xxs: 2, md: 5 }}>
-            <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
+            <Card
+              sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}
+              dataTestId="constitution-content"
+            >
               <MDXRemote {...constitution} components={MDXComponents} />
             </Card>
           </Box>

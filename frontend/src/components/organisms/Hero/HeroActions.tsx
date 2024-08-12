@@ -45,7 +45,11 @@ export function HeroActions({ role }: HeroActionsProps) {
       ) : (
         <Grid item>
           <Link href={PATHS.constitution}>
-            <Button size="large" startIcon={<img src={ICONS.rocketLaunch} />}>
+            <Button
+              size="large"
+              data-testid="hero-see-constitution-button"
+              startIcon={<img src={ICONS.rocketLaunch} />}
+            >
               {t("hero.seeConstitution")}
             </Button>
           </Link>
