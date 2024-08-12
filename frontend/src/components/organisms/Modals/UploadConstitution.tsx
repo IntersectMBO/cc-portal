@@ -55,7 +55,7 @@ export const UploadConstitution = () => {
             size="large"
             errors={errors}
             accept=".md"
-            dataTestId="upload-constitution-button"
+            dataTestId="upload-constitution"
             {...register("file", {
               required: "Required",
               validate: {

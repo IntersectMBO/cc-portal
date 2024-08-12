@@ -41,11 +41,12 @@ export const UploadFileButton = ({
         style={{ display: "none" }}
         type="file"
         onChange={fileChange}
-        data-testid={dataTestId}
+        data-testid={`${dataTestId}-input`}
       />
       <Button
         startIcon={<img src={ICONS.upload} />}
         component="span"
+        data-testid={`${dataTestId}-button`}
         {...buttonProps}
       >
         {children} {selectedFile && selectedFile.name}
