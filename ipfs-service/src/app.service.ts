@@ -135,7 +135,7 @@ export class AppService implements OnModuleInit {
       this.helia = await createHelia({
         blockstore,
         datastore,
-        libp2p: libp2pOptions,
+        //libp2p: libp2pOptions,
       });
 
       this.logger.log('PeerId: ' + this.helia.libp2p.peerId.toString());
