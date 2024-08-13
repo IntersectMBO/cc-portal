@@ -58,7 +58,7 @@ const libp2pOptions = {
     ],
   },
   transports: [
-    circuitRelayTransport({ discoverRelays: 2 }),
+    circuitRelayTransport({ discoverRelays: 1 }),
     tcp(),
     webSockets(),
   ],
@@ -78,30 +78,30 @@ const libp2pOptions = {
       ],
     }),
   ],
-  // services: {
-  //   autoNAT: autoNAT(),
-  //   dcutr: dcutr(),
-  //   delegatedRouting: () =>
-  //     createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
-  //   dht: kadDHT({
-  //     clientMode: false,
-  //     initialQuerySelfInterval: 1000,
-  //     kBucketSize: 20,
-  //     protocol: '/ipfs/kad/1.0.0',
-  //     maxInboundStreams: 32,
-  //     maxOutboundStreams: 64,
-  //     validators: { ipns: ipnsValidator },
-  //     selectors: { ipns: ipnsSelector },
-  //   }),
-  //   identify: identify(),
-  //   keychain: keychain(),
-  //   ping: ping(),
-  //   relay: circuitRelayServer({
-  //     advertise: true,
-  //     hopTimeout: 60000,
-  //   }),
-  //   upnp: uPnPNAT(),
-  // },
+  services: {
+    autoNAT: autoNAT(),
+    dcutr: dcutr(),
+    delegatedRouting: () =>
+      createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
+    dht: kadDHT({
+      clientMode: false,
+      initialQuerySelfInterval: 1000,
+      kBucketSize: 20,
+      protocol: '/ipfs/kad/1.0.0',
+      maxInboundStreams: 32,
+      maxOutboundStreams: 64,
+      validators: { ipns: ipnsValidator },
+      selectors: { ipns: ipnsSelector },
+    }),
+    identify: identify(),
+    keychain: keychain(),
+    ping: ping(),
+    relay: circuitRelayServer({
+      advertise: true,
+      hopTimeout: 60000,
+    }),
+    upnp: uPnPNAT(),
+  },
 };
 
 @Injectable()
@@ -135,7 +135,7 @@ export class AppService implements OnModuleInit {
       this.helia = await createHelia({
         blockstore,
         datastore,
-        //libp2p: libp2pOptions,
+        libp2p: libp2pOptions,
       });
 
       this.logger.log('PeerId: ' + this.helia.libp2p.peerId.toString());
