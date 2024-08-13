@@ -30,7 +30,9 @@ export const CopyCard = ({
           <Typography color={customPalette.neutralGray} variant="caption">
             {title}
           </Typography>
-          <Typography variant="body2">{copyText}</Typography>
+          <Typography variant="body2" dataTestId="copy-text">
+            {copyText}
+          </Typography>
         </Grid>
         <CopyButton size={iconSize} text={copyValue ? copyValue : copyText} />
       </Grid>

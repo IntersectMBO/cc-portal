@@ -56,7 +56,7 @@ export const VotesTableRow = ({
         opacity: disabled && 0.5,
       }}
     >
-      <Card variant="default">
+      <Card variant="default" data-testid="ga-card">
         <Grid
           container
           flexDirection={{ xxs: "column", xl: "row" }}
@@ -104,6 +104,7 @@ export const VotesTableRow = ({
                 <OutlinedLightButton
                   onClick={openGAModal}
                   disabled={!gov_action_proposal_title}
+                  data-testid="ga-modal-button"
                   startIcon={
                     <Image
                       alt="GA title"
@@ -135,7 +136,10 @@ export const VotesTableRow = ({
                 >
                   {t("govActionCategoryShort")}
                 </Typography>
-                <OutlinedLightButton nonInteractive>
+                <OutlinedLightButton
+                  data-testid="ga-category-text"
+                  nonInteractive
+                >
                   {getProposalTypeLabel(gov_action_proposal_type)}
                 </OutlinedLightButton>
               </Grid>
@@ -175,7 +179,7 @@ export const VotesTableRow = ({
                 >
                   {t("rationale")}
                 </Typography>
-                <Typography variant="caption">
+                <Typography variant="caption" data-testid="ga-rationale-text">
                   {reasoning_comment
                     ? truncateText(reasoning_comment, 100)
                     : t("notAvailable")}
@@ -195,6 +199,7 @@ export const VotesTableRow = ({
               sx={{ whiteSpace: "nowrap" }}
               onClick={() => onActionClick(votes)}
               variant="outlined"
+              data-testid="ga-show-more-button"
             >
               {actionTitle}
             </Button>

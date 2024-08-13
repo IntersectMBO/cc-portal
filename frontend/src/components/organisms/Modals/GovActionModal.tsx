@@ -67,7 +67,9 @@ export const GovActionModal = () => {
                 src={IMAGES.pastelSignIn}
               />
             </Box>
-            {govAction.title}
+            <span data-testid="governance-action-modal-title-text">
+              {govAction.title}
+            </span>
           </ModalHeader>
           <Box px={{ xxs: 2.25, md: 3 }}>
             <Typography
@@ -75,6 +77,7 @@ export const GovActionModal = () => {
               fontWeight={400}
               sx={{ pb: 0 }}
               color={customPalette.textGray}
+              data-testid="governance-action-modal-abstract-text"
             >
               {govAction?.abstract}
             </Typography>
@@ -89,7 +92,10 @@ export const GovActionModal = () => {
               <Typography color="neutralGray" variant="caption">
                 {t("govActionModal.govActionCategory")}
               </Typography>
-              <OutlinedLightButton nonInteractive={true}>
+              <OutlinedLightButton
+                nonInteractive={true}
+                data-testid="governance-action-modal-category-text"
+              >
                 {getProposalTypeLabel(govAction.type)}
               </OutlinedLightButton>
             </Box>
@@ -98,7 +104,10 @@ export const GovActionModal = () => {
                 {t("govActionModal.gaStatus")}
               </Typography>
               <Box display="flex" mt={0.25}>
-                <OutlinedLightButton nonInteractive>
+                <OutlinedLightButton
+                  nonInteractive
+                  data-testid="governance-action-modal-status-text"
+                >
                   {govAction.status}
                 </OutlinedLightButton>
               </Box>
@@ -120,6 +129,7 @@ export const GovActionModal = () => {
               fontWeight={600}
               sx={{ flexWrap: "nowrap" }}
               variant="caption"
+              data-testid="governance-action-modal-submit-time"
             >
               {formatDisplayDate(govAction.submit_time)}
             </Typography>
@@ -141,13 +151,19 @@ export const GovActionModal = () => {
                 fontWeight={600}
                 sx={{ flexWrap: "nowrap" }}
                 variant="caption"
+                data-testid="governance-action-modal-end-time"
               >
                 {formatDisplayDate(govAction.end_time)}
               </Typography>
             </Box>
           )}
           <Box px={{ xxs: 2.25, md: 3 }} pt={2.5}>
-            <Button onClick={onClick} variant="outlined" size="large">
+            <Button
+              onClick={onClick}
+              variant="outlined"
+              size="large"
+              data-testid="governance-action-modal-close-button"
+            >
               {t("common.close")}
             </Button>
           </Box>

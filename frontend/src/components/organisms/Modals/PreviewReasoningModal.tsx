@@ -119,7 +119,6 @@ export const PreviewReasoningModal = () => {
             src={IMAGES.pastelAddMember}
           />
         </Box>
-        // todo: check this with kiki
         <span data-testid="rationale-modal-title-text">
           {t("previewRationale.headline")}
         </span>
@@ -176,7 +175,10 @@ export const PreviewReasoningModal = () => {
           <Typography color="neutralGray" variant="caption">
             {t("previewRationale.governanceActionCategory")}
           </Typography>
-          <OutlinedLightButton nonInteractive={true}>
+          <OutlinedLightButton
+            nonInteractive={true}
+            data-testid="rationale-modal-ga-category-text"
+          >
             {getProposalTypeLabel(govAction.type)}
           </OutlinedLightButton>
         </Box>
@@ -247,6 +249,7 @@ export const PreviewReasoningModal = () => {
               width: "100%",
               marginBottom: 1.5,
             }}
+            data-testid="rationale-modal-action-button"
           >
             {actionTitle}
           </Button>
