@@ -143,7 +143,6 @@ export class AppService implements OnModuleInit {
         .getMultiaddrs()
         .forEach((ma) => console.log(ma.toString()));
     }
-
     return this.helia;
   }
 
