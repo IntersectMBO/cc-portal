@@ -141,6 +141,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                 <OutlinedLightButton
                   onClick={openGAModal}
                   disabled={!title}
+                  data-testid="ga-table-title-modal"
                   startIcon={
                     <Image
                       alt="GA title"
@@ -153,7 +154,9 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                     />
                   }
                 >
-                  {title ? truncateText(title, 15) : t("notAvailable")}
+                  <span data-testid="ga-table-title-text">
+                    {title ? truncateText(title, 15) : t("notAvailable")}
+                  </span>
                 </OutlinedLightButton>
               </Grid>
               <TableDivider />
@@ -172,7 +175,10 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                 >
                   {t("govActionCategoryShort")}
                 </Typography>
-                <OutlinedLightButton nonInteractive>
+                <OutlinedLightButton
+                  nonInteractive
+                  data-testid="ga-table-category-text"
+                >
                   {truncateText(getProposalTypeLabel(type), 20)}
                 </OutlinedLightButton>
               </Grid>
@@ -210,7 +216,10 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                 >
                   {t("gaStatus")}
                 </Typography>
-                <OutlinedLightButton nonInteractive>
+                <OutlinedLightButton
+                  nonInteractive
+                  data-testid="ga-table-status-text"
+                >
                   {status}
                 </OutlinedLightButton>
               </Grid>
@@ -254,6 +263,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                   : openUpdateReasoningModal()
               }
               variant="outlined"
+              data-testid="ga-table-rationale-button"
             >
               {canAddReasoning ? t("addRationale") : t("updateRationale")}
             </Button>

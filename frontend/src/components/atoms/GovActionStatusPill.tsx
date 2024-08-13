@@ -41,6 +41,7 @@ export const GovActionStatusPill = ({
         fontSize={12}
         fontWeight={400}
         lineHeight="16px"
+        data-testid="ga-table-vote-status-text"
       >
         {status}
       </Typography>
