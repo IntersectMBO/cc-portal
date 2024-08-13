@@ -28,6 +28,16 @@ jobs:
             dockerfile: ./backend/Dockerfile
             image: ghcr.io/${{ github.repository }}-backend
             qovery_container_name: backend
+          - workdir: ./ipfs-service
+            name: ipfs
+            dockerfile: ./ipfs-service/Dockerfile
+            image: ghcr.io/${{ github.repository }}-ipfs
+            qovery_container_name: ipfs
+          - workdir: ./worker-service
+            name: worker
+            dockerfile: ./worker-service/Dockerfile
+            image: ghcr.io/${{ github.repository }}-worker
+            qovery_container_name: worker
 
     runs-on: ubuntu-latest
     steps:
