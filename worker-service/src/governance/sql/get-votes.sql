@@ -9,7 +9,7 @@ vp_block.time, -- Should be Vote "Submit date" info when clicking on show more b
 ch.raw,
 gap.type, -- Should be Governance Action Proposal category (ParameterChange, HardForkInitiation, TreasuryWithdrawals...)
 gap_exp_epoch.end_time, -- Should be GAP "Expiry date" info when clicking on show more button
-vp.voting_anchor_id, -- Should be anchor id for URL that contins JSON governance action metadata
+gap.voting_anchor_id, -- Should be anchor id for URL that contins JSON governance action metadata
 va.url, -- Should be a URL that contains JSON governance action metadata
 vp_tx.hash, -- Should be transaction hash from tx table
 gap_block.time gap_submit_time, -- Should be Governance Action Proposal "Submit time"
