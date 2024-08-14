@@ -183,7 +183,7 @@ export class AppService implements OnModuleInit {
       ret1.next().then((res) => this.logger.log(`Pinned: ${res.value}`));
 
       // Announce CID to the DHT
-      //this.provideCidtoDHT(cid);
+      this.provideCidtoDHT(cid);
 
       // Publish the name
       await this.ipns.publish(this.ipnsPeerId, cid);
@@ -227,7 +227,7 @@ export class AppService implements OnModuleInit {
       ret1.next().then((res) => this.logger.log(`Pinned json: ${res.value}`));
 
       // Announce CID to the DHT
-      //this.provideCidtoDHT(cid);
+      this.provideCidtoDHT(cid);
 
       const url = process.env.IPFS_PUBLIC_URL + cid.toString();
 
