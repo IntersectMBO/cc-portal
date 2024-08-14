@@ -30,7 +30,7 @@ left join epoch gap_exp_epoch on gap_exp_epoch.id = gap.expiration
 left join voting_anchor va on va.id = gap.voting_anchor_id
 
 -- Off chain vote data
-left join off_chain_vote_data ocvd on ocvd.voting_anchor_id = va.id
+left join off_chain_vote_data ocvd on ocvd.voting_anchor_id = vp.voting_anchor_id
 
 -- Relation for URL that contains governance action metadata
 left join committee_hash ch on ch.id = vp.committee_voter
