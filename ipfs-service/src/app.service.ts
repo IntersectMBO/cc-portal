@@ -58,7 +58,7 @@ const libp2pOptions = {
     ],
   },
   transports: [
-    circuitRelayTransport({ discoverRelays: 2 }),
+    circuitRelayTransport({ discoverRelays: 1 }),
     tcp(),
     webSockets(),
   ],
@@ -82,9 +82,14 @@ const libp2pOptions = {
     autoNAT: autoNAT(),
     dcutr: dcutr(),
     delegatedRouting: () =>
-      createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev/routing/v1'),
+      createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
     dht: kadDHT({
+      clientMode: false,
+      initialQuerySelfInterval: 1000,
+      kBucketSize: 20,
       protocol: '/ipfs/kad/1.0.0',
+      maxInboundStreams: 32,
+      maxOutboundStreams: 64,
       validators: { ipns: ipnsValidator },
       selectors: { ipns: ipnsSelector },
     }),
@@ -93,6 +98,7 @@ const libp2pOptions = {
     ping: ping(),
     relay: circuitRelayServer({
       advertise: true,
+      hopTimeout: 60000,
     }),
     upnp: uPnPNAT(),
   },
@@ -137,7 +143,6 @@ export class AppService implements OnModuleInit {
         .getMultiaddrs()
         .forEach((ma) => console.log(ma.toString()));
     }
-
     return this.helia;
   }
 
@@ -233,7 +238,7 @@ export class AppService implements OnModuleInit {
     }
   }
 
-  private provideCidtoDHT(cid, retryDelay = 2000) {
+  private provideCidtoDHT(cid, retryDelay = 5000) {
     let attempt = 0;
     let errCode = null;
 
@@ -250,6 +255,7 @@ export class AppService implements OnModuleInit {
           await new Promise((resolve) => setTimeout(resolve, retryDelay));
           attemptToProvide(); // Retry
         } else {
+          this.logger.log(`CID: ${cid} has not been announced`);
           this.logger.error(error);
           throw new InternalServerErrorException(error);
         }
