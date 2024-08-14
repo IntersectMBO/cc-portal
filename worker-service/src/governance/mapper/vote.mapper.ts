@@ -13,7 +13,7 @@ export class VoteMapper {
         voteRequest.userId = val;
       }
     });
-    voteRequest.rationaleTitle = dbSyncData.title;
+    voteRequest.rationaleTitle = dbSyncData.json?.body.title;
     voteRequest.comment = dbSyncData.comment;
     voteRequest.vote = dbSyncData.vote;
     voteRequest.govActionProposalId = dbSyncData.gov_action_proposal_id;
