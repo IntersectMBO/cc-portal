@@ -74,7 +74,7 @@ export function MembersCardList({
       </Box>
       {isEmpty(data) || error ? (
         <NotFound
-          height="55vh"
+          height="50vh"
           title="members.title"
           description="members.description"
         />

@@ -14,15 +14,16 @@ export default async function ConstitutionPage({ params: { locale } }) {
   const metadata = await getConstitutionMetadata();
 
   return (
-    <main>
+    <>
       <TopNav />
-
       <Suspense fallback={<Loading />}>
         {constitution && !isResponseErrorI(constitution) ? (
-          <Constitution
-            constitution={constitution}
-            metadata={!isResponseErrorI(metadata) && metadata.reverse()}
-          />
+          <ContentWrapper>
+            <Constitution
+              constitution={constitution}
+              metadata={!isResponseErrorI(metadata) && metadata.reverse()}
+            />
+          </ContentWrapper>
         ) : (
           <>
             <ContentWrapper>
@@ -35,6 +36,6 @@ export default async function ConstitutionPage({ params: { locale } }) {
           </>
         )}
       </Suspense>
-    </main>
+    </>
   );
 }
