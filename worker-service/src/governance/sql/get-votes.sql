@@ -3,14 +3,14 @@ vp.id,
 vp.committee_voter, -- Should be a hot address related to a vote
 vp.gov_action_proposal_id, -- Should be Governance Action ID
 vp.vote, -- The vote itself, should be Yes, No, Abstain
-ocvd.title, -- Should be "Rationale title"
+ocvd.json, -- Should be JSON that contain "Rationale title" within body.title field
 ocvd.comment, -- Should be "Rationale comment"
 vp_block.time, -- Should be Vote "Submit date" info when clicking on show more button
 ch.raw,
 gap.type, -- Should be Governance Action Proposal category (ParameterChange, HardForkInitiation, TreasuryWithdrawals...)
-gap_exp_epoch.end_time, -- Should be GAP "Expiry date" info wwhen clicking on show more button
-gap.voting_anchor_id, -- Should be anchor id for URL that contins JSon governance action metadata
-va.url, -- Should be a URL that contains JSon governance action metadata
+gap_exp_epoch.end_time, -- Should be GAP "Expiry date" info when clicking on show more button
+gap.voting_anchor_id, -- Should be anchor id for URL that contins JSON governance action metadata
+va.url, -- Should be a URL that contains JSON governance action metadata
 vp_tx.hash, -- Should be transaction hash from tx table
 gap_block.time gap_submit_time, -- Should be Governance Action Proposal "Submit time"
  case 
