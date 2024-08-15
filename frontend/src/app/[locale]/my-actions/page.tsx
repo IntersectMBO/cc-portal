@@ -24,7 +24,7 @@ export default async function MyActionsPage({
   const hasError = isResponseErrorI(userActions);
 
   return (
-    <main>
+    <>
       <TopNav />
       <ContentWrapper>
         <Suspense fallback={<Loading />}>
@@ -37,6 +37,6 @@ export default async function MyActionsPage({
         </Suspense>
       </ContentWrapper>
       <Footer />
-    </main>
+    </>
   );
 }

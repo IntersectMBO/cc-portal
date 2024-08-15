@@ -1,5 +1,9 @@
 import { Box } from "@mui/material";
 
 export const ContentWrapper = ({ children }) => {
-  return <Box minHeight="78vh">{children}</Box>;
+  return (
+    <Box display="flex" flexDirection="column" flex="1 1 0%">
+      {children}
+    </Box>
+  );
 };

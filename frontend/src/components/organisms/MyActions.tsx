@@ -126,7 +126,7 @@ export const MyActions = ({
       </Box>
       {isEmpty(data) || error ? (
         <NotFound
-          height="55vh"
+          height="50vh"
           title="myActions.title"
           description="myActions.description"
         />
