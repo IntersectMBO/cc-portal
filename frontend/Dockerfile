@@ -26,6 +26,16 @@ COPY . .
 # Disabled telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Define build arguments for environment variables
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY
+ARG NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY
+
+# Set the environment variables inside the container
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY}
+ENV NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY}
+
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
@@ -41,6 +51,9 @@ ENV NODE_ENV production
 
 # Disabled telemetry during runtime.
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY}
+ENV NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY}
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
