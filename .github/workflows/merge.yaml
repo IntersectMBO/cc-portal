@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - develop
-      - interim-qa
-      - interim-pre-prod
+      - staging
       - main
 
 permissions:
@@ -14,7 +13,7 @@ permissions:
   packages: write
 
 env:
-  ENVIRONMENT: ${{ (github.ref_name == 'main' && 'prod-cc-portal') || (github.ref_name == 'interim-pre-prod' && 'pre-prod-cc-portal') || (github.ref_name == 'interim-qa' && 'qa-cc-portal') || (github.ref_name == 'develop' && 'dev-cc-portal') }}
+  ENVIRONMENT: ${{ (github.ref_name == 'main' && 'prod-cc-portal') || (github.ref_name == 'staging' && 'pre-prod-cc-portal') || (github.ref_name == 'staging' && 'qa-cc-portal') || (github.ref_name == 'develop' && 'dev-cc-portal') }}
 
 jobs:
   check-build-deploy:
@@ -127,6 +126,10 @@ jobs:
           load: true
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ secrets.DEV_NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY }}
+            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY={{ secrets.DEV_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
 
       - name: Login to GHCR
         uses: docker/login-action@v2

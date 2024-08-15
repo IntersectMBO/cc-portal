@@ -141,16 +141,19 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       container
       position="relative"
       justifyContent="flex-end"
+      flex={1}
     >
-      <Grid mt={3} item xxs={10} md={isOpen ? 8 : 11}>
-        <ContentWrapper>
-          <Box px={{ xxs: 2, md: 5 }}>
-            <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
-              <MDXRemote {...constitution} components={MDXComponents} />
-            </Card>
-          </Box>
-        </ContentWrapper>
-        <Footer />
+      <Grid mt={3} item xxs={10} md={isOpen ? 8 : 11} display="flex">
+        <Box display="flex" flexDirection="column" flex={1}>
+          <ContentWrapper>
+            <Box px={{ xxs: 2, md: 5 }}>
+              <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
+                <MDXRemote {...constitution} components={MDXComponents} />
+              </Card>
+            </Box>
+          </ContentWrapper>
+          <Footer />
+        </Box>
       </Grid>
     </Grid>
   );
