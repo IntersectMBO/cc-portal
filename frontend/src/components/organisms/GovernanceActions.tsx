@@ -102,7 +102,7 @@ export const GovernanceActions = ({
       </Box>
       {isEmpty(data) ? (
         <NotFound
-          height="55vh"
+          height="50vh"
           title="governanceAction.title"
           description="governanceAction.description"
         />
