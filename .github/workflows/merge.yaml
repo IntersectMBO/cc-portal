@@ -13,7 +13,7 @@ permissions:
   packages: write
 
 env:
-  ENVIRONMENT: ${{ (github.ref_name == 'main' && 'prod-cc-portal') || (github.ref_name == 'staging' && 'pre-prod-cc-portal') || (github.ref_name == 'staging' && 'qa-cc-portal') || (github.ref_name == 'develop' && 'dev-cc-portal') }}
+  ENVIRONMENT: ${{ (github.ref_name == 'main' && 'prod-cc-portal') || (github.ref_name == 'stage' && 'pre-prod-cc-portal') || (github.ref_name == 'staging' && 'qa-cc-portal') || (github.ref_name == 'develop' && 'dev-cc-portal') }}
 
 jobs:
   check-build-deploy:
