@@ -264,4 +264,12 @@ export class AppService implements OnModuleInit {
 
     attemptToProvide();
   }
+
+  async getIpnsUrl(): Promise<string> {
+    if (!this.ipnsPeerId) {
+      throw new InternalServerErrorException(`IPNS Peer Id not exists`);
+    }
+    const ipnsUrl = process.env.IPNS_PUBLIC_URL + this.ipnsPeerId.toString()
+    return ipnsUrl;
+  }
 }
