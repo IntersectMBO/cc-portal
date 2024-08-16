@@ -148,7 +148,7 @@ export class AppService implements OnModuleInit {
 
   async getIpns() {
     this.ipns = ipns(this.helia);
-    const keyName = 'my-key11';
+    const keyName = process.env.IPNS_KEY_NAME;
     const existingKeys = await this.helia.libp2p.services.keychain.listKeys();
     // if keyName already exists
     if (existingKeys.some((x) => x.name === keyName)) {

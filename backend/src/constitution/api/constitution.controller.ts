@@ -141,7 +141,7 @@ export class ConstitutionController {
   @Permissions(PermissionEnum.ADD_CONSTITUTION)
   @UseGuards(JwtAuthGuard, PermissionGuard)
   @Get('ipns/url')
-  async getIpnsPeerId() {
+  async getIpnsUrl() {
     return await this.constitutionFacade.getIpnsUrl();
   }
 }
