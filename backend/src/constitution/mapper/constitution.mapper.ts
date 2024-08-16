@@ -6,11 +6,14 @@ import { IpfsContentDto } from 'src/ipfs/dto/ipfs-content.dto';
 import { IpfsMetadataDto } from 'src/ipfs/dto/ipfs-metadata.dto';
 import { ConstitutionMetadataResponse } from '../api/response/constitution-metadata.response';
 import { ConstitutionIpnsUrlResponse } from '../api/response/constitutio-ipns-url.response';
+import { IPFS_PUBLIC_URL } from 'src/common/constants/ipfs.constants';
 
 export class ConstitutionMapper {
   static dtoToResponse(dto: ConstitutionDto): ConstitutionResponse {
     const response = new ConstitutionResponse();
     response.cid = dto.cid;
+    response.blake2b = dto.blake2b;
+    response.url = IPFS_PUBLIC_URL + dto.cid;
     response.version = dto.version;
     response.contents = dto.contents;
     return response;
@@ -38,6 +41,8 @@ export class ConstitutionMapper {
   ): ConstitutionMetadataResponse {
     const constitutionResponse = new ConstitutionMetadataResponse();
     constitutionResponse.cid = ipfsMetadataDto.cid;
+    constitutionResponse.blake2b = ipfsMetadataDto.blake2b;
+    constitutionResponse.url = IPFS_PUBLIC_URL + ipfsMetadataDto.cid;
     constitutionResponse.title = ipfsMetadataDto.title;
     constitutionResponse.version = ipfsMetadataDto.version;
     constitutionResponse.createdDate = ipfsMetadataDto.createdDate;
