@@ -37,7 +37,7 @@ services:
       - "5001:5001"
       - "8080:8080"
     volumes:
-      - ipfs_data:/ipfs/
+      - ipfs_data:/app/
     networks:
       - bloxico_local
     extra_hosts:
