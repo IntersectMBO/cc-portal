@@ -62,6 +62,7 @@ export class ConstitutionController {
     return await this.constitutionFacade.getConstitutionFileByCid(cid);
   }
 
+  @ApiConditionalExcludeEndpoint()
   @ApiOperation({ summary: 'Store constitution file' })
   @ApiBody({
     schema: {
