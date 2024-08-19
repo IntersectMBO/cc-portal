@@ -16,7 +16,6 @@ export interface ConstitutionMetadata {
   title: string;
   version: string;
   created_date: string;
-  url: string;
 }
 
 export interface ConstitutionByCid {
