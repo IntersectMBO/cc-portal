@@ -40,4 +40,9 @@ export class AppController {
     }
     return doc
   }
+
+  @Get('ipns/url')
+  async getIpnsUrl(): Promise<string> {
+    return await this.appService.getIpnsUrl();
+  }
 }
