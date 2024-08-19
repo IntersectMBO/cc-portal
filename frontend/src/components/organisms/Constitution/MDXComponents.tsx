@@ -215,7 +215,11 @@ export const NavCard = ({
 }) => (
   <Box mb={2}>
     <Card sx={{ px: 3, py: 2 }}>
-      <Grid container alignItems={{ lg: "center" }}>
+      <Grid
+        container
+        justifyContent="space-between"
+        alignItems={{ lg: "center" }}
+      >
         <Grid item xxs={6} lg={3}>
           <Typography variant="body1">{title}</Typography>
           <Typography variant="caption">{description}</Typography>
