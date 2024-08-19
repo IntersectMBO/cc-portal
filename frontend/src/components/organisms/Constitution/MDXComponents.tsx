@@ -220,11 +220,11 @@ export const NavCard = ({
         justifyContent="space-between"
         alignItems={{ lg: "center" }}
       >
-        <Grid item xxs={6} lg={4}>
+        <Grid item xxs={6} lg={3}>
           <Typography variant="body1">{title}</Typography>
           <Typography variant="caption">{description}</Typography>
         </Grid>
-        <Grid item xxs={6} lg={3}>
+        <Grid item xxs={6} lg={4}>
           <Box
             display="flex"
             alignItems={{ xxs: "center" }}
@@ -239,6 +239,7 @@ export const NavCard = ({
               display="flex"
               flexWrap="nowrap"
               gap={1}
+              width="100%"
             >
               <CopyButton size={14} text={hash} />
               <Typography variant="caption">
@@ -257,7 +258,11 @@ export const NavCard = ({
               justifyContent: { xxs: "left", lg: "center" },
             }}
           >
-            <Link target="_blank" href={url} style={{ cursor: "pointer" }}>
+            <Link
+              target="_blank"
+              href={url}
+              style={{ cursor: "pointer", display: "flex" }}
+            >
               <Image
                 alt="ipfs link"
                 src={ICONS.externalLink}
