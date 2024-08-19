@@ -1,8 +1,8 @@
 import { Card } from "@/components/molecules";
 import { customPalette, ICONS } from "@/constants";
 import { getShortenedGovActionId } from "@utils";
-import { Button, CopyButton, Tooltip, Typography } from "@atoms";
-import { Box, Collapse, Grid, IconButton } from "@mui/material";
+import { Button, CopyButton, Typography } from "@atoms";
+import { Box, Collapse, Grid } from "@mui/material";
 import React, { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
