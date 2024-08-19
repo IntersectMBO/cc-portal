@@ -4,6 +4,8 @@ import { getShortenedGovActionId } from "@utils";
 import { Button, CopyButton, Typography } from "@atoms";
 import { Box, Collapse, Grid } from "@mui/material";
 import React, { ReactNode } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 const Anchor = ({ id, offset = "-20vh " }) => {
   return (
@@ -203,7 +205,14 @@ export const NavDrawer = ({
   );
 };
 
-export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
+export const NavCard = ({
+  onClick,
+  title,
+  description,
+  buttonLabel,
+  hash,
+  url,
+}) => (
   <Box mb={2}>
     <Card sx={{ px: 3, py: 2 }}>
       <Grid
@@ -211,11 +220,11 @@ export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
         justifyContent="space-between"
         alignItems={{ lg: "center" }}
       >
-        <Grid item xxs={6} lg={"auto"}>
+        <Grid item xxs={6} lg={4}>
           <Typography variant="body1">{title}</Typography>
           <Typography variant="caption">{description}</Typography>
         </Grid>
-        <Grid item xxs={6} lg="auto">
+        <Grid item xxs={6} lg={3}>
           <Box
             display="flex"
             alignItems={{ xxs: "center" }}
@@ -238,7 +247,28 @@ export const NavCard = ({ onClick, title, description, buttonLabel, hash }) => (
             </Box>
           </Box>
         </Grid>
-        <Grid item xxs={12} lg="auto" mt={{ xxs: 2, md: 0 }}>
+        {url && (
+          <Grid
+            item
+            xxs={6}
+            lg={2}
+            sx={{
+              display: "flex",
+              justifyContent: { xxs: "left", lg: "center" },
+            }}
+          >
+            <Link target="_blank" href={url} style={{ cursor: "pointer" }}>
+              <Image
+                alt="ipfs link"
+                src={ICONS.externalLink}
+                width={20}
+                height={20}
+              />
+            </Link>
+          </Grid>
+        )}
+
+        <Grid item xxs={12} lg={3} mt={{ xxs: 2, md: 0 }}>
           <Button
             sx={{ width: "100%" }}
             size="medium"
