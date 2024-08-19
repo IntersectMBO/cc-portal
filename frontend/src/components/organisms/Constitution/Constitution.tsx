@@ -3,7 +3,7 @@
 import { Card } from "@molecules";
 import { Box, Divider, Grid } from "@mui/material";
 import { MDXRemote } from "next-mdx-remote";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Code,
   Heading1,
@@ -23,13 +23,21 @@ import { ContentWrapper } from "@/components/atoms";
 import { NotFound } from "../NotFound";
 import { PageTitleTabs } from "../PageTitleTabs";
 import { isAnyAdminRole } from "@utils";
+import { useScreenDimension } from "@hooks";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
+  const { isMobile } = useScreenDimension();
   const { userSession } = useAppContext();
   const [isOpen, setIsOpen] = useState(true);
   const [tab, setTab] = useState("revisions");
   const { openModal } = useModal();
   const t = useTranslations("Constitution");
+
+  useEffect(() => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  }, [isMobile]);
 
   const onCompare = (
     target: Omit<ConstitutionMetadata, "version" | "url" | "blake2b">
