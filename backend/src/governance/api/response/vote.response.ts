@@ -34,18 +34,18 @@ export class VoteResponse {
   voteValue: VoteValue;
 
   @ApiProperty({
-    description: 'Gives an on chain reasoning title related to a vote',
+    description: 'Gives an on chain rationale title related to a vote',
     example: 'This proposal is good for the ecosystem',
   })
-  @Expose({ name: 'reasoning_title' })
-  reasoningTitle: string;
+  @Expose({ name: 'rationale_title' })
+  rationaleTitle: string;
 
   @ApiProperty({
-    description: 'Gives an on chain reasoning comment related to a vote',
+    description: 'Gives an on chain rationale comment related to a vote',
     example: 'Here i elaborated why this proposal is good for the ecosystem',
   })
-  @Expose({ name: 'reasoning_comment' })
-  reasoningComment: string;
+  @Expose({ name: 'rationale_comment' })
+  rationaleComment: string;
 
   @ApiProperty({
     description:

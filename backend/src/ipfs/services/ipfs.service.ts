@@ -141,23 +141,23 @@ export class IpfsService {
     return results;
   }
 
-  async addReasoningToIpfs(reasoningJson: any): Promise<IpfsContentDto> {
+  async addRationaleToIpfs(rationaleJson: any): Promise<IpfsContentDto> {
     let ipfsContentDto: IpfsContentDto;
     try {
-      const ipfsResponse = await this.sendReasoningToIpfs(reasoningJson);
+      const ipfsResponse = await this.sendRationaleToIpfs(rationaleJson);
       const blake2b = await this.generateBlake2bHash(ipfsResponse.contents);
       ipfsContentDto = { ...ipfsResponse, blake2b: blake2b };
     } catch (error) {
       this.logger.error(`Error when adding to IPFS: ${error}`);
       throw new InternalServerErrorException(
-        `Error when add reasoning to the IPFS service`,
+        `Error when add rationale to the IPFS service`,
       );
     }
     return ipfsContentDto;
   }
 
-  private async sendReasoningToIpfs(
-    reasoningJson: string,
+  private async sendRationaleToIpfs(
+    rationaleJson: string,
   ): Promise<IpfsContentDto> {
     const apiLink =
       this.configService.getOrThrow('IPFS_SERVICE_URL') + '/ipfs/json';
@@ -166,7 +166,7 @@ export class IpfsService {
         'Content-Type': 'application/json',
       },
     };
-    const response = await axios.post(apiLink, reasoningJson, requestConfig);
+    const response = await axios.post(apiLink, rationaleJson, requestConfig);
     const cid = response.data.cid;
     const url = response.data.url;
     const content = response.data.content;
@@ -175,5 +175,20 @@ export class IpfsService {
       url: url,
       contents: content,
     };
+  }
+
+  async getIpnsUrl(): Promise<string> {
+    const apiLink =
+      this.configService.getOrThrow('IPFS_SERVICE_URL') + '/ipfs/ipns/url';
+    try {
+      const response = await axios.get(apiLink);
+      const ipnsUrl = response.data;
+      return ipnsUrl;
+    } catch (error) {
+      this.logger.error(`Error when getting IPNS URL from IPFS: ${error}`);
+      throw new InternalServerErrorException(
+        `Error when getting IPNS URL from IPFS service`,
+      );
+    }
   }
 }

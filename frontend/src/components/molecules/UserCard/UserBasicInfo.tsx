@@ -1,7 +1,9 @@
 import { IMAGES } from "@consts";
-import { OutlinedLightButton, Typography } from "@atoms";
+import { Typography, Tooltip } from "@atoms";
 import { Grid } from "@mui/material";
-import { getShortenedGovActionId } from "@utils";
+import { getShortenedGovActionId, truncateText } from "@utils";
+import { CopyPill } from "../CopyPill";
+import ConditionalWrapper from "../ConditionalWrapper";
 
 export const UserBasicInfo = ({
   name,
@@ -34,17 +36,25 @@ export const UserBasicInfo = ({
       {name}
     </Typography>
     {email && (
-      <Grid container gap={1} flexWrap="nowrap">
-        <img src={IMAGES.mail} width={20} height={20} />
-        <Typography variant="body2" fontWeight={400}>
-          {email}
-        </Typography>
-      </Grid>
+      <ConditionalWrapper
+        condition={email.length > 20}
+        wrapper={(children) => (
+          <Tooltip paragraphOne={email}>{children}</Tooltip>
+        )}
+      >
+        <Grid container gap={1} flexWrap="nowrap">
+          <img src={IMAGES.mail} width={20} height={20} />
+          <Typography variant="body2" fontWeight={400}>
+            {truncateText(email, 20)}
+          </Typography>
+        </Grid>
+      </ConditionalWrapper>
     )}
     {hotAddress && (
-      <OutlinedLightButton nonInteractive={true}>
-        {getShortenedGovActionId(hotAddress)}
-      </OutlinedLightButton>
+      <CopyPill
+        copyValue={hotAddress}
+        copyText={getShortenedGovActionId(hotAddress)}
+      />
     )}
   </Grid>
 );

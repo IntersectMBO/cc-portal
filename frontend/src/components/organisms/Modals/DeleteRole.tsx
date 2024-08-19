@@ -58,13 +58,14 @@ export const DeleteRole = () => {
             {t("deleteRole.description")}
           </Typography>
           <ControlledField.Input
-            placeholder={t("deleteRole.fields.delete.placeholder")}
-            label={t("deleteRole.fields.delete.label")}
+            placeholder={t("deleteRole.fields.confirm.placeholder")}
+            label={t("deleteRole.fields.confirm.label")}
             errors={errors}
             control={control}
-            {...register("delete", {
-              required: "Please write DELETE",
-              validate: (value) => value === "DELETE" || "Please write DELETE",
+            {...register("confirm", {
+              required: "Please write CONFIRM",
+              validate: (value) =>
+                value === "CONFIRM" || "Please write CONFIRM",
             })}
           />
           <ModalActions />

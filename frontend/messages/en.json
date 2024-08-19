@@ -67,7 +67,7 @@
     "termsOfService": "Terms of service",
     "AreYouCCMember": "Are you CC member?",
     "signIn": "Sign In",
-    "help": "Help",
+    "guides": "Guides",
     "feedback": "Feedback"
   },
   "Modals": {
@@ -77,7 +77,7 @@
     },
     "signIn": {
       "headline": "Sign In",
-      "description": "Please fill in the email address you used for registration.",
+      "description": "A magic link will be sent to the email address provided. This may take a few minutes.",
       "fields": {
         "email": {
           "label": "Email address"
@@ -89,14 +89,15 @@
       }
     },
     "signUp": {
-      "headline": "Sign Up",
+      "headline": "Complete your registration",
+      "description": "You will be using your email to sign in",
       "fields": {
-        "username": {
-          "label": "Username"
+        "displayName": {
+          "label": "Display name"
         },
-        "hotAddress": {
-          "label": "Hot address",
-          "tooltip": "At least one hot address is required for on-chain activity data to be tracked and displayed on the portal"
+        "hotCredential": {
+          "label": "Hot Credential",
+          "tooltip": "At least one hot credential is required for on-chain activity data to be tracked and displayed on the portal"
         },
         "description": {
           "label": "Description"
@@ -110,8 +111,7 @@
       }
     },
     "editProfile": {
-      "headline": "Edit profile",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget."
+      "headline": "Edit profile"
     },
     "signOut": {
       "headline": "Sign Out",
@@ -119,16 +119,16 @@
     },
     "deleteRole": {
       "headline": "Change status",
-      "description": "Lorem ipsum dolor sit amet consectetur. Velit placerat tincidunt eu odio mauris nibh quis morbi venenatis. Venenatis tincidunt mauris urna sagittis nulla eget.",
+      "description": "Are you sure you want to change the status?",
       "fields": {
-        "delete": {
+        "confirm": {
           "label": "Please confirm the action by typing expected below",
-          "placeholder": "Write DELETE"
+          "placeholder": "Write CONFIRM"
         }
       },
       "alerts": {
-        "success": "User successfully deleted",
-        "error": "Error deleting user"
+        "success": "User status successfully changed",
+        "error": "Error changing user status"
       }
     },
     "addMember": {
@@ -270,6 +270,9 @@
   "Snackbar": {
     "changesSaved": "Changes saved",
     "copiedToClipboard": "Copied to clipboard"
+  },
+  "TopBanner": {
+    "message": "This version of the Constitutional Committee Portal is for testing & previewing new features. NONE of the information contained herein comes from Cardano MainNet"
   },
   "GovernanceAction": {
     "Link": "Link",

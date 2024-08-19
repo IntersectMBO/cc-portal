@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { NotFound } from "./NotFound";
 import { VotesTable } from "./VotesTable";
-import { countSelectedFilters, isEmpty, useManageQueryParams } from "@utils";
+import { countSelectedFilters, isEmpty } from "@utils";
 import { DataActionsBar } from "../molecules";
 import {
   LATEST_UPDATES_FILTERS,
@@ -18,7 +18,7 @@ import { useModal } from "@/context";
 import { PaginationMeta, VotesTableI } from "@/lib/requests";
 import { OpenPreviewReasoningModal } from "./types";
 import { getUserVotes } from "@/lib/api";
-import { usePagination } from "@/lib/utils/usePagination";
+import { usePagination, useManageQueryParams } from "@hooks";
 import { ShowMoreButton } from "../atoms";
 import { useRouter } from "next/navigation";
 
@@ -126,7 +126,7 @@ export const MyActions = ({
       </Box>
       {isEmpty(data) || error ? (
         <NotFound
-          height="55vh"
+          height="50vh"
           title="myActions.title"
           description="myActions.description"
         />

@@ -55,7 +55,11 @@ async function RootLayout({ children, params: { locale } }) {
               <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <RenderModal />
-                <Box mt="80px">{children} </Box>
+                <main>
+                  <Box display="flex" flexDirection="column" minHeight="100vh">
+                    {children}
+                  </Box>
+                </main>
               </ThemeProvider>
             </AppRouterCacheProvider>
           </AppContextProvider>

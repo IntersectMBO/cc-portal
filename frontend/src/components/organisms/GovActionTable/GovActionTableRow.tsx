@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { Card, TableDivider } from "@molecules";
+import { Card, CopyPill, TableDivider } from "@molecules";
 import { Box, Grid } from "@mui/material";
 import { UserAvatar } from "@molecules";
 import {
@@ -230,21 +230,10 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                   {t("gaID")}
                 </Typography>
                 <Box display="flex">
-                  <Box
-                    px={2.25}
-                    py={0.75}
-                    border={1}
-                    borderColor={customPalette.lightBlue}
-                    borderRadius={100}
-                    display="flex"
-                    flexWrap="nowrap"
-                    gap={1}
-                  >
-                    <CopyButton size={14} text={tx_hash} />
-                    <Typography variant="caption">
-                      {getShortenedGovActionId(tx_hash)}
-                    </Typography>
-                  </Box>
+                  <CopyPill
+                    copyValue={tx_hash}
+                    copyText={getShortenedGovActionId(tx_hash)}
+                  />
                 </Box>
               </Grid>
             </Grid>

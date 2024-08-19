@@ -1,9 +1,10 @@
 import { PATHS } from "@/constants";
 import { decodeUserToken } from "@/lib/api";
 import { isAnyAdminRole } from "@utils";
-import { Box } from "@mui/material";
 import { redirect } from "next/navigation";
 import React from "react";
+import { AdminFooter, AdminTopNav } from "@organisms";
+import { ContentWrapper } from "@/components/atoms";
 
 async function DashboardLayout({ params: { locale }, children }) {
   const user = await decodeUserToken();
@@ -11,7 +12,13 @@ async function DashboardLayout({ params: { locale }, children }) {
   if (user && !isAnyAdminRole(user?.role)) {
     redirect(`/${locale}/${PATHS.home}`);
   }
-  return <Box mb={10}>{children}</Box>;
+  return (
+    <>
+      <AdminTopNav />
+      <ContentWrapper>{children}</ContentWrapper>
+      <AdminFooter />
+    </>
+  );
 }
 
 export default DashboardLayout;

@@ -7,11 +7,11 @@ import { MembersCard } from "./MembersCard";
 import { UserListItem } from "../types";
 import { ShowMoreButton, Typography } from "@atoms";
 import { useTranslations } from "next-intl";
-import { isEmpty, useManageQueryParams } from "@utils";
+import { isEmpty } from "@utils";
 import { DataActionsBar } from "@molecules";
 import { CC_MEMBERS_SORTING } from "@consts";
 import { PaginationMeta } from "@/lib/requests";
-import { usePagination } from "@/lib/utils/usePagination";
+import { usePagination, useManageQueryParams } from "@hooks";
 import { getMembers } from "@/lib/api";
 
 export function MembersCardList({
@@ -74,7 +74,7 @@ export function MembersCardList({
       </Box>
       {isEmpty(data) || error ? (
         <NotFound
-          height="55vh"
+          height="50vh"
           title="members.title"
           description="members.description"
         />

@@ -1,7 +1,7 @@
 import { CommonEntity } from '../../common/entities/common.entity';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { Vote } from './vote.entity';
-import { Reasoning } from './reasoning.entity';
+import { Rationale } from './rationale.entity';
 
 @Entity('gov_action_proposals')
 export class GovActionProposal extends CommonEntity {
@@ -70,8 +70,8 @@ export class GovActionProposal extends CommonEntity {
   @OneToMany(() => Vote, (vote) => vote.govActionProposal)
   votes: Vote[];
 
-  @OneToMany(() => Reasoning, (reasoning) => reasoning.govActionProposal)
-  reasonings: Reasoning[];
+  @OneToMany(() => Rationale, (rationale) => rationale.govActionProposal)
+  rationales: Rationale[];
 
   constructor(govActionProposal: Partial<GovActionProposal>) {
     super();

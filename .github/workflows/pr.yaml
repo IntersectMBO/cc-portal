@@ -1,0 +1,190 @@
+name: Lint,Test,Security Checks
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - staging
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
+  packages: write
+
+jobs:
+  static-checks:
+    strategy:
+      matrix:
+        include:
+          - workdir: ./frontend
+            name: frontend
+            dockerfile: ./frontend/Dockerfile
+            image: ghcr.io/${{ github.repository }}-frontend
+            qovery_container_name: frontend
+          - workdir: ./backend
+            name: backend
+            dockerfile: ./backend/Dockerfile
+            image: ghcr.io/${{ github.repository }}-backend
+            qovery_container_name: backend
+          - workdir: ./ipfs-service
+            name: ipfs
+            dockerfile: ./ipfs-service/Dockerfile
+            image: ghcr.io/${{ github.repository }}-ipfs
+            qovery_container_name: ipfs
+          - workdir: ./worker-service
+            name: worker
+            dockerfile: ./worker-service/Dockerfile
+            image: ghcr.io/${{ github.repository }}-worker
+            qovery_container_name: worker
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Lint Dockerfile
+        id: hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          failure-threshold: error
+          format: json
+          dockerfile: ${{ matrix.dockerfile }}
+          # output-file: hadolint_output.json
+
+      - name: Save Hadolint output
+        id: save_hadolint_output
+        if: always()
+        run: cd ${{ matrix.workdir }} && echo "$HADOLINT_RESULTS" | jq '.' > hadolint_output.json
+
+      - name: Print Dockerfile lint output
+        run: |
+          cd ${{ matrix.workdir }}
+          echo "-----HADOLINT RESULT-----"
+          echo "Outcome: ${{ steps.hadolint.outcome }}"
+          echo "-----DETAILS--------"
+          cat hadolint_output.json
+          echo "--------------------"
+
+      - name: Code lint
+        id: code_lint
+        run: |
+          cd ${{ matrix.workdir }}
+          if [ ! -f lint.sh ]; then
+            echo "lint skipped" | tee code_lint_output.txt
+            exit 0
+          fi
+          set -o pipefail
+          sudo chmod +x lint.sh && ./lint.sh 2>&1 | tee code_lint_output.txt
+
+
+      - name: Unit tests
+        id: unit_tests
+        run: |
+          cd ${{ matrix.workdir }}
+          if [ ! -f unit-test.sh ]; then
+            echo "unit tests skipped" | tee code_lint_output.txt
+            exit 0
+          fi
+          set -o pipefail
+          sudo chmod +x unit-test.sh && ./unit-test.sh 2>&1 | tee unit_test_output.txt
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - id: image_lowercase
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ matrix.image }}
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.workdir }}
+          file: ${{ matrix.dockerfile }}
+          tags: ${{ steps.image_lowercase.outputs.lowercase }}:${{ github.sha }}
+          load: true
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          
+      - name: Scan Docker image with Dockle
+        id: dockle
+        run: |
+            wget https://github.com/goodwithtech/dockle/releases/download/v0.4.14/dockle_0.4.14_Linux-64bit.tar.gz
+            tar zxvf dockle_0.4.14_Linux-64bit.tar.gz
+            sudo mv dockle /usr/local/bin
+
+            dockle --exit-level fatal --format json --output ${{ matrix.workdir }}/dockle_scan_output.json ${{ steps.image_lowercase.outputs.lowercase }}:${{ github.sha }}
+            echo " dockle exited w/ $?"
+            cat ${{ matrix.workdir }}/dockle_scan_output.json
+
+            echo "outcome=success" >> $GITHUB_OUTPUT
+
+      - name: Create PR comment
+        if: always()
+        uses: actions/github-script@v6
+        env:
+          HADOLINT_RESULT: ${{ steps.hadolint.outcome }}
+          CODE_LINT_RESULT: ${{ steps.code_lint.outcome }}
+          UNIT_TEST_RESULT: ${{ steps.unit_tests.outcome }}
+          DOCKLE_RESULT: ${{ steps.dockle.outcome }}
+        with:
+          script: |
+            const fs = require('fs');
+
+            const hadolintResult = fs.existsSync('${{ matrix.workdir }}/hadolint_output.json') ? fs.readFileSync('${{ matrix.workdir }}/hadolint_output.json', 'utf8') : 'No output';
+            const codeLintResult = fs.existsSync('${{ matrix.workdir }}/code_lint_output.txt') ? fs.readFileSync('${{ matrix.workdir }}/code_lint_output.txt', 'utf8') : 'No output';
+            const unitTestResult = fs.existsSync('${{ matrix.workdir }}/unit_test_output.txt') ? fs.readFileSync('${{ matrix.workdir }}/unit_test_output.txt', 'utf8') : 'No output';
+            const dockleScanResult = fs.existsSync('${{ matrix.workdir }}/dockle_scan_output.json') ? fs.readFileSync('${{ matrix.workdir }}/dockle_scan_output.json', 'utf8') : 'No output';
+
+            let commentBody = '';
+
+            if (process.env.HADOLINT_RESULT !== 'success') {
+              commentBody = `
+              :x: Dockerfile Lint (Hadolint) failed
+              \`\`\`json
+              ${hadolintResult}
+              \`\`\`
+                            `;
+                          } else if (process.env.CODE_LINT_RESULT !== 'success') {
+                            commentBody = `
+              :x: Code Lint failed
+              \`\`\`
+              ${codeLintResult}
+              \`\`\`
+                            `;
+                          } else if (process.env.UNIT_TEST_RESULT !== 'success') {
+                            commentBody = `
+              :x: Unit Tests failed
+              \`\`\`
+              ${unitTestResult}
+              \`\`\`
+                            `;
+                          } else if (process.env.DOCKLE_RESULT !== 'success') {
+                            commentBody = `
+              :x: Docker Image Scan (Dockle) failed
+              \`\`\`json
+              ${dockleScanResult}
+              \`\`\`
+                            `;
+                          } else {
+                            commentBody = ':white_check_mark: All checks succeeded';
+                          }
+
+                          const { owner, repo } = context.repo;
+                          const issue_number = context.issue.number;
+
+                          await github.rest.issues.createComment({
+                            owner,
+                            repo,
+                            issue_number,
+                            body: commentBody
+                          });

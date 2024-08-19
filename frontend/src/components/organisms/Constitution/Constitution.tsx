@@ -16,21 +16,23 @@ import {
 } from "./MDXComponents";
 import { ConstitutionMetadata, ConstitutionProps } from "../types";
 import { useTranslations } from "next-intl";
-import { useModal } from "@/context";
+import { useAppContext, useModal } from "@/context";
 import { Footer } from "../Footer";
 import { CONSTITUTION_SIDEBAR_TABS, customPalette } from "@consts";
 import { ContentWrapper } from "@/components/atoms";
 import { NotFound } from "../NotFound";
 import { PageTitleTabs } from "../PageTitleTabs";
+import { isAnyAdminRole } from "@utils";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
+  const { userSession } = useAppContext();
   const [isOpen, setIsOpen] = useState(true);
   const [tab, setTab] = useState("revisions");
   const { openModal } = useModal();
   const t = useTranslations("Constitution");
 
   const onCompare = (
-    target: Pick<ConstitutionMetadata, "title" | "created_date" | "cid">
+    target: Omit<ConstitutionMetadata, "version" | "url" | "blake2b">
   ) => {
     openModal({
       type: "compareConstitutionModal",
@@ -100,7 +102,6 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                           ? null
                           : onCompare({ title, created_date, cid });
                       }}
-                      url={url}
                       hash={blake2b}
                       title={title}
                       description={created_date}
@@ -108,6 +109,15 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                         metadata[0].cid === cid
                           ? t("drawer.latest")
                           : t("drawer.compare")
+                      }
+                      url={
+                        userSession &&
+                        isAnyAdminRole(userSession?.role) &&
+                        userSession?.permissions.includes(
+                          "add_constitution_version"
+                        )
+                          ? url
+                          : null
                       }
                       key={cid}
                     />
@@ -144,16 +154,19 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       container
       position="relative"
       justifyContent="flex-end"
+      flex={1}
     >
-      <Grid mt={3} item xxs={10} md={isOpen ? 8 : 11}>
-        <ContentWrapper>
-          <Box px={{ xxs: 2, md: 5 }}>
-            <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
-              <MDXRemote {...constitution} components={MDXComponents} />
-            </Card>
-          </Box>
-        </ContentWrapper>
-        <Footer />
+      <Grid mt={3} item xxs={10} md={isOpen ? 8 : 11} display="flex">
+        <Box display="flex" flexDirection="column" flex={1}>
+          <ContentWrapper>
+            <Box px={{ xxs: 2, md: 5 }}>
+              <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
+                <MDXRemote {...constitution} components={MDXComponents} />
+              </Card>
+            </Box>
+          </ContentWrapper>
+          <Footer />
+        </Box>
       </Grid>
     </Grid>
   );

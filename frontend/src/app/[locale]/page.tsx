@@ -5,6 +5,7 @@ import { unstable_setRequestLocale } from "next-intl/server"; // Import function
 import { decodeUserToken } from "@/lib/api";
 import { redirect } from "next/navigation";
 import { PATHS } from "@consts";
+import { ContentWrapper } from "@atoms";
 
 export default async function Home({ params: { locale } }) {
   unstable_setRequestLocale(locale); // Sets the locale for the request. Use cautiously due to its unstable nature.
@@ -14,12 +15,14 @@ export default async function Home({ params: { locale } }) {
     redirect(`/${locale}/${PATHS.constitution}`);
   }
   return (
-    <main>
+    <>
       <TopNav />
-      <Hero>
-        <HeroActions role="user" />
-      </Hero>
+      <ContentWrapper>
+        <Hero>
+          <HeroActions role="user" />
+        </Hero>
+      </ContentWrapper>
       <Footer />
-    </main>
+    </>
   );
 }

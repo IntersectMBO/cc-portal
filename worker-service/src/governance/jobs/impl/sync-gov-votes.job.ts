@@ -2,6 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { IJob } from '../i-job';
 import { GovernanceFacade } from 'src/governance/facade/governance.facade';
 import { Injectable } from '@nestjs/common';
+import { JOB_NAME_VOTE_SYNC } from '../../../common/constants/bullmq.constants';
 
 @Injectable()
 export class SyncGovVotesJob implements IJob {
@@ -10,7 +11,7 @@ export class SyncGovVotesJob implements IJob {
     private readonly governanceFacade: GovernanceFacade,
   ) {}
   getJobName(): string {
-    return 'Sync Governance Votes';
+    return JOB_NAME_VOTE_SYNC;
   }
   getInterval(): string {
     return (

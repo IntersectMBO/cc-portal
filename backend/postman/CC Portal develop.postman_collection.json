@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "374f247a-1ea9-4c6a-8a4f-5b5eaa052036",
-		"name": "CC Portal develop",
+		"_postman_id": "e842d76b-56e2-476d-b31d-bbeffd0853bc",
+		"name": "CC Portal develop Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20133713"
 	},
@@ -623,6 +623,32 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get IPNS URL",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/ipns/url",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"ipns",
+								"url"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -782,7 +808,7 @@
 					"response": []
 				},
 				{
-					"name": "Add Reasoning",
+					"name": "Add Rationale",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -793,7 +819,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"test reasoning 2\",\n    \"content\": \"some text of reasoning 2\"\n}",
+							"raw": "{\n    \"title\": \"test rationale 2\",\n    \"content\": \"some text of rationale 2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -801,7 +827,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/2/reasoning",
+							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/2/rationale",
 							"host": [
 								"{{base-url}}"
 							],
@@ -812,14 +838,14 @@
 								"{{userId}}",
 								"proposals",
 								"2",
-								"reasoning"
+								"rationale"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Reasoning for proposal",
+					"name": "Get Rationale for proposal",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -829,7 +855,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/2/reasoning",
+							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/2/rationale",
 							"host": [
 								"{{base-url}}"
 							],
@@ -840,7 +866,7 @@
 								"{{userId}}",
 								"proposals",
 								"2",
-								"reasoning"
+								"rationale"
 							]
 						}
 					},

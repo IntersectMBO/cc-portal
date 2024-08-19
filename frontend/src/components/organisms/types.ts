@@ -16,6 +16,7 @@ export interface ConstitutionMetadata {
   title: string;
   version: string;
   created_date: string;
+  url: string;
 }
 
 export interface ConstitutionByCid {
@@ -42,7 +43,7 @@ export interface UserListItem extends FetchUserData {}
 export interface SignupModalState {
   showCloseButton?: boolean;
   title: string;
-  description: string;
+  description?: string;
 }
 
 export interface CompareConstitutionModalState {

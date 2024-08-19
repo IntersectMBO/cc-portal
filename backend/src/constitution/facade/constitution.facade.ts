@@ -6,6 +6,7 @@ import { ConstitutionDto } from 'src/redis/dto/constitution.dto';
 import { ConstitutionService } from '../services/constitution.service';
 import { IpfsService } from 'src/ipfs/services/ipfs.service';
 import { ConstitutionMetadataResponse } from '../api/response/constitution-metadata.response';
+import { ConstitutionIpnsUrlResponse } from '../api/response/constitutio-ipns-url.response';
 
 @Injectable()
 export class ConstitutionFacade {
@@ -62,5 +63,10 @@ export class ConstitutionFacade {
     return constitutionMetadataArray.map((metadataDto) =>
       ConstitutionMapper.ipfsMetadataDtoToConstitutionResponse(metadataDto),
     );
+  }
+
+  async getIpnsUrl(): Promise<ConstitutionIpnsUrlResponse> {
+    const ipnsUrl = await this.ipfsService.getIpnsUrl();
+    return ConstitutionMapper.ipnsUrlToResponse(ipnsUrl);
   }
 }

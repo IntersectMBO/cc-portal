@@ -8,7 +8,7 @@ import { NotFound } from "../NotFound";
 import { getUsersAdmin } from "@/lib/api";
 import { PaginationMeta } from "@/lib/requests";
 import { isEmpty } from "@utils";
-import { usePagination } from "@/lib/utils/usePagination";
+import { usePagination } from "@hooks";
 import { ShowMoreButton } from "@atoms";
 import { useSearchParams } from "next/navigation";
 import { useSnackbar } from "@/context/snackbar";
