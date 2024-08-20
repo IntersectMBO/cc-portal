@@ -166,7 +166,6 @@ export class VoteService extends CommonService {
         SQL_FILE_PATH.GET_VOTES,
         addresses,
       );
-      console.log('Num of Votes: ' + dbData.length);
       const results: VoteRequest[] = [];
       dbData.forEach((vote) => {
         results.push(VoteMapper.dbSyncToVoteRequest(vote, mapHotAddresses));
