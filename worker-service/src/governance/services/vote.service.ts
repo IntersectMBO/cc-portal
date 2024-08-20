@@ -166,11 +166,9 @@ export class VoteService extends CommonService {
       addresses,
     );
     const results: VoteRequest[] = [];
-    if (dbData) {
-      dbData.forEach((vote) => {
-        results.push(VoteMapper.dbSyncToVoteRequest(vote, mapHotAddresses));
-      });
-    }
+    dbData.forEach((vote) => {
+      results.push(VoteMapper.dbSyncToVoteRequest(vote, mapHotAddresses));
+    });
     return results;
   }
 
