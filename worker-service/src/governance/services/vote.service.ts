@@ -159,17 +159,23 @@ export class VoteService extends CommonService {
   async getVoteDataFromDbSync(
     mapHotAddresses: Map<string, string>,
   ): Promise<VoteRequest[]> {
-    const prefix = '\\x'; // prefix for each hot address
-    const addresses = [...mapHotAddresses.keys()].map((key) => prefix + key);
-    const dbData = await this.getDataFromSqlFile(
-      SQL_FILE_PATH.GET_VOTES,
-      addresses,
-    );
-    const results: VoteRequest[] = [];
-    dbData.forEach((vote) => {
-      results.push(VoteMapper.dbSyncToVoteRequest(vote, mapHotAddresses));
-    });
-    return results;
+    try {
+      const prefix = '\\x'; // prefix for each hot address
+      const addresses = [...mapHotAddresses.keys()].map((key) => prefix + key);
+      const dbData = await this.getDataFromSqlFile(
+        SQL_FILE_PATH.GET_VOTES,
+        addresses,
+      );
+      console.log('Num of Votes: ' + dbData.length);
+      const results: VoteRequest[] = [];
+      dbData.forEach((vote) => {
+        results.push(VoteMapper.dbSyncToVoteRequest(vote, mapHotAddresses));
+      });
+      return results;
+    } catch (error) {
+      this.logger.log(`Error when getting votes from db_sync: ${error}`);
+      throw new InternalServerErrorException(error);
+    }
   }
 
   async countHotAddressPages(): Promise<number> {
