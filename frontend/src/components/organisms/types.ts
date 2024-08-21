@@ -89,7 +89,12 @@ export interface OpenPreviewReasoningModal {
   govAction: Pick<
     GovernanceActionTableI,
     "id" | "type" | "submit_time" | "end_time" | "tx_hash"
-  > & { vote?: Vote; vote_submit_time?: string };
+  > & {
+    vote?: Vote;
+    vote_submit_time?: string;
+    reasoning_title?: string;
+    reasoning_comment?: string;
+  };
   onActionClick?: (id: string) => void;
   actionTitle?: string;
 }
