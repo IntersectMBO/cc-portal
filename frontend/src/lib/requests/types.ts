@@ -175,9 +175,9 @@ export interface ReasoningContentsI {
 }
 
 export interface ReasoningResponseI {
-  cid: string;
-  url: string;
-  blake2b: string;
+  cid?: string;
+  url?: string;
+  blake2b?: string;
   contents: string;
   title: string;
 }
