@@ -123,14 +123,61 @@ export interface AddReasoningRequestI extends GetReasoningResponseI {
 }
 
 export interface ReasoningContentsI {
-  content: string;
-  govActionProposalTxHash: string;
-  title: string;
+  "@context": {
+    "@language": string;
+    hashAlgorithm: string;
+    body: {
+      "@id": string;
+      "@context": {
+        references: {
+          "@id": string;
+          "@container": string;
+          "@context": {
+            governanceMetadata: string;
+            other: string;
+            label: string;
+            uri: string;
+          };
+        };
+        comment: string;
+        externalUpdates: {
+          "@id": string;
+          "@context": {
+            title: string;
+            uri: string;
+          };
+        };
+      };
+    };
+    authors: {
+      "@id": string;
+      "@container": string;
+      "@context": {
+        did: string;
+        name: string;
+        witness: {
+          "@id": string;
+          "@context": {
+            witnessAlgorithm: string;
+            publicKey: string;
+            signature: string;
+          };
+        };
+      };
+    };
+  };
+  hashAlgorithm: string;
+  authors: [];
+  body: {
+    references: [];
+    comment: string;
+  };
 }
 
 export interface ReasoningResponseI {
-  cid: string;
-  url: string;
-  blake2b: string;
+  cid?: string;
+  url?: string;
+  blake2b?: string;
   contents: string;
+  title: string;
 }

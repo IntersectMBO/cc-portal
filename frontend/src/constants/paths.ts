@@ -12,5 +12,10 @@ export const PATHS = {
   },
 };
 
+export const EXTERNAL_LINKS = {
+  guides:
+    "https://app.gitbook.com/o/Prbm1mtkwSsGWSvG1Bfd/s/IOUshfMdffqF4RObLhje/legal/terms-and-conditions",
+};
+
 export const adminProtectedPath = PATHS.admin.dashboard;
 export const userProtectedPaths = [PATHS.myActions, PATHS.governanceActions];

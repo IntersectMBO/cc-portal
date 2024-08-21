@@ -3,7 +3,7 @@
 import { Card } from "@molecules";
 import { Box, Divider, Grid } from "@mui/material";
 import { MDXRemote } from "next-mdx-remote";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Code,
   Heading1,
@@ -16,20 +16,32 @@ import {
 } from "./MDXComponents";
 import { ConstitutionMetadata, ConstitutionProps } from "../types";
 import { useTranslations } from "next-intl";
-import { useModal } from "@/context";
+import { useAppContext, useModal } from "@/context";
 import { Footer } from "../Footer";
 import { CONSTITUTION_SIDEBAR_TABS, customPalette } from "@consts";
 import { ContentWrapper } from "@/components/atoms";
 import { NotFound } from "../NotFound";
 import { PageTitleTabs } from "../PageTitleTabs";
+import { isAnyAdminRole } from "@utils";
+import { useScreenDimension } from "@hooks";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
+  const { isMobile } = useScreenDimension();
+  const { userSession } = useAppContext();
   const [isOpen, setIsOpen] = useState(true);
   const [tab, setTab] = useState("revisions");
   const { openModal } = useModal();
   const t = useTranslations("Constitution");
 
-  const onCompare = (target: Omit<ConstitutionMetadata, "version">) => {
+  useEffect(() => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  }, [isMobile]);
+
+  const onCompare = (
+    target: Omit<ConstitutionMetadata, "version" | "url" | "blake2b">
+  ) => {
     openModal({
       type: "compareConstitutionModal",
       state: {
@@ -90,7 +102,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
           {tab === "revisions" ? (
             <Grid item justifyContent="flex-end" px={{ xxs: 1, md: 0 }}>
               {metadata ? (
-                metadata.map(({ title, created_date, cid }) => {
+                metadata.map(({ title, created_date, cid, blake2b, url }) => {
                   return (
                     <NavCard
                       onClick={() => {
@@ -98,13 +110,22 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                           ? null
                           : onCompare({ title, created_date, cid });
                       }}
-                      hash={cid}
+                      hash={blake2b}
                       title={title}
                       description={created_date}
                       buttonLabel={
                         metadata[0].cid === cid
                           ? t("drawer.latest")
                           : t("drawer.compare")
+                      }
+                      url={
+                        userSession &&
+                        isAnyAdminRole(userSession?.role) &&
+                        userSession?.permissions.includes(
+                          "add_constitution_version"
+                        )
+                          ? url
+                          : null
                       }
                       key={cid}
                     />
@@ -141,16 +162,19 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       container
       position="relative"
       justifyContent="flex-end"
+      flex={1}
     >
-      <Grid mt={3} item xxs={10} md={isOpen ? 8 : 11}>
-        <ContentWrapper>
-          <Box px={{ xxs: 2, md: 5 }}>
-            <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
-              <MDXRemote {...constitution} components={MDXComponents} />
-            </Card>
-          </Box>
-        </ContentWrapper>
-        <Footer />
+      <Grid mt={3} item xxs={10} md={isOpen ? 8 : 11} display="flex">
+        <Box display="flex" flexDirection="column" flex={1}>
+          <ContentWrapper>
+            <Box px={{ xxs: 2, md: 5 }}>
+              <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
+                <MDXRemote {...constitution} components={MDXComponents} />
+              </Card>
+            </Box>
+          </ContentWrapper>
+          <Footer />
+        </Box>
       </Grid>
     </Grid>
   );

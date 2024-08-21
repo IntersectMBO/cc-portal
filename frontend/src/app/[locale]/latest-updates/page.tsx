@@ -20,7 +20,7 @@ export default async function LatestUpdatesPage({
   });
   const hasError = isResponseErrorI(latestUpdates);
   return (
-    <main>
+    <>
       <TopNav />
       <ContentWrapper>
         <Suspense fallback={<Loading />}>
@@ -39,6 +39,6 @@ export default async function LatestUpdatesPage({
         </Suspense>
       </ContentWrapper>
       <Footer />
-    </main>
+    </>
   );
 }

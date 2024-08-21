@@ -1,4 +1,9 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHelia } from 'helia';
 import type { HeliaLibp2p } from 'helia';
@@ -21,8 +26,11 @@ import { kadDHT, removePrivateAddressesMapper } from '@libp2p/kad-dht';
 import { ipnsSelector } from 'ipns/selector';
 import { ipnsValidator } from 'ipns/validator';
 import { dcutr } from '@libp2p/dcutr';
-//import { autoNAT } from '@libp2p/autonat';
-//import { uPnPNAT } from '@libp2p/upnp-nat';
+import { autoNAT } from '@libp2p/autonat';
+import { ping } from '@libp2p/ping';
+import { uPnPNAT } from '@libp2p/upnp-nat';
+import { mdns } from '@libp2p/mdns';
+import { createDelegatedRoutingV1HttpApiClient } from '@helia/delegated-routing-v1-http-api-client';
 //import { gossipsub } from '@chainsafe/libp2p-gossipsub';
 //import { webRTC, webRTCDirect } from '@libp2p/webrtc';
 import {
@@ -36,6 +44,11 @@ import { config } from 'dotenv';
 config();
 
 const libp2pOptions = {
+  config: {
+    dht: {
+      enabled: true
+    }
+  },
   addresses: {
     listen: [
       // add a listen address (localhost) to accept TCP connections on a random port
@@ -43,50 +56,52 @@ const libp2pOptions = {
       process.env.LISTEN_WS_ADDRESS,
       process.env.LISTEN_QUIC_ADDRESS,
     ],
-    announce: [
-      process.env.ANNOUNCE_TCP_ADDRESS,
-      process.env.ANNOUNCE_WS_ADDRESS,
-    ],
   },
   transports: [
+    circuitRelayTransport({ discoverRelays: 1 }),
     tcp(),
-    webSockets({ filter: all }),
-    circuitRelayTransport({ discoverRelays: 3 }),
+    webSockets(),
   ],
-  connectionEncryption: [
-    noise()
-  ],
-  streamMuxers: [
-    yamux()
-  ],
+  connectionEncryption: [noise()],
+  streamMuxers: [yamux()],
   peerDiscovery: [
+   mdns(),
     bootstrap({
       list: [
-        '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
-        '/dns4/node0.preload.ipfs.io/tcp/443/wss/p2p/QmZMxNdpMkewiVZLMRxaNxUeZpDUb34pWjZ1kZvsd16Zic',
-        '/dns4/node1.preload.ipfs.io/tcp/443/wss/p2p/Qmbut9Ywz9YEDrz8ySBSgWyJk41Uvm2QJPhwDJzJyGFsD6',
-        '/dns4/node2.preload.ipfs.io/tcp/443/wss/p2p/QmV7gnbW5VTcJ3oyM2Xk1rdFBJ3kTkvxc87UFGsun29STS',
-        '/dns4/node3.preload.ipfs.io/tcp/443/wss/p2p/QmY7JB6MQXhxHvq7dBDh4HpbH29v4yE9JRadAVpndvzySN'
-      ]
-    })
+        '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
+        '/ip4/104.131.131.82/udp/4001/quic-v1/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
+      ],
+    }),
   ],
   services: {
-    identify: identify(),
+    autoNAT: autoNAT(),
     dcutr: dcutr(),
-    aminoDHT: kadDHT({
+    delegatedRouting: () =>
+      createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
+    dht: kadDHT({
+      clientMode: false,
+      initialQuerySelfInterval: 1000,
+      kBucketSize: 20,
       protocol: '/ipfs/kad/1.0.0',
-      peerInfoMapper: removePrivateAddressesMapper,
+      maxInboundStreams: 32,
+      maxOutboundStreams: 64,
       validators: { ipns: ipnsValidator },
       selectors: { ipns: ipnsSelector },
     }),
-    relay: circuitRelayServer(),
+    identify: identify(),
     keychain: keychain(),
-  }
+    ping: ping(),
+    relay: circuitRelayServer({
+      advertise: true,
+      hopTimeout: 60000,
+    }),
+    upnp: uPnPNAT(),
+  },
 };
 
 @Injectable()
@@ -117,9 +132,9 @@ export class AppService implements OnModuleInit {
       const datastore = new LevelDatastore('ipfs/datastore');
       await datastore.open();
 
-      this.helia = await createHelia({ 
-        blockstore, 
-        datastore, 
+      this.helia = await createHelia({
+        blockstore,
+        datastore,
         libp2p: libp2pOptions,
       });
 
@@ -127,25 +142,18 @@ export class AppService implements OnModuleInit {
       this.helia.libp2p
         .getMultiaddrs()
         .forEach((ma) => console.log(ma.toString()));
-      
-      // this logger is for testing purposes and should be removed in the future
-      this.helia.libp2p.addEventListener('peer:discovery', (evt) => {
-        this.logger.log(`found peer: ${ evt.detail.id.toString() }`);
-      });
     }
-
     return this.helia;
   }
 
   async getIpns() {
     this.ipns = ipns(this.helia);
-    const keyName = 'my-key11';
+    const keyName = process.env.IPNS_CONSTITUTION_KEY_NAME;
     const existingKeys = await this.helia.libp2p.services.keychain.listKeys();
     // if keyName already exists
-    if (existingKeys.some(x => x.name === keyName)) {
-      this.ipnsPeerId = await this.helia.libp2p.services.keychain.exportPeerId(
-        keyName,
-      );
+    if (existingKeys.some((x) => x.name === keyName)) {
+      this.ipnsPeerId =
+        await this.helia.libp2p.services.keychain.exportPeerId(keyName);
       this.logger.log(`IPNS PeerID: ${this.ipnsPeerId}`);
       return;
     }
@@ -161,26 +169,37 @@ export class AppService implements OnModuleInit {
   }
 
   async addDoc(file: Express.Multer.File): Promise<IpfsDto> {
-    this.fs = unixfs(this.helia);
-    const fileBuffer = Buffer.from(file.buffer);
-    const fileObj = Object.values(fileBuffer);
-    const cid: CID = await this.fs.addBytes(Uint8Array.from(fileObj));
-    this.logger.log(`Added file: ${cid}`);
+    try {
+      this.fs = unixfs(this.helia);
+      const fileBuffer = Buffer.from(file.buffer);
+      const fileObj = Object.values(fileBuffer);
 
-    const ret1 = this.helia.pins.add(cid);
-    ret1.next().then((res) => this.logger.log(`Ret: ${res.value}`));
+      // Add doc to IPFS
+      const cid: CID = await this.fs.addBytes(Uint8Array.from(fileObj));
+      this.logger.log(`Added file: ${cid}`);
 
-    // publish the name
-    await this.ipns.publish(this.ipnsPeerId, cid);
- 
-    // resolve the name
-    const result = await this.ipns.resolve(this.ipnsPeerId);
-    this.logger.log(`Result cid: ${result.cid}`);
-    this.logger.log(`Result path: ${result.path}`);
+      // Pin doc
+      const ret1 = this.helia.pins.add(cid);
+      ret1.next().then((res) => this.logger.log(`Pinned: ${res.value}`));
 
-    const content = fileBuffer.toString('utf-8');
+      // Announce CID to the DHT
+      this.provideCidtoDHT(cid);
 
-    return IpfsMapper.ipfsToIpfsDto(cid.toString(), content);
+      // Publish the name
+      await this.ipns.publish(this.ipnsPeerId, cid);
+
+      // Resolve the name
+      const result = await this.ipns.resolve(this.ipnsPeerId);
+      this.logger.log(`Result cid: ${result.cid}`);
+      this.logger.log(`Result path: ${result.record.value}`);
+
+      const content = fileBuffer.toString('utf-8');
+
+      return IpfsMapper.ipfsToIpfsDto(cid.toString(), content);
+    } catch (error) {
+      this.logger.error(`Final error: ${error}`);
+      throw new InternalServerErrorException(error);
+    }
   }
 
   async getDoc(cid: string): Promise<IpfsDto> {
@@ -197,17 +216,60 @@ export class AppService implements OnModuleInit {
   }
 
   async addJson(json: string): Promise<IpfsDto> {
-    this.fs = unixfs(this.helia);
-    const encoder = new TextEncoder();
-    const jsonContent = JSON.stringify(json);
-    const cid: CID = await this.fs.addBytes(encoder.encode(jsonContent));
-    this.logger.log(`Added json: ${cid}`);
+    try {
+      this.fs = unixfs(this.helia);
+      const encoder = new TextEncoder();
+      const jsonContent = JSON.stringify(json);
+      const cid: CID = await this.fs.addBytes(encoder.encode(jsonContent));
+      this.logger.log(`Added json: ${cid}`);
 
-    const ret1 = this.helia.pins.add(cid);
-    ret1.next().then((res) => this.logger.log(`Pinned json: ${res.value}`));
+      const ret1 = this.helia.pins.add(cid);
+      ret1.next().then((res) => this.logger.log(`Pinned json: ${res.value}`));
 
-    const url = process.env.IPFS_PUBLIC_URL + cid.toString()
+      // Announce CID to the DHT
+      this.provideCidtoDHT(cid);
 
-    return IpfsMapper.ipfsToIpfsDto(cid.toString(), jsonContent, url);
+      const url = process.env.IPFS_PUBLIC_URL + cid.toString();
+
+      return IpfsMapper.ipfsToIpfsDto(cid.toString(), jsonContent, url);
+    } catch (error) {
+      this.logger.error(`Final error: ${error}`);
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  private provideCidtoDHT(cid, retryDelay = 5000) {
+    let attempt = 0;
+    let errCode = null;
+
+    const attemptToProvide = async () => {
+      try {
+        await this.helia.libp2p.contentRouting.provide(cid);
+        this.logger.log(`Announced CID to the DHT: ${cid.toString()}`);
+      } catch (error) {
+        this.logger.error(`Error announcing CID to the DHT: ${error}`);
+        errCode = error.code;
+        if (errCode === 'ERR_QUERY_ABORTED') {
+          attempt++;
+          this.logger.log(`Retrying... (${attempt})`);
+          await new Promise((resolve) => setTimeout(resolve, retryDelay));
+          attemptToProvide(); // Retry
+        } else {
+          this.logger.log(`CID: ${cid} has not been announced`);
+          this.logger.error(error);
+          throw new InternalServerErrorException(error);
+        }
+      }
+    };
+
+    attemptToProvide();
+  }
+
+  async getIpnsUrl(): Promise<string> {
+    if (!this.ipnsPeerId) {
+      throw new InternalServerErrorException(`IPNS Peer Id not exists`);
+    }
+    const ipnsUrl = process.env.IPNS_PUBLIC_URL + this.ipnsPeerId.toString()
+    return ipnsUrl;
   }
 }

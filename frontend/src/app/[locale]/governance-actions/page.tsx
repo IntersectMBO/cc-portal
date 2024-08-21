@@ -21,7 +21,7 @@ export default async function GovernanceActionsPage({
   });
 
   return (
-    <main>
+    <>
       <TopNav />
       <ContentWrapper>
         <Suspense fallback={<Loading />}>
@@ -32,6 +32,6 @@ export default async function GovernanceActionsPage({
         </Suspense>
       </ContentWrapper>
       <Footer />
-    </main>
+    </>
   );
 }

@@ -38,6 +38,7 @@ describe('GovernanceFacade', () => {
       permissions: [],
       createdAt: null,
       updatedAt: null,
+      deactivatedAt: null,
     },
     {
       id: 'mockedId2',
@@ -51,6 +52,7 @@ describe('GovernanceFacade', () => {
       permissions: [],
       createdAt: null,
       updatedAt: null,
+      deactivatedAt: null,
     },
   ];
 
@@ -421,7 +423,7 @@ describe('GovernanceFacade', () => {
       const userId = 'user_1';
       const proposalId = mockGovActionProposalDtos[0].id;
       jest
-        .spyOn<any, string>(facade, 'createRationaleJson')
+        .spyOn<any, string>(facade, 'createRationaleJsonCip100')
         .mockResolvedValueOnce(mockRationaleJson);
       jest
         .spyOn<any, string>(facade, 'addRationaleToIpfs')
@@ -458,7 +460,7 @@ describe('GovernanceFacade', () => {
         govActionProposalId: proposalId,
       };
       jest
-        .spyOn<any, string>(facade, 'createRationaleJson')
+        .spyOn<any, string>(facade, 'createRationaleJsonCip100')
         .mockResolvedValueOnce(mockRationaleJson);
       jest
         .spyOn<any, string>(facade, 'addRationaleToIpfs')
@@ -480,9 +482,6 @@ describe('GovernanceFacade', () => {
           `Gov action proposal with id ${rationaleRequest.govActionProposalId} not found`,
         );
       }
-      expect(mockGovernanceService.findGovProposalById).toHaveBeenCalledWith(
-        rationaleRequest.govActionProposalId,
-      );
     });
   });
 
