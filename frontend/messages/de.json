@@ -2,17 +2,17 @@
   "Index": {
     "title": "Web App Boilerplate",
     "hero": {
-      "headline": "Championing Cardano's community-led governance",
-      "description": "Until a final Cardano Constitution has been developed and ratified by the community - a programme of consultation taking place throughout 2024 - a set of interim rules is required to support the transition.",
-      "seeConstitution": "Read the Interim Constitution",
-      "signIn": "Sign In",
-      "constitutionalCommitteePortal": "Constitutional Committee Portal"
+      "headline": "Wir setzen uns für die von der Community geführte Governance von Cardano ein",
+      "description": "Bis eine endgültige Cardano-Verfassung entwickelt und von der Community ratifiziert wurde – ein Konsultationsprogramm, das das ganze Jahr 2024 über läuft – ist eine Reihe von Übergangsregeln erforderlich, um den Übergang zu unterstützen.",
+      "seeConstitution": "Lesen Sie die Interimsverfassung",
+      "signIn": "Anmelden",
+      "constitutionalCommitteePortal": "Portal des Verfassungsausschusses"
     }
   },
   "Constitution": {
-    "title": "Cardano Constituition",
+    "title": "Cardano-Verfassung",
     "drawer": {
-      "compare": "Compare",
+      "compare": "Vergleichen",
       "latestRevisions": "Latest Revisions",
       "tableOfContents": "Content",
       "latest": "Latest"

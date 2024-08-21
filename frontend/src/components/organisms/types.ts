@@ -11,6 +11,8 @@ import { Vote } from "../atoms";
 
 export interface ConstitutionMetadata {
   cid: string;
+  url: string;
+  blake2b: string;
   title: string;
   version: string;
   created_date: string;

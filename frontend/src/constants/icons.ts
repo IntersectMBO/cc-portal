@@ -21,4 +21,5 @@ export const ICONS = {
   sortActive: "/icons/SortActive.svg",
   sortWhite: "/icons/SortWhite.svg",
   govAction: "/icons/GovAction.svg",
+  externalLink: "/icons/ExternalLink.svg",
 };
