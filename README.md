@@ -16,7 +16,7 @@ The primary purpose of the solution is to host the Cardano Constitution and allo
 
 ## Introduction
 
-This document serves as a comprehensive guide for setting up the full stack of our application, which includes the Frontend, Backend, Database, Caching service, Worker service and IPFS components.
+This document serves as a comprehensive guide for setting up the full stack of our application, which includes the Frontend, Backend, Database, Caching, Worker and IPFS components.
 
 ## Prerequisites
 
@@ -160,12 +160,11 @@ Below is a description of the environment variables used in the `.env` file:
    - `REDIS_HOST`: Hostname for Redis.
    - `REDIS_PORT`: Port number for Redis.
    - `REDIS_PASSWORD`: Password for Redis.
-   - `MAILER_HOST`: AWS SES hostname.
-   - `MAILER_PORT`: AWS SES port number.
-   - `MAILER_USER`: AWS SES access key id.
-   - `MAILER_API_KEY`: AWS SES secret access key.
-   - `MAILER_EMAIL_FROM`: Email of sender.
-   - `MAILER_EMAIL_NAME`: Name of sender.
+   - `AWS_ACCESS_KEY_ID`: AWS SES access key id.
+   - `AWS_SECRET_ACCESS_KEY`: AWS SES secret access key.
+   - `AWS_REGION`: AWS SES region.
+   - `EMAIL_FROM`: Email of sender.
+   - `NAME_FROM`: Name of sender.
    - `MINIO_ENDPOINT`: Endpoint for Minio. Example: `localhost`.
    - `MINIO_PORT`: Port number for Minio. Example: `9000`.
    - `MINIO_ACCESS_KEY`: Access key for Minio.
