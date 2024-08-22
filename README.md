@@ -100,21 +100,30 @@ Before you begin setting up the application, you'll need to clone the repository
    - Change your directory to the root of your project where the `docker-compose.yaml` file is located.
    - Execute the following command to start up all the services as defined in your `docker-compose.yaml` file.
      ```
-     docker-compose up --build
+     docker-compose up --build -d
      ```
 
 5. **Database migration:**
 
-   - Navigate to the `backend` directory and run the following command:
+   - Run the following commands:
+     1. Navigate to the backend docker container
+     ```
+     docker container exec -it backend bash
+     ```
+     2. Run script for migrations
      ```
      npm run typeorm:run-migrations
+     ```
+     3. Exit from the backend docker container
+     ```
+     exit
      ```
 
 6. **Create Super Admin**
    A Super Admin should be created manually. To do that, run the following SQL queries on the Backend PostgreSQL database:
-   1. Create super admin user
+   1. Create super admin user with valid email address
    ```
-   INSERT INTO users (email, status, role_id) VALUES ('mitrovic.softcoder@gmail.com', 'active', (SELECT r.id FROM roles r WHERE r.code='super_admin'));
+   INSERT INTO users (email, status, role_id) VALUES ('your@email.com', 'active', (SELECT r.id FROM roles r WHERE r.code='super_admin'));
    ```
    2. Add permissions to super admin
    ```
@@ -122,8 +131,8 @@ Before you begin setting up the application, you'll need to clone the repository
    SELECT users.id, permissions.id
    FROM permissions
    INNER join users on users.email 
-   IN ('mitrovic.softcoder@gmail.com')
-   WHERE code IN ('manage_admins', 'manage_cc_members', 'add_constitution_version')
+   IN ('your@email.com')
+   WHERE code IN ('manage_admins', 'manage_cc_members', 'add_constitution_version');
    ```
 
 ## Usage
@@ -143,7 +152,7 @@ Below is a description of the environment variables used in the `.env` file:
 2. **Backend:**
 
    - `POSTGRES_DB`: The name of the PostgreSQL database. Example: `cc-portal`.
-   - `POSTGRES_HOST`: The hostname for the PostgreSQL database. Example: `localhost`
+   - `POSTGRES_HOST`: The hostname for the PostgreSQL database. Example: `postgres`
    - `POSTGRES_PORT`: The port number for the PostgreSQL database. Example: `5432`.
    - `POSTGRES_USERNAME`: Username for accessing the PostgreSQL database. Example: `postgres`.
    - `POSTGRES_PASSWORD`: Password for the PostgreSQL database user. Example: `postgres`.
@@ -158,9 +167,9 @@ Below is a description of the environment variables used in the `.env` file:
    - `REFRESH_SECRET`: Secret key for refresh tokens.
    - `JWT_ACCESS_TOKEN_EXPIRES_IN`: Expiration time for JWT access tokens. Example: `15m`.
    - `JWT_REFRESH_TOKEN_EXPIRES_IN`: Expiration time for JWT refresh tokens. Example: `7d`.
-   - `REDIS_HOST`: Hostname for Redis.
-   - `REDIS_PORT`: Port number for Redis.
-   - `REDIS_PASSWORD`: Password for Redis.
+   - `REDIS_HOST`: Hostname for Redis. Example `cache`.
+   - `REDIS_PORT`: Port number for Redis. Example `6379`.
+   - `REDIS_PASSWORD`: Password for Redis. Example `password`.
    - `AWS_ACCESS_KEY_ID`: AWS SES access key id.
    - `AWS_SECRET_ACCESS_KEY`: AWS SES secret access key.
    - `AWS_REGION`: AWS SES region.
@@ -187,18 +196,18 @@ Below is a description of the environment variables used in the `.env` file:
 
 4. **Worker service**
 
-   - `POSTGRES_DB`: The name of the Backend PostgreSQL database. Example: `cc-portal`.
-   - `POSTGRES_HOST`: The hostname for the Backend PostgreSQL database. Example: `localhost`
-   - `POSTGRES_PORT`: The port number for the Backend PostgreSQL database. Example: `5432`.
-   - `POSTGRES_USERNAME`: Username for the Backend PostgreSQL database. Example: `postgres`.
-   - `POSTGRES_PASSWORD`: Password for the Backend PostgreSQL database user. Example: `postgres`.
+   - `BE_POSTGRES_DB`: The name of the Backend PostgreSQL database. Example: `cc-portal`.
+   - `BE_POSTGRES_HOST`: The hostname for the Backend PostgreSQL database. Example: `postgres`
+   - `BE_POSTGRES_PORT`: The port number for the Backend PostgreSQL database. Example: `5432`.
+   - `BE_POSTGRES_USERNAME`: Username for the Backend PostgreSQL database. Example: `postgres`.
+   - `BE_POSTGRES_PASSWORD`: Password for the Backend PostgreSQL database user. Example: `postgres`.
    - `DB_SYNC_POSTGRES_DB`: The name of the Backend PostgreSQL database. Example: `db-sync`.
    - `DB_SYNC_POSTGRES_SCHEMA`: The schema of the DB-Sync PostgreSQL database. Example: `public`
    - `DB_SYNC_POSTGRES_HOST`: The hostname for the DB-Sync PostgreSQL database. Example: `localhost`
    - `DB_SYNC_POSTGRES_PORT`: The port number for the DB-Sync PostgreSQL database. Example: `5432`.
    - `DB_SYNC_POSTGRES_USERNAME`: Username for the DB-Sync PostgreSQL database. Example: `db-sync-user`.
    - `DB_SYNC_POSTGRES_PASSWORD`: Password for the DB-Sync PostgreSQL database user. Example: `db-sync-password`.
-   - `REDIS_HOST`: Hostname for Redis. Example `localhost`.
+   - `REDIS_HOST`: Hostname for Redis. Example `cache`.
    - `REDIS_PORT`: Port number for Redis. Example `6379`.
    - `REDIS_PASSWORD`: Password for Redis. Example `password`.
    - `HOT_ADDRESSES_PER_PAGE`: Password for the DB-Sync PostgreSQL database user. Example: `10`.
