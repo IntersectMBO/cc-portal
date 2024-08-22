@@ -92,7 +92,7 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     ports:
-      -"3000:3000"
+      - "3000:3000"
     networks:
       - cc
 
