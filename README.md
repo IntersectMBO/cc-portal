@@ -1,6 +1,8 @@
-# 🚀 Web-App Boilerplate 🚀
+# Constitution Committee Portal
 
-Welcome to the official repository for the Web App Boilerplate.
+Welcome to the official repository for the Constitution Committee Portal.
+
+The primary purpose of the solution is to host the Cardano Constitution and allow anyone to get familiar with it and follow its evolution over time. It also serves as the single point of truth for the Cardano Community members to see how Constitutional Committee members voted on a specific Governance Action, with the inclusion of their rationale. For members of the Constitutional Committee, it serves as a portal to add reasoning to their votes and prepare it as an off-chain resource to be attached to on-chain governance actions.
 
 ## Table of content:
 
@@ -8,42 +10,58 @@ Welcome to the official repository for the Web App Boilerplate.
 - [Prerequisites](#prerequisites)
 - [Tech stack](#tech-stack)
 - [Getting started](#getting-started)
-- [Running locally](#running-locally)
+- [Usage](#usage)
+- [Environment Variables](#environment-variables) 
 - [Running using docker compose](#running-using-docker-compose)
 
 ## Introduction
 
-This document serves as a comprehensive guide for setting up the full stack of our application, which includes the backend, frontend, and database components.
+This document serves as a comprehensive guide for setting up the full stack of our application, which includes the Frontend, Backend, Database, Caching service, Worker service and IPFS components.
 
 ## Prerequisites
 
 - Node.js installed - [Download link](https://nodejs.org/en/download/).
-- PostgreSQL installed (if running locally without Docker) - [Download link](https://www.postgresql.org/).
-- Docker and Docker Compose installed (for Docker environment) - [Download link](https://docs.docker.com/get-started/)
+- Docker and Docker Compose installed - [Download link](https://docs.docker.com/get-started/)
 
 ## Tech stack:
 
-**Server:** [Node](https://nodejs.org/en/about/), [Strapi](https://docs.strapi.io/developer-docs/latest/getting-started/introduction.html)
+**Frontend:** [Next.js](https://nextjs.org/)
+
+**Backend:** [Node](https://nodejs.org/en/about/), [Nest.js](https://nestjs.com/)
 
 **Database:** [PostgreSQL](https://www.postgresql.org/)
 
-**Frontend:** [Next.js](https://nextjs.org/)
+**Caching service:** [Redis](https://redis.io/docs)
 
-**Container:** [Docker](https://docs.docker.com/get-started/)
+**Worker service:** [Nest.js](https://nestjs.com/)
 
-### Backend
-
-Our backend is powered by Strapi, a versatile headless CMS built on Node.js. It offers an intuitive admin panel, coupled with extensive RESTful and GraphQL API support, enabling efficient content management and API development.
-
-### Database
-
-For data persistence, we utilize PostgreSQL, known for its robustness, scalability, and reliability. This choice ensures that our application's data layer is secure, efficient, and capable of handling growth.
+**Helia IPFS/IPNS node:** [Helia](https://github.com/ipfs/helia), [Nest.js](https://nestjs.com/)
 
 ### Frontend
 
-The frontend is developed with Next.js, a React framework that allows for server-side rendering and static site generation. This choice enables us to create fast, SEO-friendly web pages that integrate seamlessly with our Strapi backend.
+The Frontend is developed with Next.js, a React framework that allows for server-side rendering and static site generation. This choice enables us to create fast, SEO-friendly web pages that integrate seamlessly with our Nest.js backend.
 
 The instructions that follow will guide you through setting up each component of our application stack, ensuring a cohesive development and deployment process.
+
+### Backend
+
+Our Backend is powered by Nest.js on Node.js. It offers REST APIs with a publicly available OpenAPI specification. IIt handles all requests coming from the Frontend.
+
+### Database
+
+For data persistence, we utilize PostgreSQL, known for its robustness, scalability, and reliability. This choice ensures that our application's data layer is secure, efficient, and capable of handling growth. It contains the main object data required for operation such as CC members (users), Governance Action Proposals and voting data.
+
+### Caching service
+
+We utilize Redis service to reduce the load on a Backend database by caching responses for quick retrieval.
+
+### Worker service
+
+The Worker service is powered by Nest.js on Node.js. It is used to synchronize with on-chain data changes, specifically governance actions. It is also used to monitor CC members' voting activity on governance actions. It is used to keep track of reasoning URLs that are attached to the CC vote to synchronize the information with the blockchain. Moreover, it is used to rely on it to track CC voting activities.
+
+### IPFS/IPNS Helia node
+
+The IPFS node is powered by Nest.js with Helia JS library. This service is used to store the Constitution. IPFS relies on hashes of the document to generate URLs, so each revision has a unique hash by default, while IPNS always points to the hash of the latest revision and acts as a regular web domain. The Constitution Page contains a cached version of what is on IPFS as IPFS is good as an immutable store of data but slow for a high number of concurrent users.
 
 ## Getting started
 
@@ -55,84 +73,143 @@ Before you begin setting up the application, you'll need to clone the repository
    - Navigate to the directory where you want to store the project.
    - Run the following command to clone the repository:
      ```
-     git clone https://github.com/IntersectMBO/web-app-boilerplate.git
+     git clone https://github.com/IntersectMBO/cc-portal.git
      ```
 
 2. **Navigate to the Project Directory:**
+
    - After cloning, change into the project's root directory:
      ```
-     cd web-app-boilerplate
+     cd cc-portal
      ```
-     This directory contains all the files you need to set up the application, including the Docker Compose files and the separate directories for the backend and frontend components.
+     This directory contains all the files you need to set up the application, including the Docker Compose file and the separate directories for the frontend, backend, ipfs and worker components.
 
-By cloning the repository, you ensure that you have the latest version of the code and all the necessary files to get started with the application setup.
+3. **Configure Environment Variables:**
 
-## Running locally
+   - Navigate to the `backend` directory and run the following command:
+     ```
+     cp example.env .env
+     ```
+     Edit the .env file to reflect your local settings. Env variables description can be found [below](#environment-variables).
+   - Run this command within folders: `frontend`, `worker-service`, `ipfs-service` to configure environment variables for all these services. Edit every .env file to reflect your local settings.
+     Important: for `worker-service` environment variables ensure the right credentials for connection to DB-SYNC Database 
 
-To run the application locally, you need to have Node.js installed for the backend and frontend parts, as well as the necessary databases. Follow these steps:
+4. **Docker Setup:**
 
-### Backend setup
-
-1. **Navigate to the `backend` directory** of the project.
-2. **Install dependencies** by running `npm install`.
-3. **Configure environment variables** by creating a `.env` file in the backend directory, following the `.env.example` template if available.
-4. **Start the Strapi server** in development mode with `npm run develop`, allowing for real-time updates and access to the admin panel.
-
-### Database configuration
-
-1. **Install PostgreSQL** if not already installed and ensure it is running.
-2. **Create a new database** for the project, noting down the credentials.
-3. **Update the `.env` file** in the backend directory with your database credentials (host, port, username, database name, and password).
-
-### Frontend setup
-
-1. **Navigate to the `frontend` directory** of the project.
-2. **Install dependencies** by running `npm install`.
-3. **Configure Environment Variables:** Create or edit a `.env` file in the frontend directory to include environment variables specific to your Next.js application. For seamless integration with the Strapi backend, add the following line to specify the backend API URL: `NEXT_PUBLIC_API_URL=http://localhost:1337`
-
-4. **Start the Next.js server** with `npm run dev` for development mode. This command serves your frontend application and hot-reloads for any changes.
-
-By following these detailed steps for each part of the stack, you will have a fully functional full-stack application ready for further development and eventual deployment.
-
-### Additional Information
-
-For more detailed information about setting up and running each part of the application, please refer to the README files located in the respective directories:
-
-- [Backend setup](./backend/README.md) - Detailed instructions for setting up the backend part of the application.
-- [Frontend setup](./frontend/README.md) - Detailed instructions for setting up the frontend part of the application.
-
-## Running using docker compose
-
-Leverage Docker Compose to simplify the process of deploying the full stack of our application, which includes the backend, frontend, and database. Follow these steps to get everything up and running smoothly:
-
-1. **Prerequisites:**
-
-   - Confirm that Docker and Docker Compose are installed on your machine. These tools are essential for creating and managing multi-container Docker applications.
-
-2. **Navigate to your project's root directory:**
-
-   - Open a terminal and change your directory to the root of your project where the `docker-compose.yaml` file is located. This file contains the configuration for all the services that make up your application.
-
-3. **Start services with docker compose:**
-
-   - Execute the following command to start up all the services as defined in your `docker-compose.yaml` file. The `--build` flag ensures that Docker builds fresh images for your services, reflecting any recent changes you might have made.
+   - Change your directory to the root of your project where the `docker-compose.yaml` file is located.
+   - Execute the following command to start up all the services as defined in your `docker-compose.yaml` file.
      ```
      docker-compose up --build
      ```
-   - This command will spin up the backend, frontend, and database containers, linking them together based on your configurations.
 
-4. **Accessing the application:**
-   - With all services running, your application components should be accessible at the following URLs:
-     - **Backend:** `http://localhost:1337` – This is where your Strapi CMS will be accessible for managing content and accessing the API.
-     - **Frontend:** `http://localhost:3000` – Your Next.js frontend application will be available here, ready to serve your site's visitors.
-     - **Database:** While the database itself won't be directly accessible via a simple URL (since it's meant to be accessed by your backend service), it's running on a mapped port `4321` on your host machine. This setup is specified in your `docker-compose.yaml` file, allowing secure and straightforward connections from your backend service.
+5. **Database migration:**
 
-### Overview of services in docker compose:
+   - Navigate to the `backend` directory and run the following command:
+     ```
+     npm run typeorm:run-migrations
+     ```
 
-- **Backend service:** Configured to run Strapi on port `1337`, this service automatically connects to the PostgreSQL database, ensuring your CMS has all the data it needs to operate.
+6. **Create Super Admin**
+   A Super Admin should be created manually. To do that, run the following SQL queries on the Backend PostgreSQL database:
+   1. Create super admin user
+   ```
+   INSERT INTO users (email, status, role_id) VALUES ('mitrovic.softcoder@gmail.com', 'active', (SELECT r.id FROM roles r WHERE r.code='super_admin'));
+   ```
+   2. Add permissions to super admin
+   ```
+   INSERT INTO user_permissions(user_id, permission_id)
+   SELECT users.id, permissions.id
+   FROM permissions
+   INNER join users on users.email 
+   IN ('mitrovic.softcoder@gmail.com')
+   WHERE code IN ('manage_admins', 'manage_cc_members', 'add_constitution_version')
+   ```
 
-- **Database service:** This service runs PostgreSQL and is set to be accessible on port `4321` from the host machine. It's crucial for storing all your application's data securely and efficiently.
+## Usage
 
-- **Frontend service:** Your Next.js application will be served on port `3000`, connecting to the Strapi backend to fetch content and data. This setup provides a seamless experience for developers and users alike.
+If the installation process passes successfully, the CC Portal is ready to use.
+   - Frontend should be available on the URL: `http://localhost:3000`.
+   - Backend shoul be available on the URL: `http://localhost:1337`.
 
-By following these steps, you can quickly get your full-stack application running using Docker Compose, ensuring each component is correctly configured and interconnected for optimal performance.
+## Environment Variables
+
+Below is a description of the environment variables used in the `.env` file:
+
+1. **Frontend:**
+
+   - `NEXT_PUBLIC_API_URL`: Url of the Backend service. Example: `http://localhost:1337`.
+
+2. **Backend:**
+
+   - `POSTGRES_DB`: The name of the PostgreSQL database. Example: `cc-portal`.
+   - `POSTGRES_HOST`: The hostname for the PostgreSQL database. Example: `localhost`
+   - `POSTGRES_PORT`: The port number for the PostgreSQL database. Example: `5432`.
+   - `POSTGRES_USERNAME`: Username for accessing the PostgreSQL database. Example: `postgres`.
+   - `POSTGRES_PASSWORD`: Password for the PostgreSQL database user. Example: `postgres`.
+   - `ENVIRONMENT`: Defines the environment. Example: `local`, `dev`, `stage`, `prod`.
+   - `DISPLAY_SWAGGER_API`: Defines whether Swagger will be displayed. Example: `true`, `false`.
+   - `BASE_URL`: Domain of the Backend service. Example: `http://locahost:1337`.
+   - `MAGIC_LOGIN_SECRET`: Secret key for Magic Login link.
+   - `MAGIC_LOGIN_LINK_EXPIRES_IN`: Expiration time for Magic Login link. Example: `5m`.
+   - `MAGIC_REGISTER_SECRET`: Secret key for Magic Register link.
+   - `MAGIC_REGISTER_LINK_EXPIRES_IN`: Expiration time for Magic Register link. Example: `7d`
+   - `ACCESS_SECRET`: Secret key for access tokens.
+   - `REFRESH_SECRET`: Secret key for refresh tokens.
+   - `JWT_ACCESS_TOKEN_EXPIRES_IN`: Expiration time for JWT access tokens. Example: `15m`.
+   - `JWT_REFRESH_TOKEN_EXPIRES_IN`: Expiration time for JWT refresh tokens. Example: `7d`.
+   - `REDIS_HOST`: Hostname for Redis.
+   - `REDIS_PORT`: Port number for Redis.
+   - `REDIS_PASSWORD`: Password for Redis.
+   - `MAILER_HOST`: AWS SES hostname.
+   - `MAILER_PORT`: AWS SES port number.
+   - `MAILER_USER`: AWS SES access key id.
+   - `MAILER_API_KEY`: AWS SES secret access key.
+   - `MAILER_EMAIL_FROM`: Email of sender.
+   - `MAILER_EMAIL_NAME`: Name of sender.
+   - `MINIO_ENDPOINT`: Endpoint for Minio. Example: `localhost`.
+   - `MINIO_PORT`: Port number for Minio. Example: `9000`.
+   - `MINIO_ACCESS_KEY`: Access key for Minio.
+   - `MINIO_SECRET_KEY`: Secret key for Minio.
+   - `MINIO_USE_SSL`: Dedines whether Minio use SSL. Example `true`, `false`.
+   - `MINIO_BUCKET`: Bucket name for Minio.
+   - `IPFS_SERVICE_URL`: URL of the IPFS service.Example `http://localhost:3001`.
+   - `FE_LOGIN_CALLBACK_URL`: Frontend login callback URL. Example `http://localhost:3000/en/verify/login`.
+   - `FE_REGISTER_CALLBACK_URL`: Frontend register callback URL. Example `http://localhost:3000/en/verify/register`.
+
+3. **IPFS service**
+
+   - `LISTEN_TCP_ADDRESS`: Define where the IPFS node should expect and accept connections from other peers over TCP protocol.
+   - `LISTEN_WS_ADDRESS`: WebSocket address over TCP protocol.
+   - `LISTEN_QUIC_ADDRESS`: Quic-v1 address over UDP protocol.
+   - `IPFS_PUBLIC_URL`: The base of public IPFS URL. Example `https://ipfs.io/ipfs/`.
+   - `IPNS_PUBLIC_URL`: The base of public IPNS URL. Example `https://ipfs.io/ipns/`.
+   - `IPNS_CONSTITUTION_KEY_NAME`: Key name used to generate IPNS peer ID. Example `some-random-string`.
+
+4. **Worker service**
+
+   - `POSTGRES_DB`: The name of the Backend PostgreSQL database. Example: `cc-portal`.
+   - `POSTGRES_HOST`: The hostname for the Backend PostgreSQL database. Example: `localhost`
+   - `POSTGRES_PORT`: The port number for the Backend PostgreSQL database. Example: `5432`.
+   - `POSTGRES_USERNAME`: Username for the Backend PostgreSQL database. Example: `postgres`.
+   - `POSTGRES_PASSWORD`: Password for the Backend PostgreSQL database user. Example: `postgres`.
+   - `DB_SYNC_POSTGRES_DB`: The name of the Backend PostgreSQL database. Example: `db-sync`.
+   - `DB_SYNC_POSTGRES_SCHEMA`: The schema of the DB-Sync PostgreSQL database. Example: `public`
+   - `DB_SYNC_POSTGRES_HOST`: The hostname for the DB-Sync PostgreSQL database. Example: `localhost`
+   - `DB_SYNC_POSTGRES_PORT`: The port number for the DB-Sync PostgreSQL database. Example: `5432`.
+   - `DB_SYNC_POSTGRES_USERNAME`: Username for the DB-Sync PostgreSQL database. Example: `db-sync-user`.
+   - `DB_SYNC_POSTGRES_PASSWORD`: Password for the DB-Sync PostgreSQL database user. Example: `db-sync-password`.
+   - `REDIS_HOST`: Hostname for Redis. Example `localhost`.
+   - `REDIS_PORT`: Port number for Redis. Example `6379`.
+   - `REDIS_PASSWORD`: Password for Redis. Example `password`.
+   - `HOT_ADDRESSES_PER_PAGE`: Password for the DB-Sync PostgreSQL database user. Example: `10`.
+   - `GOV_ACTION_PROPOSALS_PER_PAGE`: Password for the DB-Sync PostgreSQL database user. Example: `10`.
+   - `VOTES_JOB_FREQUENCY`: Frequency of the job that retrieves votes. Example: `*/30 * * * * *`.
+   - `GOV_ACTION_PROPOSALS_JOB_FREQUENCY`: Frequency of the job that retrieves Governance Action Proposals. Example: `0 * * * * *`.
+
+## API Documentation
+
+Access the API documentation at: [http://localhost:1337/api-docs](http://localhost:1337/api-docs).
+
+## License
+
+This project is licensed under the MIT License.
