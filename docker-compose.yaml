@@ -48,6 +48,8 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - "psql-data:/var/lib/postgresql/data/"
+    ports:
+      - "5432:5432"
     command: >
       bash -c '
       /usr/local/bin/docker-entrypoint.sh postgres & 

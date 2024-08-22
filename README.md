@@ -12,7 +12,8 @@ The primary purpose of the solution is to host the Cardano Constitution and allo
 - [Getting started](#getting-started)
 - [Usage](#usage)
 - [Environment Variables](#environment-variables) 
-- [Running using docker compose](#running-using-docker-compose)
+- [API Documentation](#api-documentation)
+- [License](#license)
 
 ## Introduction
 
