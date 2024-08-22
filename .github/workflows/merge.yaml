@@ -5,6 +5,7 @@ on:
     branches:
       - develop
       - staging
+      - beta
       - main
 
 permissions:
