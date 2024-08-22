@@ -190,8 +190,8 @@ Below is a description of the environment variables used in the `.env` file:
    - `LISTEN_TCP_ADDRESS`: Define where the IPFS node should expect and accept connections from other peers over TCP protocol.
    - `LISTEN_WS_ADDRESS`: WebSocket address over TCP protocol.
    - `LISTEN_QUIC_ADDRESS`: Quic-v1 address over UDP protocol.
-   - `IPFS_PUBLIC_URL`: The base of public IPFS URL. Example `https://ipfs.io/ipfs/`.
-   - `IPNS_PUBLIC_URL`: The base of public IPNS URL. Example `https://ipfs.io/ipns/`.
+   - `IPFS_PUBLIC_URL`: The base of public IPFS URL.
+   - `IPNS_PUBLIC_URL`: The base of public IPNS URL.
    - `IPNS_CONSTITUTION_KEY_NAME`: Key name used to generate IPNS peer ID. Example `some-random-string`.
 
 4. **Worker service**
