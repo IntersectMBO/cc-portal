@@ -24,6 +24,7 @@ import { NotFound } from "../NotFound";
 import { PageTitleTabs } from "../PageTitleTabs";
 import { isAnyAdminRole } from "@utils";
 import { useScreenDimension } from "@hooks";
+import ConditionalWrapper from "@/components/molecules/ConditionalWrapper";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const { isMobile } = useScreenDimension();
@@ -98,6 +99,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
           direction="column"
           width={{ xxs: "100%", md: "400p", lg: "450px" }}
           px={{ xxs: 1, md: 2 }}
+          pb={{ xxs: 4, md: 2 }}
         >
           {tab === "revisions" ? (
             <Grid item justifyContent="flex-end" px={{ xxs: 1, md: 0 }}>
@@ -168,9 +170,16 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
         <Box display="flex" flexDirection="column" flex={1}>
           <ContentWrapper>
             <Box px={{ xxs: 2, md: 5 }}>
-              <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
+              <ConditionalWrapper
+                condition={!isMobile}
+                wrapper={(children) => (
+                  <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
+                    {children}
+                  </Card>
+                )}
+              >
                 <MDXRemote {...constitution} components={MDXComponents} />
-              </Card>
+              </ConditionalWrapper>
             </Box>
           </ContentWrapper>
           <Footer />
