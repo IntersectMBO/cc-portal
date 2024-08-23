@@ -1,5 +1,5 @@
 import { Card } from "@molecules";
-import { customPalette, ICONS } from "@consts";
+import { customPalette, ICONS, orange } from "@consts";
 import { getShortenedGovActionId } from "@utils";
 import { Button, CopyButton, Typography } from "@atoms";
 import { Box, Collapse, Grid } from "@mui/material";
@@ -218,6 +218,7 @@ export const NavCard = ({
   buttonLabel,
   hash,
   url,
+  isActiveLabel,
 }) => (
   <Box mb={2}>
     <Card sx={{ px: 3, py: 2 }}>
@@ -227,7 +228,12 @@ export const NavCard = ({
         alignItems={{ lg: "center" }}
       >
         <Grid item xxs={6} lg={3}>
-          <Typography variant="body1">{title}</Typography>
+          <Typography
+            sx={isActiveLabel && { color: orange.c500 }}
+            variant="body1"
+          >
+            {title}
+          </Typography>
           <Typography variant="caption">{description}</Typography>
         </Grid>
         <Grid item xxs={6} lg={4}>
@@ -280,14 +286,24 @@ export const NavCard = ({
         )}
 
         <Grid item xxs={12} lg={3} mt={{ xxs: 2, md: 0 }}>
-          <Button
-            sx={{ width: "100%" }}
-            size="medium"
-            onClick={onClick}
-            variant="outlined"
-          >
-            {buttonLabel}
-          </Button>
+          {buttonLabel && (
+            <Button
+              sx={{ width: "100%" }}
+              size="medium"
+              onClick={onClick}
+              variant="outlined"
+            >
+              {buttonLabel}
+            </Button>
+          )}
+          {isActiveLabel && (
+            <Typography
+              variant="body2"
+              sx={{ textAlign: "center", color: orange.c500 }}
+            >
+              {isActiveLabel}
+            </Typography>
+          )}
         </Grid>
       </Grid>
     </Card>

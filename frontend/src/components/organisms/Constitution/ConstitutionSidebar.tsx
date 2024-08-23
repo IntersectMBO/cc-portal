@@ -86,10 +86,9 @@ export const ConstitutionSidebar = ({ tableOfContents, metadata }) => {
                     hash={blake2b}
                     title={title}
                     description={created_date}
-                    buttonLabel={
-                      metadata[0].cid === cid
-                        ? t("drawer.latest")
-                        : t("drawer.compare")
+                    buttonLabel={metadata[0].cid !== cid && t("drawer.compare")}
+                    isActiveLabel={
+                      metadata[0].cid === cid && t("drawer.latest")
                     }
                     url={
                       userSession &&
