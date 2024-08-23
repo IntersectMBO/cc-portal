@@ -35,7 +35,7 @@ export const Heading1 = ({ children, id }) => (
         marginTop: "24px",
         marginBottom: "16px",
         lineHeight: "1.25em",
-        fontSize: "2em",
+        fontSize: { xxs: 20, md: 32 },
       }}
       variant="headline4"
     >
@@ -52,7 +52,8 @@ export const Heading2 = ({ children, id }) => (
         marginTop: "24px",
         marginBottom: "16px",
         fontWeight: 600,
-        fontSize: 20,
+        fontSize: { xxs: 16, md: 20 },
+
         lineHeight: "1.25em",
       }}
     >
@@ -69,7 +70,7 @@ export const Heading3 = ({ children, id }) => (
         marginTop: "24px",
         marginBottom: "16px",
         fontWeight: 600,
-        fontSize: 18,
+        fontSize: { xxs: 14, md: 18 },
         lineHeight: "1.25em",
       }}
     >
