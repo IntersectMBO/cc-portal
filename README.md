@@ -58,7 +58,7 @@ We utilize Redis service to reduce the load on a Backend database by caching res
 
 ### Worker service
 
-The Worker service is powered by Nest.js on Node.js. It is used to synchronize with on-chain data changes, specifically governance actions. It is also used to monitor CC members' voting activity on governance actions. It is used to keep track of reasoning URLs that are attached to the CC vote to synchronize the information with the blockchain. Moreover, it is used to rely on it to track CC voting activities.
+The Worker service is powered by Nest.js on Node.js. It is used to synchronize with on-chain data changes, specifically governance actions. It is also used to monitor CC members' voting activity on governance actions. It is used to keep track of reasoning URLs that are attached to the CC vote to synchronize the information with the blockchain.
 
 ### IPFS/IPNS Helia node
 
@@ -120,6 +120,7 @@ Before you begin setting up the application, you'll need to clone the repository
      ```
 
 6. **Create Super Admin**
+   
    A Super Admin should be created manually. To do that, run the following SQL queries on the Backend PostgreSQL database:
    1. Create super admin user with valid email address
    ```
