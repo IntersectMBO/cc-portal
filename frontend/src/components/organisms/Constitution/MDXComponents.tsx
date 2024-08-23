@@ -1,5 +1,5 @@
-import { Card } from "@/components/molecules";
-import { customPalette, ICONS } from "@/constants";
+import { Card } from "@molecules";
+import { customPalette, ICONS } from "@consts";
 import { getShortenedGovActionId } from "@utils";
 import { Button, CopyButton, Typography } from "@atoms";
 import { Box, Collapse, Grid } from "@mui/material";
@@ -120,7 +120,38 @@ export const Code = ({ children }) => (
   </code>
 );
 
-export const NavDrawer = ({
+export const TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS = {
+  backgroundColor: customPalette.arcticWhite,
+  "& ol.toc-level": {
+    margin: 0,
+  },
+  "& ol.toc-level-1": {
+    paddingInlineStart: "20px",
+
+    "& li": {
+      listStyle: "outside !important",
+      "& a.toc-link-h1": {
+        fontWeight: 600,
+      },
+    },
+  },
+  "& ol.toc-level-2": {
+    margin: "10px 0px 10px 0px",
+  },
+  "& li": {
+    marginBottom: "3px !important",
+    "& a": {
+      textDecoration: "none",
+      textAlign: "left",
+      fontSize: 14,
+      fontWeight: 500,
+      lineHeight: "24px",
+      color: customPalette.textBlack,
+    },
+  },
+};
+
+export const NavDrawerDesktop = ({
   children,
   onClick,
   isOpen,
@@ -135,6 +166,7 @@ export const NavDrawer = ({
 }) => {
   return (
     <Grid
+      display={{ xxs: isOpen ? "block" : "none", md: "block" }}
       position="fixed"
       left={left}
       top={top}
@@ -144,34 +176,7 @@ export const NavDrawer = ({
       sx={{
         height: { xxs: "95vh", md: "90vh" },
         zIndex: 1,
-        backgroundColor: customPalette.arcticWhite,
-        "& ol.toc-level": {
-          margin: 0,
-        },
-        "& ol.toc-level-1": {
-          paddingInlineStart: "20px",
-
-          "& li": {
-            listStyle: "outside !important",
-            "& a.toc-link-h1": {
-              fontWeight: 600,
-            },
-          },
-        },
-        "& ol.toc-level-2": {
-          margin: "10px 0px 10px 0px",
-        },
-        "& li": {
-          marginBottom: "3px !important",
-          "& a": {
-            textDecoration: "none",
-            textAlign: "left",
-            fontSize: 14,
-            fontWeight: 500,
-            lineHeight: "24px",
-            color: customPalette.textBlack,
-          },
-        },
+        ...TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS,
       }}
     >
       <Grid
