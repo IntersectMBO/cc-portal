@@ -117,9 +117,9 @@ export const PreviewReasoningModal = () => {
   return (
     <ModalWrapper dataTestId="preview-reasoning-modal" sx={{ py: 3, px: 0 }}>
       <ModalHeader sx={{ px: 3 }}>
-        <Box sx={{ mb: 2, height: "64px" }}>
+        <Box sx={{ mb: { xxs: 0, md: 2 }, height: "64px" }}>
           <img
-            width={64}
+            width={isMobile ? 34 : 64}
             data-testid="modal-icon"
             alt="icon"
             src={IMAGES.pastelAddMember}

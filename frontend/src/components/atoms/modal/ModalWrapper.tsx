@@ -5,6 +5,7 @@ import { SxProps, styled } from "@mui/material/styles";
 import { customPalette, ICONS } from "@consts";
 import { callAll } from "@utils";
 import { useModal } from "@/context";
+import { useScreenDimension } from "@/lib/hooks";
 
 type ModalVariant = "modal" | "popup" | "wide";
 interface Props {
@@ -29,6 +30,7 @@ export const ModalWrapper = ({
   onClose,
 }: Props) => {
   const { closeModal } = useModal();
+  const { isMobile } = useScreenDimension();
   return (
     <BaseWrapper
       backgroundColor={customPalette.arcticWhite}
@@ -38,7 +40,12 @@ export const ModalWrapper = ({
       scrollable={scrollable}
     >
       {variant !== "popup" && icon && (
-        <img width={64} data-testid="modal-icon" alt="icon" src={icon} />
+        <img
+          width={isMobile ? 34 : 64}
+          data-testid="modal-icon"
+          alt="icon"
+          src={icon}
+        />
       )}
       {variant !== "popup" && !hideCloseButton && (
         <CloseButton
