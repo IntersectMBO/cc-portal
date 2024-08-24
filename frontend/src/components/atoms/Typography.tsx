@@ -22,9 +22,9 @@ export const Typography = ({
   }[variant];
 
   const fontSizeXS = {
-    headline1: 46,
-    headline2: 46,
-    headline3: 36,
+    headline1: 42,
+    headline2: 32,
+    headline3: 26,
     headline4: 24,
     headline5: 20,
     title1: 20,
@@ -60,12 +60,25 @@ export const Typography = ({
     caption: "16px",
   }[variant];
 
+  const lineHeightXS = {
+    headline1: "57px",
+    headline2: "47px",
+    headline3: "40px",
+    headline4: "40px",
+    headline5: "36px",
+    title1: "32px",
+    title2: "28px",
+    body1: "24px",
+    body2: "20px",
+    caption: "16px",
+  }[variant];
+
   return (
     <MUITypography
       color={color}
       fontSize={{ xxs: fontSizeXS, md: fontSize }}
       fontWeight={fontWeight}
-      lineHeight={lineHeight}
+      lineHeight={{ xxs: lineHeightXS, md: lineHeight }}
       {...props}
     >
       {props.children}
