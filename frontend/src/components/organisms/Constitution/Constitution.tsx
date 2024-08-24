@@ -22,6 +22,7 @@ import { ContentWrapper, Typography } from "@/components/atoms";
 import { useScreenDimension } from "@hooks";
 import { DrawerMobile } from "../TopNavigation";
 import { ConstitutionSidebar } from "./ConstitutionSidebar";
+import TOCLink from "./TOCLink";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const { isMobile } = useScreenDimension();
@@ -34,6 +35,12 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       setIsOpen(false);
     }
   }, [isMobile]);
+
+  const onTOCLinkClick = () => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  };
 
   const MDXComponents = {
     nav: ({ children }) =>
@@ -62,6 +69,12 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
     p: Paragraph,
     li: ListItem,
     code: Code,
+    a: (props) => {
+      if (props.href && props.href.startsWith("#")) {
+        return <TOCLink {...props} callback={onTOCLinkClick} />;
+      }
+      return <a {...props} />;
+    },
   };
 
   return (
