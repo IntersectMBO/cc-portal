@@ -35,6 +35,7 @@ export const ConstitutionSidebar = ({ tableOfContents, metadata }) => {
         alignItems="center"
         justifyContent="space-between"
         padding={2}
+        pt={{ xxs: 0, md: 2 }}
         sx={{ marginBottom: 2 }}
         flexWrap="nowrap"
       >

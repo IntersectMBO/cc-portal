@@ -3,7 +3,7 @@ import React from "react";
 
 import { Box, Grid, IconButton, SwipeableDrawer } from "@mui/material";
 
-import { ICONS, IMAGES } from "@consts";
+import { ICONS } from "@consts";
 
 export const DrawerMobile = ({
   isDrawerOpen,
@@ -33,18 +33,18 @@ export const DrawerMobile = ({
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
-            py: 3,
+            justifyContent: "flex-end",
+            pt: 3,
+            pb: 2,
           }}
         >
-          <img height={25} src={IMAGES.logoSign} />
           <IconButton onClick={() => setIsDrawerOpen(false)}>
             <img src={ICONS.close} />
           </IconButton>
         </Box>
 
         <Box sx={{ display: "flex", flex: 1, flexDirection: "column" }}>
-          <Grid container direction="column" mt={3} rowGap={rowGap}>
+          <Grid container direction="column" rowGap={rowGap}>
             {children}
           </Grid>
         </Box>
