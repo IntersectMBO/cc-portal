@@ -19,7 +19,7 @@
     }
   },
   "Members": {
-    "title": "Active Members",
+    "title": "Members",
     "card": {
       "joined": "Joined",
       "latestUpdates": "Latest updates"
