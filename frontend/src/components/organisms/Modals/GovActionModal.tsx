@@ -23,12 +23,14 @@ import {
   isResponseErrorI,
 } from "@utils";
 import { useSnackbar } from "@/context/snackbar";
+import { useScreenDimension } from "@hooks";
 
 export const GovActionModal = () => {
   const t = useTranslations("Modals");
   const { closeModal, state } = useModal<GovActionModalState>();
   const [govAction, setGovAction] = useState<GovActionMetadata>();
   const { addErrorAlert } = useSnackbar();
+  const { isMobile } = useScreenDimension();
 
   const onClick = () => {
     closeModal();
@@ -61,7 +63,7 @@ export const GovActionModal = () => {
           <ModalHeader sx={{ px: 3 }}>
             <Box>
               <img
-                width={64}
+                width={isMobile ? 34 : 64}
                 data-testid="modal-icon"
                 alt="icon"
                 src={IMAGES.pastelSignIn}

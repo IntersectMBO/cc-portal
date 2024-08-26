@@ -1,5 +1,5 @@
-import { Card } from "@/components/molecules";
-import { customPalette, ICONS } from "@/constants";
+import { Card } from "@molecules";
+import { customPalette, ICONS, orange } from "@consts";
 import { getShortenedGovActionId } from "@utils";
 import { Button, CopyButton, Typography } from "@atoms";
 import { Box, Collapse, Grid } from "@mui/material";
@@ -35,7 +35,7 @@ export const Heading1 = ({ children, id }) => (
         marginTop: "24px",
         marginBottom: "16px",
         lineHeight: "1.25em",
-        fontSize: "2em",
+        fontSize: { xxs: 20, md: 32 },
       }}
       variant="headline4"
     >
@@ -52,7 +52,8 @@ export const Heading2 = ({ children, id }) => (
         marginTop: "24px",
         marginBottom: "16px",
         fontWeight: 600,
-        fontSize: 20,
+        fontSize: { xxs: 16, md: 20 },
+
         lineHeight: "1.25em",
       }}
     >
@@ -69,7 +70,7 @@ export const Heading3 = ({ children, id }) => (
         marginTop: "24px",
         marginBottom: "16px",
         fontWeight: 600,
-        fontSize: 18,
+        fontSize: { xxs: 14, md: 18 },
         lineHeight: "1.25em",
       }}
     >
@@ -119,7 +120,38 @@ export const Code = ({ children }) => (
   </code>
 );
 
-export const NavDrawer = ({
+export const TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS = {
+  backgroundColor: customPalette.arcticWhite,
+  "& ol.toc-level": {
+    margin: 0,
+  },
+  "& ol.toc-level-1": {
+    paddingInlineStart: "20px",
+
+    "& li": {
+      listStyle: "outside !important",
+      "& a.toc-link-h1": {
+        fontWeight: 600,
+      },
+    },
+  },
+  "& ol.toc-level-2": {
+    margin: "10px 0px 10px 0px",
+  },
+  "& li": {
+    marginBottom: "3px !important",
+    "& a": {
+      textDecoration: "none",
+      textAlign: "left",
+      fontSize: 14,
+      fontWeight: 500,
+      lineHeight: "24px",
+      color: customPalette.textBlack,
+    },
+  },
+};
+
+export const NavDrawerDesktop = ({
   children,
   onClick,
   isOpen,
@@ -134,6 +166,7 @@ export const NavDrawer = ({
 }) => {
   return (
     <Grid
+      display={{ xxs: isOpen ? "block" : "none", md: "block" }}
       position="fixed"
       left={left}
       top={top}
@@ -143,34 +176,7 @@ export const NavDrawer = ({
       sx={{
         height: { xxs: "95vh", md: "90vh" },
         zIndex: 1,
-        backgroundColor: customPalette.arcticWhite,
-        "& ol.toc-level": {
-          margin: 0,
-        },
-        "& ol.toc-level-1": {
-          paddingInlineStart: "20px",
-
-          "& li": {
-            listStyle: "outside !important",
-            "& a.toc-link-h1": {
-              fontWeight: 600,
-            },
-          },
-        },
-        "& ol.toc-level-2": {
-          margin: "10px 0px 10px 0px",
-        },
-        "& li": {
-          marginBottom: "3px !important",
-          "& a": {
-            textDecoration: "none",
-            textAlign: "left",
-            fontSize: 14,
-            fontWeight: 500,
-            lineHeight: "24px",
-            color: customPalette.textBlack,
-          },
-        },
+        ...TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS,
       }}
     >
       <Grid
@@ -212,6 +218,7 @@ export const NavCard = ({
   buttonLabel,
   hash,
   url,
+  isActiveLabel,
 }) => (
   <Box mb={2}>
     <Card sx={{ px: 3, py: 2 }}>
@@ -221,7 +228,12 @@ export const NavCard = ({
         alignItems={{ lg: "center" }}
       >
         <Grid item xxs={6} lg={3}>
-          <Typography variant="body1">{title}</Typography>
+          <Typography
+            sx={isActiveLabel && { color: orange.c500 }}
+            variant="body1"
+          >
+            {title}
+          </Typography>
           <Typography variant="caption">{description}</Typography>
         </Grid>
         <Grid item xxs={6} lg={4}>
@@ -274,14 +286,24 @@ export const NavCard = ({
         )}
 
         <Grid item xxs={12} lg={3} mt={{ xxs: 2, md: 0 }}>
-          <Button
-            sx={{ width: "100%" }}
-            size="medium"
-            onClick={onClick}
-            variant="outlined"
-          >
-            {buttonLabel}
-          </Button>
+          {buttonLabel && (
+            <Button
+              sx={{ width: "100%" }}
+              size="medium"
+              onClick={onClick}
+              variant="outlined"
+            >
+              {buttonLabel}
+            </Button>
+          )}
+          {isActiveLabel && (
+            <Typography
+              variant="body2"
+              sx={{ textAlign: "center", color: orange.c500 }}
+            >
+              {isActiveLabel}
+            </Typography>
+          )}
         </Grid>
       </Grid>
     </Card>

@@ -3,9 +3,15 @@ import React from "react";
 
 import { Box, Grid, IconButton, SwipeableDrawer } from "@mui/material";
 
-import { ICONS, IMAGES } from "@consts";
+import { ICONS } from "@consts";
 
-export const DrawerMobile = ({ isDrawerOpen, setIsDrawerOpen, children }) => {
+export const DrawerMobile = ({
+  isDrawerOpen,
+  setIsDrawerOpen,
+  children,
+  sx = {},
+  rowGap = 4,
+}) => {
   return (
     <SwipeableDrawer
       anchor="right"
@@ -13,7 +19,7 @@ export const DrawerMobile = ({ isDrawerOpen, setIsDrawerOpen, children }) => {
       onOpen={() => setIsDrawerOpen(true)}
       open={isDrawerOpen}
       PaperProps={{
-        sx: { width: "100%" },
+        sx: { width: "100%", ...sx },
       }}
     >
       <Box
@@ -27,21 +33,18 @@ export const DrawerMobile = ({ isDrawerOpen, setIsDrawerOpen, children }) => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
-            py: 3,
+            justifyContent: "flex-end",
+            pt: 3,
+            pb: 2,
           }}
         >
-          <img height={25} src={IMAGES.logoSign} />
-          <IconButton
-            sx={{ padding: 0 }}
-            onClick={() => setIsDrawerOpen(false)}
-          >
+          <IconButton onClick={() => setIsDrawerOpen(false)}>
             <img src={ICONS.close} />
           </IconButton>
         </Box>
 
         <Box sx={{ display: "flex", flex: 1, flexDirection: "column" }}>
-          <Grid container direction="column" mt={6} rowGap={4}>
+          <Grid container direction="column" rowGap={rowGap}>
             {children}
           </Grid>
         </Box>
