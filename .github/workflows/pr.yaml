@@ -111,9 +111,14 @@ jobs:
           context: ${{ matrix.workdir }}
           file: ${{ matrix.dockerfile }}
           tags: ${{ steps.image_lowercase.outputs.lowercase }}:${{ github.sha }}
-          load: true
+          load: false
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+          outputs: type=docker,dest=/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ secrets.DEV_NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY }}
+            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
           
       - name: Scan Docker image with Dockle
         id: dockle
@@ -122,7 +127,8 @@ jobs:
             tar zxvf dockle_0.4.14_Linux-64bit.tar.gz
             sudo mv dockle /usr/local/bin
 
-            dockle --exit-level fatal --format json --output ${{ matrix.workdir }}/dockle_scan_output.json ${{ steps.image_lowercase.outputs.lowercase }}:${{ github.sha }}
+            dockle --exit-level fatal --format json --input '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar' --output ${{ matrix.workdir }}/dockle_scan_output.json
+            rm -rf '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar'
             echo " dockle exited w/ $?"
             cat ${{ matrix.workdir }}/dockle_scan_output.json
 
