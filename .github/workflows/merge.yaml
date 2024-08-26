@@ -139,7 +139,14 @@ jobs:
             tar zxvf dockle_0.4.14_Linux-64bit.tar.gz
             sudo mv dockle /usr/local/bin
 
-            dockle --exit-level fatal --format json --output ${{ matrix.workdir }}/dockle_scan_output.json ${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}
+            docker images
+
+            echo "-------"
+            echo "grepping"
+            echo "--------"
+            docker images | grep '${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}'
+
+            dockle --exit-level fatal --format json --output ${{ matrix.workdir }}/dockle_scan_output.json '${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}'
             echo " dockle exited w/ $?"
             cat ${{ matrix.workdir }}/dockle_scan_output.json
 
