@@ -158,6 +158,7 @@ jobs:
       - name: Push Docker image to GHCR
         run: |
           docker load -i '/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar'
+          rm -rf '/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar'
           docker push ${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}
 
 
