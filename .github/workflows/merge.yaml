@@ -124,13 +124,14 @@ jobs:
           context: ${{ matrix.workdir }}
           file: ${{ matrix.dockerfile }}
           tags: ${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}
-          load: true
+          load: false
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+          outputs: type=oci,dest=/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar
           build-args: |
             NEXT_PUBLIC_API_URL=${{ secrets.DEV_NEXT_PUBLIC_API_URL }}
             NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY }}
-            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY={{ secrets.DEV_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
+            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
 
       - name: Scan Docker image with Dockle
         id: dockle
@@ -139,14 +140,7 @@ jobs:
             tar zxvf dockle_0.4.14_Linux-64bit.tar.gz
             sudo mv dockle /usr/local/bin
 
-            docker images
-
-            echo "-------"
-            echo "grepping"
-            echo "--------"
-            docker images | grep '${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}'
-
-            dockle --exit-level fatal --format json --output ${{ matrix.workdir }}/dockle_scan_output.json '${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}'
+            dockle --exit-level fatal --format json --input '/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar' --output ${{ matrix.workdir }}/dockle_scan_output.json
             echo " dockle exited w/ $?"
             cat ${{ matrix.workdir }}/dockle_scan_output.json
 
@@ -163,6 +157,7 @@ jobs:
 
       - name: Push Docker image to GHCR
         run: |
+          docker load -i '/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar'
           docker push ${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}
 
 
