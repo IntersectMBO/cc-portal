@@ -21,6 +21,7 @@ export const Hero = ({ children }: HeroProps) => {
       position="relative"
       px={{ xxs: 2, sm: 5, md: 10 }}
       sx={{ backgroundColor: customPalette.arcticWhite }}
+      minHeight={{ xxs: "90vh", md: "auto" }}
     >
       <Box alignItems="center" flex={1} height="min-content" zIndex={1}>
         <Typography variant="headline2" sx={{ whiteSpace: "pre-line" }}>
