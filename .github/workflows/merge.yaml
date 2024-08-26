@@ -132,13 +132,6 @@ jobs:
             NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY }}
             NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY={{ secrets.DEV_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
 
-      - name: Login to GHCR
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Scan Docker image with Dockle
         id: dockle
         run: |
@@ -155,6 +148,15 @@ jobs:
       - name: Push Docker image to GHCR
         run: |
           docker push ${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}
+
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Deploy with Qovery
         if: github.ref == 'refs/heads/develop'
