@@ -8,7 +8,7 @@ import {
 import { IMAGES } from "@/constants";
 import { useTranslations } from "next-intl";
 import { ModalActions } from "@/components/atoms";
-import { Field } from "@molecules";
+import { Field } from "@/components/molecules";
 
 export const SignUpModal = () => {
   const t = useTranslations("Modals");

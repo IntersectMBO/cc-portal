@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "@molecules";
+import { Card } from "@/components/molecules";
 import { Grid } from "@mui/material";
 import { MDXRemote } from "next-mdx-remote";
 import { useState } from "react";
