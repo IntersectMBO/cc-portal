@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { Button } from "@/components/atoms";
 import { useTranslations } from "next-intl";
 import { useModal } from "@/context";
-import { callAll } from "@utils";
+import { callAll } from "../../../lib/utils/callAll";
 
 interface Props {
   onClose?: () => void;
