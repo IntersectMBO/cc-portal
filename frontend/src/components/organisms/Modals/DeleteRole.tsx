@@ -1,10 +1,10 @@
 import { Typography } from "@mui/material";
 
-import { ModalContents, ModalHeader, ModalWrapper } from "@atoms";
-import { IMAGES } from "@consts";
+import { ModalContents, ModalHeader, ModalWrapper } from "@/components/atoms";
+import { IMAGES } from "@/constants";
 import { useTranslations } from "next-intl";
-import { ModalActions } from "@atoms";
-import { Field } from "@molecules";
+import { ModalActions } from "@/components/atoms";
+import { Field } from "@/components/molecules";
 
 export const DeleteRole = () => {
   const t = useTranslations("Modals");

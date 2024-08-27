@@ -1,5 +1,5 @@
-import { IMAGES } from "@consts";
-import { Typography } from "@atoms";
+import { IMAGES } from "@/constants";
+import { Typography } from "@/components/atoms";
 import { Grid } from "@mui/material";
 
 export const UserBasicInfo = ({

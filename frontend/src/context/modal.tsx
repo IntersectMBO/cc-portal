@@ -1,8 +1,10 @@
 "use client";
 import { createContext, useContext, useMemo, useReducer } from "react";
 
-import { callAll, basicReducer, BasicReducer } from "@utils";
-import { MuiModalChildren } from "@atoms";
+import { basicReducer, BasicReducer } from "../lib/utils/basicReducer";
+import { callAll } from "../lib/utils/callAll";
+
+import { MuiModalChildren } from "@/components/atoms";
 import {
   SignInModal,
   AddMemberModal,

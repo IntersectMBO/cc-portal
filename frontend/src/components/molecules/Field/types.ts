@@ -5,7 +5,7 @@ import {
   InputProps,
   TextAreaProps,
   TypographyProps,
-} from "@atoms";
+} from "@/components/atoms";
 
 export type InputFieldProps = InputProps & {
   errorMessage?: string;

@@ -3,7 +3,7 @@ import {
   FormHelpfulText,
   MultipleSelect as CustomSelect,
   Typography,
-} from "@atoms";
+} from "@/components/atoms";
 import { Box } from "@mui/material";
 import { MultipleSelectProps } from "./types";
 

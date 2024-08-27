@@ -3,7 +3,7 @@ import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 import { TextareaAutosize, styled } from "@mui/material";
 
 import { TextAreaProps } from "./types";
-import { poppins } from "@consts";
+import { poppins } from "@/constants";
 
 const TextAreaBase = styled(TextareaAutosize)(
   () => `

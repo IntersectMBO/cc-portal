@@ -1,5 +1,5 @@
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { UserStatus } from "@atoms";
+import { UserStatus } from "@/components/atoms";
 
 export interface ConstitutionProps {
   constitution: MDXRemoteSerializeResult;

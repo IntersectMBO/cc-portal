@@ -7,9 +7,9 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import { Footer, TopNav } from "@/components/organisms";
-import { poppins, locales, IMAGES } from "@consts";
+import { poppins, locales, IMAGES } from "@/constants";
 import { Box, CssBaseline } from "@mui/material";
-import { RenderModal } from "@atoms";
+import { RenderModal } from "@/components/atoms";
 import { AppContextProvider } from "@/context";
 
 export function generateStaticParams() {

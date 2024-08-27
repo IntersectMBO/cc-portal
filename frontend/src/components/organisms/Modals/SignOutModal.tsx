@@ -1,7 +1,12 @@
-import { ModalContents, ModalHeader, ModalWrapper, Typography } from "@atoms";
-import { IMAGES } from "@consts";
+import {
+  ModalContents,
+  ModalHeader,
+  ModalWrapper,
+  Typography,
+} from "@/components/atoms";
+import { IMAGES } from "@/constants";
 import { useTranslations } from "next-intl";
-import { ModalActions } from "@atoms";
+import { ModalActions } from "@/components/atoms";
 
 export const SignOutModal = () => {
   const t = useTranslations("Modals");

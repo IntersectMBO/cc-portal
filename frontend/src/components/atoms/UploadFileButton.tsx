@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "@atoms";
-import { ICONS } from "@consts";
+import { Button } from "@/components/atoms";
+import { ICONS } from "@/constants";
 import { useState } from "react";
 import { ButtonProps } from "./types";
 

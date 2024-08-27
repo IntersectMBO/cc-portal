@@ -2,7 +2,7 @@
 
 import { SxProps, styled } from "@mui/material/styles";
 
-import { customPalette } from "@consts";
+import { customPalette } from "@/constants";
 
 type ModalVariant = "modal" | "popup";
 interface Props {
