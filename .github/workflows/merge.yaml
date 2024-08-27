@@ -166,7 +166,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           message: |-
-            This PR is in the tag: ${{ env.TAG }}
+            This PR is in the tag: ${{ env.TAG }} , for ${{ matrix.name }} service
 
 
       - name: Deploy with Qovery
