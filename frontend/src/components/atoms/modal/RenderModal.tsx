@@ -1,6 +1,6 @@
 "use client";
 import { Modal } from "@atoms";
-import { useModal } from "@context";
+import { useModal } from "@/context";
 import { callAll } from "@utils";
 
 export const RenderModal = () => {

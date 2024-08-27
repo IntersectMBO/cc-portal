@@ -1,6 +1,5 @@
 import React from "react";
 
-import { AppContextProvider } from "@context";
 import { NextIntlClientProvider } from "next-intl";
 import { unstable_setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -11,6 +10,7 @@ import { Footer, TopNav } from "@/components/organisms";
 import { poppins, locales, IMAGES } from "@consts";
 import { Box, CssBaseline } from "@mui/material";
 import { RenderModal } from "@atoms";
+import { AppContextProvider } from "@/context";
 
 export function generateStaticParams() {
   // Generate static params for each locale, used in static generation methods.

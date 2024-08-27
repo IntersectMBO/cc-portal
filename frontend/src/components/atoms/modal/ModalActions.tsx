@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { Button } from "@atoms";
 import { useTranslations } from "next-intl";
-import { useModal } from "@context";
+import { useModal } from "@/context";
 import { callAll } from "@utils";
 
 interface Props {
