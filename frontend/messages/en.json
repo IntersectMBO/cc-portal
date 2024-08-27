@@ -90,5 +90,11 @@
   "AdminDashboard": {
     "role": "Role",
     "status": "Status"
+  },
+  "NotFound": {
+    "constitution": {
+      "title": "No Constitution available",
+      "description": "There is currently no Constitution uploaded. Please check back later for updates"
+    }
   }
 }
