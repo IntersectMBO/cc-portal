@@ -1,5 +1,5 @@
 "use client";
-import { Modal } from "@atoms";
+import { Modal } from "@/components/atoms";
 import { useModal } from "@/context";
 import { callAll } from "@utils";
 

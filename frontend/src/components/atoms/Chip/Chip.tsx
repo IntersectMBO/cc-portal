@@ -1,4 +1,4 @@
-import { customPalette, ICONS } from "@consts";
+import { customPalette, ICONS } from "@/constants";
 import { Grid } from "@mui/material";
 import { Typography } from "../Typography";
 

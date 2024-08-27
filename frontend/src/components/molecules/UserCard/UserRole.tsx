@@ -1,7 +1,7 @@
 import React from "react";
 
-import { ChipList, Typography } from "@atoms";
-import { customPalette } from "@consts";
+import { ChipList, Typography } from "@/components/atoms";
+import { customPalette } from "@/constants";
 import { useTranslations } from "next-intl";
 
 export const UserRole = ({ roles }: { roles: string[] }) => {

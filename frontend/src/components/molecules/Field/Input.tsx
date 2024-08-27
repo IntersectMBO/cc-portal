@@ -7,7 +7,7 @@ import {
   FormHelpfulText,
   Input as InputBase,
   Typography,
-} from "@atoms";
+} from "@/components/atoms";
 
 import { InputFieldProps } from "./types";
 

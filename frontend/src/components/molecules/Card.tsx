@@ -8,7 +8,7 @@ import {
   orange,
   primaryBlue,
   successGreen,
-} from "@consts";
+} from "@/constants";
 
 type CardProps = PropsWithChildren & {
   border?: boolean;

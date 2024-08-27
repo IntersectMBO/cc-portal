@@ -3,7 +3,7 @@ import React from "react";
 
 import { AppBar, Box, Grid } from "@mui/material";
 
-import { ICONS, PATHS, NAV_ITEMS, customPalette } from "@consts";
+import { ICONS, PATHS, NAV_ITEMS, customPalette } from "@/constants";
 import { Link } from "@/components/atoms";
 import NextLink from "next/link";
 

@@ -6,7 +6,7 @@ import {
   FormHelpfulText,
   TextArea as TextAreaBase,
   Typography,
-} from "@atoms";
+} from "@/components/atoms";
 
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 import { TextAreaFieldProps } from "./types";

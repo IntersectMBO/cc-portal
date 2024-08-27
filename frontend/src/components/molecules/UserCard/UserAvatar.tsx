@@ -1,4 +1,4 @@
-import { IMAGES } from "@consts";
+import { IMAGES } from "@/constants";
 import { Grid } from "@mui/material";
 
 export const UserAvatar = ({ src }: { src?: string }) => (

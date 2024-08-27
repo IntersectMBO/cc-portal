@@ -1,5 +1,5 @@
-import { customPalette, ICONS } from "@consts";
-import { Typography } from "@atoms";
+import { customPalette, ICONS } from "@/constants";
+import { Typography } from "@/components/atoms";
 import { Collapse, Grid } from "@mui/material";
 
 const Anchor = ({ id, offset = "-20vh " }) => {

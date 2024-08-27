@@ -3,7 +3,7 @@ import React from "react";
 import { Card } from "@molecules";
 import { Grid } from "@mui/material";
 import { UserAvatar, UserBasicInfo, UserRole, UserStatus } from "@molecules";
-import { UserStatus as UserStatusType } from "@atoms";
+import { UserStatus as UserStatusType } from "@/components/atoms";
 
 export function UsersListItem({ name, email, roles, status }) {
   return (

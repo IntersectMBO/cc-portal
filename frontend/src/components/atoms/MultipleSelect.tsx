@@ -4,7 +4,7 @@ import { Theme, useTheme } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { customPalette, ICONS } from "@consts";
+import { customPalette, ICONS } from "@/constants";
 import { MultipleSelectProps } from "../molecules";
 import { Checkbox, Icon } from "@mui/material";
 import { Input } from "./Input";

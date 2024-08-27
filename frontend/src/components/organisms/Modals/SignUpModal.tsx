@@ -4,10 +4,10 @@ import {
   ModalWrapper,
   Typography,
   UploadFileButton,
-} from "@atoms";
-import { IMAGES } from "@consts";
+} from "@/components/atoms";
+import { IMAGES } from "@/constants";
 import { useTranslations } from "next-intl";
-import { ModalActions } from "@atoms";
+import { ModalActions } from "@/components/atoms";
 import { Field } from "@molecules";
 
 export const SignUpModal = () => {

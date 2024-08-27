@@ -2,7 +2,7 @@
 import { createContext, useContext, useMemo, useReducer } from "react";
 
 import { callAll, basicReducer, BasicReducer } from "@utils";
-import { MuiModalChildren } from "@atoms";
+import { MuiModalChildren } from "@/components/atoms";
 import {
   SignInModal,
   AddMemberModal,
