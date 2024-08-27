@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
-import { Footer, TopNav } from "@organisms";
+import { Footer, TopNav } from "@/components/organisms";
 import { poppins, locales, IMAGES } from "@consts";
 import { Box, CssBaseline } from "@mui/material";
 import { RenderModal } from "@atoms";

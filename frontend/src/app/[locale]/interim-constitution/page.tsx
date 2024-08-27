@@ -1,6 +1,6 @@
 import React from "react";
 import { getConstitution } from "@/lib/requests";
-import { Constitution } from "@organisms";
+import { Constitution } from "@/components/organisms";
 import { unstable_setRequestLocale } from "next-intl/server"; // Import function to set the request-specific locale (unstable API).
 
 export default async function ConstitutionPage({ params: { locale } }) {
