@@ -1,8 +1,7 @@
 import React from "react";
 
 import { unstable_setRequestLocale } from "next-intl/server"; // Import function to set the request-specific locale (unstable API).
-import { UsersList } from "@organisms";
-import { UsersListProps } from "@organisms";
+import { UsersList, UsersListProps } from "@/components/organisms";
 
 export default function AdminDashboard({ params: { locale } }) {
   unstable_setRequestLocale(locale); // Sets the locale for the request. Use cautiously due to its unstable nature.

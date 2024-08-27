@@ -3,7 +3,11 @@ import { createContext, useContext, useMemo, useReducer } from "react";
 
 import { callAll, basicReducer, BasicReducer } from "@utils";
 import { MuiModalChildren } from "@atoms";
-import { SignInModal, AddMemberModal, UploadConstitution } from "@organisms";
+import {
+  SignInModal,
+  AddMemberModal,
+  UploadConstitution,
+} from "@/components/organisms";
 import { SignUpModal } from "@/components/organisms/Modals/SignUpModal";
 import { SignOutModal } from "@/components/organisms/Modals/SignOutModal";
 

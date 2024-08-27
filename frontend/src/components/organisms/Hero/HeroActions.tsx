@@ -3,7 +3,7 @@ import { Button } from "@/components/atoms/Button";
 import { ICONS, IMAGES, PATHS } from "@/constants";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useModal } from "@context";
+import { useModal } from "@/context";
 import { Grid } from "@mui/material";
 import { HeroActionsProps } from "../types";
 
