@@ -1,138 +1,80 @@
 "use client";
 
 import { Card } from "@molecules";
-import { Box, Divider, Grid } from "@mui/material";
+import { Box, Grid, IconButton } from "@mui/material";
 import { MDXRemote } from "next-mdx-remote";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Code,
   Heading1,
   Heading2,
   Heading3,
   ListItem,
-  NavDrawer,
+  NavDrawerDesktop,
   Paragraph,
-  NavCard,
+  TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS,
 } from "./MDXComponents";
-import { ConstitutionMetadata, ConstitutionProps } from "../types";
+import { ConstitutionProps } from "../types";
 import { useTranslations } from "next-intl";
-import { useModal } from "@/context";
 import { Footer } from "../Footer";
-import { CONSTITUTION_SIDEBAR_TABS, customPalette } from "@consts";
-import { ContentWrapper } from "@/components/atoms";
-import { NotFound } from "../NotFound";
-import { PageTitleTabs } from "../PageTitleTabs";
+import { customPalette, IMAGES } from "@consts";
+import { ContentWrapper, Typography } from "@/components/atoms";
+import { useScreenDimension } from "@hooks";
+import { DrawerMobile } from "../TopNavigation";
+import { ConstitutionSidebar } from "./ConstitutionSidebar";
+import TOCLink from "./TOCLink";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
+  const { isMobile } = useScreenDimension();
   const [isOpen, setIsOpen] = useState(true);
-  const [tab, setTab] = useState("revisions");
-  const { openModal } = useModal();
+
   const t = useTranslations("Constitution");
 
-  const onCompare = (target: Omit<ConstitutionMetadata, "version">) => {
-    openModal({
-      type: "compareConstitutionModal",
-      state: {
-        base: metadata[0],
-        target,
-      },
-    });
+  useEffect(() => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  }, [isMobile]);
+
+  const onTOCLinkClick = () => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
   };
+
   const MDXComponents = {
-    nav: ({ children }) => (
-      <NavDrawer
-        isOpen={isOpen}
-        onClick={() => setIsOpen(!isOpen)}
-        top={{ xxs: 75, md: 90 }}
-        left={0}
-      >
-        <Grid
-          container
-          alignItems="center"
-          justifyContent="space-between"
-          padding={2}
-          sx={{ marginBottom: 2 }}
-          flexWrap="nowrap"
+    nav: ({ children }) =>
+      isMobile ? (
+        <DrawerMobile
+          isDrawerOpen={isOpen}
+          setIsDrawerOpen={setIsOpen}
+          sx={TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS}
+          rowGap={0}
         >
-          <Grid item xxs={12} md="auto">
-            <PageTitleTabs
-              onChange={(tab) => setTab(tab.value)}
-              tabs={CONSTITUTION_SIDEBAR_TABS}
-              selectedValue={tab}
-              sx={{ fontSize: { xxs: 16 } }}
-            />
-          </Grid>
-          <Grid
-            item
-            xxs={6}
-            justifySelf="flex-end"
-            pl={1}
-            sx={{ display: { xxs: "none", md: "flex" } }}
-          >
-            <Divider
-              color={customPalette.lightBlue}
-              orientation="horizontal"
-              flexItem={true}
-              sx={{
-                height: "1px",
-                width: "100%",
-                alignSelf: "center",
-              }}
-            />
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          direction="column"
-          width={{ xxs: "100%", md: "400p", lg: "450px" }}
-          px={{ xxs: 1, md: 2 }}
+          <ConstitutionSidebar tableOfContents={children} metadata={metadata} />
+        </DrawerMobile>
+      ) : (
+        <NavDrawerDesktop
+          isOpen={isOpen}
+          onClick={() => setIsOpen(!isOpen)}
+          top={{ xxs: 0, md: 90 }}
+          left={0}
         >
-          {tab === "revisions" ? (
-            <Grid item justifyContent="flex-end" px={{ xxs: 1, md: 0 }}>
-              {metadata ? (
-                metadata.map(({ title, created_date, cid }) => {
-                  return (
-                    <NavCard
-                      onClick={() => {
-                        metadata[0].cid === cid
-                          ? null
-                          : onCompare({ title, created_date, cid });
-                      }}
-                      hash={cid}
-                      title={title}
-                      description={created_date}
-                      buttonLabel={
-                        metadata[0].cid === cid
-                          ? t("drawer.latest")
-                          : t("drawer.compare")
-                      }
-                      key={cid}
-                    />
-                  );
-                })
-              ) : (
-                <NotFound
-                  height="auto"
-                  title="constitutionMetadata.title"
-                  description="constitutionMetadata.description"
-                  sx={{ width: "100%" }}
-                />
-              )}
-            </Grid>
-          ) : (
-            <Grid item justifyContent="flex-end">
-              {children}
-            </Grid>
-          )}
-        </Grid>
-      </NavDrawer>
-    ),
+          <ConstitutionSidebar tableOfContents={children} metadata={metadata} />
+        </NavDrawerDesktop>
+      ),
     h1: Heading1,
     h2: Heading2,
     h3: Heading3,
     p: Paragraph,
     li: ListItem,
     code: Code,
+    a: (props) => {
+      if (props.href && props.href.startsWith("#")) {
+        return <TOCLink {...props} callback={onTOCLinkClick} />;
+      }
+      return <a {...props} />;
+    },
   };
 
   return (
@@ -140,13 +82,32 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       data-testid="constitution-page-wrapper"
       container
       position="relative"
-      justifyContent="flex-end"
+      justifyContent={{ xxs: "flex-start", md: "flex-end" }}
       flex={1}
     >
-      <Grid mt={3} item xxs={10} md={isOpen ? 8 : 11} display="flex">
+      <Grid mt={3} item xxs={12} md={isOpen ? 8 : 11} display="flex">
         <Box display="flex" flexDirection="column" flex={1}>
           <ContentWrapper>
-            <Box px={{ xxs: 2, md: 5 }}>
+            <Box px={{ xxs: 3, md: 5 }}>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                pb={4}
+              >
+                <Typography variant="headline4">{t("title")}</Typography>
+                <IconButton
+                  data-testid="open-constitution-drawer-button"
+                  onClick={() => setIsOpen(true)}
+                  sx={{
+                    bgcolor: customPalette.arcticWhite,
+                    display: { xxs: "flex", md: "none" },
+                    justifyContent: "center",
+                  }}
+                >
+                  <img src={IMAGES.bookOpen} />
+                </IconButton>
+              </Box>
               <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
                 <MDXRemote {...constitution} components={MDXComponents} />
               </Card>

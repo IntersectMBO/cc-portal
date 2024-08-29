@@ -10,6 +10,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiOperation,
@@ -25,6 +26,7 @@ import { PermissionGuard } from 'src/auth/guard/permission.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ConstitutionMetadataResponse } from './response/constitution-metadata.response';
 import { getFileValidator } from '../pipe/fileValidatorPipe';
+import { ApiConditionalExcludeEndpoint } from 'src/common/decorators/api-conditional-exclude-endpoint.decorator';
 
 @ApiTags('Constitution')
 @Controller('constitution')
@@ -60,6 +62,7 @@ export class ConstitutionController {
     return await this.constitutionFacade.getConstitutionFileByCid(cid);
   }
 
+  @ApiConditionalExcludeEndpoint()
   @ApiOperation({ summary: 'Store constitution file' })
   @ApiBody({
     schema: {
@@ -124,5 +127,22 @@ export class ConstitutionController {
   })
   async getAllConstitutionMetadata(): Promise<ConstitutionMetadataResponse[]> {
     return this.constitutionFacade.getAllConstitutionMetadata();
+  }
+
+  @ApiConditionalExcludeEndpoint()
+  @ApiOperation({
+    summary: 'Get IPNS URL for constitution',
+  })
+  @ApiBearerAuth('JWT-auth')
+  @ApiResponse({
+    status: 200,
+    description: 'Returns a IPNS URL',
+    type: ConstitutionMetadataResponse,
+  })
+  @Permissions(PermissionEnum.ADD_CONSTITUTION)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @Get('ipns/url')
+  async getIpnsUrl() {
+    return await this.constitutionFacade.getIpnsUrl();
   }
 }

@@ -52,9 +52,9 @@ export const Footer = ({
       <Grid item xxs={12} md="auto">
         <Grid
           container
-          flexDirection={{ xxs: "column", md: "row" }}
           gap={2}
-          alignItems={"center"}
+          alignItems="center"
+          justifyContent="space-between"
         >
           <Typography fontWeight={400} variant="caption">
             {t("privacyPolicy")}
@@ -70,7 +70,7 @@ export const Footer = ({
                 component="span"
                 fontSize="12px"
                 lineHeight="16px"
-                sx={{ cursor: "pointer", ml: { xxs: 0, md: 1 } }}
+                sx={{ cursor: "pointer", ml: 1 }}
                 fontWeight={500}
                 variant="caption"
                 onClick={() => {

@@ -4,21 +4,28 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
+import * as aws from '@aws-sdk/client-ses';
 
 @Module({
   imports: [
     MailerModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
         transport: {
-          host: configService.getOrThrow('SENDGRID_HOST'),
-          port: configService.getOrThrow('SENDGRID_PORT'),
-          auth: {
-            user: configService.getOrThrow('SENDGRID_USER'),
-            pass: configService.getOrThrow('SENDGRID_API_KEY'),
+          SES: {
+            ses: new aws.SES({
+              region: configService.getOrThrow('AWS_REGION'),
+              credentials: {
+                accessKeyId: configService.getOrThrow('AWS_ACCESS_KEY_ID'),
+                secretAccessKey: configService.getOrThrow(
+                  'AWS_SECRET_ACCESS_KEY',
+                ),
+              },
+            }),
+            aws,
           },
         },
         defaults: {
-          from: `${configService.getOrThrow('SENDGRID_EMAIL_NAME')} <${configService.getOrThrow('SENDGRID_EMAIL_FROM')}>`,
+          from: `${configService.getOrThrow('NAME_FROM')} <${configService.getOrThrow('EMAIL_FROM')}>`,
         },
         template: {
           dir: join(__dirname, './templates'),

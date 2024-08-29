@@ -119,7 +119,7 @@ jobs:
           build-args: |
             NEXT_PUBLIC_API_URL=${{ secrets.PROD_NEXT_PUBLIC_API_URL }}
             NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${{ secrets.PROD_NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY }}
-            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.PROD_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
+            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.PROD_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}r
           
       - name: Scan Docker image with Dockle
         id: dockle

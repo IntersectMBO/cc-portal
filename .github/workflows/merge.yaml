@@ -141,7 +141,6 @@ jobs:
             sudo mv dockle /usr/local/bin
 
             dockle --exit-code 1 --exit-level fatal --format json --input '/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar' --output ${{ matrix.workdir }}/dockle_scan_output.json
-            echo " dockle exited w/ $?"
             cat ${{ matrix.workdir }}/dockle_scan_output.json
 
             echo "outcome=success" >> $GITHUB_OUTPUT

@@ -148,7 +148,7 @@ export class AppService implements OnModuleInit {
 
   async getIpns() {
     this.ipns = ipns(this.helia);
-    const keyName = 'my-key11';
+    const keyName = process.env.IPNS_CONSTITUTION_KEY_NAME;
     const existingKeys = await this.helia.libp2p.services.keychain.listKeys();
     // if keyName already exists
     if (existingKeys.some((x) => x.name === keyName)) {
@@ -263,5 +263,13 @@ export class AppService implements OnModuleInit {
     };
 
     attemptToProvide();
+  }
+
+  async getIpnsUrl(): Promise<string> {
+    if (!this.ipnsPeerId) {
+      throw new InternalServerErrorException(`IPNS Peer Id not exists`);
+    }
+    const ipnsUrl = process.env.IPNS_PUBLIC_URL + this.ipnsPeerId.toString()
+    return ipnsUrl;
   }
 }
