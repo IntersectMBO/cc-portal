@@ -6,7 +6,7 @@ on:
       - develop
       - staging
       - beta
-      - main
+      - master
 
 permissions:
   contents: write
@@ -14,7 +14,7 @@ permissions:
   packages: write
 
 env:
-  ENVIRONMENT: ${{ (github.ref_name == 'main' && 'prod-cc-portal') || (github.ref_name == 'beta' && 'pre-prod-cc-portal') || (github.ref_name == 'staging' && 'qa-cc-portal') || (github.ref_name == 'develop' && 'dev-cc-portal') }}
+  ENVIRONMENT: ${{ (github.ref_name == 'master' && 'prod-cc-portal') || (github.ref_name == 'beta' && 'pre-prod-cc-portal') || (github.ref_name == 'staging' && 'qa-cc-portal') || (github.ref_name == 'develop' && 'dev-cc-portal') }}
 
 jobs:
   check-build-deploy:
@@ -129,9 +129,9 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           outputs: type=docker,dest=/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar
           build-args: |
-            NEXT_PUBLIC_API_URL=${{ secrets.QA_NEXT_PUBLIC_API_URL }}
-            NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${{ secrets.QA_NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY }}
-            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.QA_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
+            NEXT_PUBLIC_API_URL=${{ secrets.PROD_NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${{ secrets.PROD_NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY }}
+            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.PROD_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
 
       - name: Scan Docker image with Dockle
         id: dockle
