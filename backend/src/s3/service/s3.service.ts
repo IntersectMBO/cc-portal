@@ -34,7 +34,10 @@ export class S3Service {
     fileName: string,
   ): Promise<string> {
     const fullName = this.getFullFileName(context, fileName);
-    return await this.client.presignedUrl('GET', this.bucketName, fullName);
+    const fileUrl =
+      this.configService.get('MINIO_FILE_UPLOAD_ADDRESS') + '/' + fullName;
+
+    return fileUrl;
   }
 
   async deleteFile(fileName: string) {
