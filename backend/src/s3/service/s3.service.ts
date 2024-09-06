@@ -34,7 +34,16 @@ export class S3Service {
     fileName: string,
   ): Promise<string> {
     const fullName = this.getFullFileName(context, fileName);
-    return await this.client.presignedUrl('GET', this.bucketName, fullName);
+    const presignedUrl = await this.client.presignedUrl(
+      'GET',
+      this.bucketName,
+      fullName,
+    );
+
+    const urlParts = presignedUrl.split('?');
+    const baseUrl = urlParts[0];
+
+    return baseUrl;
   }
 
   async deleteFile(fileName: string) {
