@@ -23,7 +23,9 @@ export class S3Service {
     const buffer = Buffer.from(bufferArray);
 
     const fullName = this.getFullFileName(context, fileName);
-    await this.client.putObject(this.bucketName, fullName, buffer, file.size);
+    await this.client.putObject(this.bucketName, fullName, buffer, file.size, {
+      'Content-Type': file.mimetype,
+    });
 
     const fileUrl = await this.getFileUrl(context, fileName);
     return fileUrl;
@@ -34,9 +36,7 @@ export class S3Service {
     fileName: string,
   ): Promise<string> {
     const fullName = this.getFullFileName(context, fileName);
-    const fileUrl =
-      this.configService.get('MINIO_FILE_UPLOAD_ADDRESS') + '/' + fullName;
-
+    const fileUrl = `http://${this.configService.get('MINIO_ENDPOINT')}:${this.configService.get('MINIO_PORT')}/${this.bucketName}/${fullName}`;
     return fileUrl;
   }
 
