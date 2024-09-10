@@ -36,7 +36,7 @@ export class S3Service {
     fileName: string,
   ): Promise<string> {
     const fullName = this.getFullFileName(context, fileName);
-    const fileUrl = `http://${this.configService.get('MINIO_ENDPOINT')}:${this.configService.get('MINIO_PORT')}/${this.bucketName}/${fullName}`;
+    const fileUrl = `${this.configService.get('MINIO_ENDPOINT')}:${this.configService.get('MINIO_PORT')}/${this.bucketName}/${fullName}`;
     return fileUrl;
   }
 
