@@ -6,23 +6,19 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHelia } from 'helia';
-import type { HeliaLibp2p } from 'helia';
 import { CID } from 'multiformats/cid';
-import { createLibp2p } from 'libp2p';
 import { bootstrap } from '@libp2p/bootstrap';
 import { identify } from '@libp2p/identify';
 import { webSockets } from '@libp2p/websockets';
-import { all } from '@libp2p/websockets/filters';
 import { tcp } from '@libp2p/tcp';
 import { noise } from '@chainsafe/libp2p-noise';
 import { yamux } from '@chainsafe/libp2p-yamux';
-import { mplex } from '@libp2p/mplex';
 import { unixfs } from '@helia/unixfs';
 import { FsBlockstore } from 'blockstore-fs';
 import { LevelDatastore } from 'datastore-level';
 import { IPNS, ipns } from '@helia/ipns';
 import { keychain, type Keychain } from '@libp2p/keychain';
-import { kadDHT, removePrivateAddressesMapper } from '@libp2p/kad-dht';
+import { kadDHT } from '@libp2p/kad-dht';
 import { ipnsSelector } from 'ipns/selector';
 import { ipnsValidator } from 'ipns/validator';
 import { dcutr } from '@libp2p/dcutr';
@@ -31,8 +27,6 @@ import { ping } from '@libp2p/ping';
 import { uPnPNAT } from '@libp2p/upnp-nat';
 import { mdns } from '@libp2p/mdns';
 import { createDelegatedRoutingV1HttpApiClient } from '@helia/delegated-routing-v1-http-api-client';
-//import { gossipsub } from '@chainsafe/libp2p-gossipsub';
-//import { webRTC, webRTCDirect } from '@libp2p/webrtc';
 import {
   circuitRelayTransport,
   circuitRelayServer,
@@ -41,6 +35,7 @@ import { IpfsMapper } from './mapper/ipfs.mapper.js';
 import { IpfsDto } from './dto/ipfs.dto.js';
 import { PeerId } from '@libp2p/interface';
 import { config } from 'dotenv';
+import { ProvideToDHTProducer } from './queues/producers/provide-to-dht.producer.js';
 config();
 
 const libp2pOptions = {
@@ -112,7 +107,7 @@ export class AppService implements OnModuleInit {
   private ipnsPeerId: PeerId;
   private logger = new Logger(AppService.name);
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly provideToDHTProducer: ProvideToDHTProducer) {}
 
   async onModuleInit() {
     console.log(`Initialization helia...`);
@@ -182,8 +177,8 @@ export class AppService implements OnModuleInit {
       const ret1 = this.helia.pins.add(cid);
       ret1.next().then((res) => this.logger.log(`Pinned: ${res.value}`));
 
-      // Announce CID to the DHT
-      this.provideCidtoDHT(cid);
+      // Announce CID to the DHT via queue
+      await this.provideToDHTProducer.addToQueue(cid.toString());
 
       // Publish the name
       await this.ipns.publish(this.ipnsPeerId, cid);
@@ -202,17 +197,17 @@ export class AppService implements OnModuleInit {
     }
   }
 
-  async getDoc(cid: string): Promise<IpfsDto> {
+  async getDoc(cidString: string): Promise<IpfsDto> {
     this.fs = unixfs(this.helia);
     const decoder = new TextDecoder();
+    const cid = CID.parse(cidString);
     let text = '';
-
     for await (const chunk of this.fs.cat(cid)) {
       text += decoder.decode(chunk, {
         stream: true,
       });
     }
-    return IpfsMapper.ipfsToIpfsDto(cid, text);
+    return IpfsMapper.ipfsToIpfsDto(cidString, text);
   }
 
   async addJson(json: string): Promise<IpfsDto> {
@@ -226,8 +221,8 @@ export class AppService implements OnModuleInit {
       const ret1 = this.helia.pins.add(cid);
       ret1.next().then((res) => this.logger.log(`Pinned json: ${res.value}`));
 
-      // Announce CID to the DHT
-      this.provideCidtoDHT(cid);
+      // Announce CID to the DHT via queue
+      await this.provideToDHTProducer.addToQueue(cid.toString());
 
       const url = process.env.IPFS_PUBLIC_URL + cid.toString();
 
@@ -238,32 +233,10 @@ export class AppService implements OnModuleInit {
     }
   }
 
-  private provideCidtoDHT(cid, retryDelay = 5000) {
-    let attempt = 0;
-    let errCode = null;
-
-    const attemptToProvide = async () => {
-      try {
-        await this.helia.libp2p.contentRouting.provide(cid);
-        this.logger.log(`Announced CID to the DHT: ${cid.toString()}`);
-      } catch (error) {
-        this.logger.error(`Error announcing CID to the DHT: ${error}`);
-        errCode = error.code;
-        if (errCode === 'ERR_QUERY_ABORTED') {
-          attempt++;
-          this.logger.log(`Retrying... (${attempt})`);
-          await new Promise((resolve) => setTimeout(resolve, retryDelay));
-          attemptToProvide(); // Retry
-        } else {
-          this.logger.log(`CID: ${cid} has not been announced`);
-          this.logger.error(error);
-          throw new InternalServerErrorException(error);
-        }
-      }
-    };
-
-    attemptToProvide();
-  }
+  async provideCidtoDHTViaQueue(cid: CID) {
+    await this.helia.libp2p.contentRouting.provide(cid);
+    this.logger.log(`Announced CID to the DHT: ${cid.toString()}`);
+}
 
   async getIpnsUrl(): Promise<string> {
     if (!this.ipnsPeerId) {
