@@ -15,6 +15,7 @@ permissions:
 jobs:
   static-checks:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - workdir: ./frontend
