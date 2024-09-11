@@ -95,7 +95,7 @@ export class GovActionProposalService extends CommonService {
     );
     const results: GovActionProposalRequest[] = [];
 
-    dbData.forEach((govActionProposal) => {
+    dbData?.forEach((govActionProposal) => {
       results.push(
         GovActionProposalMapper.dbSyncToGovActionProposalRequest(
           govActionProposal,
