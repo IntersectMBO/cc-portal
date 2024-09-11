@@ -76,8 +76,12 @@ services:
     container_name: cache
     restart: always
     environment:
-      REDIS_ARGS: "--requirepass ${REDIS_PASSWORD} --user ${REDIS_USERNAME} on >${REDIS_PASSWORD} ~* allcommands --user default off nopass nocommands"
-    command: redis-server --requirepass ${REDIS_PASSWORD}
+      - REDIS_USERNAME=${REDIS_USERNAME}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: >
+      redis-server --requirepass ${REDIS_PASSWORD} 
+                   --user ${REDIS_USERNAME} on >${REDIS_PASSWORD} ~* +@all
+                   --user default off
     ports:
       - "6379:6379"
     volumes:
