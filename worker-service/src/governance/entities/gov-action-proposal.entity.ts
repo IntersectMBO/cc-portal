@@ -21,7 +21,6 @@ export class GovActionProposal extends CommonEntity {
   @Column({
     name: 'title',
     type: 'varchar',
-    length: 80,
     nullable: true,
   })
   title: string;
@@ -29,7 +28,6 @@ export class GovActionProposal extends CommonEntity {
   @Column({
     name: 'abstract',
     type: 'varchar',
-    length: 2500,
     nullable: true,
   })
   abstract: string;
