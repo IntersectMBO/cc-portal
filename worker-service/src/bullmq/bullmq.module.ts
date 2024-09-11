@@ -16,7 +16,6 @@ import { ExpressAdapter } from '@bull-board/express';
         connection: {
           host: configService.getOrThrow('REDIS_HOST'),
           port: configService.getOrThrow('REDIS_PORT'),
-          username: configService.getOrThrow('REDIS_USERNAME'),
           password: configService.getOrThrow('REDIS_PASSWORD'),
         },
       }),
