@@ -105,8 +105,8 @@ export abstract class CommonService {
       };
       return govActionProposal;
     } catch (e) {
-      this.logger.log(
-        `There has been an exception when fetching data for governance action proposal: ${e}`,
+      this.logger.warn(
+        `Error when fetching GAP metadata from url ${url}; Message: ${e}`,
       );
       return null;
     }
