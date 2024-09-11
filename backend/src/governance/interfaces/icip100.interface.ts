@@ -69,6 +69,5 @@ interface WitnessContext {
 }
 
 interface BodyContent {
-  references: any[];
   comment: string;
 }

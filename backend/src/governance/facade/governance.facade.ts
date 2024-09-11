@@ -45,7 +45,11 @@ export class GovernanceFacade {
     const response = await this.governanceService.addRationale(rationaleDto);
     return GovernanceMapper.rationaleDtoToResponse(response);
   }
-
+  /**
+   * Creates a CIP 100 compatible JSON object.
+   * CIP 100 example:
+   *  https://github.com/cardano-foundation/CIPs/blob/master/CIP-0100/example.body.json
+   **/
   private async createRationaleJsonCip100(
     rationaleRequest: RationaleRequest,
   ): Promise<string> {
@@ -97,7 +101,6 @@ export class GovernanceFacade {
       hashAlgorithm: CIP100.hashAlgorithm,
       authors: [],
       body: {
-        references: [],
         comment: rationaleRequest.content,
       },
     };
