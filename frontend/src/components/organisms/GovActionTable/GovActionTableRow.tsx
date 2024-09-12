@@ -1,30 +1,26 @@
 "use client";
-import React from "react";
 
-import { Card, CopyPill, TableDivider } from "@molecules";
-import { Box, Grid } from "@mui/material";
-import { UserAvatar } from "@molecules";
+import { GovernanceActionTableI, ReasoningResponseI } from "@/lib/requests";
 import {
   Button,
-  CopyButton,
   GovActionStatusPill,
   OutlinedLightButton,
-  Typography,
+  Typography
 } from "@atoms";
+import { customPalette, ICONS, PATHS } from "@consts";
+import { useModal } from "@context";
+import { Card, CopyPill, TableDivider, UserAvatar } from "@molecules";
+import { Box, Grid } from "@mui/material";
+import { getProposalTypeLabel, getShortenedGovActionId } from "@utils";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   GovActionModalState,
   OpenAddReasoningModalState,
   OpenPreviewReasoningModal,
-  OpenReasoningLinkModalState,
+  OpenReasoningLinkModalState
 } from "../types";
-import { customPalette, ICONS, PATHS } from "@consts";
-import { useTranslations } from "next-intl";
-import Image from "next/image";
-import { getShortenedGovActionId, truncateText } from "@utils";
-import { getProposalTypeLabel } from "@utils";
-import { useModal } from "@context";
-import { ReasoningResponseI, GovernanceActionTableI } from "@/lib/requests";
-import { useRouter } from "next/navigation";
 
 interface Props {
   govActions: GovernanceActionTableI;
@@ -51,8 +47,8 @@ export const GovActionTableRow = ({ govActions }: Props) => {
     govActionModal.openModal({
       type: "govActionModal",
       state: {
-        id,
-      },
+        id
+      }
     });
   };
   const openUpdateReasoningCallback = () => {
@@ -65,8 +61,8 @@ export const GovActionTableRow = ({ govActions }: Props) => {
       state: {
         govAction: govActions,
         actionTitle: t("updateRationale"),
-        onActionClick: openUpdateReasoningCallback,
-      },
+        onActionClick: openUpdateReasoningCallback
+      }
     });
   };
 
@@ -75,8 +71,8 @@ export const GovActionTableRow = ({ govActions }: Props) => {
       type: "reasoningLinkModal",
       state: {
         hash,
-        link,
-      },
+        link
+      }
     });
   };
 
@@ -92,8 +88,8 @@ export const GovActionTableRow = ({ govActions }: Props) => {
       state: {
         id,
         callback: (response: ReasoningResponseI) =>
-          addReasoningCallback(response),
-      },
+          addReasoningCallback(response)
+      }
     });
   };
 
@@ -102,161 +98,189 @@ export const GovActionTableRow = ({ govActions }: Props) => {
       item
       mb={3}
       sx={{
-        opacity: isDisabled ? 0.5 : 1,
+        opacity: isDisabled ? 0.5 : 1
       }}
     >
       <Card variant="default">
-        <Grid
-          container
-          flexDirection={{ xxs: "column", xl: "row" }}
-          justifyContent="space-between"
-          flexWrap="nowrap"
-          gap={{ xxs: 0, xl: 3 }}
-        >
-          <Grid item xxs={12} xl={10}>
-            <Grid
-              container
-              flexDirection={{ xxs: "column", lg: "row" }}
-              flexWrap={{ xxs: "wrap", lg: "nowrap" }}
-            >
-              <Grid item xxs="auto" mb={{ xxs: 2, lg: 0 }}>
-                <UserAvatar src={ICONS.govAction} />
-              </Grid>
-              <Grid
-                item
-                xxs="auto"
-                lg={2}
-                px={{ xxs: 0, lg: 1, xl: 3 }}
-                py={{ xxs: 1.5, lg: 0 }}
-              >
-                <Typography
-                  color={customPalette.neutralGray}
-                  sx={{ marginBottom: 0.5 }}
-                  variant="caption"
-                  fontWeight={500}
-                >
-                  {t("govAction")}
-                </Typography>
-
-                <OutlinedLightButton
-                  onClick={openGAModal}
-                  disabled={!title}
-                  startIcon={
-                    <Image
-                      alt="GA title"
-                      width={12}
-                      height={12}
-                      src={ICONS.informationCircle}
-                      style={{
-                        opacity: title ? 1 : 0.5,
-                      }}
-                    />
-                  }
-                >
-                  {title ? truncateText(title, 15) : t("notAvailable")}
-                </OutlinedLightButton>
-              </Grid>
-              <TableDivider />
-              <Grid
-                item
-                xxs="auto"
-                lg={2}
-                px={{ xxs: 0, lg: 1, xl: 3 }}
-                py={{ xxs: 1.5, lg: 0 }}
-              >
-                <Typography
-                  color={customPalette.neutralGray}
-                  sx={{ marginBottom: 0.5 }}
-                  variant="caption"
-                  fontWeight={500}
-                >
-                  {t("govActionCategoryShort")}
-                </Typography>
-                <OutlinedLightButton nonInteractive>
-                  {truncateText(getProposalTypeLabel(type), 20)}
-                </OutlinedLightButton>
-              </Grid>
-              <TableDivider />
-              <Grid
-                item
-                lg={2}
-                px={{ xxs: 0, lg: 1, xl: 3 }}
-                py={{ xxs: 1.5, lg: 0 }}
-              >
-                <Typography
-                  color={customPalette.neutralGray}
-                  sx={{ marginBottom: 0.5 }}
-                  variant="caption"
-                  fontWeight={500}
-                >
-                  {t("voteStatus")}
-                </Typography>
-                <Box width={85}>
-                  <GovActionStatusPill status={vote_status} />
-                </Box>
-              </Grid>
-              <TableDivider />
-              <Grid
-                item
-                lg={2}
-                px={{ xxs: 0, lg: 1, xl: 3 }}
-                py={{ xxs: 1.5, lg: 0 }}
-              >
-                <Typography
-                  color={customPalette.neutralGray}
-                  sx={{ marginBottom: 0.5 }}
-                  variant="caption"
-                  fontWeight={500}
-                >
-                  {t("gaStatus")}
-                </Typography>
-                <OutlinedLightButton nonInteractive>
-                  {status}
-                </OutlinedLightButton>
-              </Grid>
-              <TableDivider />
-              <Grid
-                item
-                lg={5}
-                px={{ xxs: 0, lg: 1, xl: 3 }}
-                py={{ xxs: 1.5, lg: 0 }}
-              >
-                <Typography
-                  color={customPalette.neutralGray}
-                  sx={{ marginBottom: 0.5 }}
-                  variant="caption"
-                  fontWeight={500}
-                >
-                  {t("gaID")}
-                </Typography>
-                <Box display="flex">
-                  <CopyPill
-                    copyValue={tx_hash}
-                    copyText={getShortenedGovActionId(tx_hash)}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-          </Grid>
+        <Grid container>
           <Grid
             item
             xxs={12}
-            xl="auto"
-            textAlign={{ xxs: "right", xl: "center" }}
-            mt={{ xxs: 2, xl: 0 }}
+            display="flex"
+            rowGap={2}
+            flexDirection={{
+              xxs: "column",
+              md: "row",
+              lg: "row",
+              xl: "row"
+            }}
           >
-            <Button
-              disabled={isDisabled}
-              sx={{ whiteSpace: "nowrap" }}
-              onClick={() =>
-                canAddReasoning
-                  ? openAddReasoningModal()
-                  : openUpdateReasoningModal()
-              }
-              variant="outlined"
+            <Grid
+              item
+              xxs="auto"
+              md={6}
+              lg={3}
+              xl={3}
+              m={{ md: "auto", lg: "auto" }}
             >
-              {canAddReasoning ? t("addRationale") : t("updateRationale")}
-            </Button>
+              <Grid container flexWrap="nowrap">
+                <Grid item>
+                  <UserAvatar src={ICONS.govAction} />
+                </Grid>
+                <Grid
+                  item
+                  px={{ xxs: 0, lg: 1, xl: 3 }}
+                  py={{ xxs: 1.5, lg: 0 }}
+                >
+                  <Typography
+                    color={customPalette.neutralGray}
+                    sx={{ marginBottom: 0.5 }}
+                    variant="caption"
+                    fontWeight={500}
+                  >
+                    {t("govAction")}
+                  </Typography>
+
+                  <OutlinedLightButton
+                    onClick={openGAModal}
+                    disabled={!title}
+                    startIcon={
+                      <Image
+                        alt="GA title"
+                        width={12}
+                        height={12}
+                        src={ICONS.informationCircle}
+                        style={{
+                          opacity: title ? 1 : 0.5
+                        }}
+                      />
+                    }
+                  >
+                    {title ? title : t("notAvailable")}
+                  </OutlinedLightButton>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              flexDirection={{ xxs: "column", md: "row", lg: "row" }}
+              flexWrap={{ xxs: "wrap", md: "wrap", lg: "wrap", xl: "nowrap" }}
+              rowSpacing={2}
+            >
+              <Grid item display="flex" md={12} lg={5} xl={3}>
+                <TableDivider />
+                <Grid
+                  item
+                  xxs="auto"
+                  md={12}
+                  lg={12}
+                  xl={12}
+                  px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
+                  py={{ xxs: 1.5, md: 0 }}
+                >
+                  <Typography
+                    color={customPalette.neutralGray}
+                    sx={{ marginBottom: 0.5 }}
+                    variant="caption"
+                    fontWeight={500}
+                  >
+                    {t("govActionCategoryShort")}
+                  </Typography>
+                  <OutlinedLightButton nonInteractive>
+                    {getProposalTypeLabel(type)}
+                  </OutlinedLightButton>
+                </Grid>
+              </Grid>
+              <Grid item display="flex" md={12} lg={5} xl={3}>
+                <TableDivider />
+                <Grid
+                  item
+                  xxs="auto"
+                  md={12}
+                  lg={12}
+                  xl={12}
+                  px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
+                  py={{ xxs: 1.5, md: 0 }}
+                >
+                  <Typography
+                    color={customPalette.neutralGray}
+                    sx={{ marginBottom: 0.5 }}
+                    variant="caption"
+                    fontWeight={500}
+                  >
+                    {t("voteStatus")}
+                  </Typography>
+                  <Box width={85}>
+                    <GovActionStatusPill status={vote_status} />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Grid item display="flex" md={12} lg={5} xl={3}>
+                <TableDivider />
+                <Grid
+                  item
+                  xxs="auto"
+                  md={12}
+                  lg={12}
+                  xl={12}
+                  px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
+                  py={{ xxs: 1.5, md: 0 }}
+                >
+                  <Typography
+                    color={customPalette.neutralGray}
+                    sx={{ marginBottom: 0.5 }}
+                    variant="caption"
+                    fontWeight={500}
+                  >
+                    {t("gaStatus")}
+                  </Typography>
+                  <OutlinedLightButton nonInteractive>
+                    {status}
+                  </OutlinedLightButton>
+                </Grid>
+              </Grid>
+              <Grid item display="flex" md={12} lg={5} xl={3}>
+                <TableDivider />
+                <Grid
+                  item
+                  xxs="auto"
+                  md={12}
+                  lg={12}
+                  xl={12}
+                  px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
+                  py={{ xxs: 1.5, md: 0 }}
+                >
+                  <Typography
+                    color={customPalette.neutralGray}
+                    sx={{ marginBottom: 0.5 }}
+                    variant="caption"
+                    fontWeight={500}
+                  >
+                    {t("gaID")}
+                  </Typography>
+                  <Box display="flex">
+                    <CopyPill
+                      copyValue={tx_hash}
+                      copyText={getShortenedGovActionId(tx_hash)}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Grid item m={{ xxs: "auto" }} lg={2} xl={2}>
+                <Button
+                  disabled={isDisabled}
+                  sx={{ whiteSpace: "nowrap" }}
+                  onClick={() =>
+                    canAddReasoning
+                      ? openAddReasoningModal()
+                      : openUpdateReasoningModal()
+                  }
+                  variant="outlined"
+                >
+                  {canAddReasoning ? t("addRationale") : t("updateRationale")}
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Card>

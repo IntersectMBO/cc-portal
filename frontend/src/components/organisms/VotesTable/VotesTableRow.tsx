@@ -99,7 +99,7 @@ export const VotesTableRow = ({
                 <TableDivider />
                 <Grid
                   item
-                  xxs="auto"
+                  xxs={12}
                   md={12}
                   lg={12}
                   xl={12}
@@ -138,7 +138,7 @@ export const VotesTableRow = ({
                 <TableDivider />
                 <Grid
                   item
-                  xxs="auto"
+                  xxs={12}
                   md={12}
                   lg={12}
                   xl={12}
@@ -162,7 +162,7 @@ export const VotesTableRow = ({
                 <TableDivider />
                 <Grid
                   item
-                  xxs="auto"
+                  xxs={12}
                   md={12}
                   lg={12}
                   xl={12}
@@ -188,7 +188,7 @@ export const VotesTableRow = ({
 
                 <Grid
                   item
-                  xxs="auto"
+                  xxs={12}
                   md={12}
                   lg={12}
                   xl={12}
