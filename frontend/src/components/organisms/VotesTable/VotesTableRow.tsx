@@ -100,6 +100,9 @@ export const VotesTableRow = ({
                 <Grid
                   item
                   xxs="auto"
+                  md={12}
+                  lg={12}
+                  xl={12}
                   px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
                   py={{ xxs: 1.5, md: 0 }}
                 >
@@ -126,15 +129,19 @@ export const VotesTableRow = ({
                     }
                   >
                     {gov_action_proposal_title
-                      ? truncateText(gov_action_proposal_title, 40)
+                      ? gov_action_proposal_title
                       : t("notAvailable")}
                   </OutlinedLightButton>
                 </Grid>
               </Grid>
-              <Grid item display="flex" xxs="auto" md={12} lg={5} xl={3}>
+              <Grid item display="flex" md={12} lg={5} xl={3}>
                 <TableDivider />
                 <Grid
                   item
+                  xxs="auto"
+                  md={12}
+                  lg={12}
+                  xl={12}
                   px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
                   py={{ xxs: 1.5, md: 0 }}
                 >
@@ -155,6 +162,10 @@ export const VotesTableRow = ({
                 <TableDivider />
                 <Grid
                   item
+                  xxs="auto"
+                  md={12}
+                  lg={12}
+                  xl={12}
                   px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
                   py={{ xxs: 1.5, md: 0 }}
                 >
@@ -177,6 +188,10 @@ export const VotesTableRow = ({
 
                 <Grid
                   item
+                  xxs="auto"
+                  md={12}
+                  lg={12}
+                  xl={12}
                   px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
                   py={{ xxs: 1.5, md: 0 }}
                 >

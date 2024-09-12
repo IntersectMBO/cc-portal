@@ -23,11 +23,12 @@ export const OutlinedLightButton = ({
     fontWeight: 400,
     fontSize: 12,
     lineHeight: "18px",
-    whiteSpace: "normal;",
+    wordBreak: "break-word",
+
     "&": {
       pointerEvents: nonInteractive ? "none" : "all"
     }
-  };
+  } as React.CSSProperties;
 
   return (
     <Button
