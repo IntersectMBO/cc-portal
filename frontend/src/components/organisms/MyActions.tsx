@@ -25,11 +25,13 @@ import { VotesTable } from "./VotesTable";
 export const MyActions = ({
   actions,
   paginationMeta,
-  error
+  error,
+  userId
 }: {
   actions: VotesTableI[];
   paginationMeta: PaginationMeta;
   error?: string;
+  userId?: string;
 }) => {
   const t = useTranslations("MyActions");
   const router = useRouter();
@@ -67,7 +69,8 @@ export const MyActions = ({
         ? chosenFilters.govActionType?.join(",")
         : null,
     vote: chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
-    sortBy: chosenSorting || null
+    sortBy: chosenSorting || null,
+    userId
   };
 
   const { data, pagination, isLoading, loadMore } = usePagination(
