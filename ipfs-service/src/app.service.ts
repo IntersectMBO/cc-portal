@@ -163,7 +163,7 @@ export class AppService implements OnModuleInit {
     this.logger.log(`IPNS PeerID: ${this.ipnsPeerId}`);
   }
 
-  async addDoc(file: Express.Multer.File): Promise<IpfsDto> {
+  async addFile(file: Express.Multer.File): Promise<IpfsDto> {
     try {
       this.fs = unixfs(this.helia);
       const fileBuffer = Buffer.from(file.buffer);
@@ -197,19 +197,6 @@ export class AppService implements OnModuleInit {
     }
   }
 
-  async getDoc(cidString: string): Promise<IpfsDto> {
-    this.fs = unixfs(this.helia);
-    const decoder = new TextDecoder();
-    const cid = CID.parse(cidString);
-    let text = '';
-    for await (const chunk of this.fs.cat(cid)) {
-      text += decoder.decode(chunk, {
-        stream: true,
-      });
-    }
-    return IpfsMapper.ipfsToIpfsDto(cidString, text);
-  }
-
   async addJson(json: string): Promise<IpfsDto> {
     try {
       this.fs = unixfs(this.helia);
@@ -232,6 +219,25 @@ export class AppService implements OnModuleInit {
       throw new InternalServerErrorException(error);
     }
   }
+
+  async getDocByCid(cidString: string): Promise<IpfsDto> {
+    try {
+    this.fs = unixfs(this.helia);
+    const decoder = new TextDecoder();
+    const cid = CID.parse(cidString);
+
+    let text = '';
+    for await (const chunk of this.fs.cat(cid)) {
+      text += decoder.decode(chunk, {
+        stream: true,
+      });
+    }
+    return IpfsMapper.ipfsToIpfsDto(cidString, text);
+  } catch (error) {
+    this.logger.error(`Failed to get doc by CID - ${cidString} error: ${error}`);
+    return null;
+  }
+}
 
   async provideCidtoDHTViaQueue(cid: CID) {
     await this.helia.libp2p.contentRouting.provide(cid);

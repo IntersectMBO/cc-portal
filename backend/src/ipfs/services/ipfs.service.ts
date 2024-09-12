@@ -52,7 +52,8 @@ export class IpfsService {
     const formData = new FormData();
     formData.append('file', blob, file.originalname);
 
-    const apiLink = this.configService.getOrThrow('IPFS_SERVICE_URL') + '/ipfs';
+    const apiLink =
+      this.configService.getOrThrow('IPFS_SERVICE_URL') + '/ipfs/file';
     const requestConfig = {
       headers: {
         'Content-Type': 'multipart/form-data',
