@@ -11,6 +11,17 @@ export class GovActionProposalDto {
   status: GovActionProposalStatus;
   voteStatus: VoteStatus;
   hasRationale: boolean;
+  votedBy: string[];
+  rationaleBy: string[];
   submitTime: Date;
   endTime: Date;
+}
+
+export class VoteStatusRationaleInfoDto {
+  constructor(voteStatus: VoteStatus, hasRationale: boolean) {
+    this.voteStatus = voteStatus;
+    this.hasRationale = hasRationale;
+  }
+  voteStatus: VoteStatus;
+  hasRationale: boolean;
 }
