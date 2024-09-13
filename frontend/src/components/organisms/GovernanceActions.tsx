@@ -1,27 +1,27 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
-import { Box } from "@mui/material";
-import { NotFound } from "./NotFound";
-import { countSelectedFilters, isEmpty } from "@utils";
-import { DataActionsBar } from "../molecules";
+import { getGovernanceActions } from "@/lib/api";
+import { GovernanceActionTableI, PaginationMeta } from "@/lib/requests";
 import {
   GOVERNANCE_ACTIONS_FILTERS,
   GOVERNANCE_ACTIONS_SORTING,
   MY_ACTIONS_TABS,
-  PATHS,
+  PATHS
 } from "@consts";
-import { PageTitleTabs } from "./PageTitleTabs";
-import { GovActionTable } from "./GovActionTable";
-import { GovernanceActionTableI, PaginationMeta } from "@/lib/requests";
-import { getGovernanceActions } from "@/lib/api";
-import { usePagination, useManageQueryParams } from "@hooks";
-import { ShowMoreButton } from "../atoms";
+import { useManageQueryParams, usePagination } from "@hooks";
+import { Box } from "@mui/material";
+import { countSelectedFilters, isEmpty } from "@utils";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { ShowMoreButton } from "../atoms";
+import { DataActionsBar } from "../molecules";
+import { GovActionTable } from "./GovActionTable";
+import { NotFound } from "./NotFound";
+import { PageTitleTabs } from "./PageTitleTabs";
 
 export const GovernanceActions = ({
   actions,
-  paginationMeta,
+  paginationMeta
 }: {
   actions: GovernanceActionTableI[];
   paginationMeta: PaginationMeta;
@@ -43,7 +43,7 @@ export const GovernanceActions = ({
         : null,
     status:
       chosenFilters.status?.length > 0 ? chosenFilters.status?.join(",") : null,
-    sortBy: chosenSorting || null,
+    sortBy: chosenSorting || null
   };
 
   const { data, pagination, isLoading, loadMore } = usePagination(
@@ -70,10 +70,10 @@ export const GovernanceActions = ({
         paddingBottom={4}
         display="flex"
         justifyContent={{ xxs: "flex-start", md: "space-between" }}
-        flexDirection={{ xxs: "column", md: "row" }}
+        flexDirection={{ xxs: "column", md: "column", lg: "row" }}
         alignItems={{ xxs: "left", md: "center" }}
       >
-        <Box className="ttt">
+        <Box className="ttt" mb={{ xxs: 0, md: 2 }}>
           <PageTitleTabs
             tabs={MY_ACTIONS_TABS}
             onChange={(tab) => router.push(tab.value)}

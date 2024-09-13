@@ -8,13 +8,13 @@ export const PATHS = {
   logout: "/logout",
   admin: {
     home: "/admin",
-    dashboard: "/admin/dashboard",
-  },
+    dashboard: "/admin/dashboard"
+  }
 };
 
 export const EXTERNAL_LINKS = {
   guides:
-    "https://app.gitbook.com/o/Prbm1mtkwSsGWSvG1Bfd/s/IOUshfMdffqF4RObLhje/legal/terms-and-conditions",
+    "https://docs.gov.tools/about/what-is-the-constitutional-committee-portal"
 };
 
 export const adminProtectedPath = PATHS.admin.dashboard;

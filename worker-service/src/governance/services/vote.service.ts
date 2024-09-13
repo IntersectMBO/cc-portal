@@ -162,12 +162,13 @@ export class VoteService extends CommonService {
     try {
       const prefix = '\\x'; // prefix for each hot address
       const addresses = [...mapHotAddresses.keys()].map((key) => prefix + key);
+      this.logger.debug(`Addresses for fetching from db sync: ${addresses}`);
       const dbData = await this.getDataFromSqlFile(
         SQL_FILE_PATH.GET_VOTES,
         addresses,
       );
       const results: VoteRequest[] = [];
-      dbData.forEach((vote) => {
+      dbData?.forEach((vote) => {
         results.push(VoteMapper.dbSyncToVoteRequest(vote, mapHotAddresses));
       });
       return results;

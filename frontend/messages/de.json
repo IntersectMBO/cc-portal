@@ -243,15 +243,15 @@
     },
     "members": {
       "title": "No members found",
-      "description": "There is currently no members. Please check back later for updates"
+      "description": "There are currently no members. Please check back later for updates"
     },
     "latestUpdates": {
       "title": "No votes found",
-      "description": "There is currently no votes. Please check back later for updates"
+      "description": "There are currently no votes. Please check back later for updates"
     },
     "myActions": {
       "title": "No votes found",
-      "description": "There is currently no votes. Please check back later for updates"
+      "description": "There are currently no votes. Please check back later for updates"
     },
     "constitution": {
       "title": "No Constitution available",
@@ -259,11 +259,11 @@
     },
     "constitutionMetadata": {
       "title": "No revisions available",
-      "description": "There is currently no revisions available. Please check back later for updates"
+      "description": "There are currently no revisions available. Please check back later for updates"
     },
     "governanceAction": {
       "title": "No governance actions available",
-      "description": "There is currently no governance actions. Please check back later for updates"
+      "description": "There are currently no governance actions. Please check back later for updates"
     }
   },
   "Snackbar": {

@@ -3,7 +3,6 @@ import { ConstitutionRedisService } from 'src/redis/service/constitution-redis.s
 import { ConstitutionResponse } from '../api/response/constitution.response';
 import { ConstitutionMapper } from '../mapper/constitution.mapper';
 import { ConstitutionDto } from 'src/redis/dto/constitution.dto';
-import { ConstitutionService } from '../services/constitution.service';
 import { IpfsService } from 'src/ipfs/services/ipfs.service';
 import { ConstitutionMetadataResponse } from '../api/response/constitution-metadata.response';
 import { ConstitutionIpnsUrlResponse } from '../api/response/constitutio-ipns-url.response';
@@ -14,7 +13,6 @@ export class ConstitutionFacade {
 
   constructor(
     private readonly constitutionRedisService: ConstitutionRedisService,
-    private readonly constitutionService: ConstitutionService,
     private readonly ipfsService: IpfsService,
   ) {}
 
