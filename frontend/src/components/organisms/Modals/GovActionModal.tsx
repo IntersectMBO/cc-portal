@@ -1,29 +1,29 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useSnackbar } from "@/context/snackbar";
+import { getGovernanceMetadata } from "@/lib/api";
 import {
-  ModalWrapper,
-  ModalHeader,
-  Typography,
   Button,
+  ModalHeader,
+  ModalWrapper,
   OutlinedLightButton,
+  Typography
 } from "@atoms";
 import { customPalette, IMAGES } from "@consts";
-import { useTranslations } from "next-intl";
 import { useModal } from "@context";
+import { useScreenDimension } from "@hooks";
+import { CopyCard, Loading } from "@molecules";
 import { Box } from "@mui/material";
 import { GovActionModalState } from "@organisms";
-import { CopyCard, Loading } from "@molecules";
-import { GovActionMetadata } from "../types";
-import { getGovernanceMetadata } from "@/lib/api";
 import {
   formatDisplayDate,
   getProposalTypeLabel,
   getShortenedGovActionId,
-  isResponseErrorI,
+  isResponseErrorI
 } from "@utils";
-import { useSnackbar } from "@/context/snackbar";
-import { useScreenDimension } from "@hooks";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { GovActionMetadata } from "../types";
 
 export const GovActionModal = () => {
   const t = useTranslations("Modals");
@@ -83,7 +83,7 @@ export const GovActionModal = () => {
             <Box mt={3}>
               <CopyCard
                 title={t("govActionModal.govActionId")}
-                copyText={getShortenedGovActionId(govAction.tx_hash, 20)}
+                copyText={getShortenedGovActionId(govAction.tx_hash, 10)}
                 copyValue={govAction.tx_hash}
               />
             </Box>

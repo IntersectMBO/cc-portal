@@ -86,6 +86,10 @@ export abstract class CommonService {
     }
   }
 
+  /**
+   * The response data structure example is located on this link:
+   *  https://github.com/cardano-foundation/CIPs/blob/master/CIP-0108/examples/no-confidence.jsonld
+   **/
   async getGovActionProposalFromUrl(
     url: string,
   ): Promise<Partial<GovActionProposalDto>> {
@@ -95,14 +99,14 @@ export abstract class CommonService {
       const title = jsonData.body?.title;
       const abstract = jsonData.body?.abstract;
       const govActionProposal: Partial<GovActionProposalDto> = {
-        title: title?.['@value'],
-        abstract: abstract?.['@value'],
+        title: title,
+        abstract: abstract,
         govMetadataUrl: url,
       };
       return govActionProposal;
     } catch (e) {
-      this.logger.log(
-        `There has been an exception when fetching data for governance action proposal: ${e}`,
+      this.logger.warn(
+        `Error when fetching GAP metadata from url ${url}; Message: ${e}`,
       );
       return null;
     }

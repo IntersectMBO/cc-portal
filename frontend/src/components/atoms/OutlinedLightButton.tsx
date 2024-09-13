@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
-import { Button, SxProps, Theme } from "@mui/material";
 import { customPalette } from "@consts";
+import { Button, SxProps, Theme } from "@mui/material";
 import { ButtonProps } from "@mui/material/Button";
 
 interface Props extends ButtonProps {
@@ -23,11 +22,13 @@ export const OutlinedLightButton = ({
     color: customPalette.textBlack,
     fontWeight: 400,
     fontSize: 12,
-    whiteSpace: "nowrap",
+    lineHeight: "18px",
+    wordBreak: "break-word",
+
     "&": {
-      pointerEvents: nonInteractive ? "none" : "all",
-    },
-  };
+      pointerEvents: nonInteractive ? "none" : "all"
+    }
+  } as React.CSSProperties;
 
   return (
     <Button
@@ -36,7 +37,7 @@ export const OutlinedLightButton = ({
       onClick={nonInteractive ? undefined : onClick}
       sx={{
         ...defaultSxProps,
-        ...sx,
+        ...sx
       }}
       {...props}
     >

@@ -6,6 +6,7 @@ import {
 } from '../../../common/constants/bullmq.constants';
 import { Logger } from '@nestjs/common';
 import { VoteService } from '../../services/vote.service';
+import { VoteRequest } from 'src/governance/dto/vote.request';
 
 @Processor(QUEUE_NAME_DB_SYNC_VOTES)
 export class VoteProcessor extends WorkerHost {
@@ -17,19 +18,22 @@ export class VoteProcessor extends WorkerHost {
   async process(job: Job<any>): Promise<any> {
     switch (job.name) {
       case JOB_NAME_VOTE_SYNC: {
-        this.logger.debug('Data from db-sync for votes job');
-        return job.data;
+        try {
+          const voteRequests: VoteRequest[] = job.data;
+          const addresses = voteRequests.map(
+            (voteRequest) => voteRequest.hotAddress,
+          );
+          this.logger.debug(
+            `Processing votes for addresses:, ${JSON.stringify(addresses)}`,
+          );
+          await this.voteService.storeVoteData(voteRequests);
+        } catch (error) {
+          this.logger.error(
+            `Error processing job id: ${job.id}, name: ${job.name}. - Error: ${error}`,
+          );
+          throw error;
+        }
       }
     }
-  }
-
-  @OnWorkerEvent('completed')
-  onCompleted(job: Job) {
-    const { id, name, queueName, finishedOn, returnvalue } = job;
-    const completionTime = finishedOn ? new Date(finishedOn).toISOString() : '';
-    this.voteService.storeVoteData(returnvalue);
-    this.logger.log(
-      `Job id: ${id}, name: ${name} completed in queue ${queueName} on ${completionTime}.`,
-    );
   }
 }

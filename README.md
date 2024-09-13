@@ -2,43 +2,22 @@
 
 Welcome to the official repository for the Constitution Committee Portal.
 
+The primary purpose of the solution is to host the Cardano Constitution and allow anyone to get familiar with it and follow its evolution over time. It also serves as the single point of truth for the Cardano Community members to see how Constitutional Committee members voted on a specific Governance Action, with the inclusion of their rationale. For members of the Constitutional Committee, it serves as a portal to add reasoning to their votes and prepare it as an off-chain resource to be attached to on-chain governance actions.
+
 ## Navigation
 
-- [Constitution Committee Portal](#constitution-committee-portal)
-  - [Navigation](#navigation)
-  - [Introduction](#introduction)
-  - [Instances](#instances)
-    - [Mainnet (beta)](#mainnet-beta)
-    - [SanchoNet](#sanchonet)
-  - [Prerequisites](#prerequisites)
-  - [Tech stack:](#tech-stack)
-    - [Frontend](#frontend)
-    - [Backend](#backend)
-    - [Database](#database)
-    - [Caching service](#caching-service)
-    - [Worker service](#worker-service)
-    - [IPFS/IPNS Helia node](#ipfsipns-helia-node)
-  - [Getting started](#getting-started)
-  - [Usage](#usage)
-  - [Environment Variables](#environment-variables)
-  - [API Documentation](#api-documentation)
-  - [License](#license)
+- [Introduction](#introduction)
+- [Prerequisites](#prerequisites)
+- [Tech stack](#tech-stack)
+- [Getting started](#getting-started)
+- [Usage](#usage)
+- [Environment Variables](#environment-variables) 
+- [API Documentation](#api-documentation)
+- [License](#license)
 
 ## Introduction
 
-The primary purpose of the solution is to host the Cardano Constitution and allow anyone to get familiar with it and follow its evolution over time. It also serves as the single point of truth for the Cardano Community members to see how Constitutional Committee members voted on a specific Governance Action, with the inclusion of their rationale. For members of the Constitutional Committee, it serves as a portal to add reasoning to their votes and prepare it as an off-chain resource to be attached to on-chain governance actions.
-
 This document serves as a comprehensive guide for setting up the full stack of our application, which includes the Frontend, Backend, Database, Caching, Worker and IPFS components.
-
-## Instances
-
-### Mainnet (beta)
-
-- [constitution.gov.tools](https://constitution.gov.tools/)
-
-### SanchoNet
-
-- [sancho.constitution.gov.tools](https://sancho.constitution.gov.tools/)
 
 ## Prerequisites
 
@@ -243,6 +222,4 @@ Access the API documentation at: [http://localhost:1337/api-docs](http://localho
 
 ## License
 
-This project is licensed under the Apache 2.0.
-
-See [License file](./LICENSE).
+This project is licensed under the MIT License.

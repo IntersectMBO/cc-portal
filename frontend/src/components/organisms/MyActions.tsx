@@ -1,35 +1,37 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
-import { Box } from "@mui/material";
-import { useTranslations } from "next-intl";
-import { NotFound } from "./NotFound";
-import { VotesTable } from "./VotesTable";
-import { countSelectedFilters, isEmpty } from "@utils";
-import { DataActionsBar } from "../molecules";
+import { useModal } from "@/context";
+import { getUserVotes } from "@/lib/api";
+import { PaginationMeta, VotesTableI } from "@/lib/requests";
 import {
   LATEST_UPDATES_FILTERS,
   LATEST_UPDATES_SORTING,
   MY_ACTIONS_TABS,
-  PATHS,
+  PATHS
 } from "@consts";
-import { PageTitleTabs } from "./PageTitleTabs";
-import { useModal } from "@/context";
-import { PaginationMeta, VotesTableI } from "@/lib/requests";
-import { OpenPreviewReasoningModal } from "./types";
-import { getUserVotes } from "@/lib/api";
-import { usePagination, useManageQueryParams } from "@hooks";
-import { ShowMoreButton } from "../atoms";
+import { useManageQueryParams, usePagination } from "@hooks";
+import { Box } from "@mui/material";
+import { countSelectedFilters, isEmpty } from "@utils";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { ShowMoreButton } from "../atoms";
+import { DataActionsBar } from "../molecules";
+import { NotFound } from "./NotFound";
+import { PageTitleTabs } from "./PageTitleTabs";
+import { OpenPreviewReasoningModal } from "./types";
+import { VotesTable } from "./VotesTable";
 
 export const MyActions = ({
   actions,
   paginationMeta,
   error,
+  userId
 }: {
   actions: VotesTableI[];
   paginationMeta: PaginationMeta;
   error?: string;
+  userId?: string;
 }) => {
   const t = useTranslations("MyActions");
   const router = useRouter();
@@ -54,9 +56,9 @@ export const MyActions = ({
           submit_time: null, //todo, update BE response
           end_time: action.gov_action_proposal_end_time,
           vote_submit_time: action.vote_submit_time,
-          vote: action.value,
-        },
-      },
+          vote: action.value
+        }
+      }
     });
   };
 
@@ -68,6 +70,7 @@ export const MyActions = ({
         : null,
     vote: chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
     sortBy: chosenSorting || null,
+    userId
   };
 
   const { data, pagination, isLoading, loadMore } = usePagination(
@@ -94,10 +97,10 @@ export const MyActions = ({
         paddingBottom={4}
         display="flex"
         justifyContent={{ xxs: "flex-start", md: "space-between" }}
-        flexDirection={{ xxs: "column", md: "row" }}
+        flexDirection={{ xxs: "column", md: "column", lg: "row" }}
         alignItems={{ xxs: "left", md: "center" }}
       >
-        <Box>
+        <Box mb={{ xxs: 0, md: 2 }}>
           <PageTitleTabs
             tabs={MY_ACTIONS_TABS}
             onChange={(tab) => router.push(tab.value)}

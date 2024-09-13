@@ -19,6 +19,7 @@ env:
 jobs:
   check-build-deploy:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - workdir: ./frontend

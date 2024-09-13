@@ -13,12 +13,23 @@ export const UsersnapProvider = ({
   const [usersnapApi, setUsersnapApi] = useState<SpaceApi | null>(null);
 
   useEffect(() => {
-    loadSpace(process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY).then(
-      (api: SpaceApi) => {
-        api.init(initParams);
-        setUsersnapApi(api);
-      }
-    );
+    if (process.env.NEXT_PUBLIC_USERSNAP_SPACE_API_KEY) {
+      const hiddenProjects = process.env.NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS?.split("||") || []
+      loadSpace(process.env.NEXT_PUBLIC_USERSNAP_SPACE_API_KEY).then(
+        (api: SpaceApi) => {
+          api.init(initParams);
+          setUsersnapApi(api);
+          const hideHiddenProjects = () => {
+            hiddenProjects.forEach(p => {
+              api.hide(p);
+            });
+          };
+          hideHiddenProjects();
+          api.on("close", hideHiddenProjects)
+          api.on("submit", hideHiddenProjects)
+        }
+      );
+    }
   }, [initParams]);
 
   return (
