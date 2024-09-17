@@ -10,7 +10,7 @@ export const redisClientFactory: FactoryProvider<Redis> = {
       host: configService.getOrThrow('REDIS_HOST'),
       port: configService.getOrThrow('REDIS_PORT'),
       password: configService.getOrThrow('REDIS_PASSWORD'),
-      ...(configService.getOrThrow('REDIS_TLS') === 'true' && { tls: {} }),
+      ...(configService.get('REDIS_TLS') === 'false' ? {} : { tls: {} }),
     });
 
     redisInstance.on('error', (e) => {
