@@ -29,8 +29,12 @@ export class MagicRegisterStrategy extends PassportStrategy(
           destination,
           href,
         );
+        const localEnv = configService.get('ENVIRONMENT') === 'local';
+        if (localEnv) {
+          this.logger.log(`sending email to ${destination}, with link ${href}`);
+          return;
+        }
         await this.authFacade.sendEmail(emailDto);
-        this.logger.log(`sending email to ${destination}, with link ${href}`);
       },
       verify: async (payload, callback) =>
         callback(null, this.validate(payload)),
