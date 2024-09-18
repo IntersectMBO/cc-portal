@@ -79,13 +79,10 @@ export class GovernanceService {
 
   async searchGovActionProposals(
     query: PaginateQuery,
-    userId?: string,
   ): Promise<PaginatedDto<GovActionProposalDto>> {
-    const customQuery = this.returnGapQuery(userId);
-
     const result = await this.paginator.paginate(
       query,
-      customQuery,
+      this.govActionMetadataRepository,
       GOVERNANCE_ACTION_PROPOSAL_CONFIG,
     );
 
@@ -93,25 +90,6 @@ export class GovernanceService {
       GovActionProposal,
       GovActionProposalDto
     >().paginatedToDto(result, GovernanceMapper.govActionProposalToDto);
-  }
-
-  private returnGapQuery(
-    userId: string,
-  ): SelectQueryBuilder<GovActionProposal> {
-    return this.govActionMetadataRepository
-      .createQueryBuilder('governanceActionProposals')
-      .leftJoinAndSelect(
-        'governanceActionProposals.votes',
-        'vote',
-        'vote.userId = :userId',
-        { userId: userId },
-      )
-      .leftJoinAndSelect(
-        'governanceActionProposals.rationales',
-        'rationale',
-        'rationale.userId = :userId',
-        { userId: userId },
-      );
   }
 
   async addRationale(rationaleDto: RationaleDto): Promise<RationaleDto> {

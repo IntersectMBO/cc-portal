@@ -1,7 +1,10 @@
 import { IpfsContentDto } from 'src/ipfs/dto/ipfs-content.dto';
 import { GovernanceActionProposalResponse } from '../api/response/gov-action-proposal.response';
 import { VoteResponse } from '../api/response/vote.response';
-import { GovActionProposalDto } from '../dto/gov-action-proposal-dto';
+import {
+  GovActionProposalDto,
+  VoteStatusRationaleInfoDto as UserVoteStatusRationaleDto,
+} from '../dto/gov-action-proposal-dto';
 import { VoteDto } from '../dto/vote.dto';
 import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 import { Vote } from '../entities/vote.entity';
@@ -65,39 +68,45 @@ export class GovernanceMapper {
     govActionProposalDto.type = govActionProposal.govActionType;
     govActionProposalDto.status =
       GovActionProposalStatus[govActionProposal.status];
-    govActionProposalDto.voteStatus =
-      GovernanceMapper.returnVoteStatusForGovActionProposal(govActionProposal);
-    govActionProposalDto.hasRationale = !GovernanceMapper.emptyArray(
-      govActionProposal.rationales,
-    );
     govActionProposalDto.submitTime = govActionProposal.submitTime;
     govActionProposalDto.endTime = govActionProposal.endTime;
 
+    govActionProposalDto.votedBy = govActionProposal.votes?.map(
+      (vote) => vote.userId,
+    );
+    govActionProposalDto.rationaleBy = govActionProposal.rationales?.map(
+      (rationale) => rationale.userId,
+    );
     return govActionProposalDto;
   }
 
-  private static returnVoteStatusForGovActionProposal(
-    govActionProposal: GovActionProposal,
-  ): VoteStatus {
-    if (
-      GovernanceMapper.emptyArray(govActionProposal.votes) &&
-      GovernanceMapper.emptyArray(govActionProposal.rationales)
-    ) {
-      return VoteStatus.Unvoted;
-    } else if (
-      GovernanceMapper.emptyArray(govActionProposal.votes) &&
-      !GovernanceMapper.emptyArray(govActionProposal.rationales)
-    ) {
-      return VoteStatus.Pending;
+  static returnUserVoteRationaleInfo(
+    gapDto: GovActionProposalDto,
+    userId: string,
+  ): UserVoteStatusRationaleDto {
+    const userHasVote = GovernanceMapper.userHasVote(gapDto.votedBy, userId);
+    const userHasRationale = GovernanceMapper.userHasRationale(
+      gapDto.rationaleBy,
+      userId,
+    );
+    let voteStatus: VoteStatus;
+    if (!userHasVote && !userHasRationale) {
+      voteStatus = VoteStatus.Unvoted;
+    } else if (!userHasVote && userHasRationale) {
+      voteStatus = VoteStatus.Pending;
+    } else {
+      voteStatus = VoteStatus.Voted;
     }
-    return VoteStatus.Voted;
+
+    return new UserVoteStatusRationaleDto(voteStatus, userHasRationale);
   }
 
-  private static emptyArray(array: any[]): boolean {
-    if (Array.isArray(array) && array.length) {
-      return false;
-    }
-    return true;
+  private static userHasVote(votedBy: string[], userId: string): boolean {
+    return votedBy?.some((vote) => vote === userId);
+  }
+
+  static userHasRationale(rationaleBy: string[], userId: string): boolean {
+    return rationaleBy?.some((rationale) => rationale === userId);
   }
 
   static govActionProposalDtoToResponse(
