@@ -79,7 +79,7 @@ export default function UserProfileButton({
             "aria-labelledby": "basic-button",
           }}
           PaperProps={{
-            style: { backgroundColor: "transparent", boxShadow: "none" },
+            style: { boxShadow: "none" },
           }}
         >
           <Grid

@@ -22,9 +22,9 @@ export class AppController {
   }
 
   @UseInterceptors(FileInterceptor('file'))
-  @Post()
-  async addDoc(@UploadedFile() file: Express.Multer.File): Promise<IpfsDto> {
-    return await this.appService.addDoc(file);
+  @Post('file')
+  async addFile(@UploadedFile() file: Express.Multer.File): Promise<IpfsDto> {
+    return await this.appService.addFile(file);
   }
 
   @Post('json')
@@ -34,10 +34,15 @@ export class AppController {
 
   @Get(':cid')
   async getDoc(@Param('cid') cid: string): Promise<IpfsDto> {
-    const doc = await this.appService.getDoc(cid);
+    const doc = await this.appService.getDocByCid(cid);
     if (!doc) {
       throw new NotFoundException(`Document with cid: ${cid} not found`);
     }
     return doc
+  }
+
+  @Get('ipns/url')
+  async getIpnsUrl(): Promise<string> {
+    return await this.appService.getIpnsUrl();
   }
 }

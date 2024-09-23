@@ -25,12 +25,12 @@ import {
   isResponseErrorI,
 } from "@utils";
 import { useScreenDimension } from "@hooks";
-import { ReasoningContentsI, ReasoningResponseI } from "@/lib/requests";
+import { ReasoningResponseI } from "@/lib/requests";
 import { useSnackbar } from "@/context/snackbar";
 import { CopyPill } from "@/components/molecules";
 
 interface Reasoning extends Omit<ReasoningResponseI, "contents"> {
-  contents: ReasoningContentsI;
+  comment: string;
 }
 export const PreviewReasoningModal = () => {
   const t = useTranslations("Modals");
@@ -49,16 +49,22 @@ export const PreviewReasoningModal = () => {
     async function fetchData(id: string) {
       const response = await getReasoningData(id);
       if (isResponseErrorI(response)) {
-        if (response.statusCode !== 404) {
+        if (response.statusCode !== 404 && response.statusCode !== 401) {
           addErrorAlert(response.error);
           closeModal();
         }
       } else {
-        setReasoning({ ...response, contents: JSON.parse(response.contents) });
+        const contents = JSON.parse(response.contents);
+        setReasoning({ ...response, comment: contents.body.comment });
       }
     }
 
-    if (govAction?.id) {
+    if (govAction.reasoning_title && govAction.reasoning_comment) {
+      setReasoning({
+        comment: govAction.reasoning_comment,
+        title: govAction.reasoning_title,
+      });
+    } else if (govAction?.id) {
       fetchData(govAction.id);
     }
   }, [govAction?.id]);
@@ -111,9 +117,9 @@ export const PreviewReasoningModal = () => {
   return (
     <ModalWrapper dataTestId="preview-reasoning-modal" sx={{ py: 3, px: 0 }}>
       <ModalHeader sx={{ px: 3 }}>
-        <Box sx={{ mb: 2, height: "64px" }}>
+        <Box sx={{ mb: { xxs: 0, md: 2 }, height: "64px" }}>
           <img
-            width={64}
+            width={isMobile ? 34 : 64}
             data-testid="modal-icon"
             alt="icon"
             src={IMAGES.pastelAddMember}
@@ -152,7 +158,7 @@ export const PreviewReasoningModal = () => {
           >
             <Reasoning
               title={reasoning.title}
-              description={reasoning.contents.body.comment}
+              description={reasoning.comment}
               link={reasoning.url}
               hash={reasoning.blake2b}
               data-testid="asdf"

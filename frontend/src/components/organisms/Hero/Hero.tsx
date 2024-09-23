@@ -21,6 +21,7 @@ export const Hero = ({ children }: HeroProps) => {
       position="relative"
       px={{ xxs: 2, sm: 5, md: 10 }}
       sx={{ backgroundColor: customPalette.arcticWhite }}
+      minHeight={{ xxs: "90vh", md: "auto" }}
     >
       <Box alignItems="center" flex={1} height="min-content" zIndex={1}>
         <Typography
@@ -53,8 +54,7 @@ export const Hero = ({ children }: HeroProps) => {
         sx={{
           position: { xxs: "absolute", lg: "relative" },
           "& img": {
-            width: "100%",
-            maxHeight: "100%",
+            maxHeight: 600,
           },
         }}
       >

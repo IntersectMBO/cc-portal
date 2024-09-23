@@ -63,6 +63,7 @@ export const CompareConstitutionModal = () => {
     <ModalWrapper
       dataTestId="compare-constitution-modal"
       icon={IMAGES.pastelSignIn}
+      hideCloseButton={false}
       variant="wide"
       scrollable
       sx={{

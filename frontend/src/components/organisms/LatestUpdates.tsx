@@ -46,6 +46,8 @@ export const LatestUpdates = ({
           submit_time: null, //todo, update BE response
           end_time: action.gov_action_proposal_end_time,
           vote: action.value,
+          reasoning_title: action.reasoning_title,
+          reasoning_comment: action.reasoning_comment,
         },
       },
     });
@@ -111,7 +113,7 @@ export const LatestUpdates = ({
       </Box>
       {isEmpty(data) || error ? (
         <NotFound
-          height="55vh"
+          height="50vh"
           title="latestUpdates.title"
           description="latestUpdates.description"
         />

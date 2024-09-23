@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "374f247a-1ea9-4c6a-8a4f-5b5eaa052036",
-		"name": "CC Portal develop",
+		"_postman_id": "e842d76b-56e2-476d-b31d-bbeffd0853bc",
+		"name": "CC Portal develop Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20133713"
 	},
@@ -619,6 +619,32 @@
 									"key": "target",
 									"value": "B"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get IPNS URL",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/api/constitution/ipns/url",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"constitution",
+								"ipns",
+								"url"
 							]
 						}
 					},

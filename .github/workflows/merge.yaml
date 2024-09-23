@@ -1,0 +1,197 @@
+name: Check,Build,Deploy
+
+on:
+  push:
+    branches:
+      - develop
+      - staging
+      - beta
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+
+env:
+  ENVIRONMENT: ${{ (github.ref_name == 'main' && 'prod-cc-portal') || (github.ref_name == 'beta' && 'pre-prod-cc-portal') || (github.ref_name == 'staging' && 'qa-cc-portal') || (github.ref_name == 'develop' && 'dev-cc-portal') }}
+
+jobs:
+  check-build-deploy:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - workdir: ./frontend
+            name: frontend
+            dockerfile: ./frontend/Dockerfile
+            image: ghcr.io/${{ github.repository }}-frontend
+            qovery_container_name: frontend
+          - workdir: ./backend
+            name: backend
+            dockerfile: ./backend/Dockerfile
+            image: ghcr.io/${{ github.repository }}-backend
+            qovery_container_name: backend
+          - workdir: ./ipfs-service
+            name: ipfs
+            dockerfile: ./ipfs-service/Dockerfile
+            image: ghcr.io/${{ github.repository }}-ipfs
+            qovery_container_name: ipfs
+          - workdir: ./worker-service
+            name: worker
+            dockerfile: ./worker-service/Dockerfile
+            image: ghcr.io/${{ github.repository }}-worker
+            qovery_container_name: worker
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set TAG Environment Variable
+        id: set_tag
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "TAG=${{ github.sha }}" >> $GITHUB_ENV
+          else
+            echo "TAG=${{ github.ref_name }}-${{ github.sha }}" >> $GITHUB_ENV
+          fi
+
+      - name: Lint Dockerfile
+        id: hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          failure-threshold: error
+          format: json
+          dockerfile: ${{ matrix.dockerfile }}
+          # output-file: hadolint_output.json
+
+      - name: Save Hadolint output
+        id: save_hadolint_output
+        if: always()
+        run: cd ${{ matrix.workdir }} && echo "$HADOLINT_RESULTS" | jq '.' > hadolint_output.json
+
+      - name: Print Dockerfile lint output
+        run: |
+          cd ${{ matrix.workdir }}
+          echo "-----HADOLINT RESULT-----"
+          echo "Outcome: ${{ steps.hadolint.outcome }}"
+          echo "-----DETAILS--------"
+          cat hadolint_output.json
+          echo "--------------------"
+
+      - name: Code lint
+        id: code_lint
+        run: |
+          cd ${{ matrix.workdir }}
+          if [ ! -f lint.sh ]; then
+            echo "lint skipped" | tee code_lint_output.txt
+            exit 0
+          fi
+          set -o pipefail
+          sudo chmod +x lint.sh && ./lint.sh 2>&1 | tee code_lint_output.txt
+
+
+      - name: Unit tests
+        id: unit_tests
+        run: |
+          cd ${{ matrix.workdir }}
+          if [ ! -f unit-test.sh ]; then
+            echo "unit tests skipped" | tee code_lint_output.txt
+            exit 0
+          fi
+          set -o pipefail
+          sudo chmod +x unit-test.sh && ./unit-test.sh 2>&1 | tee unit_test_output.txt
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - id: image_lowercase
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ matrix.image }}
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.workdir }}
+          file: ${{ matrix.dockerfile }}
+          tags: ${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}
+          load: false
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          outputs: type=docker,dest=/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ secrets.DEV_NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY }}
+            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
+
+      - name: Scan Docker image with Dockle
+        id: dockle
+        run: |
+            wget -q https://github.com/goodwithtech/dockle/releases/download/v0.4.14/dockle_0.4.14_Linux-64bit.tar.gz
+            tar zxf dockle_0.4.14_Linux-64bit.tar.gz
+            sudo mv dockle /usr/local/bin
+
+            dockle --exit-code 1 --exit-level fatal --format json --input '/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar' --output ${{ matrix.workdir }}/dockle_scan_output.json
+            cat ${{ matrix.workdir }}/dockle_scan_output.json
+
+            echo "outcome=success" >> $GITHUB_OUTPUT
+
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Push Docker image to GHCR
+        run: |
+          docker load -i '/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar'
+          rm -rf '/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar'
+          docker push ${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}
+
+      - name: Add tag as a PR comment
+        uses: ubie-oss/comment-to-merged-pr-action@v0.3.3
+        id: comment-to-merged-pr
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          message: |-
+            This PR is in the tag: ${{ env.TAG }} , for ${{ matrix.name }} service
+
+
+      - name: Deploy with Qovery
+        if: github.ref == 'refs/heads/develop'
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+
+          echo "Deploying on $ENVIRONMENT"
+          echo "Organization - ${{ vars.ORGANIZATION }}"
+          echo "Project - ${{ vars.PROJECT }}"
+
+          # Download and install Qovery CLI
+          curl -s https://get.qovery.com | bash
+
+          qovery container list \
+          --organization ${{ vars.ORGANIZATION }} \
+          --project ${{ vars.PROJECT }} \
+          --environment $ENVIRONMENT
+
+          qovery container deploy \
+            --organization ${{ vars.ORGANIZATION }} \
+            --project ${{ vars.PROJECT }} \
+            --environment $ENVIRONMENT \
+            --container ${{ matrix.qovery_container_name }} \
+            --tag ${{ env.TAG }} \
+            --watch

@@ -1,18 +1,15 @@
 "use client";
-import React from "react";
 
-import { Card, TableDivider } from "@molecules";
-import { Box, Grid } from "@mui/material";
-import { UserAvatar, UserBasicInfo } from "@molecules";
+import { VotesTableI } from "@/lib/requests";
 import { Button, OutlinedLightButton, Typography, VotePill } from "@atoms";
-import { GovActionModalState } from "../types";
 import { customPalette, ICONS } from "@consts";
+import { useModal } from "@context";
+import { Card, TableDivider, UserAvatar, UserBasicInfo } from "@molecules";
+import { Box, Grid } from "@mui/material";
+import { getProposalTypeLabel, truncateText } from "@utils";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { truncateText } from "@utils";
-import { getProposalTypeLabel } from "@utils";
-import { useModal } from "@context";
-import { VotesTableI } from "@/lib/requests";
+import { GovActionModalState } from "../types";
 
 interface Props {
   votes: VotesTableI;
@@ -57,152 +54,178 @@ export const VotesTableRow = ({
       }}
     >
       <Card variant="default" data-testid="ga-card">
-        <Grid
-          container
-          flexDirection={{ xxs: "column", xl: "row" }}
-          justifyContent="space-between"
-          flexWrap="nowrap"
-          gap={{ xxs: 0, xl: 3 }}
-        >
-          <Grid item xxs={12} xl={11}>
-            <Grid
-              container
-              flexDirection={{ xxs: "column", lg: "row" }}
-              flexWrap={{ xxs: "wrap", lg: "nowrap" }}
-            >
-              <Grid item xxs="auto" lg={3} xl={2} mb={{ xxs: 2, lg: 0 }}>
-                <Grid container flexWrap="nowrap">
-                  <Grid item>
-                    <UserAvatar src={user_photo_url} />
-                  </Grid>
-                  <Grid item>
-                    <UserBasicInfo
-                      name={user_name}
-                      hotAddress={user_address}
-                      maxWidth={200}
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
-              <TableDivider />
-              <Grid
-                item
-                xxs="auto"
-                lg={3}
-                px={{ xxs: 0, lg: 1, xl: 3 }}
-                py={{ xxs: 1.5, lg: 0 }}
-              >
-                <Typography
-                  color={customPalette.neutralGray}
-                  sx={{ marginBottom: 0.5 }}
-                  variant="caption"
-                  fontWeight={500}
-                >
-                  {t("govAction")}
-                </Typography>
-
-                <OutlinedLightButton
-                  onClick={openGAModal}
-                  disabled={!gov_action_proposal_title}
-                  data-testid="ga-modal-button"
-                  startIcon={
-                    <Image
-                      alt="GA title"
-                      width={12}
-                      height={12}
-                      src={ICONS.informationCircle}
-                      style={{ opacity: gov_action_proposal_title ? 1 : 0.5 }}
-                    />
-                  }
-                >
-                  {gov_action_proposal_title
-                    ? truncateText(gov_action_proposal_title, 40)
-                    : t("notAvailable")}
-                </OutlinedLightButton>
-              </Grid>
-              <TableDivider />
-              <Grid
-                item
-                xxs="auto"
-                lg={2}
-                px={{ xxs: 0, lg: 1, xl: 3 }}
-                py={{ xxs: 1.5, lg: 0 }}
-              >
-                <Typography
-                  color={customPalette.neutralGray}
-                  sx={{ marginBottom: 0.5 }}
-                  variant="caption"
-                  fontWeight={500}
-                >
-                  {t("govActionCategoryShort")}
-                </Typography>
-                <OutlinedLightButton
-                  data-testid="ga-category-text"
-                  nonInteractive
-                >
-                  {getProposalTypeLabel(gov_action_proposal_type)}
-                </OutlinedLightButton>
-              </Grid>
-              <TableDivider />
-              <Grid
-                item
-                lg={2}
-                xl={2}
-                px={{ xxs: 0, lg: 1, xl: 3 }}
-                py={{ xxs: 1.5, lg: 0 }}
-              >
-                <Typography
-                  color={customPalette.neutralGray}
-                  sx={{ marginBottom: 0.5 }}
-                  variant="caption"
-                  fontWeight={500}
-                >
-                  {t("voted")}
-                </Typography>
-                <Box width={85}>
-                  <VotePill vote={value} />
-                </Box>
-              </Grid>
-              <TableDivider />
-              <Grid
-                item
-                lg={3}
-                xl={3}
-                px={{ xxs: 0, lg: 1, xl: 3 }}
-                py={{ xxs: 1.5, lg: 0 }}
-              >
-                <Typography
-                  color={customPalette.neutralGray}
-                  sx={{ marginBottom: 0.5 }}
-                  variant="caption"
-                  fontWeight={500}
-                >
-                  {t("rationale")}
-                </Typography>
-                <Typography variant="caption" data-testid="ga-rationale-text">
-                  {reasoning_comment
-                    ? truncateText(reasoning_comment, 100)
-                    : t("notAvailable")}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
+        <Grid container>
           <Grid
             item
             xxs={12}
-            xl={1}
-            textAlign={{ xxs: "right", xl: "center" }}
-            mt={{ xxs: 2, xl: 0 }}
+            display="flex"
+            rowGap={2}
+            flexDirection={{
+              xxs: "column",
+              md: "row",
+              lg: "row",
+              xl: "row",
+            }}
           >
-            <Button
-              disabled={disabled}
-              sx={{ whiteSpace: "nowrap" }}
-              onClick={() => onActionClick(votes)}
-              variant="outlined"
-              data-testid="ga-show-more-button"
+            <Grid
+              item
+              xxs="auto"
+              md={6}
+              lg={3}
+              xl={3}
+              m={{ md: "auto", lg: "auto" }}
             >
-              {actionTitle}
-            </Button>
+              <Grid container flexWrap="nowrap">
+                <Grid item>
+                  <UserAvatar src={user_photo_url} />
+                </Grid>
+                <Grid item>
+                  <UserBasicInfo
+                    name={user_name}
+                    hotAddress={user_address}
+                    maxWidth={200}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid
+              container
+              flexDirection={{ xxs: "column", md: "row", lg: "row" }}
+              flexWrap={{ xxs: "wrap", md: "wrap", lg: "wrap", xl: "nowrap" }}
+              rowSpacing={2}
+            >
+              <Grid item display="flex" md={12} lg={5} xl={3}>
+                <TableDivider />
+                <Grid
+                  item
+                  xxs={12}
+                  md={12}
+                  lg={12}
+                  xl={12}
+                  px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
+                  py={{ xxs: 1.5, md: 0 }}
+                >
+                  <Typography
+                    color={customPalette.neutralGray}
+                    sx={{ marginBottom: 0.5 }}
+                    variant="caption"
+                    fontWeight={500}
+                  >
+                    {t("govAction")}
+                  </Typography>
+
+                  <OutlinedLightButton
+                    onClick={openGAModal}
+                    disabled={!gov_action_proposal_title}
+                    data-testid="ga-modal-button"
+                    startIcon={
+                      <Image
+                        alt="GA title"
+                        width={12}
+                        height={12}
+                        src={ICONS.informationCircle}
+                        style={{ opacity: gov_action_proposal_title ? 1 : 0.5 }}
+                      />
+                    }
+                  >
+                    {gov_action_proposal_title
+                      ? gov_action_proposal_title
+                      : t("notAvailable")}
+                  </OutlinedLightButton>
+                </Grid>
+              </Grid>
+              <Grid item display="flex" md={12} lg={5} xl={3}>
+                <TableDivider />
+                <Grid
+                  item
+                  xxs={12}
+                  md={12}
+                  lg={12}
+                  xl={12}
+                  px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
+                  py={{ xxs: 1.5, md: 0 }}
+                >
+                  <Typography
+                    color={customPalette.neutralGray}
+                    sx={{ marginBottom: 0.5 }}
+                    variant="caption"
+                    fontWeight={500}
+                  >
+                    {t("govActionCategoryShort")}
+                  </Typography>
+                  <OutlinedLightButton
+                    nonInteractive
+                    data-testid="ga-category-text"
+                  >
+                    {getProposalTypeLabel(gov_action_proposal_type)}
+                  </OutlinedLightButton>
+                </Grid>
+              </Grid>
+              <Grid item display="flex" md={12} lg={5} xl={3}>
+                <TableDivider />
+                <Grid
+                  item
+                  xxs={12}
+                  md={12}
+                  lg={12}
+                  xl={12}
+                  px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
+                  py={{ xxs: 1.5, md: 0 }}
+                >
+                  <Typography
+                    color={customPalette.neutralGray}
+                    sx={{ marginBottom: 0.5 }}
+                    variant="caption"
+                    fontWeight={500}
+                  >
+                    {t("voted")}
+                  </Typography>
+                  <Box width={85}>
+                    <VotePill vote={value} />
+                  </Box>
+                </Grid>
+              </Grid>
+
+              <Grid item display="flex" md={12} lg={5} xl={3}>
+                <TableDivider />
+
+                <Grid
+                  item
+                  xxs={12}
+                  md={12}
+                  lg={12}
+                  xl={12}
+                  px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
+                  py={{ xxs: 1.5, md: 0 }}
+                >
+                  <Typography
+                    color={customPalette.neutralGray}
+                    sx={{ marginBottom: 0.5 }}
+                    variant="caption"
+                    fontWeight={500}
+                  >
+                    {t("rationale")}
+                  </Typography>
+                  <Typography variant="caption" data-testid="ga-rationale-text">
+                    {reasoning_comment
+                      ? truncateText(reasoning_comment, 100)
+                      : t("notAvailable")}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid item m={{ xxs: "auto" }} lg={2} xl={2}>
+                <Button
+                  disabled={disabled}
+                  sx={{ whiteSpace: "nowrap" }}
+                  onClick={() => onActionClick(votes)}
+                  variant="outlined"
+                  data-testid="ga-show-more-button"
+                >
+                  {actionTitle}
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Card>

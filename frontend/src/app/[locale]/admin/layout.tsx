@@ -10,7 +10,7 @@ async function AdminLayout({ params: { locale }, children }) {
   if (user && !isAnyAdminRole(user?.role)) {
     redirect(`/${locale}/${PATHS.home}`);
   }
-  return <main>{children}</main>;
+  return <>{children}</>;
 }
 
 export default AdminLayout;

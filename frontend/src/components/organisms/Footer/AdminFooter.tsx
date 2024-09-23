@@ -16,7 +16,6 @@ export const AdminFooter = () => {
       sx={{
         alignItems: "center",
         display: "flex",
-        position: "fixed",
         bottom: 0,
         width: "100%",
         backgroundColor: "white",

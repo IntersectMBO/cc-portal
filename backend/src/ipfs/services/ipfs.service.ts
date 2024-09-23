@@ -52,7 +52,8 @@ export class IpfsService {
     const formData = new FormData();
     formData.append('file', blob, file.originalname);
 
-    const apiLink = this.configService.getOrThrow('IPFS_SERVICE_URL') + '/ipfs';
+    const apiLink =
+      this.configService.getOrThrow('IPFS_SERVICE_URL') + '/ipfs/file';
     const requestConfig = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -175,5 +176,20 @@ export class IpfsService {
       url: url,
       contents: content,
     };
+  }
+
+  async getIpnsUrl(): Promise<string> {
+    const apiLink =
+      this.configService.getOrThrow('IPFS_SERVICE_URL') + '/ipfs/ipns/url';
+    try {
+      const response = await axios.get(apiLink);
+      const ipnsUrl = response.data;
+      return ipnsUrl;
+    } catch (error) {
+      this.logger.error(`Error when getting IPNS URL from IPFS: ${error}`);
+      throw new InternalServerErrorException(
+        `Error when getting IPNS URL from IPFS service`,
+      );
+    }
   }
 }

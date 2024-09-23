@@ -2,13 +2,17 @@
 
 import { SxProps, styled } from "@mui/material/styles";
 
-import { customPalette } from "@consts";
+import { customPalette, ICONS } from "@consts";
+import { callAll } from "@utils";
+import { useModal } from "@/context";
+import { useScreenDimension } from "@/lib/hooks";
 
 type ModalVariant = "modal" | "popup" | "wide";
 interface Props {
   variant?: ModalVariant;
   onClose?: () => void;
   children: React.ReactNode;
+  hideCloseButton?: boolean;
   dataTestId?: string;
   sx?: SxProps;
   icon?: string;
@@ -22,7 +26,11 @@ export const ModalWrapper = ({
   sx,
   icon,
   scrollable,
+  hideCloseButton = true,
+  onClose,
 }: Props) => {
+  const { closeModal } = useModal();
+  const { isMobile } = useScreenDimension();
   return (
     <BaseWrapper
       backgroundColor={customPalette.arcticWhite}
@@ -32,7 +40,20 @@ export const ModalWrapper = ({
       scrollable={scrollable}
     >
       {variant !== "popup" && icon && (
-        <img width={64} data-testid="modal-icon" alt="icon" src={icon} />
+        <img
+          width={isMobile ? 34 : 64}
+          data-testid="modal-icon"
+          alt="icon"
+          src={icon}
+        />
+      )}
+      {variant !== "popup" && !hideCloseButton && (
+        <CloseButton
+          data-testid="close-modal-button"
+          alt="close"
+          onClick={callAll(closeModal, onClose)}
+          src={ICONS.close}
+        />
       )}
 
       {children}
@@ -84,4 +105,11 @@ export const BaseWrapper = styled("div")<{
       `;
     }
   }}
+`;
+
+export const CloseButton = styled("img")`
+  cursor: pointer;
+  position: absolute;
+  top: 24px;
+  right: 24px;
 `;

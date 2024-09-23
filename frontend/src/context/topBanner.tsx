@@ -1,19 +1,19 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
 import { Alert, Snackbar, SnackbarOrigin } from "@mui/material";
 import {
   getItemFromSessionStorage,
   setItemToSessionStorage,
-  TOP_BANER,
+  TOP_BANER
 } from "@utils";
 import { useTranslations } from "next-intl";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface TopBannerContextI {}
 
 const defaultPosition = {
   vertical: "top",
-  horizontal: "center",
+  horizontal: "center"
 } as SnackbarOrigin;
 
 /**
@@ -31,8 +31,12 @@ export function TopBannerContextProvider({ children }) {
   const t = useTranslations("TopBanner");
 
   useEffect(() => {
-    let returningUser = getItemFromSessionStorage(TOP_BANER);
-    setDisplayPopUp(!returningUser);
+    if (process.env.NEXT_PUBLIC_IS_MAINNET === "true") {
+      setDisplayPopUp(false);
+    } else {
+      let returningUser = getItemFromSessionStorage(TOP_BANER);
+      setDisplayPopUp(!returningUser);
+    }
   }, [displayPopUp]);
 
   const handleClose = (
@@ -62,7 +66,7 @@ export function TopBannerContextProvider({ children }) {
           variant="filled"
           sx={{
             minWidth: { xxs: "100vw" },
-            backgroundColor: "#DEA029",
+            backgroundColor: "#DEA029"
           }}
         >
           {t("message")}
