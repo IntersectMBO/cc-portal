@@ -21,6 +21,7 @@ export const MultipleSelect = ({
   multiple,
   required,
   name,
+  dataTestId,
   ...rest
 }: MultipleSelectProps) => {
   return (
@@ -31,6 +32,7 @@ export const MultipleSelect = ({
           sx={{ mb: 0.5 }}
           variant="body2"
           {...labelStyles}
+          dataTestId={`${dataTestId}-text`}
         >
           {label}
         </Typography>
@@ -42,6 +44,7 @@ export const MultipleSelect = ({
         multiple={multiple}
         required={required}
         name={name}
+        dataTestId={dataTestId}
       />
       <FormHelpfulText
         helpfulText={helpfulText}

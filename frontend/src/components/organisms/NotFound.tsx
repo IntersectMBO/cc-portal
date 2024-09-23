@@ -35,10 +35,10 @@ export function NotFound({
         px={3}
         py={5}
       >
-        <Typography fontWeight={600} variant="title2">
+        <Typography fontWeight={600} variant="title2" data-testid="not-found-title-text">
           {t(title)}
         </Typography>
-        <Typography fontWeight={400} variant="body1">
+        <Typography fontWeight={400} variant="body1" data-testid="not-found-description-text">
           {t(description)}
         </Typography>
       </Box>

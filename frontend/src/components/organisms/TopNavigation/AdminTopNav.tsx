@@ -50,7 +50,10 @@ export const AdminTopNav = () => {
       width="100%"
     >
       <Hidden mdDown>
-        <Search setSearchText={setSearchText} />
+        <Search
+          setSearchText={setSearchText}
+          dataTestId="admin-top-nav-search-input"
+        />
       </Hidden>
       <Grid
         container
@@ -63,6 +66,7 @@ export const AdminTopNav = () => {
           variant="outlined"
           href={PATHS.constitution}
           component={Link}
+          data-testid="admin-top-nav-see-constitution-button"
         >
           {t("seeConstituton")}
         </MUIButton>
@@ -70,7 +74,12 @@ export const AdminTopNav = () => {
           permissions={userSession?.permissions}
           requiredPermission="manage_cc_members"
         >
-          <Button size="extraLarge" onClick={addMember} variant="outlined">
+          <Button
+            size="extraLarge"
+            onClick={addMember}
+            variant="outlined"
+            data-testid="admin-top-nav-add-member-button"
+          >
             {t("addNewMember")}
           </Button>
         </PermissionChecker>
@@ -78,7 +87,12 @@ export const AdminTopNav = () => {
           permissions={userSession?.permissions}
           requiredPermission="add_constitution_version"
         >
-          <Button size="extraLarge" type="submit" onClick={uploadConstitution}>
+          <Button
+            size="extraLarge"
+            type="submit"
+            onClick={uploadConstitution}
+            data-testid="admin-top-nav-upload-constitution-button"
+          >
             {t("uploadNewVersion")}
           </Button>
         </PermissionChecker>
@@ -94,7 +108,10 @@ export const AdminTopNav = () => {
       {!!userSession && (
         <>
           <Hidden mdUp>
-            <Search setSearchText={setSearchText} />
+            <Search
+              setSearchText={setSearchText}
+              dataTestId="admin-top-nav-search-input"
+            />
           </Hidden>
           <Hidden mdDown>{getNavItems()}</Hidden>
           <Hidden mdUp>

@@ -14,13 +14,18 @@ export const Reasoning = ({ title, description, link, hash }: ReasoningI) => {
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
-      <Typography variant="body2" color={customPalette.neutralGray}>
+      <Typography
+        data-testid="rationale-title-text"
+        variant="body2"
+        color={customPalette.neutralGray}
+      >
         {title}
       </Typography>
       <Typography
         variant="body2"
         fontWeight={400}
         color={customPalette.neutralGray}
+        data-testid="rationale-description-text"
       >
         {description}
       </Typography>

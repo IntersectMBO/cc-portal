@@ -15,7 +15,7 @@ export const ShowMoreButton = ({ isLoading, hasNextPage, callBack }: Props) => {
   ) : (
     hasNextPage && (
       <Box textAlign="center">
-        <Button variant="outlined" onClick={callBack}>
+        <Button variant="outlined" onClick={callBack} data-testid="page-content-show-more-button">
           {t("showMore")}
         </Button>
       </Box>

@@ -43,4 +43,5 @@ export interface MultipleSelectProps extends Omit<InputFieldProps, "onChange"> {
   items: SeletItem[];
   onChange: (...event: any[]) => void;
   multiple?: boolean;
+  dataTestId?: string;
 }
