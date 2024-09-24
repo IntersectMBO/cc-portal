@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useContext } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { InitOptions, loadSpace, SpaceApi } from "@usersnap/browser";
 
 export const UsersnapContext = React.createContext<SpaceApi | null>(null);
@@ -13,6 +13,7 @@ export const UsersnapProvider = ({
 }: UsersnapProviderProps) => {
   const [usersnapApi, setUsersnapApi] = useState<SpaceApi | null>(null);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_USERSNAP_SPACE_API_KEY) {
@@ -33,7 +34,7 @@ export const UsersnapProvider = ({
         }
       );
     }
-  }, [initParams, pathname]);
+  }, [initParams, pathname, searchParams]);
 
   return (
     <UsersnapContext.Provider value={usersnapApi}>
