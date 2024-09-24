@@ -35,7 +35,6 @@ export const SignInModal = () => {
   return (
     <ModalWrapper dataTestId="sign-in-modal" icon={IMAGES.pastelSignIn}>
       <ModalHeader>
-        // todo: check this with kiki
         <span data-testid="sign-in-modal-title-text">
           {t("signIn.headline")}
         </span>
