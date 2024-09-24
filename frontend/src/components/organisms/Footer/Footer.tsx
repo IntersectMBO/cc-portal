@@ -44,7 +44,11 @@ export const Footer = ({
     >
       <Hidden mdDown>
         <Grid item>
-          <Typography fontWeight={400} variant="caption">
+          <Typography
+            fontWeight={400}
+            variant="caption"
+            data-testid="footer-copy-right-text"
+          >
             {t("copyright")}
           </Typography>
         </Grid>
@@ -56,10 +60,18 @@ export const Footer = ({
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography fontWeight={400} variant="caption">
+          <Typography
+            fontWeight={400}
+            variant="caption"
+            data-testid="footer-privacy-policy-hyperlink"
+          >
             {t("privacyPolicy")}
           </Typography>
-          <Typography fontWeight={400} variant="caption">
+          <Typography
+            fontWeight={400}
+            variant="caption"
+            data-testid="footer-terms-of-service-hyperlink"
+          >
             {t("termsOfService")}
           </Typography>
 
@@ -73,13 +85,14 @@ export const Footer = ({
                 sx={{ cursor: "pointer", ml: 1 }}
                 fontWeight={500}
                 variant="caption"
+                data-testid="footer-sign-in-button"
                 onClick={() => {
                   openModal({
                     type: "signIn",
                   });
                 }}
               >
-                {t("signIn")}
+                <span data-testid="footer-sign-in-text">{t("signIn")}</span>
               </MUITypography>
             </Typography>
           )}
@@ -89,6 +102,7 @@ export const Footer = ({
             href={EXTERNAL_LINKS.guides}
             startIcon={<img src={ICONS.help} />}
             variant="text"
+            data-testid="footer-guides-button"
           >
             {t("guides")}
           </MUIButton>

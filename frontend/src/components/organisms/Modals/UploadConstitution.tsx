@@ -55,6 +55,7 @@ export const UploadConstitution = () => {
             size="large"
             errors={errors}
             accept=".md"
+            dataTestId="upload-constitution"
             {...register("file", {
               required: "Required",
               validate: {
@@ -65,7 +66,10 @@ export const UploadConstitution = () => {
           >
             {t("uploadConstitution.upload")}
           </ControlledField.Upload>
-          <ModalActions isSubmitting={isSubmitting} />
+          <ModalActions
+            isSubmitting={isSubmitting}
+            dataTestId="upload-constitution-modal"
+          />
         </ModalContents>
       </form>
     </ModalWrapper>

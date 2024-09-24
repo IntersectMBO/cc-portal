@@ -8,6 +8,7 @@ import { ButtonProps, FormErrorMessageProps } from "./types";
 interface UploadFileButtonProps extends Omit<ButtonProps, "onChange"> {
   onChange: (file: File) => void;
   accept?: string;
+  dataTestId?: string;
 }
 
 export const UploadFileButton = ({
@@ -17,6 +18,7 @@ export const UploadFileButton = ({
   errorStyles,
   name,
   accept = "image/jpeg",
+  dataTestId,
   ...buttonProps
 }: UploadFileButtonProps & FormErrorMessageProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -39,10 +41,12 @@ export const UploadFileButton = ({
         style={{ display: "none" }}
         type="file"
         onChange={fileChange}
+        data-testid={`${dataTestId}-input`}
       />
       <Button
         startIcon={<img src={ICONS.upload} />}
         component="span"
+        data-testid={`${dataTestId}-button`}
         {...buttonProps}
       >
         {children} {selectedFile && selectedFile.name}

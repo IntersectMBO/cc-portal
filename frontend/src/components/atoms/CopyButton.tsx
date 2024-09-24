@@ -11,9 +11,16 @@ interface Props {
   text: string;
   variant?: string;
   size?: number;
+  dataTestId?: string;
 }
 
-export const CopyButton = ({ isChecked, text, variant, size = 24 }: Props) => {
+export const CopyButton = ({
+  isChecked,
+  text,
+  variant,
+  size = 24,
+  dataTestId = "copy-button",
+}: Props) => {
   const { addSuccessAlert } = useSnackbar();
   const t = useTranslations("Snackbar");
 
@@ -31,7 +38,7 @@ export const CopyButton = ({ isChecked, text, variant, size = 24 }: Props) => {
 
   return (
     <img
-      data-testid="copy-button"
+      data-testid={dataTestId}
       alt="copy"
       onClick={(e) => {
         navigator.clipboard.writeText(text);

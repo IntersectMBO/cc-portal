@@ -108,7 +108,10 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                   <img src={IMAGES.bookOpen} />
                 </IconButton>
               </Box>
-              <Card sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}>
+              <Card
+                sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}
+                dataTestId="constitution-content"
+              >
                 <MDXRemote {...constitution} components={MDXComponents} />
               </Card>
             </Box>

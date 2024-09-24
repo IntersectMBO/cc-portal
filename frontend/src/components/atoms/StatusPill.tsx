@@ -41,6 +41,7 @@ export const StatusPill = ({
         fontSize={12}
         fontWeight={400}
         lineHeight="16px"
+        data-testid="user-status-text"
       >
         {status}
       </Typography>

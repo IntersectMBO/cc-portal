@@ -38,6 +38,7 @@ export const AdminFooter = () => {
         }
         variant="outlined"
         size="medium"
+        data-testid="admin-signout-button"
       >
         {t("signOut")}
       </Button>

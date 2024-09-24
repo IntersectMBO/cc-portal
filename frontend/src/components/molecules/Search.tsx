@@ -9,9 +9,14 @@ import { useEffect, useState } from "react";
 interface Props {
   setSearchText: (value) => void;
   delay?: number;
+  dataTestId?: string;
 }
 
-export const Search = ({ setSearchText, delay = 500 }: Props) => {
+export const Search = ({
+  setSearchText,
+  delay = 500,
+  dataTestId = "search-input",
+}: Props) => {
   const [searchInput, setSearchInput] = useState("");
   const debouncedSearchInput = useDebounce(searchInput, delay);
 
@@ -21,7 +26,7 @@ export const Search = ({ setSearchText, delay = 500 }: Props) => {
 
   return (
     <InputBase
-      inputProps={{ "data-testid": "search-input" }}
+      inputProps={{ "data-testid": dataTestId }}
       onChange={(e) => setSearchInput(e.target.value)}
       placeholder="Search..."
       value={searchInput}

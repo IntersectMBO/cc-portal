@@ -24,6 +24,7 @@ export function HeroActions({ role }: HeroActionsProps) {
                   type: "signIn",
                 });
               }}
+              data-testid="admin-hero-sign-in-button"
             >
               {t("hero.signIn")}
             </Button>
@@ -34,6 +35,7 @@ export function HeroActions({ role }: HeroActionsProps) {
                 variant="outlined"
                 size="large"
                 startIcon={<img src={IMAGES.bookOpen} />}
+                data-testid="admin-hero-const-comitee-portal-button"
               >
                 {t("hero.constitutionalCommitteePortal")}
               </Button>
@@ -43,7 +45,11 @@ export function HeroActions({ role }: HeroActionsProps) {
       ) : (
         <Grid item>
           <Link href={PATHS.constitution}>
-            <Button size="large" startIcon={<img src={ICONS.rocketLaunch} />}>
+            <Button
+              size="large"
+              data-testid="hero-see-constitution-button"
+              startIcon={<img src={ICONS.rocketLaunch} />}
+            >
               {t("hero.seeConstitution")}
             </Button>
           </Link>
