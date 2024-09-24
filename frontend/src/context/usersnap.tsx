@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState, useContext } from "react";
 import { InitOptions, loadSpace, SpaceApi } from "@usersnap/browser";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export const UsersnapContext = React.createContext<SpaceApi | null>(null);
 
@@ -13,14 +13,17 @@ export const UsersnapProvider = ({
 }: UsersnapProviderProps) => {
   const [usersnapApi, setUsersnapApi] = useState<SpaceApi | null>(null);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     let api: SpaceApi | null = null;
 
     const hideHiddenProjects = () => {
       if (api) {
-        const hiddenProjects = process.env.NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS?.split("||") || [];
-        hiddenProjects.forEach(p => {
+        const hiddenProjects =
+          process.env.NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS?.split("||") ||
+          [];
+        hiddenProjects.forEach((p) => {
           api.hide(p);
         });
       }
@@ -35,6 +38,7 @@ export const UsersnapProvider = ({
 
           api.on("submit", hideHiddenProjects);
           api.on("open", hideHiddenProjects);
+          api.on("close", hideHiddenProjects);
           hideHiddenProjects();
         }
       );
@@ -44,9 +48,10 @@ export const UsersnapProvider = ({
       if (api) {
         api.off("submit", hideHiddenProjects);
         api.off("open", hideHiddenProjects);
+        api.off("close", hideHiddenProjects);
       }
     };
-  }, [initParams, pathname]);
+  }, [initParams, pathname, searchParams]);
 
   return (
     <UsersnapContext.Provider value={usersnapApi}>
