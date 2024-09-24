@@ -5,6 +5,8 @@ import { InitOptions, loadSpace, SpaceApi } from "@usersnap/browser";
 
 export const UsersnapContext = React.createContext<SpaceApi | null>(null);
 
+// This context is used to integrate the Usersnap widget,
+// Usersnap is a tool for collecting user feedback and bug reports directly from the application
 export const UsersnapProvider = ({
   initParams,
   children,
@@ -31,7 +33,7 @@ export const UsersnapProvider = ({
         }
       );
     }
-  }, [initParams, pathname]); // Run effect on pathname change
+  }, [initParams, pathname]);
 
   return (
     <UsersnapContext.Provider value={usersnapApi}>
