@@ -5,10 +5,12 @@ export const ChipList = ({
   list,
   showCloseButton,
   onClick,
+  dataTestId,
 }: {
   list: string[];
   showCloseButton?: boolean;
   onClick?: () => void;
+  dataTestId?: string;
 }) => (
   <Grid container gap={1}>
     {list.map((item) => (
@@ -17,6 +19,7 @@ export const ChipList = ({
           onClick={onClick}
           showCloseButton={showCloseButton}
           label={item}
+          dataTestId={dataTestId}
         />
       </Grid>
     ))}

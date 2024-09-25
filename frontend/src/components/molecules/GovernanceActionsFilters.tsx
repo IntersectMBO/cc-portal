@@ -104,7 +104,7 @@ export const GovernanceActionsFilters = ({
                     />
                   }
                   label={
-                    <Typography fontSize={14} fontWeight={500}>
+                    <Typography fontSize={14} fontWeight={500} data-testid={`${item.label.replace(/ /g, "")}-checkbox-text`}>
                       {item.label}
                     </Typography>
                   }

@@ -7,6 +7,7 @@ export const Button = ({
   size = "large",
   variant = "contained",
   sx,
+  dataTestId,
   ...props
 }: ButtonProps) => {
   const buttonHeight = {
@@ -24,6 +25,7 @@ export const Button = ({
         ...sx,
       }}
       variant={variant}
+      data-testid={dataTestId}
       {...props}
     >
       {props.children}

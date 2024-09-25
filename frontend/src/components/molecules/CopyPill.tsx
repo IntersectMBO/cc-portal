@@ -23,7 +23,9 @@ export const CopyPill = ({ copyText, copyValue, iconSize = 14, sx }: Props) => {
       sx={sx}
     >
       <CopyButton size={iconSize} text={copyValue ? copyValue : copyText} />
-      <Typography variant="caption">{copyText}</Typography>
+      <Typography dataTestId="copy-text" variant="caption">
+        {copyText}
+      </Typography>
     </Box>
   );
 };

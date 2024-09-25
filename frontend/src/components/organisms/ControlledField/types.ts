@@ -26,6 +26,7 @@ interface ControlledGenericProps {
   errors: FieldErrors<any>;
   name: Path<any>;
   rules?: Omit<RegisterOptions, "valueAsNumber" | "valueAsDate" | "setValueAs">;
+  dataTestId?: string;
 }
 
 export type ControlledCheckboxProps = Omit<

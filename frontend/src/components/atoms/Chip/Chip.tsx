@@ -6,11 +6,13 @@ interface ChipProps {
   label: string;
   showCloseButton?: boolean;
   onClick?: () => void;
+  dataTestId?: string;
 }
 export const Chip = ({
   label,
   showCloseButton = false,
   onClick,
+  dataTestId,
 }: ChipProps) => (
   <Grid
     container
@@ -20,11 +22,15 @@ export const Chip = ({
     bgcolor={customPalette.lightBlue}
     borderRadius={100}
   >
-    <Typography data-testid={`TODO-type`} variant="caption">
+    <Typography data-testid={`${dataTestId}-text`} variant="caption">
       {label}
     </Typography>
     {showCloseButton && (
-      <IconButton onClick={onClick} sx={{ padding: 0 }}>
+      <IconButton
+        onClick={onClick}
+        sx={{ padding: 0 }}
+        data-testid={`${dataTestId}--button`}
+      >
         <img src={ICONS.close} />
       </IconButton>
     )}

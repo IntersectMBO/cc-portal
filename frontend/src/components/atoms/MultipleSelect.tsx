@@ -40,6 +40,7 @@ export function MultipleSelect({
   multiple = true,
   required,
   name,
+  dataTestId,
 }: MultipleSelectProps) {
   const theme = useTheme();
   const [selectedValue, setSelectedValue] = React.useState<string[]>([]);
@@ -70,7 +71,14 @@ export function MultipleSelect({
         (item) => item.value === selectedValue[0]
       );
       if (selectedOption) {
-        return <Typography variant="body2">{selectedOption.label}</Typography>;
+        return (
+          <Typography
+            dataTestId={`${dataTestId}-item-selected`}
+            variant="body2"
+          >
+            {selectedOption.label}
+          </Typography>
+        );
       }
     }
     return (
@@ -101,6 +109,7 @@ export function MultipleSelect({
         renderValue={renderValue}
         MenuProps={MenuProps}
         required={required}
+        data-testid={`${dataTestId}--dropdown`}
       >
         <MenuItem disabled value="">
           {placeholder}
@@ -112,9 +121,17 @@ export function MultipleSelect({
             style={getStyles(item.value, selectedValue, theme)}
           >
             {multiple && (
-              <Checkbox checked={selectedValue.indexOf(item.value) > -1} />
+              <Checkbox
+                data-testid={`${dataTestId}--checkbox_${item.value}`}
+                checked={selectedValue.indexOf(item.value) > -1}
+              />
             )}
-            <Typography variant="body2">{item.label}</Typography>
+            <Typography
+              dataTestId={`${dataTestId}-text_${item.value}`}
+              variant="body2"
+            >
+              {item.label}
+            </Typography>
           </MenuItem>
         ))}
       </Select>

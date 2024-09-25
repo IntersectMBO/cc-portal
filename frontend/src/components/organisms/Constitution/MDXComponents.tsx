@@ -157,15 +157,18 @@ export const NavDrawerDesktop = ({
   isOpen,
   left = 0,
   top = { xxs: 75, md: 90 },
+  dataTestId,
 }: {
   children: ReactNode;
   onClick: () => void;
   isOpen: boolean;
   left: number;
   top: { xxs: number; md: number };
+  dataTestId?: string;
 }) => {
   return (
     <Grid
+      data-testid={dataTestId}
       display={{ xxs: isOpen ? "block" : "none", md: "block" }}
       position="fixed"
       left={left}
@@ -185,6 +188,7 @@ export const NavDrawerDesktop = ({
         container
         justifyContent={isOpen ? "flex-end" : "center"}
         pr={isOpen ? 3 : 0}
+        data-testid="nav-drawer-toggle-button"
       >
         <img
           src={isOpen ? ICONS.arrowLeft : ICONS.arrowRight}
@@ -199,6 +203,7 @@ export const NavDrawerDesktop = ({
           scrollbarWidth: "thin",
           scrollbarColor: "#888 #f1f1f1",
         }}
+        data-testid="nav-drawer-collapse-container"
         in={isOpen}
         timeout="auto"
         easing="enter"
@@ -221,7 +226,7 @@ export const NavCard = ({
   isActiveLabel,
 }) => (
   <Box mb={2}>
-    <Card sx={{ px: 3, py: 2 }}>
+    <Card sx={{ px: 3, py: 2 }} data-testid={`${title.replace(" ", "-")}-card`}>
       <Grid
         container
         justifyContent="space-between"
@@ -292,6 +297,7 @@ export const NavCard = ({
               size="medium"
               onClick={onClick}
               variant="outlined"
+              data-testid="compare-button"
             >
               {buttonLabel}
             </Button>
