@@ -1,14 +1,14 @@
 "use client";
 import {
+  customPalette,
   cyan,
   errorRed,
   fadedPurple,
   orange,
+  poppins,
   primaryBlue,
   progressYellow,
-  customPalette,
-  successGreen,
-  poppins,
+  successGreen
 } from "@/constants";
 import { createTheme } from "@mui/material/styles";
 
@@ -53,18 +53,18 @@ export const theme = createTheme({
       xxs: 0,
       xs: 375,
       sm: 425,
-      md: 768,
-      lg: 1024,
-      xl: 1440,
-    },
+      md: 769,
+      lg: 1025,
+      xl: 1441
+    }
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          margin: 0,
-        },
-      },
+          margin: 0
+        }
+      }
     },
     MuiInputBase: {
       styleOverrides: {
@@ -74,90 +74,90 @@ export const theme = createTheme({
           border: 1,
           borderRadius: 50,
           padding: "8px 16px",
-          width: "100%",
-        },
-      },
+          width: "100%"
+        }
+      }
     },
     MuiButton: {
       styleOverrides: {
         root: {
           borderRadius: 50,
-          textTransform: "none",
+          textTransform: "none"
         },
         outlined: ({ theme }) => ({
-          borderColor: theme.palette.lightBlue,
-        }),
-      },
+          borderColor: theme.palette.lightBlue
+        })
+      }
     },
     MuiChip: {
       variants: [
         {
           props: { color: "default", variant: "filled" },
           style: {
-            backgroundColor: fadedPurple.c100,
-          },
+            backgroundColor: fadedPurple.c100
+          }
         },
         {
           props: { color: "success", variant: "filled" },
           style: {
             backgroundColor: successGreen.c200,
-            color: successGreen.c700,
-          },
+            color: successGreen.c700
+          }
         },
         {
           props: { color: "error", variant: "filled" },
           style: {
             backgroundColor: errorRed.c100,
-            color: errorRed.c500,
-          },
+            color: errorRed.c500
+          }
         },
         {
           props: { color: "warning", variant: "filled" },
           style: {
             backgroundColor: progressYellow.c200,
-            color: orange.c700,
-          },
+            color: orange.c700
+          }
         },
         {
           props: { color: "info", variant: "filled" },
           style: {
             backgroundColor: cyan.c100,
-            color: cyan.c500,
-          },
-        },
+            color: cyan.c500
+          }
+        }
       ],
       styleOverrides: {
         root: {
           fontSize: "0.875rem",
           fontWeight: 500,
-          height: 28,
+          height: 28
         },
         filledPrimary: {
           backgroundColor: primaryBlue.c100,
-          color: primaryBlue.c500,
+          color: primaryBlue.c500
         },
         filledSecondary: {
           backgroundColor: orange.c100,
-          color: orange.c600,
-        },
-      },
+          color: orange.c600
+        }
+      }
     },
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
-        },
-      },
-    },
+          borderRadius: 12
+        }
+      }
+    }
   },
   typography: {
     fontFamily: poppins.style.fontFamily,
     allVariants: {
       color: "#242232",
-      fontFamily: poppins.style.fontFamily,
-    },
+      fontFamily: poppins.style.fontFamily
+    }
   },
-  palette: customPalette,
+  palette: customPalette
 });
 
 theme.shadows[1] =
