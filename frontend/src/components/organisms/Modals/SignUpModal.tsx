@@ -143,6 +143,7 @@ export const SignUpModal = () => {
             errors={errors}
             control={control}
             accept="image/png, image/jpg, image/jpeg"
+            dataTestId="upload-profile-photo-button"
             {...register("file", {
               validate: {
                 fileType: (file) =>
@@ -169,6 +170,7 @@ export const SignUpModal = () => {
               <ModalActions isSubmitting={isSubmitting} />
             ) : (
               <Button
+                data-testid="sign-up-modal-button"
                 startIcon={
                   isSubmitting && (
                     <CircularProgress color="inherit" size="14px" />

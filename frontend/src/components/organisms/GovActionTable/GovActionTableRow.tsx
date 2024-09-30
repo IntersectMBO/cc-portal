@@ -5,7 +5,7 @@ import {
   Button,
   GovActionStatusPill,
   OutlinedLightButton,
-  Typography
+  Typography,
 } from "@atoms";
 import { customPalette, ICONS, PATHS } from "@consts";
 import { useModal } from "@context";
@@ -19,7 +19,7 @@ import {
   GovActionModalState,
   OpenAddReasoningModalState,
   OpenPreviewReasoningModal,
-  OpenReasoningLinkModalState
+  OpenReasoningLinkModalState,
 } from "../types";
 
 interface Props {
@@ -47,8 +47,8 @@ export const GovActionTableRow = ({ govActions }: Props) => {
     govActionModal.openModal({
       type: "govActionModal",
       state: {
-        id
-      }
+        id,
+      },
     });
   };
   const openUpdateReasoningCallback = () => {
@@ -61,8 +61,8 @@ export const GovActionTableRow = ({ govActions }: Props) => {
       state: {
         govAction: govActions,
         actionTitle: t("updateRationale"),
-        onActionClick: openUpdateReasoningCallback
-      }
+        onActionClick: openUpdateReasoningCallback,
+      },
     });
   };
 
@@ -71,8 +71,8 @@ export const GovActionTableRow = ({ govActions }: Props) => {
       type: "reasoningLinkModal",
       state: {
         hash,
-        link
-      }
+        link,
+      },
     });
   };
 
@@ -88,8 +88,8 @@ export const GovActionTableRow = ({ govActions }: Props) => {
       state: {
         id,
         callback: (response: ReasoningResponseI) =>
-          addReasoningCallback(response)
-      }
+          addReasoningCallback(response),
+      },
     });
   };
 
@@ -98,7 +98,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
       item
       mb={3}
       sx={{
-        opacity: isDisabled ? 0.5 : 1
+        opacity: isDisabled ? 0.5 : 1,
       }}
     >
       <Card variant="default">
@@ -112,7 +112,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
               xxs: "column",
               md: "row",
               lg: "row",
-              xl: "row"
+              xl: "row",
             }}
           >
             <Grid
@@ -151,12 +151,15 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                         height={12}
                         src={ICONS.informationCircle}
                         style={{
-                          opacity: title ? 1 : 0.5
+                          opacity: title ? 1 : 0.5,
                         }}
                       />
                     }
+                    data-testid="ga-table-title-modal"
                   >
-                    {title ? title : t("notAvailable")}
+                    <span data-testid="ga-table-title-text">
+                      {title ? title : t("notAvailable")}
+                    </span>
                   </OutlinedLightButton>
                 </Grid>
               </Grid>
@@ -186,7 +189,10 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                   >
                     {t("govActionCategoryShort")}
                   </Typography>
-                  <OutlinedLightButton nonInteractive>
+                  <OutlinedLightButton
+                    nonInteractive
+                    data-testid="ga-table-category-text"
+                  >
                     {getProposalTypeLabel(type)}
                   </OutlinedLightButton>
                 </Grid>
@@ -234,7 +240,10 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                   >
                     {t("gaStatus")}
                   </Typography>
-                  <OutlinedLightButton nonInteractive>
+                  <OutlinedLightButton
+                    nonInteractive
+                    data-testid="ga-table-status-text"
+                  >
                     {status}
                   </OutlinedLightButton>
                 </Grid>
@@ -276,6 +285,7 @@ export const GovActionTableRow = ({ govActions }: Props) => {
                       : openUpdateReasoningModal()
                   }
                   variant="outlined"
+                  data-testid="ga-table-rationale-button"
                 >
                   {canAddReasoning ? t("addRationale") : t("updateRationale")}
                 </Button>

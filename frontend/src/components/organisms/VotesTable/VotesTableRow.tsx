@@ -22,7 +22,7 @@ export const VotesTableRow = ({
   votes,
   disabled,
   actionTitle,
-  onActionClick
+  onActionClick,
 }: Props) => {
   const t = useTranslations("LatestUpdates");
   const { openModal } = useModal<GovActionModalState>();
@@ -34,14 +34,14 @@ export const VotesTableRow = ({
     reasoning_comment,
     gov_action_proposal_id,
     gov_action_proposal_title,
-    gov_action_proposal_type
+    gov_action_proposal_type,
   } = votes;
   const openGAModal = () => {
     openModal({
       type: "govActionModal",
       state: {
-        id: gov_action_proposal_id
-      }
+        id: gov_action_proposal_id,
+      },
     });
   };
 
@@ -50,10 +50,10 @@ export const VotesTableRow = ({
       item
       mb={3}
       sx={{
-        opacity: disabled && 0.5
+        opacity: disabled && 0.5,
       }}
     >
-      <Card variant="default">
+      <Card variant="default" data-testid="ga-card">
         <Grid container>
           <Grid
             item
@@ -64,7 +64,7 @@ export const VotesTableRow = ({
               xxs: "column",
               md: "row",
               lg: "row",
-              xl: "row"
+              xl: "row",
             }}
           >
             <Grid
@@ -118,6 +118,7 @@ export const VotesTableRow = ({
                   <OutlinedLightButton
                     onClick={openGAModal}
                     disabled={!gov_action_proposal_title}
+                    data-testid="ga-modal-button"
                     startIcon={
                       <Image
                         alt="GA title"
@@ -153,7 +154,10 @@ export const VotesTableRow = ({
                   >
                     {t("govActionCategoryShort")}
                   </Typography>
-                  <OutlinedLightButton nonInteractive>
+                  <OutlinedLightButton
+                    nonInteractive
+                    data-testid="ga-category-text"
+                  >
                     {getProposalTypeLabel(gov_action_proposal_type)}
                   </OutlinedLightButton>
                 </Grid>
@@ -203,7 +207,7 @@ export const VotesTableRow = ({
                   >
                     {t("rationale")}
                   </Typography>
-                  <Typography variant="caption">
+                  <Typography variant="caption" data-testid="ga-rationale-text">
                     {reasoning_comment
                       ? truncateText(reasoning_comment, 100)
                       : t("notAvailable")}
@@ -216,6 +220,7 @@ export const VotesTableRow = ({
                   sx={{ whiteSpace: "nowrap" }}
                   onClick={() => onActionClick(votes)}
                   variant="outlined"
+                  data-testid="ga-show-more-button"
                 >
                   {actionTitle}
                 </Button>

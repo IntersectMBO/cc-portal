@@ -25,8 +25,12 @@ export class MagicLoginStrategy extends PassportStrategy(
       callbackUrl: configService.getOrThrow('FE_LOGIN_CALLBACK_URL'),
       sendMagicLink: async (destination: string, href: string) => {
         const emailDto: EmailDto = EmailMapper.loginEmail(destination, href);
+        const localEnv = configService.get('ENVIRONMENT') === 'local';
+        if (localEnv) {
+          this.logger.log(`sending email to ${destination}, with link ${href}`);
+          return;
+        }
         await this.authFacade.sendEmail(emailDto);
-        this.logger.log(`sending email to ${destination}, with link ${href}`);
       },
       verify: async (payload, callback) =>
         callback(null, this.validate(payload)),

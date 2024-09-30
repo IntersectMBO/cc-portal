@@ -139,7 +139,14 @@ export class GovernanceFacade {
     userId: string,
   ): Promise<PaginatedResponse<GovernanceActionProposalSearchResponse>> {
     const gapPaginatedDto =
-      await this.governanceService.searchGovActionProposals(query, userId);
+      await this.governanceService.searchGovActionProposals(query);
+
+    gapPaginatedDto.items.forEach((gap) => {
+      const userVotesRationaleInfo =
+        GovernanceMapper.returnUserVoteRationaleInfo(gap, userId);
+      gap.voteStatus = userVotesRationaleInfo.voteStatus;
+      gap.hasRationale = userVotesRationaleInfo.hasRationale;
+    });
 
     return new PaginationDtoMapper<
       GovActionProposalDto,

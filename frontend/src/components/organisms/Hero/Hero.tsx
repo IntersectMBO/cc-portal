@@ -24,7 +24,11 @@ export const Hero = ({ children }: HeroProps) => {
       minHeight={{ xxs: "90vh", md: "auto" }}
     >
       <Box alignItems="center" flex={1} height="min-content" zIndex={1}>
-        <Typography variant="headline2" sx={{ whiteSpace: "pre-line" }}>
+        <Typography
+          variant="headline2"
+          sx={{ whiteSpace: "pre-line" }}
+          data-testid="hero-section-title-text"
+        >
           {t("hero.headline")}
         </Typography>
         <Typography
@@ -33,7 +37,8 @@ export const Hero = ({ children }: HeroProps) => {
             maxWidth: 630,
             my: { xxs: 2, md: 5 },
             whiteSpace: "pre-line",
-          }}
+            }}
+          data-testid="hero-section-description-text"
         >
           {t("hero.description")}
         </Typography>

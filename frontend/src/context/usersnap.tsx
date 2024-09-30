@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState, useContext } from "react";
 import { InitOptions, loadSpace, SpaceApi } from "@usersnap/browser";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export const UsersnapContext = React.createContext<SpaceApi | null>(null);
 
@@ -11,26 +12,46 @@ export const UsersnapProvider = ({
   children,
 }: UsersnapProviderProps) => {
   const [usersnapApi, setUsersnapApi] = useState<SpaceApi | null>(null);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
+    let api: SpaceApi | null = null;
+
+    const hideHiddenProjects = () => {
+      if (api) {
+        const hiddenProjects =
+          process.env.NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS?.split("||") ||
+          [];
+        hiddenProjects.forEach((p) => {
+          api.hide(p);
+        });
+      }
+    };
+
     if (process.env.NEXT_PUBLIC_USERSNAP_SPACE_API_KEY) {
-      const hiddenProjects = process.env.NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS?.split("||") || []
       loadSpace(process.env.NEXT_PUBLIC_USERSNAP_SPACE_API_KEY).then(
-        (api: SpaceApi) => {
+        (loadedApi: SpaceApi) => {
+          api = loadedApi;
           api.init(initParams);
           setUsersnapApi(api);
-          const hideHiddenProjects = () => {
-            hiddenProjects.forEach(p => {
-              api.hide(p);
-            });
-          };
+
+          api.on("submit", hideHiddenProjects);
+          api.on("open", hideHiddenProjects);
+          api.on("close", hideHiddenProjects);
           hideHiddenProjects();
-          api.on("close", hideHiddenProjects)
-          api.on("submit", hideHiddenProjects)
         }
       );
     }
-  }, [initParams]);
+
+    return () => {
+      if (api) {
+        api.off("submit", hideHiddenProjects);
+        api.off("open", hideHiddenProjects);
+        api.off("close", hideHiddenProjects);
+      }
+    };
+  }, [initParams, pathname, searchParams]);
 
   return (
     <UsersnapContext.Provider value={usersnapApi}>

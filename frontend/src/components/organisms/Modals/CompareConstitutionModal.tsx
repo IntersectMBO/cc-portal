@@ -112,7 +112,11 @@ export const CompareConstitutionModal = () => {
         ) : (
           <Loading />
         )}
-        <Button variant="outlined" onClick={closeModal}>
+        <Button
+          variant="outlined"
+          onClick={closeModal}
+          data-testid="modal-close-button"
+        >
           {t("common.close")}
         </Button>
       </ModalContents>

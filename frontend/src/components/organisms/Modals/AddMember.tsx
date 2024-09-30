@@ -63,6 +63,7 @@ export const AddMemberModal = () => {
             control={control}
             {...register("email", { required: "Email is required" })}
             type="email"
+            dataTestId="add-member-email"
           />
           <ControlledField.Select
             placeholder={t("addMember.fields.role.placeholder")}
@@ -71,6 +72,7 @@ export const AddMemberModal = () => {
             control={control}
             errors={errors}
             multiple={false}
+            dataTestId="add-member-role"
             {...register("role", { required: "Role is required" })}
           />
           {isAdminRole(role) && (
@@ -80,13 +82,14 @@ export const AddMemberModal = () => {
               items={permissionsList}
               control={control}
               errors={errors}
+              dataTestId="add-member-permission"
               {...register("permissions", {
                 required: "Permission is required",
               })}
             />
           )}
 
-          <ModalActions />
+          <ModalActions dataTestId="add-member-modal" />
         </ModalContents>
       </form>
     </ModalWrapper>

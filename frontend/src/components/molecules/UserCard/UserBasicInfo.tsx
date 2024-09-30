@@ -31,6 +31,7 @@ export const UserBasicInfo = ({
         minHeight: 24,
         width: "100%",
       }}
+      dataTestId="user-info-username-text"
       variant="body1"
     >
       {name}
@@ -44,7 +45,11 @@ export const UserBasicInfo = ({
       >
         <Grid container gap={1} flexWrap="nowrap">
           <img src={IMAGES.mail} width={20} height={20} />
-          <Typography variant="body2" fontWeight={400}>
+          <Typography
+            variant="body2"
+            fontWeight={400}
+            dataTestId="user-info-email-text"
+          >
             {truncateText(email, 20)}
           </Typography>
         </Grid>
