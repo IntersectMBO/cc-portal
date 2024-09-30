@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   JoinTable,
   ManyToMany,
@@ -50,6 +51,7 @@ export class User extends CommonEntity {
   })
   profilePhotoUrl: string;
 
+  @Index('users_status_idx')
   @Column({
     name: 'status',
     type: 'enum',
@@ -63,6 +65,7 @@ export class User extends CommonEntity {
   })
   hotAddresses: HotAddress[];
 
+  @Index('users_role_id_idx')
   @ManyToOne(() => Role, (role) => role.users, {
     eager: true,
   })
