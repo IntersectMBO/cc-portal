@@ -14,6 +14,7 @@ import { EmailDto } from 'src/email/dto/email.dto';
 import { UserStatusEnum } from '../../users/enums/user-status.enum';
 import { CreateUserRequest } from 'src/users/api/request/create-user.request';
 import { RoleEnum } from 'src/users/enums/role.enum';
+import { PermissionEnum } from 'src/users/enums/permission.enum';
 
 @Injectable()
 export class AuthFacade {
@@ -105,5 +106,16 @@ export class AuthFacade {
 
   async sendEmail(emailDto: EmailDto): Promise<void> {
     await this.emailService.sendEmail(emailDto);
+  }
+
+  async checkAbilityResendRegisterInvite(
+    email: string,
+    permissions: PermissionEnum[],
+  ) {
+    const user = await this.validateUser(email);
+    if (user.status !== UserStatusEnum.PENDING) {
+      throw new ConflictException(`Unable to resend register invite`);
+    }
+    this.usersService.checkRoleManegedByPermission(user.role, permissions);
   }
 }

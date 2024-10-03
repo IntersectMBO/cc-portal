@@ -1,6 +1,6 @@
 import {
+  BadRequestException,
   ConflictException,
-  ForbiddenException,
   Injectable,
 } from '@nestjs/common';
 import { UpdateUserRequest } from '../api/request/update-user.request';
@@ -18,13 +18,12 @@ import { PaginateQuery } from 'nestjs-paginate';
 import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mapper';
 import { PermissionEnum } from '../enums/permission.enum';
 import { ToggleStatusRequest } from '../api/request/toggle-status.request';
-import { RoleFactory } from '../role/role.factory';
+import { UserStatusEnum } from '../enums/user-status.enum';
 @Injectable()
 export class UsersFacade {
   constructor(
     private readonly usersService: UsersService,
     private readonly s3Service: S3Service,
-    private readonly roleFactory: RoleFactory,
   ) {}
 
   async getAllRoles(): Promise<RoleResponse[]> {
@@ -100,27 +99,17 @@ export class UsersFacade {
     permissions: PermissionEnum[],
   ): Promise<UserResponse> {
     const user = await this.usersService.findById(toggleStatusRequest.userId);
-    this.checkAbilityToggleStatus(user, permissions);
+    // Current status of the user 'pending' cannot be changed in this way
+    if (user.status === UserStatusEnum.PENDING) {
+      throw new BadRequestException(
+        `Unable to change current status ${UserStatusEnum.PENDING}`,
+      );
+    }
+    this.usersService.checkRoleManegedByPermission(user.role, permissions);
     const result = await this.usersService.updateUserStatus(
       user.id,
       toggleStatusRequest.status,
     );
     return UserMapper.mapUserDtoToResponse(result);
-  }
-
-  /**
-   * Checks whether the logged-in user can change status
-   * @param user - User whose status we change
-   * @param permissions - Permissions of the logged-in user
-   */
-  private checkAbilityToggleStatus(
-    user: UserDto,
-    permissions: PermissionEnum[],
-  ): void {
-    const role = this.roleFactory.getInstance(user.role);
-    const managedBy = role.managedBy();
-    if (!permissions.includes(managedBy)) {
-      throw new ForbiddenException(`You have no permission for this action`);
-    }
   }
 }

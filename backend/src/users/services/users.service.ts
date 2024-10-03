@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -25,6 +26,8 @@ import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.confi
 import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
 import { PaginationEntityMapper } from 'src/util/pagination/mapper/pagination.mapper';
 import { Paginator } from 'src/util/pagination/paginator';
+import { RoleFactory } from '../role/role.factory';
+import { PermissionEnum } from '../enums/permission.enum';
 
 @Injectable()
 export class UsersService {
@@ -42,6 +45,7 @@ export class UsersService {
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
     private readonly paginator: Paginator,
+    private readonly roleFactory: RoleFactory,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
@@ -271,5 +275,16 @@ export class UsersService {
       .leftJoinAndSelect('users.role', 'role')
       .where('role.code = :code', { code: RoleEnum.USER })
       .andWhere('users.status = :status', { status: UserStatusEnum.ACTIVE });
+  }
+
+  checkRoleManegedByPermission(
+    usersRole: string,
+    permissions: PermissionEnum[],
+  ): void {
+    const role = this.roleFactory.getInstance(usersRole);
+    const managedBy = role.managedBy();
+    if (!permissions.includes(managedBy)) {
+      throw new ForbiddenException(`You have no permission for this action`);
+    }
   }
 }
