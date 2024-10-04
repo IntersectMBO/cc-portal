@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "e842d76b-56e2-476d-b31d-bbeffd0853bc",
-		"name": "CC Portal develop Copy",
+		"_postman_id": "76b45677-bce1-4b13-8de8-db1a76d8e827",
+		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20133713"
 	},
@@ -351,6 +351,40 @@
 									"key": "token",
 									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXN0aW5hdGlvbiI6InRlc3RAdGVzdC5jb24iLCJjb2RlIjoiNDQxMzEiLCJpYXQiOjE3MTAyNDUxNTYsImV4cCI6MTcxMDI0NTQ1Nn0.A66L6PK-D4bKe0Owtp_WS7z2gvAIafnrEuouv9CwUzA"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resend Register Invite",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"destination\": \"test.user@test.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/auth/resend-register-invite",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"resend-register-invite"
 							]
 						}
 					},
