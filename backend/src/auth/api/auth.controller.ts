@@ -14,6 +14,7 @@ import { AuthFacade } from '../facade/auth.facade';
 import { AuthGuard } from '@nestjs/passport';
 import { TokenResponse } from './response/token.response';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -31,6 +32,7 @@ import { CreateCCMemberRequest } from 'src/users/api/request/create-cc-member.re
 import { UserMapper } from 'src/users/mapper/userMapper.mapper';
 import { CreateAdminRequest } from 'src/users/api/request/create-admin.request';
 import { ApiConditionalExcludeEndpoint } from 'src/common/decorators/api-conditional-exclude-endpoint.decorator';
+import { ResendRegisterRequest } from './request/resend-register.request';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -191,5 +193,30 @@ export class AuthController {
     );
 
     return response;
+  }
+
+  @ApiConditionalExcludeEndpoint()
+  @ApiOperation({
+    summary: 'Resend Register invite. Sending email with a magic link',
+  })
+  @ApiBearerAuth('JWT-auth')
+  @ApiResponse({ status: 201, description: `{ "success": "true" }` })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden resource' })
+  @ApiResponse({ status: 409, description: 'Conflict' })
+  @ApiBody({ type: ResendRegisterRequest })
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @Post('resend-register-invite')
+  async resendRegisterInvite(
+    @Req() req,
+    @Res() res,
+    @Body() resendRequest: ResendRegisterRequest,
+  ) {
+    const permissions: PermissionEnum[] = req.user.permissions;
+    await this.authFacade.checkAbilityResendRegisterInvite(
+      resendRequest.destination,
+      permissions,
+    );
+    return this.registerStrategy.send(req, res);
   }
 }
