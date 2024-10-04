@@ -48,7 +48,6 @@ export class AuthFacade {
     return updatedUser;
   }
 
-  // validateUser checks user by email
   async findUserByEmail(email: string): Promise<UserDto> {
     const user = await this.usersService.findByEmail(email);
     return user;
