@@ -277,7 +277,7 @@ export class UsersService {
       .andWhere('users.status = :status', { status: UserStatusEnum.ACTIVE });
   }
 
-  checkRoleManegedByPermission(
+  checkRoleManagedByPermission(
     usersRole: string,
     permissions: PermissionEnum[],
   ): void {

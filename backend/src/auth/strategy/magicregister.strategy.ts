@@ -42,7 +42,7 @@ export class MagicRegisterStrategy extends PassportStrategy(
   }
 
   validate(payload: { destination: string }) {
-    const user = this.authFacade.validateUser(payload.destination);
+    const user = this.authFacade.findUserByEmail(payload.destination);
     return user;
   }
 }

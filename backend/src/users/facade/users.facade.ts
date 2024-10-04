@@ -105,7 +105,7 @@ export class UsersFacade {
         `Unable to change current status ${UserStatusEnum.PENDING}`,
       );
     }
-    this.usersService.checkRoleManegedByPermission(user.role, permissions);
+    this.usersService.checkRoleManagedByPermission(user.role, permissions);
     const result = await this.usersService.updateUserStatus(
       user.id,
       toggleStatusRequest.status,

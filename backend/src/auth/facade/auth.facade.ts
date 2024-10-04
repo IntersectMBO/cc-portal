@@ -49,7 +49,7 @@ export class AuthFacade {
   }
 
   // validateUser checks user by email
-  async validateUser(email: string): Promise<UserDto> {
+  async findUserByEmail(email: string): Promise<UserDto> {
     const user = await this.usersService.findByEmail(email);
     return user;
   }
@@ -61,7 +61,7 @@ export class AuthFacade {
 
   // checkLoginAbility checks whether the user can login according to his status
   async checkLoginAbility(email: string): Promise<void> {
-    const user = await this.validateUser(email);
+    const user = await this.findUserByEmail(email);
     if (user.status !== UserStatusEnum.ACTIVE) {
       throw new BadRequestException(`User is not active`);
     }
@@ -112,10 +112,10 @@ export class AuthFacade {
     email: string,
     permissions: PermissionEnum[],
   ) {
-    const user = await this.validateUser(email);
+    const user = await this.findUserByEmail(email);
     if (user.status !== UserStatusEnum.PENDING) {
       throw new ConflictException(`Unable to resend register invite`);
     }
-    this.usersService.checkRoleManegedByPermission(user.role, permissions);
+    this.usersService.checkRoleManagedByPermission(user.role, permissions);
   }
 }
