@@ -1,7 +1,12 @@
 import { Vote } from "@atoms";
 
 export type UserRole = "super_admin" | "admin" | "user" | "alumni" | null;
-
+export enum UserRoleEnum {
+  SuperAdmin = "super_admin",
+  Admin = "admin",
+  User = "user",
+  Alumni = "alumni"
+}
 export interface RoleListObject {
   value: UserRole;
   label: string;
@@ -67,13 +72,13 @@ export enum GovActionProposalStatus {
   EXPIRED = "EXPIRED",
   RATIFIED = "RATIFIED",
   ENACTED = "ENACTED",
-  DROPPED = "DROPPED",
+  DROPPED = "DROPPED"
 }
 
 export enum GovActionStatus {
   PENDING = "PENDING",
   VOTED = "VOTED",
-  UNVOTED = "UNVOTED",
+  UNVOTED = "UNVOTED"
 }
 
 export interface GovernanceActionTableI {

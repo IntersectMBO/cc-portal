@@ -289,5 +289,11 @@
       "sessionExists": "Session already exists. Please try again.",
       "pagination": "Error loading more data"
     }
+  },
+  "UsersList": {
+    "resendInv": "Resend Invitation",
+    "makeInactive": "Make Inactive",
+    "makeActive": "Make Active",
+    "delteUser": "Delete User"
   }
 }
