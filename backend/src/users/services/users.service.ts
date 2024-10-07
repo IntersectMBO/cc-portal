@@ -287,4 +287,9 @@ export class UsersService {
       throw new ForbiddenException(`You have no permission for this action`);
     }
   }
+
+  async removeUser(userId: string): Promise<void> {
+    const user = await this.findEntityById(userId);
+    await this.userRepository.remove(user);
+  }
 }

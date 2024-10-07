@@ -8,6 +8,7 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { GovActionProposal } from './gov-action-proposal.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity('votes')
 export class Vote extends CommonEntity {
@@ -23,6 +24,12 @@ export class Vote extends CommonEntity {
     type: 'uuid',
   })
   userId: string;
+
+  @ManyToOne(() => User, (user) => user.votes, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Column({
     name: 'hot_address',

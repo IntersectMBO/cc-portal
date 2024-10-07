@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UsersService } from '../services/users.service';
@@ -21,6 +22,7 @@ import { ToggleStatusRequest } from '../api/request/toggle-status.request';
 import { UserStatusEnum } from '../enums/user-status.enum';
 @Injectable()
 export class UsersFacade {
+  private logger = new Logger(UsersService.name);
   constructor(
     private readonly usersService: UsersService,
     private readonly s3Service: S3Service,
@@ -111,5 +113,20 @@ export class UsersFacade {
       toggleStatusRequest.status,
     );
     return UserMapper.mapUserDtoToResponse(result);
+  }
+
+  async removeUser(userId: string): Promise<void> {
+    const userDto = await this.usersService.findById(userId);
+    try {
+      await this.usersService.removeUser(userDto.id);
+      if (userDto.profilePhotoUrl) {
+        const fileName = S3Service.extractFileNameFromUrl(
+          userDto.profilePhotoUrl,
+        );
+        await this.s3Service.deleteFile(fileName);
+      }
+    } catch (e) {
+      this.logger.error(`Error when removing user: ${e.message}`);
+    }
   }
 }
