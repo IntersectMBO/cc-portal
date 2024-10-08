@@ -282,6 +282,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @ApiResponse({ status: 400, description: 'Bad requset' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden resource' })
   @ApiResponse({ status: 404, description: 'Not found' })
   @ApiParam({
     name: 'id',
