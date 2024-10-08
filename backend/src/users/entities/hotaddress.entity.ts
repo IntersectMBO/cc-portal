@@ -20,7 +20,9 @@ export class HotAddress extends CommonEntity {
   })
   address: string;
 
-  @ManyToOne(() => User, (user) => user.hotAddresses)
+  @ManyToOne(() => User, (user) => user.hotAddresses, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   user: User;
 }

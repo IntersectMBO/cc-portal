@@ -13,6 +13,7 @@ import {
   UseGuards,
   Request,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
@@ -40,6 +41,8 @@ import { PermissionEnum } from '../enums/permission.enum';
 import { PermissionGuard } from 'src/auth/guard/permission.guard';
 import { ToggleStatusRequest } from './request/toggle-status.request';
 import { ApiConditionalExcludeEndpoint } from 'src/common/decorators/api-conditional-exclude-endpoint.decorator';
+import { Permissions } from 'src/auth/guard/permission.decorator';
+import { RemoveUserRequest } from './request/remove-user.request';
 
 @ApiTags('Users')
 @Controller('users')
@@ -271,5 +274,36 @@ export class UsersController {
       toggleStatusRequest,
       permissions,
     );
+  }
+
+  @ApiConditionalExcludeEndpoint()
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Delete user' })
+  @ApiResponse({ status: 200, description: 'User deleted successfully' })
+  @ApiResponse({ status: 400, description: 'Bad requset' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'identifactor of user',
+  })
+  @ApiBody({ type: RemoveUserRequest })
+  @HttpCode(200)
+  @Permissions(PermissionEnum.MANAGE_ADMINS) // Superadmin only
+  @UseGuards(JwtAuthGuard, UserPathGuard, PermissionGuard)
+  @Delete(':id')
+  async removeUser(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() removeUserRequest: RemoveUserRequest,
+  ) {
+    if (id === removeUserRequest.userId) {
+      throw new BadRequestException(`You cannot delete yourself`);
+    }
+    await this.usersFacade.removeUser(removeUserRequest.userId);
+    return {
+      success: true,
+      message: 'User deleted successfully',
+    };
   }
 }
