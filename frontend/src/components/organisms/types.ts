@@ -1,12 +1,12 @@
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import {
-  ReasoningResponseI,
   FetchUserData,
   GovActionProposalStatus,
-  UserRole,
   GovernanceActionTableI,
+  ReasoningResponseI,
   UserAuthStatus,
+  UserRole
 } from "@/lib/requests";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Vote } from "../atoms";
 
 export interface ConstitutionMetadata {
@@ -66,6 +66,11 @@ export interface OpenAddReasoningModalState {
 export interface OpenDeleteRoleModalState {
   userId: string;
   status: UserAuthStatus;
+}
+
+export interface OpenDeleteUserModalState {
+  sAdminId: string;
+  userId: string;
 }
 
 export interface OpenReasoningLinkModalState {

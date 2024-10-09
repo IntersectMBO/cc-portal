@@ -12,7 +12,7 @@ export const Chip = ({
   label,
   showCloseButton = false,
   onClick,
-  dataTestId,
+  dataTestId
 }: ChipProps) => (
   <Grid
     container
@@ -21,6 +21,7 @@ export const Chip = ({
     py={0.75}
     bgcolor={customPalette.lightBlue}
     borderRadius={100}
+    alignItems="center"
   >
     <Typography data-testid={`${dataTestId}-text`} variant="caption">
       {label}
@@ -31,7 +32,7 @@ export const Chip = ({
         sx={{ padding: 0 }}
         data-testid={`${dataTestId}--button`}
       >
-        <img src={ICONS.close} />
+        <img width={16} src={ICONS.close} />
       </IconButton>
     )}
   </Grid>

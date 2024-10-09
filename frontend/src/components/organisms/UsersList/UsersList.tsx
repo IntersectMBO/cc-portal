@@ -1,22 +1,22 @@
 "use client";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
-import { Grid } from "@mui/material";
-import { UsersListItem } from "./UsersListItem";
-import { UserListItem } from "../types";
-import { NotFound } from "../NotFound";
+import { useSnackbar } from "@/context/snackbar";
 import { getUsersAdmin } from "@/lib/api";
 import { PaginationMeta } from "@/lib/requests";
-import { isEmpty } from "@utils";
-import { usePagination } from "@hooks";
 import { ShowMoreButton } from "@atoms";
+import { usePagination } from "@hooks";
+import { Grid } from "@mui/material";
+import { isEmpty } from "@utils";
 import { useSearchParams } from "next/navigation";
-import { useSnackbar } from "@/context/snackbar";
+import { NotFound } from "../NotFound";
+import { UserListItem } from "../types";
+import { UsersListItem } from "./UsersListItem";
 
 export function UsersList({
   usersList,
   paginationMeta,
-  error,
+  error
 }: {
   usersList: UserListItem[];
   paginationMeta: PaginationMeta;
@@ -50,7 +50,7 @@ export function UsersList({
       py={{ xxs: 3, md: 6 }}
       container
       direction="column"
-      gap={0}
+      gap={2}
     >
       {data &&
         data.map((users) => {
