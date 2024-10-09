@@ -8,10 +8,12 @@ import { OpenDeleteUserModalState } from "../types";
 
 export function UserListStatusDeleteButton({ userId }: { userId: string }) {
   const { userSession } = useAppContext();
-  const isSuperAdmin = isSuperAdminRole(userSession.role);
-  if (!isSuperAdmin) return null;
   const { openModal } = useModal<OpenDeleteUserModalState>();
-  const deleteUser = () => {
+  const t = useTranslations("UsersList");
+
+  if (!isSuperAdminRole(userSession.role)) return null;
+
+  const handleDeleteUser = () => {
     openModal({
       type: "deleteUser",
       state: {
@@ -20,12 +22,11 @@ export function UserListStatusDeleteButton({ userId }: { userId: string }) {
       }
     });
   };
-  const t = useTranslations("UsersList");
 
   return (
     <Button
       size="small"
-      onClick={deleteUser}
+      onClick={handleDeleteUser}
       variant="text"
       sx={{ fontSize: 12, color: "#8E908E" }}
     >
