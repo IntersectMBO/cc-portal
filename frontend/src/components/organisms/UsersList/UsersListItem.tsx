@@ -1,4 +1,3 @@
-import { Button } from "@/components/atoms";
 import {
   Card,
   TableDivider,
@@ -12,6 +11,7 @@ import { UserStatus as UserStatusType } from "@atoms";
 import { Box, Grid } from "@mui/material";
 import { hasManageUserPermission } from "@utils";
 import { OpenDeleteRoleModalState, UserListItem } from "../types";
+import { UserListStatusDeleteButton } from "./UserListStatusDeleteButton";
 import UserListStatusSwitchButton from "./UserListStatusSwitchButton";
 export function UsersListItem({
   id,
@@ -85,7 +85,7 @@ export function UsersListItem({
         xxs={12}
         sm={12}
         md={4}
-        lg={3}
+        lg={4}
         display="flex"
         flexDirection="row"
         gap={3}
@@ -117,14 +117,7 @@ export function UsersListItem({
         justifyContent="flex-end"
         alignItems="center"
       >
-        <Button
-          size="small"
-          onClick={undefined}
-          variant="text"
-          sx={{ fontSize: 12, color: "#8E908E" }}
-        >
-          Delete User
-        </Button>
+        <UserListStatusDeleteButton userId={id} />
       </Grid>
     );
   };

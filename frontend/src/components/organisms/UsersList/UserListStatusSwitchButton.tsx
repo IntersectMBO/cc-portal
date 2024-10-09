@@ -1,10 +1,11 @@
 "use client";
 
 import { useAppContext } from "@/context";
+import { useSnackbar } from "@/context/snackbar";
 import { resendRegisterEmail, toggleUserStatus } from "@/lib/api";
 import { UserRole, UserRoleEnum } from "@/lib/requests";
 import { Button, UserStatus as UserStatusType } from "@atoms";
-import { isAdminRole, isSuperAdminRole } from "@utils";
+import { isAdminRole, isResponseErrorI, isSuperAdminRole } from "@utils";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "use-intl";
 
@@ -29,6 +30,7 @@ export default function UserListStatusSwitchButton({
   const isAdmin = isAdminRole(userSession.role);
   const router = useRouter();
   const t = useTranslations("UsersList");
+  const { addSuccessAlert, addErrorAlert } = useSnackbar();
 
   // super admin can switch status of admins (not users) and admin can switch status of users but not of admins
   // both super admin and admin can resend invitation
@@ -37,7 +39,14 @@ export default function UserListStatusSwitchButton({
       return {
         buttonText: t("resendInv"),
         action: async () => {
-          await resendRegisterEmail(email);
+          const res = await resendRegisterEmail(email);
+          if (!isResponseErrorI(res)) {
+            addSuccessAlert(t("resendAlerts.success"));
+            router.refresh();
+          } else {
+            addErrorAlert(res.error);
+          }
+
           router.refresh();
         }
       };

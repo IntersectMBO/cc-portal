@@ -680,15 +680,44 @@ export async function uploadUserPhoto(
 
 export async function resendRegisterEmail(email: string) {
   try {
-    const res = await axiosInstance.post(`/api/auth/resend-register-invite`, {
-      destination: email
-    });
+    const token = getAccessToken();
+    const res = await axiosInstance.post(
+      `/api/auth/resend-register-invite`,
+      {
+        destination: email
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
 
     return res;
   } catch (error) {
     const t = await getTranslations();
     return {
-      error: t("General.errors.somethingWentWrong"),
+      error: t("UsersList.resendAlerts.error"),
+      statusCode: error.res?.statusCode || null
+    };
+  }
+}
+export async function deleteUser(sAdminId: string, userId: string) {
+  const token = getAccessToken();
+  try {
+    const res = await axiosInstance.delete(`/api/users/${sAdminId}`, {
+      data: {
+        user_id: userId
+      },
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return res;
+  } catch (error) {
+    const t = await getTranslations();
+    return {
+      error: t("Modals.deleteUser.alerts.error"),
       statusCode: error.res?.statusCode || null
     };
   }
