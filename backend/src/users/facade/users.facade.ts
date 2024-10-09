@@ -117,8 +117,8 @@ export class UsersFacade {
 
   async removeUser(userId: string): Promise<void> {
     const userDto = await this.usersService.findById(userId);
+    await this.usersService.removeUser(userDto.id);
     try {
-      await this.usersService.removeUser(userDto.id);
       if (userDto.profilePhotoUrl) {
         const fileName = S3Service.extractFileNameFromUrl(
           userDto.profilePhotoUrl,
@@ -126,7 +126,9 @@ export class UsersFacade {
         await this.s3Service.deleteFile(fileName);
       }
     } catch (e) {
-      this.logger.error(`Error when removing user: ${e.message}`);
+      this.logger.error(
+        `Error when removing profile photo of the user with id ${userId}: ${e.message}`,
+      );
     }
   }
 }
