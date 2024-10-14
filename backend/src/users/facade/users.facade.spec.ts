@@ -4,6 +4,7 @@ import { UsersService } from '../services/users.service';
 import {
   ConflictException,
   ForbiddenException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { UserStatusEnum } from '../enums/user-status.enum';
@@ -23,6 +24,7 @@ import { RoleFactory } from '../role/role.factory';
 
 describe('UsersFacade', () => {
   let facade: UsersFacade;
+  let logger: Logger;
 
   let mockRoles: Role[] = [
     {
@@ -215,13 +217,6 @@ describe('UsersFacade', () => {
           );
         }
 
-        // const sortedUsers = filteredUsers.sort((a, b) => {
-        //   if (query.sortBy === SortOrder.ASC) {
-        //     return a.name > b.name ? 1 : -1;
-        //   } else if (order === SortOrder.DESC) {
-        //     return b.name > a.name ? -1 : -1;
-        //   }
-        // });
         const currentPosition = query.page * query.limit;
         const paginatedUsers = filteredUsers.slice(
           currentPosition,
@@ -241,6 +236,8 @@ describe('UsersFacade', () => {
         return usersPaginatedDto;
       }),
     updateUserStatus: jest.fn(),
+    removeUser: jest.fn(),
+    checkRoleManagedByPermission: jest.fn(),
   };
 
   const mockS3Service = {
@@ -264,10 +261,17 @@ describe('UsersFacade', () => {
           provide: RoleFactory,
           useValue: mockRoleFactory,
         },
+        {
+          provide: Logger,
+          useValue: {
+            error: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     facade = module.get<UsersFacade>(UsersFacade);
+    logger = module.get<Logger>(Logger);
   });
 
   afterEach(() => {
@@ -490,7 +494,7 @@ describe('UsersFacade', () => {
     });
 
     it('should deactivate an admin', async () => {
-      const user = mockUsers[0];
+      const user = mockUsers[1];
       const request: ToggleStatusRequest = {
         userId: user.id,
         status: UserStatusEnum.INACTIVE,
@@ -516,7 +520,7 @@ describe('UsersFacade', () => {
     });
 
     it(`shouldn't deactivate an admin - no permission`, async () => {
-      const user = mockUsers[0];
+      const user = mockUsers[1];
       const request: ToggleStatusRequest = {
         userId: user.id,
         status: UserStatusEnum.INACTIVE,
@@ -535,7 +539,7 @@ describe('UsersFacade', () => {
     });
 
     it(`shouldn't deactivate a super admin - no permission`, async () => {
-      const user = mockUsers[0];
+      const user = mockUsers[1];
       const request: ToggleStatusRequest = {
         userId: user.id,
         status: UserStatusEnum.INACTIVE,
@@ -571,6 +575,51 @@ describe('UsersFacade', () => {
           `User with id ${request.userId} not found`,
         );
         expect(mockUserService.findById).toHaveBeenCalledWith(request.userId);
+      }
+    });
+  });
+
+  describe(`Remove user`, () => {
+    it('should remove a user and delete their profile photo if it exists', async () => {
+      const mockUserDto = mockUsers[0];
+      jest.spyOn(mockS3Service, 'deleteFile').mockResolvedValue('profile.jpg');
+      jest.spyOn(mockUserService, 'removeUser').mockResolvedValue(undefined);
+
+      await facade.removeUser(mockUserDto.id);
+
+      // Assert: Ensure that the user was removed and file was deleted
+      expect(mockUserService.findById).toHaveBeenCalledWith(mockUserDto.id);
+      expect(mockUserService.removeUser).toHaveBeenCalledWith(mockUserDto.id);
+      expect(mockS3Service.deleteFile).toHaveBeenCalledWith('profile.jpg');
+    });
+
+    it('should remove a user without attempting to delete the profile photo if none exists', async () => {
+      const mockUserDto = mockUsers[0];
+      mockUserDto.profilePhotoUrl = null;
+      jest.spyOn(mockUserService, 'removeUser').mockResolvedValue(undefined);
+
+      await facade.removeUser(mockUserDto.id);
+
+      // Assert: Ensure the profile photo was not deleted
+      expect(mockUserService.findById).toHaveBeenCalledWith(mockUserDto.id);
+      expect(mockUserService.removeUser).toHaveBeenCalledWith(mockUserDto.id);
+      expect(mockS3Service.deleteFile).not.toHaveBeenCalled();
+    });
+
+    it('should log an error if deleting the profile photo fails', async () => {
+      const mockUserDto = mockUsers[0];
+      jest
+        .spyOn(mockS3Service, 'deleteFile')
+        .mockRejectedValue(new Error('Deletion error'));
+      jest.spyOn(logger, 'error').mockImplementation(jest.fn());
+
+      try {
+        await facade.removeUser(mockUserDto.id);
+      } catch (error) {
+        // Assert: Ensure the error is logged but the process doesn't crash
+        expect(logger.error).toHaveBeenCalledWith(
+          `Error when removing profile photo of the user with id ${mockUserDto.id}: Deletion error`,
+        );
       }
     });
   });
