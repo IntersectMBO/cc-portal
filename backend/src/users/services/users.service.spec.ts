@@ -18,6 +18,7 @@ import { UserDto } from '../dto/user.dto';
 import { PaginateQuery, Paginated } from 'nestjs-paginate';
 import { Paginator } from 'src/util/pagination/paginator';
 import { RoleEnum } from '../enums/role.enum';
+import { RoleFactory } from '../role/role.factory';
 const mockS3Service = {
   uploadFileMinio: jest.fn().mockResolvedValue('mocked_file_name'),
   createBucketIfNotExists: jest.fn().mockResolvedValue('new_bucket'),
@@ -41,6 +42,8 @@ const user: User = {
   },
   permissions: null,
   hotAddresses: null,
+  rationales: null,
+  votes: null,
   deactivatedAt: null,
   createdAt: null,
   updatedAt: null,
@@ -130,6 +133,8 @@ const mockUsers: User[] = [
     status: UserStatusEnum.ACTIVE,
     role: mockRoles[2],
     permissions: [],
+    rationales: null,
+    votes: null,
     deactivatedAt: null,
     createdAt: null,
     updatedAt: null,
@@ -144,6 +149,8 @@ const mockUsers: User[] = [
     status: UserStatusEnum.ACTIVE,
     role: mockRoles[1],
     permissions: [mockPermissions[0], mockPermissions[1]],
+    rationales: null,
+    votes: null,
     deactivatedAt: null,
     createdAt: null,
     updatedAt: null,
@@ -243,6 +250,7 @@ const mockUserRepository = {
     return mockUsers;
   }),
   count: jest.fn().mockResolvedValue(mockUsers.length),
+  remove: jest.fn(),
 };
 const mockRoleRepository = {
   create: jest.fn().mockReturnValue({}),
@@ -325,6 +333,10 @@ describe('UsersService', () => {
         { provide: EntityManager, useValue: mockEntityManager },
         {
           provide: ConfigService,
+          useValue: {},
+        },
+        {
+          provide: RoleFactory,
           useValue: {},
         },
       ],
@@ -707,6 +719,26 @@ describe('UsersService', () => {
       expect(usersPaginatedDto.items[1].name).toEqual(mockUsers[1].name);
       expect(usersPaginatedDto.items.length).toEqual(2);
       expect(mockPaginator.paginate).toHaveBeenCalled();
+    });
+  });
+
+  describe('removeUser', () => {
+    it('should remove a user successfully', async () => {
+      const mockUser = mockUsers[0];
+      const mockFindEntityById = jest
+        .spyOn<any, any>(service, 'findEntityById')
+        .mockResolvedValueOnce(mockUser);
+      await service.removeUser(mockUser.id);
+      expect(mockFindEntityById).toHaveBeenCalledWith(mockUser.id);
+      expect(mockUserRepository.remove).toHaveBeenCalledWith(mockUser);
+    });
+    it('should throw NotFoundException if user is not found', async () => {
+      jest
+        .spyOn<any, any>(service, 'findEntityById')
+        .mockRejectedValue(new NotFoundException());
+      await expect(service.removeUser('non-existent-user')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

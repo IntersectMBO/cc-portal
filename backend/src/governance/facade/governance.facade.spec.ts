@@ -36,6 +36,8 @@ describe('GovernanceFacade', () => {
       status: UserStatusEnum.ACTIVE,
       role: null,
       permissions: [],
+      rationales: null,
+      votes: null,
       createdAt: null,
       updatedAt: null,
       deactivatedAt: null,
@@ -50,6 +52,8 @@ describe('GovernanceFacade', () => {
       status: UserStatusEnum.ACTIVE,
       role: null,
       permissions: [],
+      rationales: null,
+      votes: null,
       createdAt: null,
       updatedAt: null,
       deactivatedAt: null,
@@ -69,6 +73,8 @@ describe('GovernanceFacade', () => {
       hasRationale: null,
       submitTime: null,
       endTime: null,
+      votedBy: null,
+      rationaleBy: null,
     },
     {
       id: '2',
@@ -82,6 +88,8 @@ describe('GovernanceFacade', () => {
       hasRationale: null,
       submitTime: null,
       endTime: null,
+      votedBy: null,
+      rationaleBy: null,
     },
   ];
 
@@ -568,7 +576,7 @@ describe('GovernanceFacade', () => {
 
       expect(
         mockGovernanceService.searchGovActionProposals,
-      ).toHaveBeenCalledWith(query, userId);
+      ).toHaveBeenCalledWith(query);
     });
 
     it('should return an empty array - not found by userId', async () => {
@@ -578,13 +586,22 @@ describe('GovernanceFacade', () => {
         limit: 10,
         path: 'randomPath',
       };
+      mockGovernanceService.searchGovActionProposals.mockReturnValueOnce({
+        items: [],
+        itemCount: 0,
+        pageOptions: {
+          page: query.page,
+          perPage: query.limit,
+          skip: 10,
+        },
+      } as PaginatedDto<GovActionProposalDto>);
 
       const result = await facade.searchGovActionProposals(query, userId);
 
       expect(result.data).toEqual([]);
       expect(
         mockGovernanceService.searchGovActionProposals,
-      ).toHaveBeenCalledWith(query, userId);
+      ).toHaveBeenCalledWith(query);
     });
 
     it('should return an empty array - not found by search parameter', async () => {
@@ -601,7 +618,7 @@ describe('GovernanceFacade', () => {
       expect(result.data).toEqual([]);
       expect(
         mockGovernanceService.searchGovActionProposals,
-      ).toHaveBeenCalledWith(query, userId);
+      ).toHaveBeenCalledWith(query);
     });
   });
 });
