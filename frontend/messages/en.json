@@ -144,6 +144,20 @@
         "error": "Error deleting user"
       }
     },
+    "switchUserStatus": {
+      "headline": "Change status",
+      "description": "Are you sure you want to change the status?",
+      "fields": {
+        "confirm": {
+          "label": "Please confirm the action by typing expected below",
+          "placeholder": "Write CONFIRM"
+        }
+      },
+      "alerts": {
+        "success": "Status changed successfully",
+        "error": "Error changing status user"
+      }
+    },
     "addMember": {
       "headline": "Add member",
       "fields": {

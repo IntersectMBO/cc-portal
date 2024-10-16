@@ -9,7 +9,7 @@ import {
 import { useAppContext, useModal } from "@/context";
 import { UserStatus as UserStatusType } from "@atoms";
 import { Box, Grid } from "@mui/material";
-import { hasManageUserPermission } from "@utils";
+// import { hasManageUserPermission } from "@utils";
 import { OpenDeleteRoleModalState, UserListItem } from "../types";
 import { UserListStatusDeleteButton } from "./UserListStatusDeleteButton";
 import UserListStatusSwitchButton from "./UserListStatusSwitchButton";
@@ -26,9 +26,9 @@ export function UsersListItem({
 >) {
   const { userSession } = useAppContext();
   const { openModal } = useModal<OpenDeleteRoleModalState>();
-  const allowDeletingUser =
-    status !== "inactive" &&
-    hasManageUserPermission(role, userSession?.permissions);
+  // const allowDeletingUser =
+  //   status !== "inactive" &&
+  //   hasManageUserPermission(role, userSession?.permissions);
 
   const deleteUserRole = () => {
     openModal({
@@ -69,7 +69,7 @@ export function UsersListItem({
         <TableDivider />
         <Box>
           <UserRole
-            showCloseButton={allowDeletingUser}
+            // showCloseButton={allowDeletingUser}
             roles={[role]}
             onClick={deleteUserRole}
           />

@@ -1,13 +1,14 @@
 "use client";
 
-import { useAppContext } from "@/context";
+import { useAppContext, useModal } from "@/context";
 import { useSnackbar } from "@/context/snackbar";
-import { resendRegisterEmail, toggleUserStatus } from "@/lib/api";
+import { resendRegisterEmail } from "@/lib/api";
 import { UserRole, UserRoleEnum } from "@/lib/requests";
 import { Button, UserStatus as UserStatusType } from "@atoms";
 import { isAdminRole, isResponseErrorI, isSuperAdminRole } from "@utils";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "use-intl";
+import { OpenSwitchStatusModalState } from "../types";
 
 type ActionConfig = {
   buttonText: string;
@@ -30,6 +31,8 @@ export default function UserListStatusSwitchButton({
   const isAdmin = isAdminRole(userSession.role);
   const router = useRouter();
   const t = useTranslations("UsersList");
+  const { openModal } = useModal<OpenSwitchStatusModalState>();
+
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
 
   // super admin can switch status of admins (not users) and admin can switch status of users but not of admins
@@ -53,14 +56,14 @@ export default function UserListStatusSwitchButton({
     }
 
     if (status === "active" || status === "inactive") {
-      const newStatus = status === "active" ? "inactive" : "active";
+      const newStatus: Omit<UserStatusType, "pending"> =
+        status === "active" ? "inactive" : "active";
 
       if (isSuperAdmin && role === UserRoleEnum.Admin) {
         return {
           buttonText: status === "active" ? t("makeInactive") : t("makeActive"),
           action: async () => {
-            await toggleUserStatus(userId, newStatus);
-            router.refresh();
+            handleSwitchUser(newStatus);
           }
         };
       }
@@ -72,8 +75,7 @@ export default function UserListStatusSwitchButton({
         return {
           buttonText: status === "active" ? t("makeInactive") : t("makeActive"),
           action: async () => {
-            await toggleUserStatus(userId, newStatus);
-            router.refresh();
+            handleSwitchUser(newStatus);
           }
         };
       }
@@ -87,6 +89,16 @@ export default function UserListStatusSwitchButton({
   if (!actionConfig) {
     return null;
   }
+
+  const handleSwitchUser = (newStatus: Omit<UserStatusType, "pending">) => {
+    openModal({
+      type: "switchUserStatus",
+      state: {
+        newStatus,
+        userId
+      }
+    });
+  };
 
   return (
     <Button
