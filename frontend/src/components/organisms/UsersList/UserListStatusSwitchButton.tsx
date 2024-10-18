@@ -45,7 +45,6 @@ export default function UserListStatusSwitchButton({
           const res = await resendRegisterEmail(email);
           if (!isResponseErrorI(res)) {
             addSuccessAlert(t("resendAlerts.success"));
-            router.refresh();
           } else {
             addErrorAlert(res.error);
           }
@@ -59,7 +58,12 @@ export default function UserListStatusSwitchButton({
       const newStatus: Omit<UserStatusType, "pending"> =
         status === "active" ? "inactive" : "active";
 
-      if (isSuperAdmin && role === UserRoleEnum.Admin) {
+      if (
+        isSuperAdmin &&
+        (role === UserRoleEnum.Admin ||
+          role === UserRoleEnum.User ||
+          role === UserRoleEnum.Alumni)
+      ) {
         return {
           buttonText: status === "active" ? t("makeInactive") : t("makeActive"),
           action: async () => {
