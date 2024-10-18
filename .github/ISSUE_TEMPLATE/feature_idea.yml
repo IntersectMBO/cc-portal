@@ -2,7 +2,7 @@ name: 💡 Feature idea
 description: Idea or request for some feature on the CC Portal roadmap
 title: "💡 "
 labels: ["💡 Feature idea"]
-projects: [ ]
+projects: ["IntersectMBO/24", "IntersectMBO/34"]
 body:
   - type: markdown
     attributes:
