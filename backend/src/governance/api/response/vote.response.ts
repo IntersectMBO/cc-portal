@@ -34,6 +34,14 @@ export class VoteResponse {
   voteValue: VoteValue;
 
   @ApiProperty({
+    description: 'Gives an on chain rationale url to a vote',
+    example:
+      'https://ipfs.io.ipfs/QmaoWaMwKjrrvLKWZaWgeLpT7qcrYJNUby2Mnk5uYBrkG4',
+  })
+  @Expose({ name: 'rationale_url' })
+  rationaleUrl: string;
+
+  @ApiProperty({
     description: 'Gives an on chain rationale title related to a vote',
     example: 'This proposal is good for the ecosystem',
   })
