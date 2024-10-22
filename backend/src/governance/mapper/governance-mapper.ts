@@ -24,6 +24,7 @@ export class GovernanceMapper {
     voteResponse.userPhotoUrl = voteDto.userPhotoUrl;
     voteResponse.userAddress = voteDto.userAddress;
     voteResponse.voteValue = voteDto.voteValue;
+    voteResponse.rationaleUrl = voteDto.rationaleUrl;
     voteResponse.rationaleTitle = voteDto.rationaleTitle;
     voteResponse.rationaleComment = voteDto.rationaleComment;
     voteResponse.govActionProposalId = voteDto.govActionProposalId;
@@ -42,6 +43,7 @@ export class GovernanceMapper {
     voteDto.userId = vote.userId;
     voteDto.userAddress = vote.hotAddress;
     voteDto.voteValue = VoteValue[vote.vote];
+    voteDto.rationaleUrl = vote.voteMetadataUrl;
     voteDto.rationaleTitle = vote.title;
     voteDto.rationaleComment = vote.comment;
     voteDto.govActionProposalId = vote.govActionProposal?.id;

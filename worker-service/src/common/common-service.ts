@@ -111,4 +111,12 @@ export abstract class CommonService {
       return null;
     }
   }
+
+  async transformIpfsUrl(ipfsUrl: string): Promise<string> {
+    if (ipfsUrl && ipfsUrl.startsWith('ipfs://')) {
+      const cid = ipfsUrl.replace('ipfs://', '');
+      return `https://ipfs.io/ipfs/${cid}`;
+    }
+    return ipfsUrl; // Return the original URL if it doesn't start with ipfs://
+  }
 }
