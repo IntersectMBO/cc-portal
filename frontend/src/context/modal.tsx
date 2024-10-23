@@ -7,6 +7,7 @@ import { GovActionModal } from "@/components/organisms/Modals/GovActionModal";
 import { PreviewReasoningModal } from "@/components/organisms/Modals/PreviewReasoningModal";
 import { SignOutModal } from "@/components/organisms/Modals/SignOutModal";
 import { SignUpModal } from "@/components/organisms/Modals/SignUpModal";
+import { SwitchUsersStatus } from "@/components/organisms/Modals/SiwtchUsersStatus";
 import { MuiModalChildren } from "@atoms";
 import {
   AddMemberModal,
@@ -42,7 +43,8 @@ export type ModalType =
   | "addReasoningModal"
   | "reasoningLinkModal"
   | "previewReasoningModal"
-  | "govActionModal";
+  | "govActionModal"
+  | "switchUserStatus";
 
 const modals: Record<ModalType, ContextModal> = {
   none: {
@@ -84,6 +86,9 @@ const modals: Record<ModalType, ContextModal> = {
   },
   govActionModal: {
     component: <GovActionModal />
+  },
+  switchUserStatus: {
+    component: <SwitchUsersStatus />
   }
 };
 

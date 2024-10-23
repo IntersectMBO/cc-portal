@@ -7,7 +7,7 @@ import {
   UserRole
 } from "@/lib/requests";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { Vote } from "../atoms";
+import { UserStatus, Vote } from "../atoms";
 
 export interface ConstitutionMetadata {
   cid: string;
@@ -73,6 +73,10 @@ export interface OpenDeleteUserModalState {
   userId: string;
 }
 
+export interface OpenSwitchStatusModalState {
+  newStatus: Omit<UserStatus, "pending">;
+  userId: string;
+}
 export interface OpenReasoningLinkModalState {
   hash: string;
   link: string;

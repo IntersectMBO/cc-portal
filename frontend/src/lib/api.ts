@@ -196,7 +196,7 @@ export async function getUser(
 
 export async function toggleUserStatus(
   user_id: string,
-  status: UserAuthStatus
+  status: Omit<UserAuthStatus, "pending">
 ): Promise<FetchUserData | ResponseErrorI> {
   const token = getAccessToken();
   const decodedToken = await decodeUserToken();
