@@ -5,7 +5,6 @@ export class VoteRequest {
   govActionProposalId: string;
   vote: string;
   voteMetadataUrl: string;
-  comment: string;
   submitTime: number;
   votingAnchorId: string;
   govActionType: string;

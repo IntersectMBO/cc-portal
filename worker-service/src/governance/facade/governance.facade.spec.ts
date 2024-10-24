@@ -250,6 +250,7 @@ describe('GovernanceFacade', () => {
       userId: mockUsers[0].id,
       createdAt: null,
       updatedAt: null,
+      voteMetadataUrl: 'https://vote-url-1.jsonld',
     },
     {
       id: '2',
@@ -262,6 +263,7 @@ describe('GovernanceFacade', () => {
       userId: mockUsers[1].id,
       createdAt: null,
       updatedAt: null,
+      voteMetadataUrl: 'https://vote-url-2.jsonld',
     },
     {
       id: '3',
@@ -274,6 +276,7 @@ describe('GovernanceFacade', () => {
       userId: mockUsers[2].id,
       createdAt: null,
       updatedAt: null,
+      voteMetadataUrl: 'https://vote-url-3.jsonld',
     },
   ];
 
