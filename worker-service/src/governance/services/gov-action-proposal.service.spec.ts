@@ -611,17 +611,15 @@ describe('GovActionProposalService', () => {
         mockOffset,
       );
     });
-    it(`should throw an error when mapping 'undefined' value after trying to fetch data from remote DB `, async () => {
+    it(`should return an empty array when get 'undefined' from remote DB`, async () => {
+      const mockEmptyArray: object[] = [];
       const mockGetPaginatedDataFromSqlFIle = jest
         .spyOn(service, 'getPaginatedDataFromSqlFile')
         .mockResolvedValue(undefined);
 
-      await expect(
-        service.getGovActionProposalDataFromDbSync(mockPerPage, mockOffset),
-      ).rejects.toThrow(
-        new TypeError(
-          `Cannot read properties of undefined (reading 'forEach')`,
-        ),
+      const result = await service.getGovActionProposalDataFromDbSync(
+        mockPerPage,
+        mockOffset,
       );
 
       expect(mockGetPaginatedDataFromSqlFIle).toHaveBeenCalledWith(
@@ -629,7 +627,7 @@ describe('GovActionProposalService', () => {
         mockPerPage,
         mockOffset,
       );
-      // expect(result).toEqual(mockEmptyArray);
+      expect(result).toEqual(mockEmptyArray);
     });
   });
 });
