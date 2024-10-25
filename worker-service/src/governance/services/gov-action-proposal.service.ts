@@ -57,13 +57,15 @@ export class GovActionProposalService extends CommonService {
   ): Promise<Partial<GovActionProposal[]>> {
     const govActionProposals = [];
     for (const request of requests) {
-      const govMetadataUrl = request.govMetadataUrl;
+      const govMetadataUrl = await this.transformIpfsUrl(
+        request.govMetadataUrl,
+      );
       const axiosData = await this.getGovActionProposalFromUrl(govMetadataUrl);
       const govActionProposal = {
         id: request.id,
         votingAnchorId: request.votingAnchorId,
         govActionType: request.govActionType,
-        govMetadataUrl: request.govMetadataUrl,
+        govMetadataUrl: govMetadataUrl,
         endTime: request?.endTime,
         status: request.status,
         txHash: request.txHash,

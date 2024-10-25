@@ -70,6 +70,13 @@ export class Vote extends CommonEntity {
   comment: string;
 
   @Column({
+    name: 'vote_metadata_url',
+    type: 'varchar',
+    nullable: true,
+  })
+  voteMetadataUrl: string;
+
+  @Column({
     name: 'submit_time',
     type: 'timestamp',
   })
