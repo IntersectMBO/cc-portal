@@ -1,19 +1,19 @@
 "use client";
-import { CONSTITUTION_SIDEBAR_TABS, customPalette } from "@/constants";
-import { Divider, Grid } from "@mui/material";
+import { CONSTITUTION_SIDEBAR_TABS } from "@/constants";
+import { useAppContext, useModal } from "@/context";
+import { Grid } from "@mui/material";
+import { isAnyAdminRole } from "@utils";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { NotFound } from "../NotFound";
 import { PageTitleTabs } from "../PageTitleTabs";
 import { ConstitutionMetadata } from "../types";
-import { isAnyAdminRole } from "@utils";
-import { useAppContext, useModal } from "@/context";
 import { NavCard } from "./MDXComponents";
-import { useState } from "react";
-import { useTranslations } from "next-intl";
 
 export const ConstitutionSidebar = ({ tableOfContents, metadata }) => {
   const { openModal } = useModal();
   const { userSession } = useAppContext();
-  const [tab, setTab] = useState("revisions");
+  const [tab, setTab] = useState("contents");
   const t = useTranslations("Constitution");
 
   const onCompare = (
@@ -23,17 +23,16 @@ export const ConstitutionSidebar = ({ tableOfContents, metadata }) => {
       type: "compareConstitutionModal",
       state: {
         base: metadata[0],
-        target,
-      },
+        target
+      }
     });
   };
-
   return (
     <>
       <Grid
         container
         alignItems="center"
-        justifyContent="space-between"
+        justifyContent="center"
         padding={2}
         pt={{ xxs: 0, md: 2 }}
         sx={{ marginBottom: 2 }}
@@ -47,30 +46,12 @@ export const ConstitutionSidebar = ({ tableOfContents, metadata }) => {
             sx={{ fontSize: { xxs: 16 } }}
           />
         </Grid>
-        <Grid
-          item
-          xxs={6}
-          justifySelf="flex-end"
-          pl={1}
-          sx={{ display: { xxs: "none", md: "flex" } }}
-        >
-          <Divider
-            color={customPalette.lightBlue}
-            orientation="horizontal"
-            flexItem={true}
-            sx={{
-              height: "1px",
-              width: "100%",
-              alignSelf: "center",
-            }}
-          />
-        </Grid>
       </Grid>
       <Grid
         container
         direction="column"
-        width={{ xxs: "100%", md: "400p", lg: "450px" }}
-        px={{ xxs: 1, md: 2 }}
+        width={{ xxs: "100%", lg: "340px" }}
+        px={{ xxs: 1, md: 1 }}
         pb={{ xxs: 4, md: 2 }}
       >
         {tab === "revisions" ? (
@@ -114,7 +95,7 @@ export const ConstitutionSidebar = ({ tableOfContents, metadata }) => {
             )}
           </Grid>
         ) : (
-          <Grid item justifyContent="flex-end">
+          <Grid item container>
             {tableOfContents}
           </Grid>
         )}

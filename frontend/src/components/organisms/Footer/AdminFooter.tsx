@@ -1,11 +1,10 @@
 "use client";
-import React from "react";
 
+import { Button, Typography } from "@atoms";
+import { PATHS } from "@consts";
+import { useModal } from "@context";
 import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { Button, Typography } from "@atoms";
-import { useModal } from "@context";
-import { PATHS } from "@consts";
 
 export const AdminFooter = () => {
   const t = useTranslations("Footer");
@@ -20,8 +19,9 @@ export const AdminFooter = () => {
         width: "100%",
         backgroundColor: "white",
         justifyContent: "space-between",
-        px: { xxs: 2, sm: 6, md: 8, xl: 10 },
+        px: { xxs: 2, sm: 6, md: 18 },
         py: 3,
+        mb: { xxs: 3 }
       }}
     >
       <Typography fontWeight={500} variant="caption">
@@ -32,8 +32,8 @@ export const AdminFooter = () => {
           openModal({
             type: "signOutModal",
             state: {
-              homeRedirectionPath: PATHS.admin.home,
-            },
+              homeRedirectionPath: PATHS.admin.home
+            }
           })
         }
         variant="outlined"

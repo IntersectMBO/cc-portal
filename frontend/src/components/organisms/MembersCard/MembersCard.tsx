@@ -2,18 +2,17 @@ import { Box } from "@mui/material";
 
 import { Button, Typography } from "@atoms";
 
+import { formatDisplayDate, truncateText } from "@utils";
 import { useTranslations } from "next-intl";
-import { ICONS } from "@consts";
 import { UserListItem } from "..";
 import { UserAvatar } from "../../molecules/UserCard";
-import { formatDisplayDate, truncateText } from "@utils";
 
 export const MembersCard = ({
   id,
   name,
   description,
   profile_photo_url,
-  created_at,
+  created_at
 }: Pick<
   UserListItem,
   "name" | "id" | "description" | "created_at" | "profile_photo_url"
@@ -33,7 +32,7 @@ export const MembersCard = ({
         padding: 3,
         paddingBottom: 4,
         maxWidth: "450px",
-        height: "386px",
+        height: "386px"
       }}
     >
       <Box>
@@ -57,7 +56,7 @@ export const MembersCard = ({
       >
         <Button
           sx={{ pointerEvents: "none" }}
-          variant="outlined"
+          variant="text"
           size="small"
           data-testid={`members-${id}-joined`}
         >

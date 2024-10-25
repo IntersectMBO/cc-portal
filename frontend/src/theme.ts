@@ -153,7 +153,7 @@ export const theme = createTheme({
   typography: {
     fontFamily: poppins.style.fontFamily,
     allVariants: {
-      color: "#242232",
+      color: "#212A3D",
       fontFamily: poppins.style.fontFamily
     }
   },
