@@ -102,7 +102,7 @@ export interface OpenPreviewReasoningModal {
     vote?: Vote;
     vote_submit_time?: string;
     reasoning_title?: string;
-    reasoning_comment?: string;
+    rationale_url?: string;
   };
   onActionClick?: (id: string) => void;
   actionTitle?: string;

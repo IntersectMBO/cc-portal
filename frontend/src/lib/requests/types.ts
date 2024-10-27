@@ -56,6 +56,7 @@ export interface VotesTableI {
   user_address: string;
   user_photo_url?: string;
   value: Vote;
+  rationale_url?: string;
   reasoning_title?: string;
   reasoning_comment?: string;
   gov_action_proposal_id: string;

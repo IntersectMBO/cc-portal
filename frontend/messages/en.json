@@ -32,7 +32,8 @@
     "voted": "Voted",
     "rationale": "Rationale",
     "actionTitle": "Show more",
-    "notAvailable": "Not Available"
+    "notAvailable": "Not Available",
+    "available": "Available"
   },
   "MyActions": {
     "myVotesTab": "My Votes",
@@ -224,6 +225,8 @@
     "previewRationale": {
       "headline": "Rationale",
       "description": "Please update rationale for your vote on specific governance action.",
+      "noRationaleUrl": "A rationale has not been provided for this vote",
+      "rationaleLink": "Rationale link",
       "governanceActionCategory": "Governance Action Category",
       "governanceActionId": "Governance Action ID",
       "voted": "Voted",
