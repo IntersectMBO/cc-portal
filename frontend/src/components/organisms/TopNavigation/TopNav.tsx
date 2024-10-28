@@ -76,7 +76,11 @@ export const TopNav = () => {
             </Button>
           </Box>
         )}
-        {isUserRole(userSession.role) && <UserProfileButton user={user} />}
+        {isUserRole(userSession.role) && (
+          <Box ml={{ md: 3 }}>
+            <UserProfileButton user={user} />
+          </Box>
+        )}
       </>
     );
   };

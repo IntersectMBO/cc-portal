@@ -22,7 +22,7 @@ export const VotesTableRow = ({
   votes,
   disabled,
   actionTitle,
-  onActionClick,
+  onActionClick
 }: Props) => {
   const t = useTranslations("LatestUpdates");
   const { openModal } = useModal<GovActionModalState>();
@@ -31,17 +31,17 @@ export const VotesTableRow = ({
     user_address,
     user_photo_url,
     value,
-    reasoning_comment,
+    rationale_url,
     gov_action_proposal_id,
     gov_action_proposal_title,
-    gov_action_proposal_type,
+    gov_action_proposal_type
   } = votes;
   const openGAModal = () => {
     openModal({
       type: "govActionModal",
       state: {
-        id: gov_action_proposal_id,
-      },
+        id: gov_action_proposal_id
+      }
     });
   };
 
@@ -50,7 +50,7 @@ export const VotesTableRow = ({
       item
       mb={3}
       sx={{
-        opacity: disabled && 0.5,
+        opacity: disabled && 0.5
       }}
     >
       <Card variant="default" data-testid="ga-card">
@@ -64,7 +64,7 @@ export const VotesTableRow = ({
               xxs: "column",
               md: "row",
               lg: "row",
-              xl: "row",
+              xl: "row"
             }}
           >
             <Grid
@@ -208,9 +208,7 @@ export const VotesTableRow = ({
                     {t("rationale")}
                   </Typography>
                   <Typography variant="caption" data-testid="ga-rationale-text">
-                    {reasoning_comment
-                      ? truncateText(reasoning_comment, 100)
-                      : t("notAvailable")}
+                    {rationale_url ? t("available") : t("notAvailable")}
                   </Typography>
                 </Grid>
               </Grid>

@@ -36,10 +36,12 @@ export const Link: FC<LinkProps> = (props) => {
           fontSize,
           color: "textBlack",
           padding: `16px 16px ${isActive ? "14px" : "16px"} 16px`,
+          "&:hover": {
+            backgroundColor: customPalette.bgTab
+          },
           borderBottom: isActive
             ? `2px solid ${customPalette.primaryBlue}`
-            : "none",
-          backgroundColor: isActive ? customPalette.bgTab : undefined
+            : "none"
         }}
         variant="body2"
       >

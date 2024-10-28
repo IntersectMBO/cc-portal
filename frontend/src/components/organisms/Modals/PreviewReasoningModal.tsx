@@ -1,33 +1,31 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { CopyPill } from "@/components/molecules";
+import { Reasoning } from "@/components/molecules/Reasoning";
+import { useSnackbar } from "@/context/snackbar";
+import { ReasoningResponseI } from "@/lib/requests";
 import {
-  ModalWrapper,
-  ModalHeader,
-  Typography,
-  Tooltip,
   Button,
+  ModalHeader,
+  ModalWrapper,
   OutlinedLightButton,
-  VotePill,
+  Tooltip,
+  Typography,
+  VotePill
 } from "@atoms";
 import { customPalette, IMAGES } from "@consts";
-import { useTranslations } from "next-intl";
 import { useModal } from "@context";
-import { Box } from "@mui/material";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { Reasoning } from "@/components/molecules/Reasoning";
-import { OpenPreviewReasoningModal } from "../types";
-import { getReasoningData } from "@/lib/api";
-import {
-  getProposalTypeLabel,
-  getShortenedGovActionId,
-  formatDisplayDate,
-  isResponseErrorI,
-} from "@utils";
 import { useScreenDimension } from "@hooks";
-import { ReasoningResponseI } from "@/lib/requests";
-import { useSnackbar } from "@/context/snackbar";
-import { CopyPill } from "@/components/molecules";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { Box } from "@mui/material";
+import {
+  formatDisplayDate,
+  getProposalTypeLabel,
+  getShortenedGovActionId
+} from "@utils";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { OpenPreviewReasoningModal } from "../types";
 
 interface Reasoning extends Omit<ReasoningResponseI, "contents"> {
   comment: string;
@@ -36,7 +34,7 @@ export const PreviewReasoningModal = () => {
   const t = useTranslations("Modals");
   const {
     closeModal,
-    state: { govAction, onActionClick, actionTitle },
+    state: { govAction, onActionClick, actionTitle }
   } = useModal<OpenPreviewReasoningModal>();
   const [reasoning, setReasoning] = useState<Reasoning | null>(null);
   const onClose = () => {
@@ -46,27 +44,26 @@ export const PreviewReasoningModal = () => {
   const { addErrorAlert } = useSnackbar();
 
   useEffect(() => {
-    async function fetchData(id: string) {
-      const response = await getReasoningData(id);
-      if (isResponseErrorI(response)) {
-        if (response.statusCode !== 404 && response.statusCode !== 401) {
-          addErrorAlert(response.error);
-          closeModal();
-        }
-      } else {
-        const contents = JSON.parse(response.contents);
-        setReasoning({ ...response, comment: contents.body.comment });
-      }
-    }
-
-    if (govAction.reasoning_title && govAction.reasoning_comment) {
-      setReasoning({
-        comment: govAction.reasoning_comment,
-        title: govAction.reasoning_title,
-      });
-    } else if (govAction?.id) {
-      fetchData(govAction.id);
-    }
+    // async function fetchData(id: string) {
+    //   const response = await getReasoningData(id);
+    //   if (isResponseErrorI(response)) {
+    //     if (response.statusCode !== 404 && response.statusCode !== 401) {
+    //       addErrorAlert(response.error);
+    //       closeModal();
+    //     }
+    //   } else {
+    //     const contents = JSON.parse(response.contents);
+    //     setReasoning({ ...response, comment: contents.body.comment });
+    //   }
+    // }
+    // if (govAction.reasoning_title && govAction.reasoning_comment) {
+    //   setReasoning({
+    //     comment: govAction.reasoning_comment,
+    //     title: govAction.reasoning_title,
+    //   });
+    // } else if (govAction?.id) {
+    //   fetchData(govAction.id);
+    // }
   }, [govAction?.id]);
 
   const DisplayDate = ({
@@ -75,7 +72,7 @@ export const PreviewReasoningModal = () => {
     date,
     tooltipHeading,
     tooltipParagraph,
-    dataTestId,
+    dataTestId
   }) => {
     return (
       <Box
@@ -105,7 +102,7 @@ export const PreviewReasoningModal = () => {
         >
           <InfoOutlinedIcon
             style={{
-              color: "#ADAEAD",
+              color: "#ADAEAD"
             }}
             sx={{ ml: 0.7 }}
             fontSize="small"
@@ -129,26 +126,28 @@ export const PreviewReasoningModal = () => {
           {t("previewRationale.headline")}
         </span>
       </ModalHeader>
-      <Typography
-        sx={{ px: 3 }}
-        variant="body2"
-        fontWeight={400}
-        color={customPalette.textGray}
-        data-testid="rationale-modal-description-text"
-      >
-        {t("previewRationale.description")}
-      </Typography>
+      {!govAction.rationale_url && (
+        <Typography
+          sx={{ px: 3 }}
+          variant="body2"
+          fontWeight={400}
+          color={customPalette.textGray}
+          data-testid="rationale-modal-description-text"
+        >
+          {t("previewRationale.noRationaleUrl")}
+        </Typography>
+      )}
       <Box
         sx={{
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          backgroundColor: "rgba(255, 255, 255, 0.3)",
+          backgroundColor: "rgba(255, 255, 255, 0.3)"
         }}
         pt={3}
         pb={3}
         px={{ xxs: 2.25, md: 3 }}
       >
-        {reasoning && (
+        {/* {reasoning && (
           <Box
             padding={1.5}
             border={1}
@@ -164,6 +163,20 @@ export const PreviewReasoningModal = () => {
               data-testid="asdf"
             />
           </Box>
+        )} */}
+        {govAction.rationale_url && (
+          <Box mt={3}>
+            <Typography color="neutralGray" variant="caption">
+              {t("previewRationale.rationaleLink")}
+            </Typography>
+            <CopyPill
+              copyValue={govAction.rationale_url}
+              copyText={getShortenedGovActionId(
+                govAction.rationale_url,
+                isMobile ? 4 : 20
+              )}
+            />
+          </Box>
         )}
         <Box mt={3}>
           <Typography color="neutralGray" variant="caption">
@@ -177,6 +190,7 @@ export const PreviewReasoningModal = () => {
             )}
           />
         </Box>
+
         <Box mt={3} data-testid="governance-action-type-text">
           <Typography color="neutralGray" variant="caption">
             {t("previewRationale.governanceActionCategory")}
@@ -253,7 +267,7 @@ export const PreviewReasoningModal = () => {
             size="large"
             sx={{
               width: "100%",
-              marginBottom: 1.5,
+              marginBottom: 1.5
             }}
             data-testid="rationale-modal-action-button"
           >
@@ -265,7 +279,7 @@ export const PreviewReasoningModal = () => {
           variant="contained"
           size="large"
           sx={{
-            width: "100%",
+            width: "100%"
           }}
           data-testid="rationale-modal-close-button"
         >
