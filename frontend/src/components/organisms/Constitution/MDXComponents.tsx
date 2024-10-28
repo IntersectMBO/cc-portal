@@ -206,7 +206,7 @@ export const NavDrawerDesktop = ({
       </Grid> */}
       <Box
         sx={{
-          height: { xxs: "90vh", md: "80vh" },
+          height: { xxs: "90vh", md: "100vh" },
           overflowY: "scroll",
 
           scrollbarWidth: "none",

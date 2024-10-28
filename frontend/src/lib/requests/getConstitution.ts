@@ -17,10 +17,7 @@ export async function getConstitution(): Promise<any> {
     const mdxSource = await serialize(mdxContent, {
       mdxOptions: {
         remarkPlugins: [remarkToc],
-        rehypePlugins: [
-          rehypeSlug,
-          [rehypeToc, { headings: ["h1", "h2", "h3"] }]
-        ]
+        rehypePlugins: [rehypeSlug, [rehypeToc, { headings: ["h2", "h3"] }]]
       }
     });
     return mdxSource;

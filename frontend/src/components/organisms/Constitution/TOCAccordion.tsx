@@ -6,14 +6,14 @@ import {
   AccordionSummary,
   Box
 } from "@mui/material";
-import React, { Children } from "react";
+import { Children } from "react";
 
 export const TocAccordion = ({ children }) => {
   return (
     <>
       {Children.map(children, (child) => (
         <>
-          {child.props.className.includes("toc-item-h1") ? (
+          {child.props.className.includes("toc-item-h2") ? (
             <Accordion
               elevation={0}
               sx={{
@@ -39,21 +39,56 @@ export const TocAccordion = ({ children }) => {
                   }
                 }}
               >
-                {React.cloneElement(child.props.children[0], {
-                  href: "#",
-                  onClick: (e) => e.preventDefault()
-                })}
+                {child.props.children[0]}
               </AccordionSummary>
-              <AccordionDetails>{child.props.children[1]}</AccordionDetails>
+              <AccordionDetails>
+                <Box
+                  sx={{
+                    flexDirection: "column",
+                    listStyleType: "none",
+                    padding: "0 16px",
+                    "& li": {
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "left",
+                      minHeight: "56px"
+                    }
+                  }}
+                >
+                  {child.props.children[1].props.children}
+                </Box>
+              </AccordionDetails>
             </Accordion>
           ) : (
-            <Box
+            <Accordion
+              elevation={0}
               sx={{
-                lineHeight: "56px"
+                boxShadow: "none",
+                padding: 0,
+                "&:before": {
+                  display: "none"
+                },
+                width: "100%"
               }}
+              disableGutters
             >
-              {child.props.children}
-            </Box>
+              <Box
+                sx={{
+                  borderRadius: "30px",
+                  minHeight: "56px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "left",
+                  listStyleType: "none",
+                  padding: "0 16px",
+                  "&:hover": {
+                    backgroundColor: customPalette.accordionBg
+                  }
+                }}
+              >
+                {child}
+              </Box>
+            </Accordion>
           )}
         </>
       ))}
