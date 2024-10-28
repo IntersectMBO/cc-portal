@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     container_name: worker
     restart: unless-stopped
+    ports:
+      - "3002:3002"
     networks:
       - bloxico_local
 
@@ -31,7 +33,6 @@ services:
     container_name: ipfs-service
     ports:
       - "3001:3001"
-      - "3002:3002"
       - "4001:4001"
       - "4002:4002"
       - "4003:4003"
