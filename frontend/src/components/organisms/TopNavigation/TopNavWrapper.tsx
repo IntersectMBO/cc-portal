@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 import { AppBar, SxProps } from "@mui/material";
 
@@ -17,7 +17,7 @@ export const TopNavWrapper = ({ children, homeRedirectionPath, sx }: Props) => {
     <AppBar
       component="nav"
       sx={{
-        backgroundColor: customPalette.arcticWhite,
+        backgroundColor: customPalette.neutralWhite,
         borderColor: "lightblue",
         borderRadius: 0,
         boxShadow: 0,
@@ -25,17 +25,17 @@ export const TopNavWrapper = ({ children, homeRedirectionPath, sx }: Props) => {
         alignItems: "center",
         flexDirection: "row",
         position: "sticky",
-        py: { xxs: 2, sm: 3 },
-        px: { xxs: 2, sm: 5 },
+        py: { xxs: 2, sm: 2 },
+        px: { xxs: 5, sm: 5 },
         "& img": {
-          width: "100%",
+          width: "100%"
         },
         gap: "40px",
-        ...sx,
+        ...sx
       }}
     >
       <NextLink data-testid="logo-button" href={homeRedirectionPath}>
-        <img height={35} src={ICONS.logoSign} />
+        <img height={32} src={ICONS.logoSign} />
       </NextLink>
       {children}
     </AppBar>

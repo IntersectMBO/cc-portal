@@ -8,10 +8,17 @@ import {
   Unique,
 } from 'typeorm';
 import { GovActionProposal } from './gov-action-proposal.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity('rationales')
 @Unique(['userId', 'govActionProposalId'])
 export class Rationale extends CommonEntity {
+  @ManyToOne(() => User, (user) => user.rationales, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
   @PrimaryColumn({
     name: 'user_id',
     type: 'uuid',

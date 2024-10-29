@@ -1,20 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Box, Grid, Hidden, IconButton } from "@mui/material";
 
-import { Button as MUIButton } from "@mui/material";
 import { Button } from "@atoms";
-import { TopNavWrapper } from "./TopNavWrapper";
-import { useTranslations } from "next-intl";
+import { IMAGES, PATHS } from "@consts";
 import { useAppContext, useModal } from "@context";
-import PermissionChecker from "../PermissionChecker";
-import { customPalette, IMAGES, PATHS } from "@consts";
-import Link from "next/link";
-import { Search } from "@molecules";
 import { useManageQueryParams } from "@hooks";
-import MenuIcon from "@mui/icons-material/Menu";
+import { Search } from "@molecules";
+import { Button as MUIButton } from "@mui/material";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import PermissionChecker from "../PermissionChecker";
 import { DrawerMobile } from "./DrawerMobile";
+import { TopNavWrapper } from "./TopNavWrapper";
 
 export const AdminTopNav = () => {
   const t = useTranslations("Navigation");
@@ -26,14 +25,14 @@ export const AdminTopNav = () => {
 
   useEffect(() => {
     const params: Record<string, string | null> = {
-      search: searchText || null,
+      search: searchText || null
     };
     updateQueryParams(params);
   }, [searchText, updateQueryParams]);
 
   const addMember = () =>
     openModal({
-      type: "addMember",
+      type: "addMember"
     });
 
   const uploadConstitution = () => openModal({ type: "uploadConstitution" });
@@ -115,14 +114,8 @@ export const AdminTopNav = () => {
           </Hidden>
           <Hidden mdDown>{getNavItems()}</Hidden>
           <Hidden mdUp>
-            <IconButton
-              data-testid="open-drawer-button"
-              onClick={openDrawer}
-              sx={{
-                bgcolor: customPalette.arcticWhite,
-              }}
-            >
-              <MenuIcon color="primary" />
+            <IconButton data-testid="open-drawer-button" onClick={openDrawer}>
+              <img src={IMAGES.menu} />
             </IconButton>
           </Hidden>
           <DrawerMobile

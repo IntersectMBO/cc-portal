@@ -1,24 +1,24 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
-import { Box } from "@mui/material";
-import { ShowMoreButton, Typography } from "@atoms";
-import { useTranslations } from "next-intl";
-import { VotesTable } from "./VotesTable";
-import { NotFound } from "./NotFound";
-import { countSelectedFilters, isEmpty } from "@utils";
-import { DataActionsBar } from "../molecules";
-import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING } from "@consts";
-import { PaginationMeta, VotesTableI } from "@/lib/requests";
-import { usePagination, useManageQueryParams } from "@hooks";
-import { getLatestUpdates } from "@/lib/api";
-import { OpenPreviewReasoningModal } from "./types";
 import { useModal } from "@/context";
+import { getLatestUpdates } from "@/lib/api";
+import { PaginationMeta, VotesTableI } from "@/lib/requests";
+import { ShowMoreButton, Typography } from "@atoms";
+import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING } from "@consts";
+import { useManageQueryParams, usePagination } from "@hooks";
+import { Box } from "@mui/material";
+import { countSelectedFilters, isEmpty } from "@utils";
+import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useState } from "react";
+import { DataActionsBar } from "../molecules";
+import { NotFound } from "./NotFound";
+import { OpenPreviewReasoningModal } from "./types";
+import { VotesTable } from "./VotesTable";
 
 export const LatestUpdates = ({
   latestUpdates,
   paginationMeta,
-  error,
+  error
 }: {
   latestUpdates: VotesTableI[];
   paginationMeta: PaginationMeta;
@@ -47,9 +47,9 @@ export const LatestUpdates = ({
           end_time: action.gov_action_proposal_end_time,
           vote: action.value,
           reasoning_title: action.reasoning_title,
-          reasoning_comment: action.reasoning_comment,
-        },
-      },
+          rationale_url: action.rationale_url
+        }
+      }
     });
   };
 
@@ -60,7 +60,7 @@ export const LatestUpdates = ({
         ? chosenFilters.govActionType?.join(",")
         : null,
     vote: chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
-    sortBy: chosenSorting || null,
+    sortBy: chosenSorting || null
   };
 
   const { data, pagination, isLoading, loadMore } = usePagination(

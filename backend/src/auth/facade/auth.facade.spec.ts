@@ -9,6 +9,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -18,6 +19,7 @@ import { Role } from 'src/users/entities/role.entity';
 import { TokenResponse } from '../api/response/token.response';
 import { EmailService } from '../../email/service/email.service';
 import { UserStatusEnum } from '../../users/enums/user-status.enum';
+import { PermissionEnum } from 'src/users/enums/permission.enum';
 
 describe('AuthFacade', () => {
   let facade: AuthFacade;
@@ -135,6 +137,20 @@ describe('AuthFacade', () => {
       createdAt: null,
       updatedAt: null,
     },
+    {
+      id: '3',
+      name: 'Test User 3',
+      email: 'test@test.com',
+      description: 'Lorem ipsum dolor sit amet 3',
+      profilePhotoUrl: 'https://example3.com/profile.jpg',
+      status: UserStatusEnum.PENDING,
+      hotAddresses: ['addr1', 'addr2'],
+      role: mockRoles[2].code,
+      permissions: [],
+      deactivatedAt: null,
+      createdAt: null,
+      updatedAt: null,
+    },
   ];
 
   const mockTokenResponse: TokenResponse = {
@@ -233,6 +249,7 @@ describe('AuthFacade', () => {
       }
       return user;
     }),
+    checkRoleManagedByPermission: jest.fn(),
   };
 
   const mockAuthService = {
@@ -408,7 +425,7 @@ describe('AuthFacade', () => {
   });
 
   describe('Validate User', () => {
-    it('should validate user by email', async () => {
+    it('should find user by email', async () => {
       const email = 'sofija@example.com';
       const userDto: UserDto = {
         id: '1',
@@ -425,7 +442,7 @@ describe('AuthFacade', () => {
         updatedAt: null,
       };
 
-      const result = await facade.validateUser(email);
+      const result = await facade.findUserByEmail(email);
 
       expect(result).toEqual(userDto);
       expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
@@ -435,7 +452,7 @@ describe('AuthFacade', () => {
       const email = 'non_existing@example.com';
 
       try {
-        await facade.validateUser(email);
+        await facade.findUserByEmail(email);
       } catch (e) {
         expect(e).toBeInstanceOf(NotFoundException);
         expect(e.message).toBe(`User with this email address not found`);
@@ -532,6 +549,81 @@ describe('AuthFacade', () => {
       await expect(facade.refreshAccessToken(refreshToken)).rejects.toThrow(
         UnauthorizedException,
       );
+    });
+  });
+
+  describe('Check Ability Resend Register Invite', () => {
+    it('should call checkRoleManagedByPermission if user status is PENDING', async () => {
+      const mockUser = mockUsers[2];
+      jest.spyOn(facade, 'findUserByEmail').mockResolvedValue(mockUser);
+      const permissions = [PermissionEnum.MANAGE_CC_MEMBERS];
+
+      await facade.checkAbilityResendRegisterInvite(
+        mockUser.email,
+        permissions,
+      );
+
+      expect(facade.findUserByEmail).toHaveBeenCalledWith(mockUser.email);
+      expect(mockUserService.checkRoleManagedByPermission).toHaveBeenCalledWith(
+        mockUser.role,
+        permissions,
+      );
+    });
+
+    it(`should throw error if user's status is not PENDING`, async () => {
+      const mockUser = mockUsers[1];
+      jest.spyOn(facade, 'findUserByEmail').mockResolvedValue(mockUser);
+      const permissions = [PermissionEnum.MANAGE_CC_MEMBERS];
+
+      try {
+        await facade.checkAbilityResendRegisterInvite(
+          mockUser.email,
+          permissions,
+        );
+      } catch (e) {
+        expect(e).toBeInstanceOf(ConflictException);
+        expect(e.status).toEqual(409);
+        expect(e.message).toEqual(`Unable to resend register invite`);
+      }
+    });
+
+    it('should throw NotFoundException if user with given email is not found', async () => {
+      const mockUser = mockUsers[2];
+      mockUser.email = 'not-existing-email@test.com';
+      jest
+        .spyOn(facade, 'findUserByEmail')
+        .mockRejectedValue(
+          new NotFoundException(`User with this email address not found`),
+        );
+      const permissions = [PermissionEnum.MANAGE_CC_MEMBERS];
+      try {
+        await facade.checkAbilityResendRegisterInvite(
+          mockUser.email,
+          permissions,
+        );
+      } catch (e) {
+        expect(e).toBeInstanceOf(NotFoundException);
+        expect(e.status).toEqual(404);
+        expect(e.message).toEqual(`User with this email address not found`);
+      }
+    });
+
+    it('should call checkRoleManagedByPermission if user status is PENDING', async () => {
+      const mockUser = mockUsers[2];
+      mockUser.role = RoleEnum.ADMIN;
+      jest.spyOn(facade, 'findUserByEmail').mockResolvedValue(mockUser);
+      const permissions = [PermissionEnum.ADD_CONSTITUTION];
+
+      try {
+        await facade.checkAbilityResendRegisterInvite(
+          mockUser.email,
+          permissions,
+        );
+      } catch (e) {
+        expect(e).toBeInstanceOf(ForbiddenException);
+        expect(e.status).toEqual(403);
+        expect(e.message).toEqual(`You have no permission for this action`);
+      }
     });
   });
 });

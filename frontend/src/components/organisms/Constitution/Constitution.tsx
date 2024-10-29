@@ -1,9 +1,16 @@
 "use client";
 
-import { Card } from "@molecules";
+import { ContentWrapper, Typography } from "@/components/atoms";
+import { customPalette, IMAGES } from "@consts";
+import { useScreenDimension } from "@hooks";
 import { Box, Grid, IconButton } from "@mui/material";
+import { useTranslations } from "next-intl";
 import { MDXRemote } from "next-mdx-remote";
 import { useEffect, useState } from "react";
+import { Footer } from "../Footer";
+import { DrawerMobile } from "../TopNavigation";
+import { ConstitutionProps } from "../types";
+import { ConstitutionSidebar } from "./ConstitutionSidebar";
 import {
   Code,
   Heading1,
@@ -12,16 +19,9 @@ import {
   ListItem,
   NavDrawerDesktop,
   Paragraph,
-  TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS,
+  TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS
 } from "./MDXComponents";
-import { ConstitutionProps } from "../types";
-import { useTranslations } from "next-intl";
-import { Footer } from "../Footer";
-import { customPalette, IMAGES } from "@consts";
-import { ContentWrapper, Typography } from "@/components/atoms";
-import { useScreenDimension } from "@hooks";
-import { DrawerMobile } from "../TopNavigation";
-import { ConstitutionSidebar } from "./ConstitutionSidebar";
+import { TocAccordion } from "./TOCAccordion";
 import TOCLink from "./TOCLink";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
@@ -57,7 +57,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
         <NavDrawerDesktop
           isOpen={isOpen}
           onClick={() => setIsOpen(!isOpen)}
-          top={{ xxs: 0, md: 90 }}
+          top={{ xxs: 0, md: 85 }}
           left={0}
         >
           <ConstitutionSidebar tableOfContents={children} metadata={metadata} />
@@ -69,12 +69,25 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
     p: Paragraph,
     li: ListItem,
     code: Code,
+    ol: (props) => {
+      //make sure we render ol from toc with TocAccordion otherwise return default
+      if (props.className && props.className.includes("toc-level")) {
+        return <TocAccordion {...props} />;
+      }
+      return <ol style={{ color: customPalette.textGray }} {...props} />;
+    },
     a: (props) => {
       if (props.href && props.href.startsWith("#")) {
-        return <TOCLink {...props} callback={onTOCLinkClick} />;
+        return (
+          <TOCLink
+            {...props}
+            callback={onTOCLinkClick}
+            disabled={props.className.includes("toc-link-h2")}
+          />
+        );
       }
       return <a {...props} />;
-    },
+    }
   };
 
   return (
@@ -82,9 +95,17 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       data-testid="constitution-page-wrapper"
       container
       position="relative"
-      justifyContent={{ xxs: "flex-start", md: "flex-end" }}
+      justifyContent={{ xxs: "flex-start" }}
       flex={1}
     >
+      {/* fake elemnt to push content to the right since tos is fixed on left */}
+      <Box
+        height={{ xss: "0", md: "100%" }}
+        width={{ xss: "0", md: "420px" }}
+        zIndex={-1}
+      >
+        &nbsp;
+      </Box>
       <Grid mt={3} item xxs={12} md={isOpen ? 8 : 11} display="flex">
         <Box display="flex" flexDirection="column" flex={1}>
           <ContentWrapper>
@@ -93,7 +114,9 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                pb={4}
+                position={{ xxs: "sticky", md: "static" }}
+                top="72px"
+                bgcolor={customPalette.bgWhite}
               >
                 <Typography variant="headline4">{t("title")}</Typography>
                 <IconButton
@@ -102,21 +125,18 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                   sx={{
                     bgcolor: customPalette.arcticWhite,
                     display: { xxs: "flex", md: "none" },
-                    justifyContent: "center",
+                    justifyContent: "center"
                   }}
                 >
-                  <img src={IMAGES.bookOpen} />
+                  <img src={IMAGES.docSearch} />
                 </IconButton>
               </Box>
-              <Card
-                sx={{ px: { xxs: 2, md: 7 }, py: { xxs: 1, md: 6 } }}
-                dataTestId="constitution-content"
-              >
+              <Box data-testid="constitution-content" pt={4}>
                 <MDXRemote {...constitution} components={MDXComponents} />
-              </Card>
+              </Box>
             </Box>
           </ContentWrapper>
-          <Footer />
+          <Footer bgColor={customPalette.bgWhite} />
         </Box>
       </Grid>
     </Grid>

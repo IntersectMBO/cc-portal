@@ -1,79 +1,53 @@
 "use client";
-import { CONSTITUTION_SIDEBAR_TABS, customPalette } from "@/constants";
-import { Divider, Grid } from "@mui/material";
-import { NotFound } from "../NotFound";
-import { PageTitleTabs } from "../PageTitleTabs";
-import { ConstitutionMetadata } from "../types";
-import { isAnyAdminRole } from "@utils";
-import { useAppContext, useModal } from "@/context";
-import { NavCard } from "./MDXComponents";
-import { useState } from "react";
+import { useModal } from "@/context";
+import { Grid, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
 
 export const ConstitutionSidebar = ({ tableOfContents, metadata }) => {
   const { openModal } = useModal();
-  const { userSession } = useAppContext();
-  const [tab, setTab] = useState("revisions");
+  // const { userSession } = useAppContext();
+  // const [tab, setTab] = useState("contents");
   const t = useTranslations("Constitution");
 
-  const onCompare = (
-    target: Omit<ConstitutionMetadata, "version" | "url" | "blake2b">
-  ) => {
-    openModal({
-      type: "compareConstitutionModal",
-      state: {
-        base: metadata[0],
-        target,
-      },
-    });
-  };
-
+  // const onCompare = (
+  //   target: Omit<ConstitutionMetadata, "version" | "url" | "blake2b">
+  // ) => {
+  //   openModal({
+  //     type: "compareConstitutionModal",
+  //     state: {
+  //       base: metadata[0],
+  //       target
+  //     }
+  //   });
+  // };
   return (
     <>
       <Grid
         container
         alignItems="center"
-        justifyContent="space-between"
+        justifyContent="left"
         padding={2}
         pt={{ xxs: 0, md: 2 }}
-        sx={{ marginBottom: 2 }}
+        px={{ xxs: 2, md: 3 }}
         flexWrap="nowrap"
       >
-        <Grid item xxs={12} md="auto">
+        {/* <Grid item xxs={12} md="auto">
           <PageTitleTabs
             onChange={(tab) => setTab(tab.value)}
             tabs={CONSTITUTION_SIDEBAR_TABS}
             selectedValue={tab}
             sx={{ fontSize: { xxs: 16 } }}
           />
-        </Grid>
-        <Grid
-          item
-          xxs={6}
-          justifySelf="flex-end"
-          pl={1}
-          sx={{ display: { xxs: "none", md: "flex" } }}
-        >
-          <Divider
-            color={customPalette.lightBlue}
-            orientation="horizontal"
-            flexItem={true}
-            sx={{
-              height: "1px",
-              width: "100%",
-              alignSelf: "center",
-            }}
-          />
-        </Grid>
+        </Grid> */}
+        <Typography fontWeight={500}>{t("drawer.tableOfContents")}</Typography>
       </Grid>
       <Grid
         container
         direction="column"
-        width={{ xxs: "100%", md: "400p", lg: "450px" }}
-        px={{ xxs: 1, md: 2 }}
-        pb={{ xxs: 4, md: 2 }}
+        width={{ xxs: "100%", lg: "340px" }}
+        px={{ xxs: 1, md: 1 }}
       >
-        {tab === "revisions" ? (
+        {/* {tab === "revisions" ? (
           <Grid item justifyContent="flex-end" px={{ xxs: 1, md: 0 }}>
             {metadata ? (
               metadata.map(({ title, created_date, cid, blake2b, url }) => {
@@ -113,11 +87,11 @@ export const ConstitutionSidebar = ({ tableOfContents, metadata }) => {
               />
             )}
           </Grid>
-        ) : (
-          <Grid item justifyContent="flex-end">
-            {tableOfContents}
-          </Grid>
-        )}
+        ) : ( */}
+        <Grid item container>
+          {tableOfContents}
+        </Grid>
+        {/* )} */}
       </Grid>
     </>
   );

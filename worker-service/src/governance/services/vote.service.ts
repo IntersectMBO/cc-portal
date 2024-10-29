@@ -73,13 +73,15 @@ export class VoteService extends CommonService {
         voteRequests[i],
         existingGAPs,
       );
+      const voteMetadataUrl = await this.transformIpfsUrl(
+        voteRequests[i].voteMetadataUrl,
+      );
       const vote: Partial<Vote> = {
         id: voteRequests[i].id,
         userId: voteRequests[i].userId,
         hotAddress: voteRequests[i].hotAddress,
         vote: voteRequests[i].vote,
-        title: voteRequests[i].rationaleTitle,
-        comment: voteRequests[i].comment,
+        voteMetadataUrl: voteMetadataUrl,
         submitTime: new Date(voteRequests[i].submitTime),
         govActionProposal: existingGAP,
       };
@@ -125,8 +127,11 @@ export class VoteService extends CommonService {
   private async prepareGAP(
     voteRequest: VoteRequest,
   ): Promise<GovActionProposal> {
+    const govMetadataUrl = await this.transformIpfsUrl(
+      voteRequest.govMetadataUrl,
+    );
     const govActionProposalDto: Partial<GovActionProposalDto> =
-      await this.getGovActionProposalFromUrl(voteRequest.govMetadataUrl);
+      await this.getGovActionProposalFromUrl(govMetadataUrl);
     govActionProposalDto.id = voteRequest.govActionProposalId;
     govActionProposalDto.votingAnchorId = voteRequest.votingAnchorId;
     govActionProposalDto.status = voteRequest.status;
@@ -135,7 +140,7 @@ export class VoteService extends CommonService {
       'hex',
     );
     govActionProposalDto.govActionType = voteRequest.govActionType;
-    govActionProposalDto.govMetadataUrl = voteRequest.govMetadataUrl;
+    govActionProposalDto.govMetadataUrl = govMetadataUrl;
     govActionProposalDto.submitTime = voteRequest.govActionProposalSubmitTime;
 
     const govActionProposal =

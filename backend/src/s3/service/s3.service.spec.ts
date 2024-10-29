@@ -11,9 +11,12 @@ const mockBucket = {
 };
 
 const mockConfigService = {
-  get: jest.fn().mockImplementation((minioBucked) => {
-    if (minioBucked === 'MINIO_BUCKET') {
+  get: jest.fn().mockImplementation((variable) => {
+    if (variable === 'MINIO_BUCKET') {
       return 'cc-portal';
+    }
+    if (variable === 'S3_BASE_URL') {
+      return 'https://cc-portal.s3.amazonaws.com';
     }
   }),
 };
@@ -88,13 +91,14 @@ describe('S3Service', () => {
       const result = await service.uploadFile(context, fileName, file);
 
       expect(result).toBe(
-        'https://cc-portal.s3.amazonaws.com/profile-photo-test-upload.txt',
+        'https://cc-portal.s3.amazonaws.com/cc-portal/profile-photo-test-upload.txt',
       );
       expect(mockMinioClient.putObject).toHaveBeenCalledWith(
         'cc-portal',
         'profile-photo-test-upload.txt',
         expect.any(Buffer),
         100,
+        { 'Content-Type': undefined },
       );
     });
 

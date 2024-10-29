@@ -1,11 +1,11 @@
-import { Dispatch, SetStateAction, useCallback } from "react";
 import {
   Box,
   Checkbox,
   FormControlLabel,
   FormLabel,
-  Typography,
+  Typography
 } from "@mui/material";
+import { Dispatch, SetStateAction, useCallback } from "react";
 
 import { useTranslations } from "next-intl";
 import { FilterItems } from "./types";
@@ -19,13 +19,14 @@ interface Props {
 export const GovernanceActionsFilters = ({
   chosenFilters,
   setChosenFilters,
-  filterOptions,
+  filterOptions
 }: Props) => {
   const t = useTranslations();
 
   const handleFilterChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
       const { name, checked } = e.target;
+
       setChosenFilters((prevFilters) => {
         const newFilters = { ...prevFilters };
         if (checked) {
@@ -43,6 +44,7 @@ export const GovernanceActionsFilters = ({
 
   return (
     <Box
+      key={JSON.stringify(chosenFilters)}
       display="flex"
       flexDirection="column"
       position="absolute"
@@ -54,7 +56,7 @@ export const GovernanceActionsFilters = ({
         borderRadius: "10px",
         padding: "12px 0px",
         width: "auto",
-        zIndex: "1",
+        zIndex: "1"
       }}
     >
       <Box
@@ -78,7 +80,7 @@ export const GovernanceActionsFilters = ({
                 fontSize: 14,
                 fontWeight: 500,
                 color: "#9792B5",
-                paddingX: "20px",
+                paddingX: "20px"
               }}
             >
               {filter.title}

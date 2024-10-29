@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   JoinTable,
   ManyToMany,
@@ -13,6 +14,8 @@ import { CommonEntity } from '../../common/entities/common.entity';
 import { Permission } from './permission.entity';
 import { HotAddress } from './hotaddress.entity';
 import { UserStatusEnum } from '../enums/user-status.enum';
+import { Rationale } from '../../governance/entities/rationale.entity';
+import { Vote } from '../../governance/entities/vote.entity';
 
 @Entity('users')
 export class User extends CommonEntity {
@@ -50,6 +53,7 @@ export class User extends CommonEntity {
   })
   profilePhotoUrl: string;
 
+  @Index('users_status_idx')
   @Column({
     name: 'status',
     type: 'enum',
@@ -63,6 +67,17 @@ export class User extends CommonEntity {
   })
   hotAddresses: HotAddress[];
 
+  @OneToMany(() => Rationale, (rationale) => rationale.user, {
+    cascade: true,
+  })
+  rationales: Rationale[];
+
+  @OneToMany(() => Vote, (vote) => vote.user, {
+    cascade: true,
+  })
+  votes: Vote[];
+
+  @Index('users_role_id_idx')
   @ManyToOne(() => Role, (role) => role.users, {
     eager: true,
   })

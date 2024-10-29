@@ -1,28 +1,29 @@
 "use client";
-import React from "react";
 
+import { EXTERNAL_LINKS, ICONS } from "@/constants";
+import { Typography } from "@atoms";
+import { useAppContext, useModal } from "@context";
+import { useScreenDimension } from "@hooks";
 import {
-  Typography as MUITypography,
   Grid,
-  SxProps,
   Hidden,
   Button as MUIButton,
+  Typography as MUITypography,
+  SxProps
 } from "@mui/material";
-import { Typography } from "@atoms";
 import { useTranslations } from "next-intl";
-import { useAppContext, useModal } from "@context";
-import { EXTERNAL_LINKS, ICONS } from "@/constants";
-import { useScreenDimension } from "@hooks";
 import Link from "next/link";
 
 export const Footer = ({
   showSignIn = true,
   sx,
   isFixed = false,
+  bgColor = "#FFF"
 }: {
   showSignIn?: boolean;
   sx?: SxProps;
   isFixed?: boolean;
+  bgColor?: string;
 }) => {
   const t = useTranslations("Footer");
   const { userSession } = useAppContext();
@@ -38,8 +39,8 @@ export const Footer = ({
       py="20px"
       sx={
         isFixed && !isMobile
-          ? { position: "fixed", bottom: 0, backgroundColor: "#FFF", ...sx }
-          : { backgroundColor: "#FFF", ...sx }
+          ? { position: "fixed", bottom: 0, backgroundColor: bgColor, ...sx }
+          : { backgroundColor: bgColor, ...sx }
       }
     >
       <Hidden mdDown>
@@ -88,7 +89,7 @@ export const Footer = ({
                 data-testid="footer-sign-in-button"
                 onClick={() => {
                   openModal({
-                    type: "signIn",
+                    type: "signIn"
                   });
                 }}
               >

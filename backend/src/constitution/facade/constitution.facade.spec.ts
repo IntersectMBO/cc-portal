@@ -59,12 +59,16 @@ describe('ConstitutionFacade', () => {
   const mockFirstConstitutionMetadataResponse: ConstitutionMetadataResponse = {
     title: 'Revision 1',
     cid: 'bafkreibxlpnlpsg6ewqzxhslwyhzl4p4vc6bifj3nb4k2lxhbnfaojbmwy',
+    blake2b: 'f6f811fbde53b09c1b653766f27578cc867e9b634b9142800f56e282b041de00',
+    url: 'https://ipfs.io/ipfs/bafkreibxlpnlpsg6ewqzxhslwyhzl4p4vc6bifj3nb4k2lxhbnfaojbmwy',
     version: '1713769514',
     createdDate: '2024-04-21 11:21:59.334',
   };
 
   const mockFirstConstitutionResponse: ConstitutionResponse = {
     cid: 'bafkreibxlpnlpsg6ewqzxhslwyhzl4p4vc6bifj3nb4k2lxhbnfaojbmwy',
+    blake2b: 'f6f811fbde53b09c1b653766f27578cc867e9b634b9142800f56e282b041de00',
+    url: 'https://ipfs.io/ipfs/bafkreibxlpnlpsg6ewqzxhslwyhzl4p4vc6bifj3nb4k2lxhbnfaojbmwy',
     version: '1713769514',
     contents:
       'The morning sun cast a golden glow over the tranquil village, painting the cobblestone streets with warmth. Birds chirped melodiously, adding to the serene ambiance that enveloped the small community. Life moved at a leisurely pace here, far removed from the hustle and bustle of the city. Neighbors greeted each other with smiles and friendly nods as they went about their daily routines, weaving a tight-knit tapestry of camaraderie.\n',
@@ -93,6 +97,8 @@ describe('ConstitutionFacade', () => {
   const mockSecondConstitutionMetadataResponse: ConstitutionMetadataResponse = {
     title: 'Revision 2',
     cid: 'bafkreich5c3rbz4amwevqy676czysmr27ctby46zdhja7gnpzriyqwdv4i',
+    blake2b: 'f6f811fbde53b09c1b653766f27578cc867e9b634b9142800f56e282b041de00',
+    url: 'https://ipfs.io/ipfs/bafkreich5c3rbz4amwevqy676czysmr27ctby46zdhja7gnpzriyqwdv4i',
     version: '1713769479',
     createdDate: '2024-04-22 11:21:59.334',
   };
