@@ -185,7 +185,7 @@ export const NavDrawerDesktop = ({
       mt={4}
       sx={{
         borderRadius: "16px",
-        height: { xxs: "95vh", md: "91vh" },
+        height: { xxs: "95vh", md: "calc(100vh - 118px)" },
         zIndex: 1,
         ...TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS
       }}
@@ -206,10 +206,8 @@ export const NavDrawerDesktop = ({
       </Grid> */}
       <Box
         sx={{
-          height: { xxs: "90vh", md: "100vh" },
+          height: { xxs: "90vh", md: "100%" },
           overflowY: "scroll",
-
-          scrollbarWidth: "none",
           borderRadiusTop: "16px 16px 0 0",
           "&::-webkit-scrollbar": {
             display: "none"
