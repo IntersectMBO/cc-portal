@@ -28,6 +28,11 @@ export const TocNested = ({ headings }) => {
             },
             "&.Mui-expanded": {
               backgroundColor: customPalette.accordionBg
+            },
+            "& a": {
+              "&:active": {
+                pointerEvents: "none" // disables the href activation on click but keep tooltip showing
+              }
             }
           }}
         >
