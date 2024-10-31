@@ -61,6 +61,13 @@ export const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        // this is set so that self anchor doesn't overlap with nav bar when scrolling
+        html: {
+          "@media (max-width: 424px)": {
+            scrollPaddingTop: "0"
+          },
+          scrollPaddingTop: "85px"
+        },
         body: {
           margin: 0
         }

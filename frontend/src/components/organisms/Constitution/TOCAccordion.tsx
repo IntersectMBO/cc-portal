@@ -1,3 +1,4 @@
+"use client";
 import { customPalette } from "@/constants";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -6,14 +7,30 @@ import {
   AccordionSummary,
   Box
 } from "@mui/material";
-import { Children } from "react";
+import { Children, useEffect, useState } from "react";
+import { TocNested } from "./TOCNested";
 
 export const TocAccordion = ({ children }) => {
+  const [nestedHeading2, setNestedHeading2] = useState([]);
+
+  useEffect(() => {
+    const headings = [];
+    Children.forEach(children, (child) => {
+      if (Array.isArray(child.props.children[1]?.props.children)) {
+        child.props.children[1].props.children.forEach((subChild) => {
+          if (subChild.props.className?.includes("toc-item-h2")) {
+            headings.push(subChild);
+          }
+        });
+      }
+    });
+    setNestedHeading2(headings);
+  }, [children]);
   return (
     <>
       {Children.map(children, (child) => (
         <>
-          {child.props.className.includes("toc-item-h2") ? (
+          {Array.isArray(child.props.children) ? (
             <Accordion
               elevation={0}
               sx={{
@@ -36,6 +53,9 @@ export const TocAccordion = ({ children }) => {
                   },
                   "&.Mui-expanded": {
                     backgroundColor: customPalette.accordionBg
+                  },
+                  "& a": {
+                    pointerEvents: "none"
                   }
                 }}
               >
@@ -51,47 +71,63 @@ export const TocAccordion = ({ children }) => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "left",
-                      minHeight: "56px"
+                      minHeight: "56px",
+                      margin: "0",
+                      "&:a": {
+                        margin: "auto"
+                      }
                     }
                   }}
                 >
-                  {child.props.children[1].props.children}
+                  {Array.isArray(child.props.children[1]?.props.children)
+                    ? child.props.children[1].props.children.map((subChild) =>
+                        subChild.props.className.includes("toc-item-h2")
+                          ? null // Filter out toc-item-h2 as we are already capturing it in the state
+                          : subChild
+                      )
+                    : child.props.children[1]?.props.children}
                 </Box>
               </AccordionDetails>
             </Accordion>
-          ) : (
-            <Accordion
-              elevation={0}
+          ) : !child.props?.className.includes("toc-item-h4") ? (
+            <AccordionDetails
               sx={{
-                boxShadow: "none",
-                padding: 0,
-                "&:before": {
-                  display: "none"
+                borderRadius: "30px",
+                minHeight: "56px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "left",
+                listStyleType: "none",
+                padding: "0 16px",
+                width: "100%",
+                "&:hover": {
+                  backgroundColor: customPalette.accordionBg
                 },
-                width: "100%"
-              }}
-              disableGutters
-            >
-              <Box
-                sx={{
-                  borderRadius: "30px",
-                  minHeight: "56px",
+                "& li": {
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "left",
-                  listStyleType: "none",
-                  padding: "0 16px",
-                  "&:hover": {
-                    backgroundColor: customPalette.accordionBg
-                  }
-                }}
-              >
-                {child}
-              </Box>
-            </Accordion>
+                  alignItems: "center"
+                }
+              }}
+            >
+              {child}
+            </AccordionDetails>
+          ) : (
+            <AccordionDetails
+              sx={{
+                listStyleType: "none",
+                padding: "0 16px",
+                height: "56px",
+                "& li": {
+                  minHeight: "56px"
+                }
+              }}
+            >
+              {child}
+            </AccordionDetails>
           )}
         </>
       ))}
+      <TocNested headings={nestedHeading2} />
     </>
   );
 };
