@@ -100,10 +100,12 @@ export const Paragraph = ({ children, id }) => (
 export const ListItem = ({ children, id }) => (
   <li
     style={{
-      lineHeight: "1.5",
-      marginBottom: "16px",
       fontSize: "14px",
-      color: customPalette.textGray
+      color: customPalette.textGray,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
+      justifyContent: "center"
     }}
   >
     {children}
@@ -146,13 +148,14 @@ export const TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS = {
     margin: "10px 0px 10px 0px"
   },
   "& li": {
-    marginBottom: "3px !important",
+    width: "100%",
     "& a": {
+      width: "100%",
       textDecoration: "none",
       textAlign: "left",
-      fontSize: 14,
-      fontWeight: 500,
-      lineHeight: "24px",
+      fontSize: "1rem",
+      fontWeight: 400,
+      lineHeight: "56px",
       color: customPalette.textBlack
     }
   }

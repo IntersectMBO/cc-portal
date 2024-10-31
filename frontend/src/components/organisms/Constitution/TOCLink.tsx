@@ -1,6 +1,6 @@
 import { customPalette } from "@/constants";
-import { useEffect, useState } from "react";
-
+import { Tooltip } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 interface Props {
   href: string;
   children: React.ReactNode;
@@ -21,7 +21,9 @@ interface Props {
 
 const TOCLink = ({ href, children, callback, disabled }: Props) => {
   const [isActive, setIsActive] = useState(false);
-  const CHAR_LIMIT = 26;
+  const [isTruncated, setIsTruncated] = useState(false);
+  const linkRef = useRef<HTMLAnchorElement>(null);
+
   const handleClick = (e) => {
     e.preventDefault();
     // Extract the target element's ID from the href (e.g., "#section1" => "section1")
@@ -58,21 +60,32 @@ const TOCLink = ({ href, children, callback, disabled }: Props) => {
     };
   }, [href]);
 
+  useEffect(() => {
+    if (linkRef.current) {
+      // check if child is truncated
+      setIsTruncated(linkRef.current.scrollWidth > linkRef.current.clientWidth);
+    }
+  }, [children]);
+
   return (
-    <a
-      href={href}
-      onClick={handleClick}
-      style={{
-        color: customPalette.textBlack,
-        textDecoration: "none",
-        pointerEvents: disabled ? "none" : undefined
-      }}
-    >
-      {/* Truncate the link text if it exceeds the character limit because of drawer width */}
-      {typeof children === "string" && children.length > CHAR_LIMIT
-        ? children.trim().slice(0, CHAR_LIMIT) + "..."
-        : children}
-    </a>
+    <Tooltip title={isTruncated ? children : ""} arrow>
+      <a
+        ref={linkRef}
+        href={href}
+        onClick={handleClick}
+        style={{
+          color: customPalette.textBlack,
+          textDecoration: "none",
+          maxWidth: "260px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          display: "inline-block"
+        }}
+      >
+        {children}
+      </a>
+    </Tooltip>
   );
 };
 

@@ -106,7 +106,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       >
         &nbsp;
       </Box>
-      <Grid mt={3} item xxs={12} md={isOpen ? 8 : 11} display="flex">
+      <Grid mt={3} item xxs={12} md={isOpen ? 8 : 11}>
         <Box display="flex" flexDirection="column" flex={1}>
           <ContentWrapper>
             <Box px={{ xxs: 3, md: 5 }}>
