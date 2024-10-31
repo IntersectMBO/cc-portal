@@ -55,7 +55,9 @@ export const TocAccordion = ({ children }) => {
                     backgroundColor: customPalette.accordionBg
                   },
                   "& a": {
-                    pointerEvents: "none"
+                    "&:active": {
+                      pointerEvents: "none" // disables the href activation on click but keep tooltip showing
+                    }
                   }
                 }}
               >
