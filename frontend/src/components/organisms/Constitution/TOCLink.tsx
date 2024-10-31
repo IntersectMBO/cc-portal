@@ -5,6 +5,7 @@ interface Props {
   href: string;
   children: React.ReactNode;
   callback: () => void;
+  disabled: boolean;
 }
 /**
  * TOCLink Component
@@ -18,7 +19,7 @@ interface Props {
  * @param {Function} props.callback - A callback function to be executed after the link is clicked.
  */
 
-const TOCLink = ({ href, children, callback }: Props) => {
+const TOCLink = ({ href, children, callback, disabled }: Props) => {
   const [isActive, setIsActive] = useState(false);
   const [isTruncated, setIsTruncated] = useState(false);
   const linkRef = useRef<HTMLAnchorElement>(null);
