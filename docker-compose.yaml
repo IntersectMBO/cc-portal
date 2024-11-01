@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     container_name: worker
     restart: unless-stopped
+    ports:
+      - "3002:3002"
     networks:
       - cc
 

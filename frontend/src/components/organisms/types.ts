@@ -1,13 +1,13 @@
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import {
-  ReasoningResponseI,
   FetchUserData,
   GovActionProposalStatus,
-  UserRole,
   GovernanceActionTableI,
+  ReasoningResponseI,
   UserAuthStatus,
+  UserRole
 } from "@/lib/requests";
-import { Vote } from "../atoms";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { UserStatus, Vote } from "../atoms";
 
 export interface ConstitutionMetadata {
   cid: string;
@@ -68,6 +68,15 @@ export interface OpenDeleteRoleModalState {
   status: UserAuthStatus;
 }
 
+export interface OpenDeleteUserModalState {
+  sAdminId: string;
+  userId: string;
+}
+
+export interface OpenSwitchStatusModalState {
+  newStatus: Omit<UserStatus, "pending">;
+  userId: string;
+}
 export interface OpenReasoningLinkModalState {
   hash: string;
   link: string;
@@ -93,7 +102,7 @@ export interface OpenPreviewReasoningModal {
     vote?: Vote;
     vote_submit_time?: string;
     reasoning_title?: string;
-    reasoning_comment?: string;
+    rationale_url?: string;
   };
   onActionClick?: (id: string) => void;
   actionTitle?: string;

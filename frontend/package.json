@@ -10,10 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.15.20",
-    "@mui/material": "^5.15.7",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^5.16.7",
+    "@mui/material": "^5.16.7",
     "@mui/material-nextjs": "^5.15.11",
     "@sentry/nextjs": "^7.100.1",
     "@usersnap/browser": "^0.0.5",

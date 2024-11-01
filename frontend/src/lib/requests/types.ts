@@ -1,7 +1,12 @@
 import { Vote } from "@atoms";
 
 export type UserRole = "super_admin" | "admin" | "user" | "alumni" | null;
-
+export enum UserRoleEnum {
+  SuperAdmin = "super_admin",
+  Admin = "admin",
+  User = "user",
+  Alumni = "alumni"
+}
 export interface RoleListObject {
   value: UserRole;
   label: string;
@@ -51,6 +56,7 @@ export interface VotesTableI {
   user_address: string;
   user_photo_url?: string;
   value: Vote;
+  rationale_url?: string;
   reasoning_title?: string;
   reasoning_comment?: string;
   gov_action_proposal_id: string;
@@ -67,13 +73,13 @@ export enum GovActionProposalStatus {
   EXPIRED = "EXPIRED",
   RATIFIED = "RATIFIED",
   ENACTED = "ENACTED",
-  DROPPED = "DROPPED",
+  DROPPED = "DROPPED"
 }
 
 export enum GovActionStatus {
   PENDING = "PENDING",
   VOTED = "VOTED",
-  UNVOTED = "UNVOTED",
+  UNVOTED = "UNVOTED"
 }
 
 export interface GovernanceActionTableI {

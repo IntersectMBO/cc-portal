@@ -13,6 +13,9 @@ import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
 import { VoteDto } from '../dto/vote.dto';
 import { VoteStatus } from '../enums/vote-status.enum';
 import { VoteValue } from '../enums/vote-value.enum';
+import { User } from 'src/users/entities/user.entity';
+import { UserStatusEnum } from 'src/users/enums/user-status.enum';
+import { RoleEnum } from 'src/users/enums/role.enum';
 
 describe('IpfsService', () => {
   let service: GovernanceService;
@@ -30,6 +33,8 @@ describe('IpfsService', () => {
       hasRationale: null,
       submitTime: null,
       endTime: null,
+      votedBy: null,
+      rationaleBy: null,
     },
     {
       id: '2',
@@ -43,6 +48,8 @@ describe('IpfsService', () => {
       hasRationale: null,
       submitTime: null,
       endTime: null,
+      votedBy: null,
+      rationaleBy: null,
     },
   ];
 
@@ -92,12 +99,38 @@ describe('IpfsService', () => {
     },
   ];
 
+  const mockUser: User = {
+    id: 'userId',
+    name: 'John Doe',
+    email: 'mockedEmail',
+    description: 'mockedDescription',
+    profilePhotoUrl: 'mockedProfilePhoto',
+    status: UserStatusEnum.ACTIVE,
+    role: {
+      id: 'roleId3',
+      code: RoleEnum.USER,
+      users: [],
+      permissions: [],
+      createdAt: null,
+      updatedAt: null,
+    },
+    permissions: null,
+    hotAddresses: null,
+    rationales: null,
+    votes: null,
+    deactivatedAt: null,
+    createdAt: null,
+    updatedAt: null,
+  };
+
   const vote: Vote = {
     id: '1',
     userId: 'userId',
+    user: mockUser,
     hotAddress: 'hotAddress_1',
     govActionProposal: mockGovActionProposals[0],
     vote: VoteValue.Yes,
+    voteMetadataUrl: 'voteMetadataUrl_1',
     title: 'Title_1',
     comment: 'Comment_1',
     submitTime: null,
@@ -109,9 +142,11 @@ describe('IpfsService', () => {
     {
       id: 'Vote_1',
       userId: 'User_1',
+      user: mockUser,
       hotAddress: 'hotAddress_1',
       govActionProposal: mockGovActionProposals[0],
       vote: VoteValue.Yes,
+      voteMetadataUrl: 'voteMetadataUrl_1',
       title: 'Title_1',
       comment: 'Comment_1',
       submitTime: null,
@@ -121,9 +156,11 @@ describe('IpfsService', () => {
     {
       id: 'Vote_2',
       userId: 'User_1',
+      user: mockUser,
       hotAddress: 'hotAddress_1',
       govActionProposal: mockGovActionProposals[1],
       vote: VoteValue.Yes,
+      voteMetadataUrl: 'voteMetadataUrl_2',
       title: 'Title_2',
       comment: 'Comment_2',
       submitTime: null,
@@ -448,9 +485,6 @@ describe('IpfsService', () => {
         search: 'govActionProposal_Title',
         path: 'randomPath',
       };
-      jest
-        .spyOn<any, any>(service, 'returnGapQuery')
-        .mockResolvedValueOnce(mockGovActionProposals[0]);
       mockPaginator.paginate.mockResolvedValue(paginatedValueGap);
       const gapPaginatedDto: PaginatedDto<GovActionProposalDto> =
         await service.searchGovActionProposals(query);
@@ -468,7 +502,6 @@ describe('IpfsService', () => {
         search: 'NotExisting',
         path: 'randomPath',
       };
-      jest.spyOn<any, any>(service, 'returnGapQuery').mockResolvedValueOnce([]);
       mockPaginator.paginate.mockResolvedValueOnce(paginatedEmptyValueGap);
       const gapPaginatedDto: PaginatedDto<GovActionProposalDto> =
         await service.searchGovActionProposals(query);
@@ -502,10 +535,9 @@ describe('IpfsService', () => {
         limit: 10,
         path: 'randomPath',
       };
-      const userId = 'user1';
       mockPaginator.paginate.mockResolvedValueOnce(paginatedMultiValueGap);
       const gapPaginatedDto: PaginatedDto<GovActionProposalDto> =
-        await service.searchGovActionProposals(query, userId);
+        await service.searchGovActionProposals(query);
       expect(gapPaginatedDto.items[0].title).toEqual(
         mockGovActionProposals[0].title,
       );

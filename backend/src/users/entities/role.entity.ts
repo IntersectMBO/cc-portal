@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   OneToMany,
@@ -16,6 +17,7 @@ export class Role extends CommonEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index('roles_code_idx')
   @Column({
     name: 'code',
     type: 'enum',

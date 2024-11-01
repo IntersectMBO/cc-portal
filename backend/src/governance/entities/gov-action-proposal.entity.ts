@@ -1,5 +1,5 @@
 import { CommonEntity } from '../../common/entities/common.entity';
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, Index, OneToMany, PrimaryColumn } from 'typeorm';
 import { Vote } from './vote.entity';
 import { Rationale } from './rationale.entity';
 
@@ -23,7 +23,6 @@ export class GovActionProposal extends CommonEntity {
   @Column({
     name: 'title',
     type: 'varchar',
-    length: 80,
     nullable: true,
   })
   title: string;
@@ -31,7 +30,6 @@ export class GovActionProposal extends CommonEntity {
   @Column({
     name: 'abstract',
     type: 'varchar',
-    length: 2500,
     nullable: true,
   })
   abstract: string;
@@ -42,12 +40,14 @@ export class GovActionProposal extends CommonEntity {
   })
   govMetadataUrl: string;
 
+  @Index('gov_action_status_idx')
   @Column({
     name: 'status',
     type: 'varchar',
   })
   status: string;
 
+  @Index('gov_action_type_idx')
   @Column({
     name: 'gov_action_type',
     type: 'varchar',

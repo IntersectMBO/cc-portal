@@ -1,7 +1,8 @@
-import { FC } from "react";
-import NextLink from "next/link";
 import MUILink from "@mui/material/Link";
+import NextLink from "next/link";
+import { FC } from "react";
 
+import { customPalette } from "@/constants";
 import { Typography } from "@mui/material";
 import { usePathname } from "next/navigation";
 
@@ -20,7 +21,7 @@ export const Link: FC<LinkProps> = (props) => {
 
   const fontSize = {
     small: 14,
-    big: 22,
+    big: 22
   }[size];
 
   return (
@@ -33,8 +34,14 @@ export const Link: FC<LinkProps> = (props) => {
       <Typography
         sx={{
           fontSize,
-          fontWeight: isActive && href !== "" ? 600 : 500,
-          color: isActive && href !== "" ? "#FF640A" : "textBlack",
+          color: "textBlack",
+          padding: `16px 16px ${isActive ? "14px" : "16px"} 16px`,
+          "&:hover": {
+            backgroundColor: customPalette.bgTab
+          },
+          borderBottom: isActive
+            ? `2px solid ${customPalette.primaryBlue}`
+            : "none"
         }}
         variant="body2"
       >

@@ -22,7 +22,7 @@ export const primaryBlue: ColorType = {
   c600: "#002682",
   c700: "#001A57",
   c800: "#000D2B",
-  c900: "#000511",
+  c900: "#000511"
 };
 
 export const orange: ColorType = {
@@ -35,7 +35,7 @@ export const orange: ColorType = {
   c600: "#BF4B08",
   c700: "#803205",
   c800: "#401903",
-  c900: "#1A0A01",
+  c900: "#1A0A01"
 };
 
 export const cyan: ColorType = {
@@ -48,7 +48,7 @@ export const cyan: ColorType = {
   c600: "#156F86",
   c700: "#0E4A59",
   c800: "#07252D",
-  c900: "#030F12",
+  c900: "#030F12"
 };
 
 export const fadedPurple: ColorType = {
@@ -61,7 +61,7 @@ export const fadedPurple: ColorType = {
   c600: "#716E88",
   c700: "#4C495B",
   c800: "#26252D",
-  c900: "#0F0F12",
+  c900: "#0F0F12"
 };
 
 export const gray: ColorType = {
@@ -74,7 +74,7 @@ export const gray: ColorType = {
   c600: "#474847",
   c700: "#242424",
   c800: "#0E0E0E",
-  c900: "#000000",
+  c900: "#000000"
 };
 
 export const successGreen: ColorType = {
@@ -87,7 +87,7 @@ export const successGreen: ColorType = {
   c600: "#4A8D3E",
   c700: "#315E29",
   c800: "#192F15",
-  c900: "#0A1308",
+  c900: "#0A1308"
 };
 
 export const progressYellow: ColorType = {
@@ -100,7 +100,7 @@ export const progressYellow: ColorType = {
   c600: "#A7781F",
   c700: "#6F5015",
   c800: "#38280A",
-  c900: "#161004",
+  c900: "#161004"
 };
 
 export const errorRed: ColorType = {
@@ -113,7 +113,7 @@ export const errorRed: ColorType = {
   c600: "#9E2323",
   c700: "#6A1818",
   c800: "#350C0C",
-  c900: "#150505",
+  c900: "#150505"
 };
 
 export const customPalette = {
@@ -137,8 +137,12 @@ export const customPalette = {
   secondaryBlue: "#6F99FF",
   specialCyan: "#1C94B2",
   specialCyanBorder: "#77BFD1",
-  textBlack: "#242232",
-  textGray: "#525252",
+  textBlack: "#212A3D",
+  textGray: "#506288",
   arcticWhite: "#FBFBFF",
   inputPlaceholder: "#a6a6a6",
+  bgWhite: "#f2f4f8",
+  bgTab: "#e4e5e8",
+  ripple: "#d5d6da",
+  accordionBg: "#e0e6f5"
 };

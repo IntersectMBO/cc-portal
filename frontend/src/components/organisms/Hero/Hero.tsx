@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Box } from "@mui/material";
 
 import { Typography } from "@/components/atoms/Typography";
@@ -36,8 +34,8 @@ export const Hero = ({ children }: HeroProps) => {
           sx={{
             maxWidth: 630,
             my: { xxs: 2, md: 5 },
-            whiteSpace: "pre-line",
-            }}
+            whiteSpace: "pre-line"
+          }}
           data-testid="hero-section-description-text"
         >
           {t("hero.description")}
@@ -46,7 +44,7 @@ export const Hero = ({ children }: HeroProps) => {
       </Box>
 
       <Box
-        width={{ xxs: 300, md: 400, lg: "100%" }}
+        width={{ xxs: 300, md: 400, lg: 558 }}
         flex={1}
         right={0}
         top={0}
@@ -54,8 +52,8 @@ export const Hero = ({ children }: HeroProps) => {
         sx={{
           position: { xxs: "absolute", lg: "relative" },
           "& img": {
-            maxHeight: 600,
-          },
+            maxHeight: 558
+          }
         }}
       >
         <img src={IMAGES.heroImage} />

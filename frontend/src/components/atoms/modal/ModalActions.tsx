@@ -1,8 +1,8 @@
-import { Box, CircularProgress } from "@mui/material";
 import { Button } from "@atoms";
-import { useTranslations } from "next-intl";
 import { useModal } from "@context";
+import { Box, CircularProgress } from "@mui/material";
 import { callAll } from "@utils";
+import { useTranslations } from "next-intl";
 
 interface Props {
   onClose?: () => void;
@@ -13,7 +13,7 @@ interface Props {
 export const ModalActions = ({
   onClose,
   isSubmitting,
-  dataTestId = "modal-action",
+  dataTestId = "modal-action"
 }: Props) => {
   const t = useTranslations("Modals");
   const { closeModal } = useModal();
@@ -22,7 +22,7 @@ export const ModalActions = ({
     <Box
       sx={{
         display: "flex",
-        gap: 2,
+        gap: 2
       }}
     >
       <Button
@@ -31,6 +31,7 @@ export const ModalActions = ({
           isSubmitting && <CircularProgress color="inherit" size="14px" />
         }
         data-testid={`${dataTestId}-confirm-button`}
+        disabled={isSubmitting}
       >
         {t("common.confirm")}
       </Button>

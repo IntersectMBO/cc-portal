@@ -31,7 +31,7 @@ export const VotesTableRow = ({
     user_address,
     user_photo_url,
     value,
-    reasoning_comment,
+    rationale_url,
     gov_action_proposal_id,
     gov_action_proposal_title,
     gov_action_proposal_type,
@@ -130,7 +130,7 @@ export const VotesTableRow = ({
                     }
                   >
                     {gov_action_proposal_title
-                      ? gov_action_proposal_title
+                      ? truncateText(gov_action_proposal_title, 40)
                       : t("notAvailable")}
                   </OutlinedLightButton>
                 </Grid>
@@ -208,9 +208,7 @@ export const VotesTableRow = ({
                     {t("rationale")}
                   </Typography>
                   <Typography variant="caption" data-testid="ga-rationale-text">
-                    {reasoning_comment
-                      ? truncateText(reasoning_comment, 100)
-                      : t("notAvailable")}
+                    {rationale_url ? t("available") : t("notAvailable")}
                   </Typography>
                 </Grid>
               </Grid>

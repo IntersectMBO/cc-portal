@@ -14,7 +14,7 @@
     "drawer": {
       "compare": "Vergleichen",
       "latestRevisions": "Latest Revisions",
-      "tableOfContents": "Content",
+      "tableOfContents": "Contents",
       "latest": "Latest"
     }
   },
@@ -32,7 +32,8 @@
     "voted": "Voted",
     "rationale": "Rationale",
     "actionTitle": "Show more",
-    "notAvailable": "Not Available"
+    "notAvailable": "Not Available",
+    "available": "Available"
   },
   "MyActions": {
     "myVotesTab": "My Votes",
@@ -130,6 +131,34 @@
         "error": "Error changing user status"
       }
     },
+    "deleteUser": {
+      "headline": "Delete user",
+      "description": "Are you sure you want to delete this user?",
+      "fields": {
+        "confirm": {
+          "label": "Please confirm the action by typing expected below",
+          "placeholder": "Write DELETE"
+        }
+      },
+      "alerts": {
+        "success": "User deleted successfully",
+        "error": "Error deleting user"
+      }
+    },
+    "switchUserStatus": {
+      "headline": "Change status",
+      "description": "Are you sure you want to change the status?",
+      "fields": {
+        "confirm": {
+          "label": "Please confirm the action by typing expected below",
+          "placeholder": "Write CONFIRM"
+        }
+      },
+      "alerts": {
+        "success": "Status changed successfully",
+        "error": "Error changing status user"
+      }
+    },
     "addMember": {
       "headline": "Add member",
       "fields": {
@@ -196,6 +225,8 @@
     "previewRationale": {
       "headline": "Rationale",
       "description": "Please update rationale for your vote on specific governance action.",
+      "noRationaleUrl": "A rationale has not been provided for this vote",
+      "rationaleLink": "Rationale link",
       "governanceActionCategory": "Governance Action Category",
       "governanceActionId": "Governance Action ID",
       "voted": "Voted",
@@ -288,6 +319,16 @@
       "somethingWentWrong": "Something went wrong. Please refresh the page or try again later",
       "sessionExists": "Session already exists. Please try again.",
       "pagination": "Error loading more data"
+    }
+  },
+  "UsersList": {
+    "resendInv": "Resend Invitation",
+    "makeInactive": "Make Inactive",
+    "makeActive": "Make Active",
+    "deleteUser": "Delete User",
+    "resendAlerts": {
+      "success": "Email successfully resent",
+      "error": "Error resending email"
     }
   }
 }

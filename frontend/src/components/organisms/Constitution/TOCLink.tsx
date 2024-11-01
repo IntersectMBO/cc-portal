@@ -1,10 +1,11 @@
-import { orange } from "@/constants";
-import { useEffect, useState } from "react";
-
+import { customPalette } from "@/constants";
+import { Tooltip } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 interface Props {
   href: string;
   children: React.ReactNode;
   callback: () => void;
+  disabled: boolean;
 }
 /**
  * TOCLink Component
@@ -18,8 +19,10 @@ interface Props {
  * @param {Function} props.callback - A callback function to be executed after the link is clicked.
  */
 
-const TOCLink = ({ href, children, callback }: Props) => {
+const TOCLink = ({ href, children, callback, disabled }: Props) => {
   const [isActive, setIsActive] = useState(false);
+  const [isTruncated, setIsTruncated] = useState(false);
+  const linkRef = useRef<HTMLAnchorElement>(null);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -57,14 +60,32 @@ const TOCLink = ({ href, children, callback }: Props) => {
     };
   }, [href]);
 
+  useEffect(() => {
+    if (linkRef.current) {
+      // check if child is truncated
+      setIsTruncated(linkRef.current.scrollWidth > linkRef.current.clientWidth);
+    }
+  }, [children]);
+
   return (
-    <a
-      href={href}
-      onClick={handleClick}
-      style={{ color: isActive ? orange.c500 : "inherit" }}
-    >
-      {children}
-    </a>
+    <Tooltip title={isTruncated ? children : ""} arrow>
+      <a
+        ref={linkRef}
+        href={href}
+        onClick={handleClick}
+        style={{
+          color: customPalette.textBlack,
+          textDecoration: "none",
+          maxWidth: "260px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          display: "inline-block"
+        }}
+      >
+        {children}
+      </a>
+    </Tooltip>
   );
 };
 

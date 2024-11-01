@@ -123,7 +123,7 @@ jobs:
             NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.PROD_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
             NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS=${{ secrets.PROD_NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS }}
             NEXT_PUBLIC_IS_MAINNET=${{ secrets.PROD_NEXT_PUBLIC_IS_MAINNET }}
-            
+
       - name: Scan Docker image with Dockle
         id: dockle
         run: |
