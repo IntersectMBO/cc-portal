@@ -174,7 +174,7 @@ export const PreviewReasoningModal = () => {
               copyText={getShortenedGovActionId(
                 govAction.rationale_url,
                 isMobile ? 4 : 20
-              )}
+              )}r
             />
           </Box>
         )}
