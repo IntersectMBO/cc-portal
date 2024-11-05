@@ -28,7 +28,7 @@ export const ConstitutionSidebar = ({ tableOfContents, metadata }) => {
         justifyContent="left"
         padding={2}
         pt={{ xxs: 0, md: 2 }}
-        px={{ xxs: 2, md: 3 }}
+        px={{ xxs: 1, md: 2 }}
         flexWrap="nowrap"
       >
         {/* <Grid item xxs={12} md="auto">
@@ -45,7 +45,7 @@ export const ConstitutionSidebar = ({ tableOfContents, metadata }) => {
         container
         direction="column"
         width={{ xxs: "100%", lg: "340px" }}
-        px={{ xxs: 1, md: 1 }}
+        px={{ xxs: 0, md: 0 }}
       >
         {/* {tab === "revisions" ? (
           <Grid item justifyContent="flex-end" px={{ xxs: 1, md: 0 }}>
