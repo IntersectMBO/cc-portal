@@ -23,7 +23,7 @@ import {
 } from "@utils";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { GovActionMetadata, OpenPreviewReasoningModal } from "../types";g
+import { GovActionMetadata, OpenPreviewReasoningModal } from "../types";
 
 export const PreviewReasoningModal = () => {
   const t = useTranslations("Modals");
