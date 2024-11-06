@@ -66,14 +66,29 @@ export const Footer = ({
             variant="caption"
             data-testid="footer-privacy-policy-hyperlink"
           >
-            {t("privacyPolicy")}
+            <a
+              href="https://docs.intersectmbo.org/legal/policies-and-conditions/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              {t("privacyPolicy")}
+            </a>
           </Typography>
+
           <Typography
             fontWeight={400}
             variant="caption"
             data-testid="footer-terms-of-service-hyperlink"
           >
-            {t("termsOfService")}
+            <a
+              href="https://docs.intersectmbo.org/legal/policies-and-conditions/terms-of-use"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              {t("termsOfService")}
+            </a>
           </Typography>
 
           {!userSession && showSignIn && (

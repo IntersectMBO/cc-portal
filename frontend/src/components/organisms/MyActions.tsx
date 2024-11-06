@@ -55,13 +55,15 @@ export const MyActions = ({
           type: action.gov_action_proposal_type,
           submit_time: null, //todo, update BE response
           end_time: action.gov_action_proposal_end_time,
-          vote_submit_time: action.vote_submit_time,
-          vote: action.value
+          vote: action.value,
+          reasoning_title: action.reasoning_title,
+          rationale_url: action.rationale_url,
+          status: action.gov_action_proposal_status,
+          title: action.gov_action_proposal_title
         }
       }
     });
   };
-
   const params: Record<string, string | null> = {
     search: searchText || null,
     govActionType:
