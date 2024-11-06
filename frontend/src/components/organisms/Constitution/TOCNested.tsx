@@ -1,4 +1,3 @@
-import { customPalette } from "@/constants";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 
@@ -23,12 +22,8 @@ export const TocNested = ({ headings }) => {
           sx={{
             borderRadius: "30px",
             minHeight: "56px",
-            "&:hover": {
-              backgroundColor: customPalette.accordionBg
-            },
-            "&.Mui-expanded": {
-              backgroundColor: customPalette.accordionBg
-            },
+            padding: 0,
+
             "& a": {
               "&:active": {
                 pointerEvents: "none" // disables the href activation on click but keep tooltip showing

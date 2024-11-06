@@ -30,6 +30,7 @@
     "govAction": "Governance Action",
     "govActionCategoryShort": "GA Category",
     "voted": "Voted",
+    "time": "Time",
     "rationale": "Rationale",
     "actionTitle": "Show more",
     "notAvailable": "Not Available",
@@ -225,29 +226,15 @@
     "previewRationale": {
       "headline": "Rationale",
       "description": "Please update rationale for your vote on specific governance action.",
-      "noRationaleUrl": "A rationale has not been provided for this vote",
       "rationaleLink": "Rationale link",
+      "rationale": "Rationale",
+      "notAvailable": "Not Available",
+      "governanceActionStatus": "Governance Action Status",
       "governanceActionCategory": "Governance Action Category",
       "governanceActionId": "Governance Action ID",
       "voted": "Voted",
-      "submissionDate": "Submission date",
-      "expiryDate": "Expiry date",
-      "voteSubmissionDate": "Vote submission date",
-      "tooltips": {
-        "expiryDate": {
-          "heading": "Expiry Date",
-          "paragraphOne": "The date when the governance action will expiry if it doesn’t reach ratification thresholds.",
-          "paragraphTwo": "IMPORTANT: If the governance action is ratified before the expiry date it will be considered ratified and it will not be available to vote on afterwards."
-        },
-        "submissionDate": {
-          "heading": "Submission Date",
-          "paragraphOne": "The date when the governance action was submitted on-chain.",
-          "vote": {
-            "heading": "Vote Submission Date",
-            "paragraphOne": "The date when the vote was submitted on-chain."
-          }
-        }
-      },
+      "submissionDate": "GA submitted on:",
+      "expiryDate": "GA expiration date:",
       "alerts": {
         "error": "Error fetching rationale data"
       }

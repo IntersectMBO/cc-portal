@@ -1,11 +1,11 @@
 "use client";
 
-import { SxProps, styled } from "@mui/material/styles";
+import { styled, SxProps } from "@mui/material/styles";
 
-import { customPalette, ICONS } from "@consts";
-import { callAll } from "@utils";
 import { useModal } from "@/context";
 import { useScreenDimension } from "@/lib/hooks";
+import { customPalette, ICONS } from "@consts";
+import { callAll } from "@utils";
 
 type ModalVariant = "modal" | "popup" | "wide";
 interface Props {
@@ -27,7 +27,7 @@ export const ModalWrapper = ({
   icon,
   scrollable,
   hideCloseButton = true,
-  onClose,
+  onClose
 }: Props) => {
   const { closeModal } = useModal();
   const { isMobile } = useScreenDimension();
@@ -79,6 +79,7 @@ export const BaseWrapper = styled("div")<{
   transform: translate(-50%, -50%);
   overflow-y: ${({ scrollable }) => scrollable && "scroll"};
   overflow-x: hidden;
+  scrollbar-width: ${({ scrollable }) => (scrollable ? "auto" : "none")};
   @media (max-width: ${700}px) {
     overflow: scroll;
   }
