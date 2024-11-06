@@ -238,6 +238,16 @@
       "alerts": {
         "error": "Error fetching rationale data"
       }
+    },
+    "govActionModal": {
+      "govActionId": "Governance Action ID",
+      "govActionCategory": "Governance Action Category",
+      "gaStatus": "Governance Action Status",
+      "submitTime": "Submit time",
+      "endTime": "End time",
+      "alerts": {
+        "error": "Error fetching governance action data"
+      }
     }
   },
   "AdminDashboard": {

@@ -115,7 +115,7 @@ export const PreviewReasoningModal = () => {
             {getProposalTypeLabel(govAction.type)}
           </OutlinedLightButton>
         </Box>
-        <Box mt={3}>
+        <Box mt={3} data-testid="governance-action-status">
           <Typography color="neutralGray" variant="caption">
             {t("previewRationale.governanceActionStatus")}
           </Typography>
@@ -143,7 +143,7 @@ export const PreviewReasoningModal = () => {
           </Box>
         )}
 
-        <Box mt={3}>
+        <Box mt={3} data-testid="governance-action-rationale-url">
           <Typography color="neutralGray" variant="caption">
             {t("previewRationale.rationale")}
           </Typography>
@@ -165,7 +165,7 @@ export const PreviewReasoningModal = () => {
 
       {govMetadata.submit_time && (
         <Box
-          data-testid="governance-action-modal-submit-time"
+          data-testid="governance-action-modal-submit-date"
           bgcolor="#D6E2FF80"
           display="flex"
           flexDirection="row"
@@ -180,7 +180,7 @@ export const PreviewReasoningModal = () => {
             fontWeight={600}
             sx={{ flexWrap: "nowrap" }}
             variant="caption"
-            data-testid="governance-action-modal-end-time"
+            data-testid="governance-action-modal-submit-time"
           >
             {formatDisplayDate(govAction.submit_time)}
           </Typography>
@@ -188,7 +188,7 @@ export const PreviewReasoningModal = () => {
       )}
       {govMetadata?.end_time && (
         <Box
-          data-testid="expiry-date"
+          data-testid="governance-action-modal-expiry-date"
           bgcolor="rgba(247, 249, 251, 1)"
           display="flex"
           flexDirection="row"

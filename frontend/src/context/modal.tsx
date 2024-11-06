@@ -3,6 +3,7 @@ import { createContext, useContext, useMemo, useReducer } from "react";
 
 import { CompareConstitutionModal } from "@/components/organisms/Modals/CompareConstitutionModal";
 import { DeleteUser } from "@/components/organisms/Modals/DeleteUser";
+import { GovActionModal } from "@/components/organisms/Modals/GovActionModal";
 import { PreviewReasoningModal } from "@/components/organisms/Modals/PreviewReasoningModal";
 import { SignOutModal } from "@/components/organisms/Modals/SignOutModal";
 import { SignUpModal } from "@/components/organisms/Modals/SignUpModal";
@@ -42,7 +43,8 @@ export type ModalType =
   | "addReasoningModal"
   | "reasoningLinkModal"
   | "previewReasoningModal"
-  | "switchUserStatus";
+  | "switchUserStatus"
+  | "govActionModal";
 
 const modals: Record<ModalType, ContextModal> = {
   none: {
@@ -82,7 +84,9 @@ const modals: Record<ModalType, ContextModal> = {
   previewReasoningModal: {
     component: <PreviewReasoningModal />
   },
-
+  govActionModal: {
+    component: <GovActionModal />
+  },
   switchUserStatus: {
     component: <SwitchUsersStatus />
   }
