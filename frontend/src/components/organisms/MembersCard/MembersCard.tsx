@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-import { Button, Typography } from "@atoms";
+import { Typography } from "@atoms";
 
 import { formatDisplayDate, truncateText } from "@utils";
 import { useTranslations } from "next-intl";
@@ -54,14 +54,13 @@ export const MembersCard = ({
         justifyContent="center"
         gap={{ xxs: 1, md: 0 }}
       >
-        <Button
-          sx={{ pointerEvents: "none" }}
-          variant="text"
-          size="small"
+        <Typography
+          fontWeight={400}
+          variant="body1"
           data-testid={`members-${id}-joined`}
         >
           {t("card.joined")} {formatDisplayDate(created_at)}
-        </Button>
+        </Typography>
 
         {/** 
          * temporarily hidden

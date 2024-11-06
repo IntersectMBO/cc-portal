@@ -9,7 +9,7 @@ export const PageTitleTabs = ({
   tabs,
   onChange,
   selectedValue,
-  sx,
+  sx
 }: {
   tabs: TabI[];
   onChange: (newValue: TabI) => void;
@@ -26,8 +26,8 @@ export const PageTitleTabs = ({
       sx={{ mb: { xxs: 1, md: 0 } }}
       value={selectedIndex}
       onChange={handleChange}
-      textColor="secondary"
-      indicatorColor="secondary"
+      textColor="inherit"
+      indicatorColor="primary"
     >
       {tabs.map((tab) => (
         <Tab
@@ -37,7 +37,7 @@ export const PageTitleTabs = ({
             textTransform: "none",
             fontSize: { xxs: 16, md: 32 },
             color: customPalette.textBlack,
-            ...sx,
+            ...sx
           }}
           data-testid={`${tab.value}-tab-button`}
         />
