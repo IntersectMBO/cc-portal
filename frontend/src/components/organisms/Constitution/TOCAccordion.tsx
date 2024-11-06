@@ -62,7 +62,6 @@ export const TocAccordion = ({ children }) => {
                     flexDirection: "column",
                     listStyleType: "none",
                     padding: "0 16px",
-
                     "& li": {
                       display: "flex",
                       alignItems: "center",
