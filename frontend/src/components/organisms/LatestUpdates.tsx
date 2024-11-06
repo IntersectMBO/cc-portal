@@ -47,7 +47,9 @@ export const LatestUpdates = ({
           end_time: action.gov_action_proposal_end_time,
           vote: action.value,
           reasoning_title: action.reasoning_title,
-          rationale_url: action.rationale_url
+          rationale_url: action.rationale_url,
+          status: action.gov_action_proposal_status,
+          title: action.gov_action_proposal_title
         }
       }
     });

@@ -43,8 +43,8 @@ export type ModalType =
   | "addReasoningModal"
   | "reasoningLinkModal"
   | "previewReasoningModal"
-  | "govActionModal"
-  | "switchUserStatus";
+  | "switchUserStatus"
+  | "govActionModal";
 
 const modals: Record<ModalType, ContextModal> = {
   none: {
