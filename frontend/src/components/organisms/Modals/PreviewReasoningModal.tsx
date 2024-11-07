@@ -55,7 +55,6 @@ export const PreviewReasoningModal = () => {
   }, [govAction.id]);
 
   if (!govMetadata) return null;
-
   return (
     <ModalWrapper dataTestId="preview-reasoning-modal" sx={{ py: 3, px: 0 }}>
       <ModalHeader sx={{ px: 3 }}>
@@ -182,7 +181,7 @@ export const PreviewReasoningModal = () => {
             variant="caption"
             data-testid="governance-action-modal-submit-time"
           >
-            {formatDisplayDate(govAction.submit_time)}
+            {formatDisplayDate(govMetadata.submit_time)}
           </Typography>
         </Box>
       )}
@@ -205,7 +204,7 @@ export const PreviewReasoningModal = () => {
             variant="caption"
             data-testid="governance-action-modal-end-time"
           >
-            {formatDisplayDate(govAction.end_time)}
+            {formatDisplayDate(govMetadata.end_time)}
           </Typography>
         </Box>
       )}
