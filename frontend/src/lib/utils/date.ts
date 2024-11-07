@@ -1,27 +1,36 @@
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 /**
  * Formats a given date into a specified display format.
  *
- * The function converts the input date into a string representation according to
- * the specified format. By default, it uses the "d.MM.yyyy" format, but a different
- * format can be provided if needed.
+ * The function converts the input date string into a date object and then formats it
+ * according to the "do LLL yyyy" format, which will display the date in the format
+ * "23rd Aug 2024".
  *
- * @param date - The date to format. This can be a string or a `Date` object.
- * @param outputFormat - The format string that specifies the desired output format.
- *                        Defaults to "d.MM.yyyy" if not specified.
- * @returns A string representing the formatted date based on the `outputFormat`.
+ * @param dateString - The date string to format. This should be in the ISO 8601 format
+ *                     (e.g., "2024-08-23T04:08:06.000Z").
+ * @returns A string representing the formatted date.
  *
  * @example
- * formatDisplayDate("2024-08-05");
- * // Returns "5.08.2024" (using default format)
+ * formatDisplayDate("2024-08-23T04:08:06.000Z");
+ * // Returns "23rd Aug 2024"
  *
- * formatDisplayDate(new Date(), "yyyy/MM/dd");
- * // Returns "2024/08/05" (current date in specified format)
- *
- * formatDisplayDate("2024-08-05", "MMMM d, yyyy");
- * // Returns "August 5, 2024"
+ * formatDisplayDate("invalid date");
+ * // Returns "Invalid date"
  */
-export const formatDisplayDate = (
-  date: string | Date,
-  outputFormat = "d.MM.yyyy"
-) => format(new Date(date), outputFormat).toString();
+export function formatDisplayDate(date: string | Date): string {
+  let dateToFormat: Date;
+
+  if (typeof date === "string") {
+    try {
+      dateToFormat = parseISO(date);
+    } catch (error) {
+      return "Invalid date";
+    }
+  } else if (date instanceof Date) {
+    dateToFormat = date;
+  } else {
+    return "Invalid date";
+  }
+
+  return format(dateToFormat, "do LLL yyyy");
+}
