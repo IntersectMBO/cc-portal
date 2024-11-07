@@ -17,16 +17,20 @@ import { format, parseISO } from "date-fns";
  * formatDisplayDate("invalid date");
  * // Returns "Invalid date"
  */
-export function formatDisplayDate(dateString: string): string {
-  if (!dateString) {
+export function formatDisplayDate(date: string | Date): string {
+  let dateToFormat: Date;
+
+  if (typeof date === "string") {
+    try {
+      dateToFormat = parseISO(date);
+    } catch (error) {
+      return "Invalid date";
+    }
+  } else if (date instanceof Date) {
+    dateToFormat = date;
+  } else {
     return "Invalid date";
   }
 
-  try {
-    const date = parseISO(dateString);
-    return format(date, "do LLL yyyy");
-  } catch (error) {
-    console.error("Error parsing date:", error);
-    return "Invalid date";
-  }
+  return format(dateToFormat, "do LLL yyyy");
 }
