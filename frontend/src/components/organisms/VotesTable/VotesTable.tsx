@@ -1,7 +1,6 @@
-import React from "react";
+import { VotesTableI } from "@/lib/requests";
 import { Grid } from "@mui/material";
 import { VotesTableRow } from "./VotesTableRow";
-import { VotesTableI } from "@/lib/requests";
 
 interface Props {
   votes: VotesTableI[];
@@ -14,26 +13,22 @@ export const VotesTable = ({
   votes,
   onActionClick,
   actionTitle,
-  isDisabled,
+  isDisabled
 }: Props) => {
   return (
-    <Grid container direction="column" gap={0}>
+    <Grid container direction="column" gap={2}>
       {votes &&
         votes.map((data, index) => {
           const disabled = isDisabled && isDisabled(data);
           return (
-            <Grid
-              key={index}
-              item
+            <VotesTableRow
+              votes={data}
+              disabled={disabled}
+              onActionClick={onActionClick}
+              actionTitle={actionTitle}
               data-testid={`latest-updates-${data.gov_action_proposal_id}-card`}
-            >
-              <VotesTableRow
-                votes={data}
-                disabled={disabled}
-                onActionClick={onActionClick}
-                actionTitle={actionTitle}
-              />
-            </Grid>
+              key={index}
+            />
           );
         })}
     </Grid>
