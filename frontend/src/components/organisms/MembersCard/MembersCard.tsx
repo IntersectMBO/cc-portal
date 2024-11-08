@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 
 import { Typography } from "@atoms";
 
-import { formatDisplayDate, truncateText } from "@utils";
+import { formatDisplayDate } from "@utils";
 import { useTranslations } from "next-intl";
 import { UserListItem } from "..";
 import { UserAvatar } from "../../molecules/UserCard";
@@ -42,8 +42,18 @@ export const MembersCard = ({
         <Box textAlign="center" data-testid="members-name" pb={3}>
           <Typography variant="headline5">{name} </Typography>
 
-          <Typography fontWeight={400} variant="body1">
-            {truncateText(description, 150)}
+          <Typography
+            fontWeight={400}
+            variant="body1"
+            sx={{
+              display: "-webkit-box", // Required for line clamping
+              WebkitBoxOrient: "vertical", // Required for line clamping
+              overflow: "hidden", // Hides overflowed text
+              textOverflow: "ellipsis", // Adds ellipsis for overflowed text
+              WebkitLineClamp: 5 // Limits text to a maximum of 3 lines
+            }}
+          >
+            {description}
           </Typography>
         </Box>
       </Box>
@@ -52,6 +62,7 @@ export const MembersCard = ({
         display="flex"
         flexDirection={{ xxs: "column", md: "row" }}
         justifyContent="center"
+        alignItems="center"
         gap={{ xxs: 1, md: 0 }}
       >
         <Typography
