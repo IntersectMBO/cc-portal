@@ -50,7 +50,7 @@ export const MembersCard = ({
               WebkitBoxOrient: "vertical", // Required for line clamping
               overflow: "hidden", // Hides overflowed text
               textOverflow: "ellipsis", // Adds ellipsis for overflowed text
-              WebkitLineClamp: 5 // Limits text to a maximum of 3 lines
+              WebkitLineClamp: 5 // Limits text to a maximum of 5 lines
             }}
           >
             {description}

@@ -19,8 +19,10 @@ export const EXTERNAL_LINKS = {
     "https://docs.intersectmbo.org/legal/policies-and-conditions/terms-of-use",
   privacyPolicy:
     "https://docs.intersectmbo.org/legal/policies-and-conditions/privacy-policy",
-  guardrails:
-    "https://github.com/IntersectMBO/plutus/tree/master/cardano-constitution"
+  guardrailsScript:
+    "https://github.com/IntersectMBO/plutus/tree/master/cardano-constitution",
+  guardrailsRationale:
+    "https://docs.google.com/document/d/1FDVnDwugtA5RlgH8a-_8pWL_W-VGvMYA"
 };
 
 export const adminProtectedPath = PATHS.admin.dashboard;

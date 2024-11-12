@@ -13,7 +13,12 @@ export function HeroActions({ role }: HeroActionsProps) {
   const { openModal } = useModal();
   const isAmdmin = role === "admin";
   return (
-    <Grid container flexDirection={{ xxs: "column", md: "row" }} gap={1}>
+    <Grid
+      container
+      flexDirection={{ xxs: "column", md: "row" }}
+      gap={1}
+      sx={{ position: "absolute" }}
+    >
       {isAmdmin ? (
         <>
           <Grid item>
@@ -60,17 +65,31 @@ export function HeroActions({ role }: HeroActionsProps) {
             </Button>
           </Link>
           <a
-            href={EXTERNAL_LINKS.guardrails}
+            href={EXTERNAL_LINKS.guardrailsScript}
             target="_blank"
             rel="noopener noreferrer"
             style={{ color: "inherit", textDecoration: "none" }}
           >
             <OutlinedLightButton
               size="large"
-              data-testid="hero-see-guardrails-button"
+              data-testid="hero-see-guardrails-script-button"
               sx={{ height: "40px", fontSize: 14, fontWeight: 500 }}
             >
-              {t("hero.guardrails")}
+              {t("hero.guardrailsScript")}
+            </OutlinedLightButton>
+          </a>
+          <a
+            href={EXTERNAL_LINKS.guardrailsRationale}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            <OutlinedLightButton
+              size="large"
+              data-testid="hero-see-guardrails-rationale-button"
+              sx={{ height: "40px", fontSize: 14, fontWeight: 500 }}
+            >
+              {t("hero.guardrailsRationale")}
             </OutlinedLightButton>
           </a>
         </Grid>

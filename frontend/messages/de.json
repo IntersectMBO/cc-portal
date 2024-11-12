@@ -5,7 +5,8 @@
       "headline": "Wir setzen uns für die von der Community geführte Governance von Cardano ein",
       "description": "Bis eine endgültige Cardano-Verfassung entwickelt und von der Community ratifiziert wurde – ein Konsultationsprogramm, das das ganze Jahr 2024 über läuft – ist eine Reihe von Übergangsregeln erforderlich, um den Übergang zu unterstützen.",
       "seeConstitution": "Lesen Sie die Interimsverfassung",
-      "guardrails": "Guardrails Script",
+      "guardrailsScript": "Guardrails Script",
+      "guardrailsRationale": "Guardrails Rationale",
       "signIn": "Anmelden",
       "constitutionalCommitteePortal": "Portal des Verfassungsausschusses"
     }
