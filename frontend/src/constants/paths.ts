@@ -14,7 +14,15 @@ export const PATHS = {
 
 export const EXTERNAL_LINKS = {
   guides:
-    "https://docs.gov.tools/about/what-is-the-constitutional-committee-portal"
+    "https://docs.gov.tools/about/what-is-the-constitutional-committee-portal",
+  termsOfUse:
+    "https://docs.intersectmbo.org/legal/policies-and-conditions/terms-of-use",
+  privacyPolicy:
+    "https://docs.intersectmbo.org/legal/policies-and-conditions/privacy-policy",
+  guardrailsScript:
+    "https://github.com/IntersectMBO/plutus/tree/master/cardano-constitution",
+  guardrailsRationale:
+    "https://docs.google.com/document/d/1FDVnDwugtA5RlgH8a-_8pWL_W-VGvMYA"
 };
 
 export const adminProtectedPath = PATHS.admin.dashboard;
