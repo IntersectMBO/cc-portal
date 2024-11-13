@@ -180,15 +180,11 @@ export const TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS = {
 
 export const NavDrawerDesktop = ({
   children,
-  onClick,
-  isOpen,
   left = 0,
   top = { xxs: 75, md: 90 },
   dataTestId
 }: {
   children: ReactNode;
-  onClick: () => void;
-  isOpen: boolean;
   left: number;
   top: { xxs: number; md: number };
   dataTestId?: string;
@@ -196,7 +192,7 @@ export const NavDrawerDesktop = ({
   return (
     <Grid
       data-testid={dataTestId}
-      display={{ xxs: isOpen ? "block" : "none", md: "block" }}
+      display={{ xxs: "none", md: "block" }}
       position="fixed"
       left={left}
       top={top}
@@ -210,20 +206,6 @@ export const NavDrawerDesktop = ({
         ...TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS
       }}
     >
-      {/* TODO remove whole logic around this arrow or redesign it */}
-      {/* <Grid
-        sx={{ cursor: "pointer" }}
-        item
-        container
-        justifyContent={isOpen ? "flex-end" : "center"}
-        pr={isOpen ? 3 : 0}
-        data-testid="nav-drawer-toggle-button"
-      >
-        <img
-          src={isOpen ? ICONS.arrowLeft : ICONS.arrowRight}
-          onClick={onClick}
-        />
-      </Grid> */}
       <Box
         sx={{
           height: { xxs: "90vh", md: "100%" },
@@ -235,7 +217,7 @@ export const NavDrawerDesktop = ({
         }}
         data-testid="nav-drawer-collapse-container"
       >
-        {isOpen && <>{children}</>}
+        {children}
       </Box>
     </Grid>
   );
