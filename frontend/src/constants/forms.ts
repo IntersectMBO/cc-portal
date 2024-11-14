@@ -8,29 +8,29 @@ import { isAdminRole, isSuperAdminRole } from "@/lib/utils/roles";
 export const permissionsList: PermissionsListObject[] = [
   {
     label: "Manage constitutional members",
-    value: "manage_cc_members",
+    value: "manage_cc_members"
   },
   {
     label: "Upload Constitution version",
-    value: "add_constitution_version",
-  },
+    value: "add_constitution_version"
+  }
 ];
 
 //Roles that admin can append when creating new members through Admin Dashboard in application
 export const adminAddMemberRoleList: RoleListObject[] = [
   {
     label: "Constitutional member",
-    value: "user",
-  },
+    value: "user"
+  }
 ];
 
 //Roles that super admin can append when creating new members through Admin Dashboard in application
 export const superAdminAddMemberRoleList: RoleListObject[] = [
   {
     label: "Admin",
-    value: "admin",
+    value: "admin"
   },
-  ...adminAddMemberRoleList,
+  ...adminAddMemberRoleList
 ];
 
 //All roles available in application
@@ -38,12 +38,12 @@ export const rolesList: RoleListObject[] = [
   ...superAdminAddMemberRoleList,
   {
     label: "Super admin",
-    value: "super_admin",
+    value: "super_admin"
   },
   {
     label: "Alumni",
-    value: "alumni",
-  },
+    value: "alumni"
+  }
 ];
 
 export const getRoleDropdownList = (userRole) => {
@@ -57,5 +57,6 @@ export const getRoleDropdownList = (userRole) => {
 export const PROFILE_PICTURE_MAX_FILE_SIZE = 5;
 
 export const PATTERNS = {
-  hotAddress: /^[a-fA-F0-9]{56}$/,
+  username: /^[a-zA-Z0-9_|.\s]+$/,
+  hotAddress: /^[a-fA-F0-9]{56}$/
 };

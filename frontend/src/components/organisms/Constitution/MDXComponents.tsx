@@ -79,6 +79,21 @@ export const Heading3 = ({ children, id }) => (
     <Anchor id={id} />
   </>
 );
+export const Heading5 = ({ children }) => (
+  <Typography
+    variant="headline5"
+    sx={{
+      marginTop: "22px",
+      marginBottom: "22px",
+      fontWeight: 800,
+      fontSize: { xxs: 12, md: 14 },
+      lineHeight: "1em",
+      overflowWrap: "break-word"
+    }}
+  >
+    {children}
+  </Typography>
+);
 
 export const Paragraph = ({ children, id }) => (
   <>
@@ -105,7 +120,8 @@ export const ListItem = ({ children, id }) => (
       display: "flex",
       flexDirection: "column",
       alignItems: "flex-start",
-      justifyContent: "center"
+      justifyContent: "center",
+      wordBreak: "break-all"
     }}
   >
     {children}
@@ -131,6 +147,7 @@ export const Code = ({ children }) => (
 export const TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS = {
   backgroundColor: customPalette.neutralWhite,
   borderRadius: "16px",
+  padding: "12px",
   "& ol.toc-level": {
     margin: 0
   },

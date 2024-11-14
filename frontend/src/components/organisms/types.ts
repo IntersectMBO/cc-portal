@@ -95,10 +95,7 @@ export interface GovActionMetadata {
 }
 
 export interface OpenPreviewReasoningModal {
-  govAction: Pick<
-    GovernanceActionTableI,
-    "id" | "type" | "submit_time" | "end_time" | "tx_hash"
-  > & {
+  govAction: Partial<GovernanceActionTableI> & {
     vote?: Vote;
     vote_submit_time?: string;
     reasoning_title?: string;

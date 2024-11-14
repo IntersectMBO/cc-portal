@@ -1,5 +1,4 @@
 "use client";
-import { customPalette } from "@/constants";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
@@ -35,7 +34,6 @@ export const TocAccordion = ({ children }) => {
               elevation={0}
               sx={{
                 boxShadow: "none",
-                padding: 0,
                 "&:before": {
                   display: "none"
                 },
@@ -48,12 +46,7 @@ export const TocAccordion = ({ children }) => {
                 sx={{
                   borderRadius: "30px",
                   minHeight: "56px",
-                  "&:hover": {
-                    backgroundColor: customPalette.accordionBg
-                  },
-                  "&.Mui-expanded": {
-                    backgroundColor: customPalette.accordionBg
-                  },
+                  padding: 0,
                   "& a": {
                     "&:active": {
                       pointerEvents: "none" // disables the href activation on click but keep tooltip showing
@@ -100,11 +93,9 @@ export const TocAccordion = ({ children }) => {
                 alignItems: "center",
                 justifyContent: "left",
                 listStyleType: "none",
-                padding: "0 16px",
+                padding: 0,
                 width: "100%",
-                "&:hover": {
-                  backgroundColor: customPalette.accordionBg
-                },
+
                 "& li": {
                   display: "flex",
                   alignItems: "center"
@@ -117,7 +108,7 @@ export const TocAccordion = ({ children }) => {
             <AccordionDetails
               sx={{
                 listStyleType: "none",
-                padding: "0 16px",
+                padding: 0,
                 height: "56px",
                 "& li": {
                   minHeight: "56px"

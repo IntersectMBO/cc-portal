@@ -1,26 +1,26 @@
 "use client";
-import { useAppContext, useModal } from "@context";
+import { useSnackbar } from "@/context/snackbar";
+import { editUser, uploadUserPhoto } from "@/lib/api";
 import {
+  Button,
+  ModalActions,
   ModalContents,
   ModalHeader,
   ModalWrapper,
-  Typography,
-  Button,
-  ModalActions,
   Tooltip,
+  Typography
 } from "@atoms";
 import { IMAGES, PATTERNS, PROFILE_PICTURE_MAX_FILE_SIZE } from "@consts";
+import { useAppContext, useModal } from "@context";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Box, CircularProgress } from "@mui/material";
+import { isResponseErrorI } from "@utils";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
 import { SignupModalState } from "../types";
-import { editUser, uploadUserPhoto } from "@/lib/api";
-import { useEffect, useState } from "react";
-import { useSnackbar } from "@/context/snackbar";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { useRouter } from "next/navigation";
-import { isResponseErrorI } from "@utils";
 
 export const SignUpModal = () => {
   const { state, closeModal } = useModal<SignupModalState>();
@@ -35,7 +35,7 @@ export const SignUpModal = () => {
     handleSubmit,
     formState: { errors },
     control,
-    setValue,
+    setValue
   } = useForm();
 
   useEffect(() => {
@@ -99,8 +99,16 @@ export const SignUpModal = () => {
             label={t("signUp.fields.displayName.label")}
             errors={errors}
             control={control}
-            {...register("name", { required: "Display name is required" })}
+            {...register("name", {
+              pattern: {
+                value: PATTERNS.username,
+                message:
+                  "Display name can only contain letters, numbers, spaces, underscores, pipes, and periods"
+              },
+              required: "Display name is required"
+            })}
           />
+
           <ControlledField.Input
             label={
               <Tooltip
@@ -113,7 +121,7 @@ export const SignUpModal = () => {
                   {t("signUp.fields.hotCredential.label")}
                   <InfoOutlinedIcon
                     style={{
-                      color: "#ADAEAD",
+                      color: "#ADAEAD"
                     }}
                     sx={{ ml: 0.7 }}
                     fontSize="small"
@@ -126,8 +134,8 @@ export const SignUpModal = () => {
             {...register("hotAddress", {
               pattern: {
                 value: PATTERNS.hotAddress,
-                message: "Entered value does not match the expected format",
-              },
+                message: "Entered value does not match the expected format"
+              }
             })}
           />
           <ControlledField.TextArea
@@ -155,15 +163,15 @@ export const SignUpModal = () => {
                 fileSize: (file) =>
                   !file ||
                   file.size / (1024 * 1024) < PROFILE_PICTURE_MAX_FILE_SIZE ||
-                  "The file size should be less than 5MB",
-              },
+                  "The file size should be less than 5MB"
+              }
             })}
           >
             {t("signUp.fields.upload")}
           </ControlledField.Upload>
           <Box
             sx={{
-              display: "flex",
+              display: "flex"
             }}
           >
             {state.showCloseButton ? (

@@ -68,7 +68,13 @@ const TOCLink = ({ href, children, callback, disabled }: Props) => {
   }, [children]);
 
   return (
-    <Tooltip title={isTruncated ? children : ""} arrow>
+    <Tooltip
+      title={isTruncated ? children : ""}
+      arrow
+      enterDelay={200}
+      enterNextDelay={200}
+      leaveDelay={0}
+    >
       <a
         ref={linkRef}
         href={href}
@@ -76,11 +82,15 @@ const TOCLink = ({ href, children, callback, disabled }: Props) => {
         style={{
           color: customPalette.textBlack,
           textDecoration: "none",
-          maxWidth: "260px",
+          maxWidth: "292px",
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis",
-          display: "inline-block"
+          display: "inline-block",
+          backgroundColor: isActive ? customPalette.accordionBg : undefined,
+          borderRadius: "30px",
+          padding: "0 16px",
+          boxSizing: "border-box"
         }}
       >
         {children}
