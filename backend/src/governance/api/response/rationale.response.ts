@@ -24,10 +24,6 @@ export class RationaleResponse {
   @Expose({ name: 'blake2b' })
   blake2b: string;
 
-  @ApiProperty({ description: 'Title of a rationale' })
-  @Expose({ name: 'title' })
-  title: string;
-
   @ApiProperty({ description: 'Contents of a rationale in json format' })
   @Expose({ name: 'contents' })
   contents: string;

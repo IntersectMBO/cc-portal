@@ -42,16 +42,16 @@ export class Rationale extends CommonEntity {
   govActionProposalId: string;
 
   @Column({
-    name: 'title',
+    name: 'summary',
     type: 'varchar',
   })
-  title: string;
+  summary: string;
 
   @Column({
-    name: 'content',
+    name: 'rationale_statement',
     type: 'varchar',
   })
-  content: string;
+  rationaleStatement: string;
 
   @Column({
     name: 'cid',
