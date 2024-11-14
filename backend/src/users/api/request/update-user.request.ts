@@ -15,7 +15,7 @@ export class UpdateUserRequest {
   })
   @MinLength(2, { message: `Minimum character length is 2` })
   @MaxLength(30, { message: `Maximum character length is 30` })
-  @Matches(/^[a-zA-Z0-9_.\s]+$/, {
+  @Matches(/^[a-zA-Z0-9_|.\s]+$/, {
     message: `Name can't contain special characters & symbols`,
   })
   @IsString()

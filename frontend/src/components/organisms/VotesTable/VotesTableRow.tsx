@@ -2,14 +2,11 @@
 
 import { VotesTableI } from "@/lib/requests";
 import { Button, OutlinedLightButton, Typography, VotePill } from "@atoms";
-import { customPalette, ICONS } from "@consts";
-import { useModal } from "@context";
+import { customPalette } from "@consts";
 import { Card, TableDivider, UserAvatar, UserBasicInfo } from "@molecules";
 import { Box, Grid } from "@mui/material";
-import { getProposalTypeLabel, truncateText } from "@utils";
+import { formatDisplayDate, getProposalTypeLabel, truncateText } from "@utils";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
-import { GovActionModalState } from "../types";
 
 interface Props {
   votes: VotesTableI;
@@ -25,25 +22,16 @@ export const VotesTableRow = ({
   onActionClick,
 }: Props) => {
   const t = useTranslations("LatestUpdates");
-  const { openModal } = useModal<GovActionModalState>();
   const {
     user_name,
     user_address,
     user_photo_url,
     value,
     rationale_url,
-    gov_action_proposal_id,
     gov_action_proposal_title,
     gov_action_proposal_type,
+    vote_submit_time
   } = votes;
-  const openGAModal = () => {
-    openModal({
-      type: "govActionModal",
-      state: {
-        id: gov_action_proposal_id,
-      },
-    });
-  };
 
   return (
     <Grid
@@ -108,31 +96,18 @@ export const VotesTableRow = ({
                 >
                   <Typography
                     color={customPalette.neutralGray}
-                    sx={{ marginBottom: 0.5 }}
+                    sx={{ marginBottom: 1 }}
                     variant="caption"
                     fontWeight={500}
                   >
                     {t("govAction")}
                   </Typography>
 
-                  <OutlinedLightButton
-                    onClick={openGAModal}
-                    disabled={!gov_action_proposal_title}
-                    data-testid="ga-modal-button"
-                    startIcon={
-                      <Image
-                        alt="GA title"
-                        width={12}
-                        height={12}
-                        src={ICONS.informationCircle}
-                        style={{ opacity: gov_action_proposal_title ? 1 : 0.5 }}
-                      />
-                    }
-                  >
+                  <Typography variant="caption">
                     {gov_action_proposal_title
                       ? truncateText(gov_action_proposal_title, 40)
                       : t("notAvailable")}
-                  </OutlinedLightButton>
+                  </Typography>
                 </Grid>
               </Grid>
               <Grid item display="flex" md={12} lg={5} xl={3}>
@@ -181,12 +156,39 @@ export const VotesTableRow = ({
                   >
                     {t("voted")}
                   </Typography>
-                  <Box width={85}>
+
+                  <Box display="flex" alignItems="center" gap={2}>
                     <VotePill vote={value} />
                   </Box>
                 </Grid>
               </Grid>
+              <Grid item display="flex" md={12} lg={5} xl={2}>
+                <TableDivider />
+                <Grid
+                  item
+                  xxs={12}
+                  md={12}
+                  lg={12}
+                  xl={12}
+                  px={{ xxs: 0, md: 3, lg: 3, xl: 3 }}
+                  py={{ xxs: 1.5, md: 0 }}
+                >
+                  <Typography
+                    color={customPalette.neutralGray}
+                    sx={{ marginBottom: 1 }}
+                    variant="caption"
+                    fontWeight={500}
+                  >
+                    {t("time")}
+                  </Typography>
 
+                  <Box display="flex" alignItems="center" gap={2}>
+                    <Typography variant="caption">
+                      {formatDisplayDate(vote_submit_time)}
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
               <Grid item display="flex" md={12} lg={5} xl={3}>
                 <TableDivider />
 
@@ -201,7 +203,7 @@ export const VotesTableRow = ({
                 >
                   <Typography
                     color={customPalette.neutralGray}
-                    sx={{ marginBottom: 0.5 }}
+                    sx={{ marginBottom: 1 }}
                     variant="caption"
                     fontWeight={500}
                   >

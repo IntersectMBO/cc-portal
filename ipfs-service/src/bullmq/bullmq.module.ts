@@ -14,6 +14,11 @@ import { ExpressAdapter } from "@bull-board/express";
           host: configService.getOrThrow("REDIS_HOST"),
           port: configService.getOrThrow("REDIS_PORT"),
           password: configService.getOrThrow("REDIS_PASSWORD"),
+          connectTimeout: 20000,
+          reconnectOnError: (err) => {
+            const targetErrors = ['READONLY', 'ETIMEDOUT', 'ECONNRESET'];
+            return targetErrors.some(targetError => err.message.includes(targetError));
+          },
           ...(configService.get('REDIS_TLS') === 'false' ? {} : { tls: {} }),
         },
       }),
