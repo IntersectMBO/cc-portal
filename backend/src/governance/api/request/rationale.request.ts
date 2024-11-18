@@ -1,12 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class RationaleRequest {
-  @ApiProperty({ description: 'Rationale title' })
+  @ApiProperty({ description: 'Summary' })
+  @IsNotEmpty()
+  @MaxLength(200, { message: `Maximum character length is 200` })
   @IsString()
-  title: string;
+  summary: string;
 
-  @ApiProperty({ description: 'Rationale content' })
+  @ApiProperty({ description: 'Rationale statement' })
+  @IsNotEmpty()
   @IsString()
-  content: string;
+  rationaleStatement: string;
 }
