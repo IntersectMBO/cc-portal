@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@atoms";
 import { ICONS } from "@consts";
+import { Box } from "@mui/material";
 import { useState } from "react";
 import { FormErrorMessage } from "./FormErrorMessage";
 import { ButtonProps, FormErrorMessageProps } from "./types";
@@ -43,14 +44,24 @@ export const UploadFileButton = ({
         onChange={fileChange}
         data-testid={`${dataTestId}-input`}
       />
-      <Button
-        startIcon={<img src={ICONS.upload} />}
-        component="span"
-        data-testid={`${dataTestId}-button`}
-        {...buttonProps}
-      >
-        {children} {selectedFile && selectedFile.name}
-      </Button>
+      <Box sx={{ display: "flex" }}>
+        <Button
+          startIcon={<img src={ICONS.upload} />}
+          component="span"
+          data-testid={`${dataTestId}-button`}
+          {...buttonProps}
+        >
+          <Box
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap"
+            }}
+          >
+            {selectedFile && selectedFile.name ? selectedFile.name : children}
+          </Box>
+        </Button>
+      </Box>
       <FormErrorMessage errorMessage={errorMessage} errorStyles={errorStyles} />
     </label>
   );
