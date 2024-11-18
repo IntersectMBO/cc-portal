@@ -8,7 +8,10 @@ export class RationaleRequest {
   @IsString()
   summary: string;
 
-  @ApiProperty({ description: 'Rationale statement' })
+  @ApiProperty({
+    description: 'Rationale statement',
+    name: 'rationale_statement',
+  })
   @IsNotEmpty()
   @IsString()
   rationaleStatement: string;
