@@ -15,8 +15,8 @@ import { IpfsService } from 'src/ipfs/services/ipfs.service';
 import { RationaleRequest } from '../api/request/rationale.request';
 import { IpfsContentDto } from 'src/ipfs/dto/ipfs-content.dto';
 import { GovActionProposalDto } from '../dto/gov-action-proposal-dto';
-import { ICIP136 } from '../interfaces/icip136.interface';
-import { CIP136 } from '../constants/cip136.constants';
+import { ICIP100 } from '../interfaces/icip100.interface';
+import { CIP100 } from '../constants/cip100.constants';
 
 @Injectable()
 export class GovernanceFacade {
@@ -33,10 +33,8 @@ export class GovernanceFacade {
     proposalId: string,
     rationaleRequest: RationaleRequest,
   ): Promise<RationaleResponse> {
-    const rationaleJson = await this.createRationaleJsonCip100(
-      rationaleRequest,
-      userId,
-    );
+    const rationaleJson =
+      await this.createRationaleJsonCip100(rationaleRequest);
     const ipfsContentDto = await this.addRationaleToIpfs(rationaleJson);
     const rationaleDto = GovernanceMapper.ipfsContentDtoToRationaleDto(
       ipfsContentDto,
@@ -48,85 +46,65 @@ export class GovernanceFacade {
     return GovernanceMapper.rationaleDtoToResponse(response);
   }
   /**
-   * Creates a CIP 136 compatible JSON object.
-   * CIP 136 example:
-   *  https://github.com/Ryun1/CIPs/blob/governance-metadata-cc-rationale/CIP-0136/examples/treasury-withdrawal-unconstitutional.jsonld
+   * Creates a CIP 100 compatible JSON object.
+   * CIP 100 example:
+   *  https://github.com/cardano-foundation/CIPs/blob/master/CIP-0100/example.body.json
    **/
   private async createRationaleJsonCip100(
     rationaleRequest: RationaleRequest,
-    userId: string,
   ): Promise<string> {
-    const cip136: ICIP136 = {
+    const cip100: ICIP100 = {
       '@context': {
-        '@language': CIP136.contextLanguage,
-        CIP100: CIP136.contextCIP100,
-        CIP136: CIP136.contextCIP136,
-        hashAlgorithm: CIP136.contextHashAlgorithm,
+        '@language': CIP100.contextLanguage,
+        hashAlgorithm: CIP100.contextHashAlgorithm,
         body: {
-          '@id': CIP136.contextBody,
+          '@id': CIP100.contextBody,
           '@context': {
             references: {
-              '@id': CIP136.contextBodyReferences,
+              '@id': CIP100.contextBodyReferences,
               '@container': '@set',
               '@context': {
-                GovernanceMetadata:
-                  CIP136.contextBodyReferencesGovernanceMetadata,
-                Other: CIP136.contextBodyReferencesOther,
-                label: CIP136.contextBodyReferencesLabel,
-                uri: CIP136.contextBodyReferencesUri,
-                RelevantArticles: CIP136.contextBodyReferencesRelevantArticles,
+                governanceMetadata:
+                  CIP100.contextBodyReferencesGovernanceMetadata,
+                other: CIP100.contextBodyReferencesOther,
+                label: CIP100.contextBodyReferencesLabel,
+                uri: CIP100.contextBodyReferencesUri,
               },
             },
-            summary: CIP136.contextBodySummary,
-            rationaleStatement: CIP136.contextBodyRationaleStatement,
-            precedentDiscussion: CIP136.contextBodyPrecedentDiscussion,
-            counterargumentDiscussion:
-              CIP136.contextBodyCounterargumentDiscussion,
-            conclusion: CIP136.contextBodyConclusion,
-            internalVote: {
-              '@id': CIP136.contextBodyInternalVote,
-              '@container': '@set',
+            comment: CIP100.contextBodyComment,
+            externalUpdates: {
+              '@id': CIP100.contextBodyExternalUpdates,
               '@context': {
-                constitutional: CIP136.contextBodyInternalVoteConstitutional,
-                unconstitutional:
-                  CIP136.contextBodyInternalVoteUnconstitutional,
-                abstain: CIP136.contextBodyInternalVoteAbstain,
-                didNotVote: CIP136.contextBodyInternalVoteDidNotVote,
+                title: CIP100.contextUpdateTitle,
+                uri: CIP100.contextUpdateUri,
               },
             },
           },
         },
         authors: {
-          '@id': CIP136.contextAuthors,
+          '@id': CIP100.contextAuthors,
           '@container': '@set',
           '@context': {
             did: '@id',
-            name: CIP136.contextAuthorsName,
+            name: CIP100.contextAuthorsName,
             witness: {
-              '@id': CIP136.contextAuthorsWitness,
+              '@id': CIP100.contextAuthorsWitness,
               '@context': {
-                witnessAlgorithm: CIP136.contextWitnessAlgorithm,
-                publicKey: CIP136.contextWitnessPublicKey,
-                signature: CIP136.contextWitnessSignature,
+                witnessAlgorithm: CIP100.contextWitnessAlgorithm,
+                publicKey: CIP100.contextWitnessPublicKey,
+                signature: CIP100.contextWitnessSignature,
               },
             },
           },
         },
       },
-      hashAlgorithm: CIP136.hashAlgorithm,
-      body: {
-        summary: rationaleRequest.summary,
-        rationaleStatement: rationaleRequest.rationaleStatement,
-      },
+      hashAlgorithm: CIP100.hashAlgorithm,
       authors: [],
+      body: {
+        comment: rationaleRequest.content,
+      },
     };
-    const user = await this.usersService.findById(userId);
-    if (user.name) {
-      cip136.authors.push({
-        name: user.name,
-      });
-    }
-    return JSON.stringify(cip136);
+    return JSON.stringify(cip100);
   }
 
   private async addRationaleToIpfs(
