@@ -16,6 +16,7 @@ import { VoteValue } from '../enums/vote-value.enum';
 import { User } from 'src/users/entities/user.entity';
 import { UserStatusEnum } from 'src/users/enums/user-status.enum';
 import { RoleEnum } from 'src/users/enums/role.enum';
+import { RationaleDto } from '../dto/rationale.dto';
 
 describe('IpfsService', () => {
   let service: GovernanceService;
@@ -53,11 +54,11 @@ describe('IpfsService', () => {
     },
   ];
 
-  const mockRationaleDto = {
+  const mockRationaleDto: RationaleDto = {
     userId: 'mockedId',
     govActionProposalId: '1',
-    title: 'Rationale title',
-    content: 'Rationale content',
+    summary: 'Rationale title',
+    rationaleStatement: 'Rationale content',
     cid: 'rationalecid',
     blake2b: 'rationaleblake2b',
     url: 'rationaleurl',

@@ -159,8 +159,8 @@ export class GovernanceMapper {
     rationaleDto.json = ipfsContentDto.contents;
     rationaleDto.userId = userId;
     rationaleDto.govActionProposalId = proposalId;
-    rationaleDto.title = rationaleRequest.title;
-    rationaleDto.content = rationaleRequest.content;
+    rationaleDto.summary = rationaleRequest.summary;
+    rationaleDto.rationaleStatement = rationaleRequest.rationaleStatement;
     return rationaleDto;
   }
 
@@ -168,8 +168,8 @@ export class GovernanceMapper {
     const rationaleDto = new RationaleDto();
     rationaleDto.userId = rationale.userId;
     rationaleDto.govActionProposalId = rationale.govActionProposalId;
-    rationaleDto.title = rationale.title;
-    rationaleDto.content = rationale.content;
+    rationaleDto.summary = rationale.summary;
+    rationaleDto.rationaleStatement = rationale.rationaleStatement;
     rationaleDto.cid = rationale.cid;
     rationaleDto.blake2b = rationale.blake2b;
     rationaleDto.url = rationale.url;
@@ -182,7 +182,6 @@ export class GovernanceMapper {
     response.cid = dto.cid;
     response.blake2b = dto.blake2b;
     response.url = dto.url;
-    response.title = dto.title;
     response.contents = dto.json;
     return response;
   }
