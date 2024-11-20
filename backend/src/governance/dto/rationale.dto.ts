@@ -1,8 +1,8 @@
 export class RationaleDto {
   userId: string;
   govActionProposalId: string;
-  summary: string;
-  rationaleStatement: string;
+  title: string;
+  content: string;
   cid: string;
   blake2b: string;
   url: string;
