@@ -26,9 +26,9 @@ import { TocAccordion } from "./TOCAccordion";
 import TOCLink from "./TOCLink";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
-  const { isMobile } = useScreenDimension();
+  const { screenWidth } = useScreenDimension();
   const [isOpen, setIsOpen] = useState(true);
-
+  const isMobile = screenWidth < 1025;
   const t = useTranslations("Constitution");
 
   useEffect(() => {
@@ -55,12 +55,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
           <ConstitutionSidebar tableOfContents={children} metadata={metadata} />
         </DrawerMobile>
       ) : (
-        <NavDrawerDesktop
-          isOpen={isOpen}
-          onClick={() => setIsOpen(!isOpen)}
-          top={{ xxs: 0, md: 85 }}
-          left={0}
-        >
+        <NavDrawerDesktop top={{ xxs: 0, md: 85 }} left={0}>
           <ConstitutionSidebar tableOfContents={children} metadata={metadata} />
         </NavDrawerDesktop>
       ),
@@ -97,27 +92,25 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       data-testid="constitution-page-wrapper"
       container
       position="relative"
-      justifyContent={{ xxs: "flex-start" }}
+      justifyContent={{ xxs: "center", lg: "flex-start" }}
       flex={1}
     >
-      {/* fake elemnt to push content to the right since tos is fixed on left */}
-      <Box
-        height={{ xss: "0", md: "100%" }}
-        width={{ xss: "0", md: "420px" }}
-        zIndex={-1}
+      <Grid
+        mt={3}
+        item
+        xxs={12}
+        md={isOpen ? 8 : 11}
+        ml={{ xxs: 0, lg: "404px" }}
       >
-        &nbsp;
-      </Box>
-      <Grid mt={3} item xxs={12} md={isOpen ? 8 : 11}>
         <Box display="flex" flexDirection="column" flex={1}>
           <ContentWrapper>
-            <Box px={{ xxs: 3, md: 5 }}>
+            <Box px={{ xxs: 3, lg: 5 }}>
               <Box
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                position={{ xxs: "sticky", md: "static" }}
-                top="72px"
+                position={{ xxs: "sticky", lg: "static" }}
+                top={{ xxs: "72px", md: "104px" }}
                 bgcolor={customPalette.bgWhite}
               >
                 <Typography variant="headline4">{t("title")}</Typography>
@@ -126,7 +119,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                   onClick={() => setIsOpen(true)}
                   sx={{
                     bgcolor: customPalette.arcticWhite,
-                    display: { xxs: "flex", md: "none" },
+                    display: { xxs: "flex", lg: "none" },
                     justifyContent: "center"
                   }}
                 >

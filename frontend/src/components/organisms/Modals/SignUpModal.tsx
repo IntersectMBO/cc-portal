@@ -100,6 +100,10 @@ export const SignUpModal = () => {
             errors={errors}
             control={control}
             {...register("name", {
+              maxLength: {
+                value: 64,
+                message: "Display name cannot exceed 64 characters"
+              },
               pattern: {
                 value: PATTERNS.username,
                 message:

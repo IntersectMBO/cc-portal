@@ -1,16 +1,16 @@
 "use client";
-import * as React from "react";
-import Menu from "@mui/material/Menu";
-import { ICONS, IMAGES, PATHS } from "@consts";
-import { Button } from "../atoms";
-import { useModal } from "@context";
 import { FetchUserData } from "@/lib/requests";
-import { useTranslations } from "next-intl";
-import { Grid, Hidden } from "@mui/material";
+import { ICONS, IMAGES, PATHS } from "@consts";
+import { useModal } from "@context";
 import { UserAvatar } from "@molecules";
+import { Grid, Hidden, Tooltip } from "@mui/material";
+import Menu from "@mui/material/Menu";
+import { useTranslations } from "next-intl";
+import * as React from "react";
+import { Button } from "../atoms";
 
 export default function UserProfileButton({
-  user,
+  user
 }: {
   user: Pick<FetchUserData, "name" | "profile_photo_url">;
 }) {
@@ -31,8 +31,8 @@ export default function UserProfileButton({
       type: "signUpModal",
       state: {
         showCloseButton: true,
-        title: t("Modals.editProfile.headline"),
-      },
+        title: t("Modals.editProfile.headline")
+      }
     });
     handleClose();
   };
@@ -41,11 +41,12 @@ export default function UserProfileButton({
     openModal({
       type: "signOutModal",
       state: {
-        homeRedirectionPath: PATHS.home,
-      },
+        homeRedirectionPath: PATHS.home
+      }
     });
   };
 
+  const USERNAME_MAX_LENGTH = 32;
   return (
     <>
       <Hidden mdDown>
@@ -67,7 +68,18 @@ export default function UserProfileButton({
           endIcon={<img width={20} height={20} src={ICONS.chevronDown} />}
           dataTestId="user-profile-menu-button"
         >
-          {user?.name || "User"}
+          <Tooltip
+            title={user?.name?.length > USERNAME_MAX_LENGTH ? user.name : ""}
+            placement="top"
+            disableFocusListener
+            disableTouchListener
+          >
+            <span>
+              {user?.name?.length > USERNAME_MAX_LENGTH
+                ? `${user.name.slice(0, USERNAME_MAX_LENGTH)}...`
+                : user?.name || "User"}
+            </span>
+          </Tooltip>
         </Button>
 
         <Menu
@@ -76,10 +88,10 @@ export default function UserProfileButton({
           open={open}
           onClose={handleClose}
           MenuListProps={{
-            "aria-labelledby": "basic-button",
+            "aria-labelledby": "basic-button"
           }}
           PaperProps={{
-            style: { boxShadow: "none" },
+            style: { boxShadow: "none" }
           }}
         >
           <Grid

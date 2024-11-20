@@ -1,15 +1,15 @@
+import { Tooltip, Typography } from "@atoms";
 import { IMAGES } from "@consts";
-import { Typography, Tooltip } from "@atoms";
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { getShortenedGovActionId, truncateText } from "@utils";
-import { CopyPill } from "../CopyPill";
 import ConditionalWrapper from "../ConditionalWrapper";
+import { CopyPill } from "../CopyPill";
 
 export const UserBasicInfo = ({
   name,
   email,
   hotAddress,
-  maxWidth = 300,
+  maxWidth = 300
 }: {
   name: string;
   email?: string;
@@ -22,14 +22,17 @@ export const UserBasicInfo = ({
       paddingRight: 3,
       width: { xxs: "auto", md: maxWidth },
       height: "100%",
+      textAlign: { xxs: "center", sm: "left" }
     }}
     px={{ xxs: 1, lg: 3 }}
+    display="flex"
+    flexDirection="column"
   >
     <Typography
       sx={{
         marginBottom: 0.5,
         minHeight: 24,
-        width: "100%",
+        width: { xxs: "auto", md: maxWidth }
       }}
       dataTestId="user-info-username-text"
       variant="body1"
@@ -56,10 +59,12 @@ export const UserBasicInfo = ({
       </ConditionalWrapper>
     )}
     {hotAddress && (
-      <CopyPill
-        copyValue={hotAddress}
-        copyText={getShortenedGovActionId(hotAddress)}
-      />
+      <Box display="flex">
+        <CopyPill
+          copyValue={hotAddress}
+          copyText={getShortenedGovActionId(hotAddress)}
+        />
+      </Box>
     )}
   </Grid>
 );

@@ -133,8 +133,8 @@ export class GovernanceController {
     description: 'Unauthorized',
   })
   @ApiResponse({
-    status: 409,
-    description: 'Rationale already exists for this user',
+    status: 400,
+    description: 'Bad Request',
   })
   @UseGuards(JwtAuthGuard, UserPathGuard)
   @Post('users/:id/proposals/:proposalId/rationale')
