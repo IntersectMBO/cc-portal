@@ -75,7 +75,13 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
     },
     a: (props) => {
       if (props.href && props.href.startsWith("#")) {
-        return <TOCLink {...props} callback={onTOCLinkClick} />;
+        return (
+          <TOCLink
+            {...props}
+            callback={onTOCLinkClick}
+            disabled={props.className.includes("toc-link-h2")}
+          />
+        );
       }
       return <a {...props} />;
     }
