@@ -1,9 +1,9 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class RenameRationalesContentField1731525490627
+export class RenameRationalesContentField1732104855344
   implements MigrationInterface
 {
-  name = 'RenameRationalesContentField1731525490627';
+  name = 'RenameRationalesContentField1732104855344';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
