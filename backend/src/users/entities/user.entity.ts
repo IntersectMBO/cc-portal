@@ -25,7 +25,7 @@ export class User extends CommonEntity {
   @Column({
     name: 'name',
     type: 'varchar',
-    length: 50,
+    length: 64,
     nullable: true,
   })
   name: string;
