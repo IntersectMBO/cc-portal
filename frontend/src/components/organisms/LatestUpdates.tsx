@@ -120,7 +120,7 @@ export const LatestUpdates = ({
           description="latestUpdates.description"
         />
       ) : (
-        <>
+        <Box display="flex" flexDirection="column" gap={4}>
           <VotesTable
             votes={data}
             actionTitle={t("actionTitle")}
@@ -131,7 +131,7 @@ export const LatestUpdates = ({
             hasNextPage={pagination.has_next_page}
             callBack={loadMore}
           />
-        </>
+        </Box>
       )}
     </Box>
   );

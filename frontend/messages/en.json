@@ -5,6 +5,8 @@
       "headline": "Championing Cardano's community-led governance",
       "description": "Until a final Cardano Constitution has been developed and ratified by the community - a programme of consultation taking place throughout 2024 - a set of interim rules is required to support the transition.",
       "seeConstitution": "Read the Interim Constitution",
+      "guardrailsScript": "Guardrails Script",
+      "guardrailsRationale": "Guardrails Rationale",
       "signIn": "Sign In",
       "constitutionalCommitteePortal": "Constitutional Committee Portal"
     }

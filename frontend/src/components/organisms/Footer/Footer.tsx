@@ -67,7 +67,7 @@ export const Footer = ({
             data-testid="footer-privacy-policy-hyperlink"
           >
             <a
-              href="https://docs.intersectmbo.org/legal/policies-and-conditions/privacy-policy"
+              href={EXTERNAL_LINKS.privacyPolicy}
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "inherit", textDecoration: "none" }}
@@ -82,7 +82,7 @@ export const Footer = ({
             data-testid="footer-terms-of-service-hyperlink"
           >
             <a
-              href="https://docs.intersectmbo.org/legal/policies-and-conditions/terms-of-use"
+              href={EXTERNAL_LINKS.termsOfUse}
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "inherit", textDecoration: "none" }}

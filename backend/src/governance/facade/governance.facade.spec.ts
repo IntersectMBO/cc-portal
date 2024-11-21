@@ -119,22 +119,21 @@ describe('GovernanceFacade', () => {
   ];
 
   const mockRationaleRequest: RationaleRequest = {
-    title: 'Rationale title',
-    content: 'Rationale content',
+    summary: 'Rationale title',
+    rationaleStatement: 'Rationale content',
   };
 
   const mockRationaleJson = {
     govActionProposalHash: mockGovActionProposalDtos[0].txHash,
-    title: mockRationaleRequest.title,
-    content: mockRationaleRequest.content,
+    title: mockRationaleRequest.summary,
+    content: mockRationaleRequest.rationaleStatement,
   };
 
   const mockIpfsContentDto: IpfsContentDto = {
     blake2b: 'blake2b_example',
     cid: 'cid_example',
     url: 'ipfs_url_example',
-    title: mockRationaleRequest.title,
-    contents: mockRationaleRequest.content,
+    contents: mockRationaleRequest.rationaleStatement,
   };
 
   const mockGovActionProposals: GovActionProposal[] = [
@@ -215,8 +214,8 @@ describe('GovernanceFacade', () => {
     {
       userId: mockUsers[0].id,
       govActionProposalId: mockGovActionProposals[0].id,
-      title: 'Rationale title 1',
-      content: 'Rationale content 1',
+      summary: 'Rationale title 1',
+      rationaleStatement: 'Rationale content 1',
       cid: 'cid1',
       blake2b: 'blake2b1',
       url: 'http://test.com',
@@ -225,8 +224,8 @@ describe('GovernanceFacade', () => {
     {
       userId: mockUsers[0].id,
       govActionProposalId: mockGovActionProposals[1].id,
-      title: 'Rationale title 2',
-      content: 'Rationale content 2',
+      summary: 'Rationale title 2',
+      rationaleStatement: 'Rationale content 2',
       cid: 'cid2',
       blake2b: 'blake2b2',
       url: 'http://test.com',
