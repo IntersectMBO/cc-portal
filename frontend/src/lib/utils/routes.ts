@@ -1,7 +1,7 @@
 import {
   adminProtectedPath,
   PATHS,
-  userProtectedPaths,
+  userProtectedPaths
 } from "@/constants/paths";
 import { NextRequest } from "next/server";
 import { UserRole } from "../requests";
@@ -54,7 +54,7 @@ export const isUserProtectedRoute = (req: NextRequest): boolean =>
 export const getRoleBasedHomeRedirectURL = (role: UserRole): string => {
   let redirectUrl = PATHS.home;
   if (isAnyAdminRole(role)) {
-    redirectUrl = PATHS.admin.home;
+    redirectUrl = PATHS.home;
   }
   return redirectUrl;
 };
