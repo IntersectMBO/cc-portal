@@ -43,7 +43,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"Aca|Mitrovic\",\n    \"description\":\"\",\n    \"hotAddress\":\"\"\n}",
+							"raw": "{\n    \"name\":\"Andjy\",\n    \"description\":\"\",\n    \"hotAddress\":\"newone\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -887,7 +887,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"summary\": \"Summary of rationale 1\",\n    \"rationale_statement\": \"Rationale statement 1\"\n}",
+							"raw": "{\n    \"title\": \"test rationale 2\",\n    \"content\": \"some text of rationale 2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -895,7 +895,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/1/rationale",
+							"raw": "{{base-url}}/api/governance/users/{{userId}}/proposals/2/rationale",
 							"host": [
 								"{{base-url}}"
 							],
@@ -905,7 +905,7 @@
 								"users",
 								"{{userId}}",
 								"proposals",
-								"1",
+								"2",
 								"rationale"
 							]
 						}
