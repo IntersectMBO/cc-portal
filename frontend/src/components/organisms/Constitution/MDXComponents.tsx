@@ -1,10 +1,11 @@
 import { Button, CopyButton, Typography } from "@atoms";
-import { customPalette, ICONS, orange } from "@consts";
-import { Card } from "@molecules";
-import { Box, Grid } from "@mui/material";
+import { customPalette, ICONS, PATHS } from "@consts";
+import { Box, Grid, IconButton } from "@mui/material";
 import { getShortenedGovActionId } from "@utils";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
 const Anchor = ({ id, offset = "-20vh " }) => {
@@ -177,7 +178,31 @@ export const TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS = {
     }
   }
 };
+export const DrawerNav = () => {
+  const t = useTranslations("Constitution");
 
+  const pathname = usePathname();
+  const linkPath = pathname.includes(PATHS.versionHistory)
+    ? PATHS.constitution
+    : PATHS.versionHistory;
+  const buttonLabel = pathname.includes(PATHS.versionHistory)
+    ? t("drawer.backToContents")
+    : t("drawer.versionHistory");
+  const buttonEndIcon = pathname.includes(PATHS.versionHistory)
+    ? ICONS.arrowLeft
+    : ICONS.documentSearch;
+  return (
+    <Grid container direction="column" gap={1} p={2}>
+      {/* <Button variant="contained">{t("drawer.uploadNewVersion")}</Button> */}
+      <Link href={linkPath}>
+        <Button fullWidth variant="outlined">
+          <img src={buttonEndIcon} style={{ marginRight: 8 }} />
+          {buttonLabel}
+        </Button>
+      </Link>
+    </Grid>
+  );
+};
 export const NavDrawerDesktop = ({
   children,
   left = 0,
@@ -208,7 +233,7 @@ export const NavDrawerDesktop = ({
     >
       <Box
         sx={{
-          height: { xxs: "90vh", md: "100%" },
+          height: { xxs: "90vh", md: "calc(100vh - 250px)" },
           overflowY: "scroll",
           borderRadiusTop: "16px 16px 0 0",
           "&::-webkit-scrollbar": {
@@ -219,6 +244,7 @@ export const NavDrawerDesktop = ({
       >
         {children}
       </Box>
+      <DrawerNav />
     </Grid>
   );
 };
@@ -227,98 +253,104 @@ export const NavCard = ({
   onClick,
   title,
   description,
-  buttonLabel,
   hash,
   url,
-  isActiveLabel
-}) => (
-  <Box mb={2}>
-    <Card sx={{ px: 3, py: 2 }} data-testid={`${title.replace(" ", "-")}-card`}>
+  isActive,
+  isLatest
+}) => {
+  return (
+    <Grid
+      container
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      data-testid={`${title.replace(" ", "-")}-card`}
+      mb={2}
+    >
       <Grid
-        container
-        justifyContent="space-between"
-        alignItems={{ lg: "center" }}
+        item
+        xxs={4}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
       >
-        <Grid item xxs={6} lg={3}>
+        <Box>
           <Typography
-            sx={isActiveLabel && { color: orange.c500 }}
+            sx={isActive && { color: customPalette.primaryBlue }}
             variant="body1"
           >
             {title}
           </Typography>
           <Typography variant="caption">{description}</Typography>
-        </Grid>
-        <Grid item xxs={6} lg={4}>
-          <Box
-            display="flex"
-            alignItems={{ xxs: "center" }}
-            justifyContent={{ xxs: "flex-end" }}
+        </Box>
+      </Grid>
+      <Grid
+        item
+        xxs={4}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Box
+          p={0.75}
+          border={1}
+          borderColor={customPalette.lightBlue}
+          borderRadius={100}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexWrap="nowrap"
+          gap={1}
+          width="100%"
+        >
+          <CopyButton size={14} text={hash} />
+          <Typography variant="caption">
+            {getShortenedGovActionId(hash)}
+          </Typography>
+        </Box>
+      </Grid>
+      {url && (
+        <Grid
+          item
+          xxs={2}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <Link
+            target="_blank"
+            href={url}
+            style={{ cursor: "pointer", display: "flex" }}
           >
-            <Box
-              px={2.25}
-              py={0.75}
-              border={1}
-              borderColor={customPalette.lightBlue}
-              borderRadius={100}
-              display="flex"
-              flexWrap="nowrap"
-              gap={1}
-              width="100%"
-            >
-              <CopyButton size={14} text={hash} />
-              <Typography variant="caption">
-                {getShortenedGovActionId(hash)}
-              </Typography>
-            </Box>
-          </Box>
-        </Grid>
-        {url && (
-          <Grid
-            item
-            xxs={6}
-            lg={2}
-            sx={{
-              display: "flex",
-              justifyContent: { xxs: "left", lg: "center" }
-            }}
-          >
-            <Link
-              target="_blank"
-              href={url}
-              style={{ cursor: "pointer", display: "flex" }}
-            >
+            <IconButton>
               <Image
                 alt="ipfs link"
                 src={ICONS.externalLink}
                 width={20}
                 height={20}
               />
-            </Link>
-          </Grid>
-        )}
-
-        <Grid item xxs={12} lg={3} mt={{ xxs: 2, md: 0 }}>
-          {buttonLabel && (
-            <Button
-              sx={{ width: "100%" }}
-              size="medium"
-              onClick={onClick}
-              variant="outlined"
-              data-testid="compare-button"
-            >
-              {buttonLabel}
-            </Button>
-          )}
-          {isActiveLabel && (
-            <Typography
-              variant="body2"
-              sx={{ textAlign: "center", color: orange.c500 }}
-            >
-              {isActiveLabel}
-            </Typography>
-          )}
+            </IconButton>
+          </Link>
         </Grid>
+      )}
+      <Grid
+        item
+        xxs={2}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        {!isActive && !isLatest && (
+          <IconButton data-testid="compare-button" onClick={onClick}>
+            <img src={ICONS.eye} width={20} height={20} />
+          </IconButton>
+        )}
+        {isLatest && <Typography variant="caption">{isLatest}</Typography>}
       </Grid>
-    </Card>
-  </Box>
-);
+    </Grid>
+  );
+};

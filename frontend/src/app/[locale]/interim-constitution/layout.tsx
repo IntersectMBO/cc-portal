@@ -6,5 +6,9 @@ export default function ConstitutionLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <Box sx={{ backgroundColor: customPalette.bgWhite }}>{children}</Box>;
+  return (
+    <Box sx={{ backgroundColor: customPalette.bgWhite, minHeight: "100vh" }}>
+      {children}
+    </Box>
+  );
 }

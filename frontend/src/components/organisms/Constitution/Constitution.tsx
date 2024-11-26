@@ -6,11 +6,11 @@ import { useScreenDimension } from "@hooks";
 import { Box, Grid, IconButton } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { MDXRemote } from "next-mdx-remote";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Footer } from "../Footer";
 import { DrawerMobile } from "../TopNavigation";
 import { ConstitutionProps } from "../types";
-import { ConstitutionSidebar } from "./ConstitutionSidebar";
+import { ContentsSidebar } from "./ContentsSidebar";
 import {
   Code,
   Heading1,
@@ -27,15 +27,9 @@ import TOCLink from "./TOCLink";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const { screenWidth } = useScreenDimension();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const isMobile = screenWidth < 1025;
   const t = useTranslations("Constitution");
-
-  useEffect(() => {
-    if (isMobile) {
-      setIsOpen(false);
-    }
-  }, [isMobile]);
 
   const onTOCLinkClick = () => {
     if (isMobile) {
@@ -52,11 +46,11 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
           sx={TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS}
           rowGap={0}
         >
-          <ConstitutionSidebar tableOfContents={children} metadata={metadata} />
+          <ContentsSidebar tableOfContents={children} />
         </DrawerMobile>
       ) : (
         <NavDrawerDesktop top={{ xxs: 0, md: 85 }} left={0}>
-          <ConstitutionSidebar tableOfContents={children} metadata={metadata} />
+          <ContentsSidebar tableOfContents={children} />
         </NavDrawerDesktop>
       ),
     h1: Heading1,
@@ -96,9 +90,9 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
         md={isOpen ? 8 : 11}
         ml={{ xxs: 0, lg: "404px" }}
       >
-        <Box display="flex" flexDirection="column" flex={1}>
+        <Box display="flex" flexDirection="column" flex={1} gap={1}>
           <ContentWrapper>
-            <Box px={{ xxs: 3, lg: 5 }}>
+            <Box px={{ xxs: 2, lg: 5 }}>
               <Box
                 display="flex"
                 justifyContent="space-between"

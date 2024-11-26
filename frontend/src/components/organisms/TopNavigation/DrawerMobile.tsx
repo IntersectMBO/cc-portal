@@ -3,6 +3,7 @@
 import { Box, Grid, IconButton, SwipeableDrawer } from "@mui/material";
 
 import { ICONS } from "@consts";
+import { DrawerNav } from "../Constitution";
 
 export const DrawerMobile = ({
   isDrawerOpen,
@@ -45,6 +46,7 @@ export const DrawerMobile = ({
         <Box sx={{ display: "flex", flex: 1, flexDirection: "column" }}>
           <Grid container direction="column" rowGap={rowGap}>
             {children}
+            <DrawerNav />
           </Grid>
         </Box>
       </Box>

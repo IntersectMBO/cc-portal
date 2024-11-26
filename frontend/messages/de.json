@@ -15,9 +15,11 @@
     "title": "Cardano-Verfassung",
     "drawer": {
       "compare": "Vergleichen",
-      "latestRevisions": "Latest Revisions",
+      "versionHistory": "Version History",
       "tableOfContents": "Contents",
-      "latest": "Latest"
+      "latest": "Latest",
+      "uploadNewVersion": "Upload new version",
+      "backToContents": "Back to contents"
     }
   },
   "Members": {

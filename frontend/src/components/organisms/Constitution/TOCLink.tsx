@@ -88,7 +88,7 @@ const TOCLink = ({ href, children, callback }: Props) => {
           display: "inline-block",
           backgroundColor: isActive ? customPalette.accordionBg : undefined,
           borderRadius: "30px",
-          padding: "0 16px",
+          padding: "0 8px",
           boxSizing: "border-box"
         }}
       >
