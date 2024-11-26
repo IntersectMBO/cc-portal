@@ -1,9 +1,9 @@
 "use client";
-import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 import { TextareaAutosize, styled } from "@mui/material";
+import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
-import { TextAreaProps } from "./types";
 import { poppins } from "@consts";
+import { TextAreaProps } from "./types";
 
 const TextAreaBase = styled(TextareaAutosize)(
   () => `
@@ -20,7 +20,7 @@ const TextAreaBase = styled(TextareaAutosize)(
 );
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ errorMessage, maxLength = 500, onBlur, onFocus, ...props }, ref) => {
+  ({ errorMessage, maxLength, onBlur, onFocus, ...props }, ref) => {
     const textAraeRef = useRef<HTMLTextAreaElement>(null);
 
     const handleFocus = useCallback(
@@ -45,7 +45,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         ({
           focus: handleFocus,
           blur: handleBlur,
-          ...textAraeRef.current,
+          ...textAraeRef.current
         } as unknown as HTMLTextAreaElement),
       [handleBlur, handleFocus]
     );
@@ -61,7 +61,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           outline: "none",
           padding: "12px 14px",
           resize: "none",
-          overflow: "scroll",
+          overflow: "scroll"
         }}
         maxLength={maxLength}
         ref={textAraeRef}
