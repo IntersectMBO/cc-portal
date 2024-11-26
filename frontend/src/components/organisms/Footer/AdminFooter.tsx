@@ -32,7 +32,7 @@ export const AdminFooter = () => {
           openModal({
             type: "signOutModal",
             state: {
-              homeRedirectionPath: PATHS.admin.home
+              homeRedirectionPath: PATHS.home
             }
           })
         }
