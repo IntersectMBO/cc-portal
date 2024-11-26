@@ -125,8 +125,8 @@ describe('GovernanceFacade', () => {
 
   const mockRationaleJson = {
     govActionProposalHash: mockGovActionProposalDtos[0].txHash,
-    title: mockRationaleRequest.summary,
-    content: mockRationaleRequest.rationaleStatement,
+    summary: mockRationaleRequest.summary,
+    rationaleStatement: mockRationaleRequest.rationaleStatement,
   };
 
   const mockIpfsContentDto: IpfsContentDto = {
@@ -432,7 +432,7 @@ describe('GovernanceFacade', () => {
       const userId = 'user_1';
       const proposalId = mockGovActionProposalDtos[0].id;
       jest
-        .spyOn<any, string>(facade, 'createRationaleJsonCip100')
+        .spyOn<any, string>(facade, 'createRationaleJsonCip136')
         .mockResolvedValueOnce(mockRationaleJson);
       jest
         .spyOn<any, string>(facade, 'addRationaleToIpfs')
@@ -469,7 +469,7 @@ describe('GovernanceFacade', () => {
         govActionProposalId: proposalId,
       };
       jest
-        .spyOn<any, string>(facade, 'createRationaleJsonCip100')
+        .spyOn<any, string>(facade, 'createRationaleJsonCip136')
         .mockResolvedValueOnce(mockRationaleJson);
       jest
         .spyOn<any, string>(facade, 'addRationaleToIpfs')
