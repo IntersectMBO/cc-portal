@@ -33,7 +33,7 @@ export class GovernanceFacade {
     proposalId: string,
     rationaleRequest: RationaleRequest,
   ): Promise<RationaleResponse> {
-    const rationaleJson = await this.createRationaleJsonCip100(
+    const rationaleJson = await this.createRationaleJsonCip136(
       rationaleRequest,
       userId,
     );
@@ -52,7 +52,7 @@ export class GovernanceFacade {
    * CIP 136 example:
    *  https://github.com/Ryun1/CIPs/blob/governance-metadata-cc-rationale/CIP-0136/examples/treasury-withdrawal-unconstitutional.jsonld
    **/
-  private async createRationaleJsonCip100(
+  private async createRationaleJsonCip136(
     rationaleRequest: RationaleRequest,
     userId: string,
   ): Promise<string> {
