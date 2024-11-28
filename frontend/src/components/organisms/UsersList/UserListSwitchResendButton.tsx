@@ -1,21 +1,23 @@
 "use client";
 
+import { ICONS } from "@/constants";
 import { useAppContext, useModal } from "@/context";
 import { useSnackbar } from "@/context/snackbar";
 import { resendRegisterEmail } from "@/lib/api";
 import { UserRole, UserRoleEnum } from "@/lib/requests";
-import { Button, UserStatus as UserStatusType } from "@atoms";
+import { UserStatus as UserStatusType } from "@atoms";
+import { IconButton } from "@mui/material";
+import Switch from "@mui/material/Switch";
 import { isAdminRole, isResponseErrorI, isSuperAdminRole } from "@utils";
-import { useRouter } from "next/navigation";
+import { ReactNode } from "react";
 import { useTranslations } from "use-intl";
 import { OpenSwitchStatusModalState } from "../types";
-
 type ActionConfig = {
-  buttonText: string;
+  button: ReactNode;
   action: () => Promise<void>;
 };
 
-export default function UserListStatusSwitchButton({
+export default function UserListSwitchResendButton({
   status,
   userId,
   role,
@@ -29,7 +31,6 @@ export default function UserListStatusSwitchButton({
   const { userSession } = useAppContext();
   const isSuperAdmin = isSuperAdminRole(userSession.role);
   const isAdmin = isAdminRole(userSession.role);
-  const router = useRouter();
   const t = useTranslations("UsersList");
   const { openModal } = useModal<OpenSwitchStatusModalState>();
 
@@ -40,7 +41,11 @@ export default function UserListStatusSwitchButton({
   const getActionConfig = (): ActionConfig | null => {
     if (status === "pending" && (isAdmin || isSuperAdmin)) {
       return {
-        buttonText: t("resendInv"),
+        button: (
+          <IconButton size="large" onClick={() => actionConfig?.action()}>
+            <img src={ICONS.resendEmail} />
+          </IconButton>
+        ),
         action: async () => {
           const res = await resendRegisterEmail(email);
           if (!isResponseErrorI(res)) {
@@ -48,8 +53,6 @@ export default function UserListStatusSwitchButton({
           } else {
             addErrorAlert(res.error);
           }
-
-          router.refresh();
         }
       };
     }
@@ -65,7 +68,12 @@ export default function UserListStatusSwitchButton({
           role === UserRoleEnum.Alumni)
       ) {
         return {
-          buttonText: status === "active" ? t("makeInactive") : t("makeActive"),
+          button: (
+            <Switch
+              onClick={() => actionConfig?.action()}
+              checked={status === "active"}
+            />
+          ),
           action: async () => {
             handleSwitchUser(newStatus);
           }
@@ -77,7 +85,12 @@ export default function UserListStatusSwitchButton({
         (role === UserRoleEnum.User || role === UserRoleEnum.Alumni)
       ) {
         return {
-          buttonText: status === "active" ? t("makeInactive") : t("makeActive"),
+          button: (
+            <Switch
+              onClick={() => actionConfig?.action()}
+              checked={status === "active"}
+            />
+          ),
           action: async () => {
             handleSwitchUser(newStatus);
           }
@@ -104,14 +117,5 @@ export default function UserListStatusSwitchButton({
     });
   };
 
-  return (
-    <Button
-      size="small"
-      onClick={actionConfig.action}
-      variant="text"
-      sx={{ fontSize: 12, color: "#8E908E" }}
-    >
-      {actionConfig.buttonText}
-    </Button>
-  );
+  return <>{actionConfig.button}</>;
 }

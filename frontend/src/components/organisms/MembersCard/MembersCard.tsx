@@ -32,7 +32,9 @@ export const MembersCard = ({
         padding: 3,
         paddingBottom: 4,
         maxWidth: "450px",
-        height: "386px"
+        height: "386px",
+        marginLeft: "auto",
+        marginRight: "auto"
       }}
     >
       <Box>
@@ -40,7 +42,16 @@ export const MembersCard = ({
           <UserAvatar width={100} height={100} src={profile_photo_url} />
         </Box>
         <Box textAlign="center" data-testid="members-name" pb={3}>
-          <Typography variant="headline5">{name} </Typography>
+          <Typography
+            variant="headline5"
+            sx={{
+              overflow: "hidden", // Hides overflowed text
+              textOverflow: "ellipsis", // Adds ellipsis for overflowed text
+              whiteSpace: "nowrap"
+            }}
+          >
+            {name}{" "}
+          </Typography>
 
           <Typography
             fontWeight={400}
