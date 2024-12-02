@@ -119,4 +119,10 @@ export abstract class CommonService {
     }
     return ipfsUrl; // Return the original URL if it doesn't start with ipfs://
   }
+
+  async getEndTime(startTime: Date, interval: number): Promise<Date> {
+    const startDate = new Date(startTime);
+    const endTime = new Date(startDate.getTime() + interval * 1000);
+    return endTime;
+  }
 }

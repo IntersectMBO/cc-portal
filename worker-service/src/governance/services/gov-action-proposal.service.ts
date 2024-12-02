@@ -18,6 +18,7 @@ import { GovActionProposalMapper } from '../mapper/gov-action-proposal.mapper';
 import { CommonService } from 'src/common/common-service';
 import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 import { ConfigService } from '@nestjs/config';
+import { GovActionProposalDto } from '../dto/gov-action-proposal.dto';
 
 @Injectable()
 export class GovActionProposalService extends CommonService {
@@ -56,17 +57,24 @@ export class GovActionProposalService extends CommonService {
     requests: GovActionProposalRequest[],
   ): Promise<Partial<GovActionProposal[]>> {
     const govActionProposals = [];
+    const endTimeInterval: number =
+      this.configService.getOrThrow('EPOCH_DURATION') *
+      this.configService.getOrThrow('GAP_DURATION_IN_EPOCH_COUNT');
     for (const request of requests) {
       const govMetadataUrl = await this.transformIpfsUrl(
         request.govMetadataUrl,
       );
       const axiosData = await this.getGovActionProposalFromUrl(govMetadataUrl);
-      const govActionProposal = {
+      const endTime = await this.getEndTime(
+        request.submitTime,
+        endTimeInterval,
+      );
+      const govActionProposal: Partial<GovActionProposalDto> = {
         id: request.id,
         votingAnchorId: request.votingAnchorId,
         govActionType: request.govActionType,
         govMetadataUrl: govMetadataUrl,
-        endTime: request?.endTime,
+        endTime: endTime,
         status: request.status,
         txHash: request.txHash,
         submitTime: request.submitTime,

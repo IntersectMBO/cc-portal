@@ -10,7 +10,6 @@ export class VoteRequest {
   govActionType: string;
   govMetadataUrl: string;
   status: string;
-  endTime: Date;
   txHash: string;
   govActionProposalSubmitTime: Date;
 }

@@ -4,7 +4,6 @@ export class GovActionProposalRequest {
   govActionType: string;
   govMetadataUrl: string;
   status: string;
-  endTime: string;
   txHash: string;
-  submitTime: string;
+  submitTime: Date;
 }
