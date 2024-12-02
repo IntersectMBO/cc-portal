@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "76b45677-bce1-4b13-8de8-db1a76d8e827",
+		"_postman_id": "2b1baa78-48e2-4671-aff8-da723a452325",
 		"name": "CC Portal develop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20133713"
@@ -274,6 +274,41 @@
 								"api",
 								"users",
 								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change user role and permissions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"1c3b9794-95c1-4c78-9948-b057996763f6\",\n    \"new_role\": \"admin\",\n    \"new_permissions\": [\"manage_cc_members\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/users/{{userId}}/role-permissions",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{userId}}",
+								"role-permissions"
 							]
 						}
 					},
