@@ -282,7 +282,7 @@
 				{
 					"name": "Change user role and permissions",
 					"request": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [
 							{
 								"key": "Authorization",

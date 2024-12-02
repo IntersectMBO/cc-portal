@@ -14,7 +14,6 @@ import {
   Request,
   Delete,
   BadRequestException,
-  Post,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
@@ -332,7 +331,7 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'Not Found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @HttpCode(200)
-  @Post(':id/role-permissions')
+  @Patch(':id/role-permissions')
   @Permissions(PermissionEnum.MANAGE_ROLES_AND_PERMISSIONS)
   @UseGuards(JwtAuthGuard, UserPathGuard, PermissionGuard)
   async updateUserRoleAndPermissions(
