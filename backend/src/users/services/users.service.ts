@@ -28,6 +28,7 @@ import { PaginationEntityMapper } from 'src/util/pagination/mapper/pagination.ma
 import { Paginator } from 'src/util/pagination/paginator';
 import { RoleFactory } from '../role/role.factory';
 import { PermissionEnum } from '../enums/permission.enum';
+import { UpdateRoleAndPermissionsRequest } from '../api/request/update-role-and-permissions.request';
 
 @Injectable()
 export class UsersService {
@@ -291,5 +292,46 @@ export class UsersService {
   async removeUser(userId: string): Promise<void> {
     const user = await this.findEntityById(userId);
     await this.userRepository.remove(user);
+  }
+
+  async updateUserRoleAndPermissions(
+    updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
+  ): Promise<UserDto> {
+    const user = await this.findEntityById(
+      updateRoleAndPermissionsRequest.userId,
+    );
+    const role = await this.findRoleByCode(
+      updateRoleAndPermissionsRequest.newRole,
+    );
+    this.validatePermissionsForRole(
+      role,
+      updateRoleAndPermissionsRequest.newPermissions,
+    );
+
+    user.role = role;
+    if (updateRoleAndPermissionsRequest.newPermissions) {
+      const newPermissions = await this.getUserPermissions(
+        updateRoleAndPermissionsRequest.newPermissions,
+      );
+      user.permissions = newPermissions;
+    }
+    await this.userRepository.save(user);
+
+    return UserMapper.userToDto(user);
+  }
+
+  private validatePermissionsForRole(role: Role, permissions: string[]): void {
+    if (role.code === 'admin' && permissions.length === 0) {
+      throw new BadRequestException(`At least one permission is required`);
+    }
+    const allowedPermissions = role.permissions?.map(
+      (permission) => permission.code,
+    );
+    const isAllowed = permissions.every((perm) =>
+      allowedPermissions.includes(perm),
+    );
+    if (!isAllowed) {
+      throw new BadRequestException(`Permissions aren't allowed for this role`);
+    }
   }
 }
