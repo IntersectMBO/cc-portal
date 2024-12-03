@@ -15,9 +15,11 @@
     "title": "Cardano-Verfassung",
     "drawer": {
       "compare": "Vergleichen",
-      "latestRevisions": "Latest Revisions",
+      "versionHistory": "Version History",
       "tableOfContents": "Contents",
-      "latest": "Latest"
+      "latest": "Latest",
+      "uploadNewVersion": "Upload new version",
+      "backToContents": "Back to contents"
     }
   },
   "Members": {
@@ -204,10 +206,10 @@
       "description": "Please provide rationale for your vote on specific governance action.",
       "fields": {
         "title": {
-          "label": "Title"
+          "label": "Summary"
         },
         "rationale": {
-          "label": "Rationale"
+          "label": "Rationale Statement"
         }
       },
       "alerts": {

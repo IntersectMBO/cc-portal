@@ -45,9 +45,14 @@ export interface SignupModalState {
   description?: string;
 }
 
-export interface CompareConstitutionModalState {
+export type TargetConstitutionState = Pick<
+  ConstitutionMetadata,
+  "title" | "created_date" | "cid"
+>;
+
+export interface CompareConstitutionState {
   base: ConstitutionMetadata;
-  target: ConstitutionMetadata;
+  target: TargetConstitutionState;
 }
 
 export interface SignOutModalState {

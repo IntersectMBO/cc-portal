@@ -5,7 +5,7 @@ import {
   FormErrorMessage,
   FormHelpfulText,
   TextArea as TextAreaBase,
-  Typography,
+  Typography
 } from "@atoms";
 
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
@@ -21,7 +21,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
       label,
       labelStyles,
       layoutStyles,
-      maxLength = 500,
+      maxLength,
       onBlur,
       onFocus,
       ...props
@@ -52,7 +52,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
         ({
           focus: handleFocus,
           blur: handleBlur,
-          ...textAreaRef.current,
+          ...textAreaRef.current
         } as unknown as HTMLTextAreaElement),
       [handleBlur, handleFocus]
     );
@@ -63,7 +63,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
           flexDirection: "column",
           width: "100%",
           position: "relative",
-          ...layoutStyles,
+          ...layoutStyles
         }}
       >
         {label && (
@@ -95,11 +95,11 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
           sx={{
             bottom: errorMessage ? 35 : 14,
             position: "absolute",
-            right: 15,
+            right: 15
           }}
           variant="caption"
         >
-          {props?.value?.toString()?.length ?? 0}/{maxLength}
+          {maxLength && `${props?.value?.toString()?.length ?? 0}/${maxLength}`}
         </Typography>
       </Box>
     );

@@ -22,4 +22,6 @@ export const ICONS = {
   sortWhite: "/icons/SortWhite.svg",
   govAction: "/icons/GovAction.svg",
   externalLink: "/icons/ExternalLink.svg",
+  eye: "/icons/Eye.svg",
+  documentSearch: "/icons/DocumentSearch.svg"
 };
