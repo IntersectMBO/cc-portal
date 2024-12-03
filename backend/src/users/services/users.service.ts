@@ -300,6 +300,9 @@ export class UsersService {
     const user = await this.findEntityById(
       updateRoleAndPermissionsRequest.userId,
     );
+    if (user.role.code === RoleEnum.SUPER_ADMIN) {
+      throw new ForbiddenException(`You have no permission for this action`);
+    }
     const role = await this.findRoleByCode(
       updateRoleAndPermissionsRequest.newRole,
     );
