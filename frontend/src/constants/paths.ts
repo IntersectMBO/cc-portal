@@ -1,6 +1,7 @@
 export const PATHS = {
   home: "/",
   constitution: "/interim-constitution",
+  versionHistory: "/interim-constitution/version-history",
   members: "/members",
   latestUpdates: "/latest-updates",
   myActions: "/my-actions",

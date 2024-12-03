@@ -208,19 +208,12 @@ export const PreviewReasoningModal = () => {
           </Typography>
         </Box>
       )}
-      <Box
-        bgcolor="white"
-        px={{ xxs: 1.4, md: 3 }}
-        pt={2.5}
-        sx={{ borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}
-      >
+      <Box px={{ xxs: 1.4, md: 3 }} pt={2.5} display="flex" gap={2}>
         {onActionClick && (
           <Button
             onClick={() => onActionClick(govAction.id)}
             variant="contained"
-            size="large"
             sx={{
-              width: "100%",
               marginBottom: 1.5
             }}
             data-testid="rationale-modal-action-button"
@@ -230,10 +223,9 @@ export const PreviewReasoningModal = () => {
         )}
         <Button
           onClick={onClose}
-          variant="contained"
-          size="large"
+          variant="outlined"
           sx={{
-            width: "100%"
+            width: !onActionClick ? "100%" : undefined
           }}
           data-testid="rationale-modal-close-button"
         >
