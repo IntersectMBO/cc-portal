@@ -5,7 +5,8 @@ on:
     branches:
       - develop
       - staging
-      - main
+      - beta
+      - master
 
 permissions:
   contents: read
@@ -78,7 +79,6 @@ jobs:
           set -o pipefail
           sudo chmod +x lint.sh && ./lint.sh 2>&1 | tee code_lint_output.txt
 
-
       - name: Unit tests
         id: unit_tests
         run: |
@@ -132,7 +132,7 @@ jobs:
             rm -rf '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar'
             cat ${{ matrix.workdir }}/dockle_scan_output.json
 
-            echo "outcome=success" >> $GITHUB_OUTPUT
+          echo "outcome=success" >> $GITHUB_OUTPUT
 
       - name: Create PR comment
         if: always()

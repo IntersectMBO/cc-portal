@@ -89,7 +89,11 @@ export const Heading5 = ({ children }) => (
       fontWeight: 800,
       fontSize: { xxs: 12, md: 14 },
       lineHeight: "1em",
+<<<<<<< HEAD
       overflowWrap: "break-word"
+=======
+      overflowWrap: "break-word",
+>>>>>>> staging
     }}
   >
     {children}
@@ -103,7 +107,11 @@ export const Paragraph = ({ children, id }) => (
         lineHeight: "1.5",
         marginBottom: "16px",
         fontSize: "14px",
+<<<<<<< HEAD
         color: customPalette.textGray
+=======
+        color: customPalette.textGray,
+>>>>>>> staging
       }}
       variant="caption"
     >
@@ -122,7 +130,11 @@ export const ListItem = ({ children, id }) => (
       flexDirection: "column",
       alignItems: "flex-start",
       justifyContent: "center",
+<<<<<<< HEAD
       wordBreak: "break-all"
+=======
+      wordBreak: "break-all",
+>>>>>>> staging
     }}
   >
     {children}
@@ -174,9 +186,15 @@ export const TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS = {
       fontSize: "1rem",
       fontWeight: 400,
       lineHeight: "56px",
+<<<<<<< HEAD
       color: customPalette.textBlack
     }
   }
+=======
+      color: customPalette.textBlack,
+    },
+  },
+>>>>>>> staging
 };
 export const DrawerNav = () => {
   const t = useTranslations("Constitution");
@@ -207,7 +225,11 @@ export const NavDrawerDesktop = ({
   children,
   left = 0,
   top = { xxs: 75, md: 90 },
+<<<<<<< HEAD
   dataTestId
+=======
+  dataTestId,
+>>>>>>> staging
 }: {
   children: ReactNode;
   left: number;
@@ -237,8 +259,13 @@ export const NavDrawerDesktop = ({
           overflowY: "scroll",
           borderRadiusTop: "16px 16px 0 0",
           "&::-webkit-scrollbar": {
+<<<<<<< HEAD
             display: "none"
           }
+=======
+            display: "none",
+          },
+>>>>>>> staging
         }}
         data-testid="nav-drawer-collapse-container"
       >
@@ -256,7 +283,11 @@ export const NavCard = ({
   hash,
   url,
   isActive,
+<<<<<<< HEAD
   isLatest
+=======
+  isLatest,
+>>>>>>> staging
 }) => {
   return (
     <Grid

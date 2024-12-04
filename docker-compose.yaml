@@ -8,7 +8,7 @@ services:
     ports:
       - "1337:1337"
     networks:
-      - bloxico_local
+      - cc
     depends_on:
       - psql
       - cache
@@ -24,24 +24,17 @@ services:
     ports:
       - "3002:3002"
     networks:
-      - bloxico_local
+      - cc
 
   ipfs:
     build:
       context: ./ipfs-service
       dockerfile: Dockerfile
     container_name: ipfs-service
-    ports:
-      - "3001:3001"
-      - "4001:4001"
-      - "4002:4002"
-      - "4003:4003"
-      - "5001:5001"
-      - "8080:8080"
     volumes:
       - ipfs_data:/ipfs/datastore
     networks:
-      - bloxico_local
+      - cc
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -53,8 +46,8 @@ services:
     container_name: postgres
     environment:
       POSTGRES_DB: cc-portal
-      POSTGRES_USER: BEdev24
-      POSTGRES_PASSWORD: bedev.bloxico24
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - "psql-data:/var/lib/postgresql/data/"
     ports:
@@ -67,11 +60,11 @@ services:
       while ! pg_isready -q -h postgres -p 5432; do 
         sleep 1; 
       done; 
-      PGUSER=BEdev24 PGPASSWORD=bedev.bloxico24 psql -U BEdev24 -d cc-portal -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"; 
+      PGUSER=postgres PGPASSWORD=postgres psql -U postgres -d cc-portal -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"; 
       wait $pid
       '
     networks:
-      - bloxico_local
+      - cc
 
   cache:
     image: redis/redis-stack:latest
@@ -81,11 +74,11 @@ services:
       - REDIS_PASSWORD=your-redis-password
     command: redis-server --requirepass ${REDIS_PASSWORD}
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - cache:/data
     networks:
-      - bloxico_local
+      - cc
 
   s3:
     image: minio/minio
@@ -94,32 +87,23 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_ROOT_USER: bloxico
-      MINIO_ROOT_PASSWORD: bloxico2
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
     command: ["server", "/data", "--console-address", ":9001"]
     volumes:
       - s3_data:/data
     networks:
-      - bloxico_local
+      - cc
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend
-    networks:
-      - bloxico_local
-
-  proxy:
-    build:
-      context: ./proxy
-      dockerfile: Dockerfile
-    container_name: proxy
     ports:
-      - "80:80"
-      - "443:443"
+      - "3000:3000"
     networks:
-      - bloxico_local
+      - cc
 
 volumes:
   cache:
@@ -127,4 +111,4 @@ volumes:
   ipfs_data:
   psql-data:
 networks:
-  bloxico_local:
+  cc:
