@@ -15,9 +15,11 @@
     "title": "Interim Constitution",
     "drawer": {
       "compare": "Compare",
-      "latestRevisions": "Latest Revisions",
-      "tableOfContents": "Content",
-      "latest": "Latest"
+      "versionHistory": "Version History",
+      "tableOfContents": "Contents",
+      "latest": "Latest",
+      "uploadNewVersion": "Upload new version",
+      "backToContents": "Back to contents"
     }
   },
   "Members": {

@@ -19,7 +19,7 @@ export const VotesTableRow = ({
   votes,
   disabled,
   actionTitle,
-  onActionClick,
+  onActionClick
 }: Props) => {
   const t = useTranslations("LatestUpdates");
   const {
