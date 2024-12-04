@@ -53,7 +53,6 @@ const libp2pOptions = {
     ],
   },
   transports: [
-    circuitRelayTransport({ discoverRelays: 1 }),
     tcp(),
     webSockets(),
   ],
@@ -80,21 +79,13 @@ const libp2pOptions = {
       createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
     dht: kadDHT({
       clientMode: false,
-      initialQuerySelfInterval: 1000,
-      kBucketSize: 20,
       protocol: '/ipfs/kad/1.0.0',
-      maxInboundStreams: 32,
-      maxOutboundStreams: 64,
       validators: { ipns: ipnsValidator },
       selectors: { ipns: ipnsSelector },
     }),
     identify: identify(),
     keychain: keychain(),
     ping: ping(),
-    relay: circuitRelayServer({
-      advertise: true,
-      hopTimeout: 60000,
-    }),
     upnp: uPnPNAT(),
   },
 };
