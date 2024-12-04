@@ -5,7 +5,6 @@ interface Props {
   href: string;
   children: React.ReactNode;
   callback: () => void;
-  disabled: boolean;
 }
 /**
  * TOCLink Component
@@ -19,7 +18,7 @@ interface Props {
  * @param {Function} props.callback - A callback function to be executed after the link is clicked.
  */
 
-const TOCLink = ({ href, children, callback, disabled }: Props) => {
+const TOCLink = ({ href, children, callback }: Props) => {
   const [isActive, setIsActive] = useState(false);
   const [isTruncated, setIsTruncated] = useState(false);
   const linkRef = useRef<HTMLAnchorElement>(null);
@@ -89,8 +88,8 @@ const TOCLink = ({ href, children, callback, disabled }: Props) => {
           display: "inline-block",
           backgroundColor: isActive ? customPalette.accordionBg : undefined,
           borderRadius: "30px",
-          padding: "0 16px",
-          boxSizing: "border-box"
+          padding: "0 8px",
+          boxSizing: "border-box",
         }}
       >
         {children}

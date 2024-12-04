@@ -1,7 +1,6 @@
 "use client";
 import { createContext, useContext, useMemo, useReducer } from "react";
 
-import { CompareConstitutionModal } from "@/components/organisms/Modals/CompareConstitutionModal";
 import { DeleteUser } from "@/components/organisms/Modals/DeleteUser";
 import { GovActionModal } from "@/components/organisms/Modals/GovActionModal";
 import { PreviewReasoningModal } from "@/components/organisms/Modals/PreviewReasoningModal";
@@ -15,7 +14,7 @@ import {
   DeleteRole,
   ReasoningLinkModal,
   SignInModal,
-  UploadConstitution
+  UploadConstitution,
 } from "@organisms";
 import { basicReducer, BasicReducer, callAll } from "@utils";
 
@@ -39,7 +38,6 @@ export type ModalType =
   | "uploadConstitution"
   | "deleteRole"
   | "deleteUser"
-  | "compareConstitutionModal"
   | "addReasoningModal"
   | "reasoningLinkModal"
   | "previewReasoningModal"
@@ -48,48 +46,46 @@ export type ModalType =
 
 const modals: Record<ModalType, ContextModal> = {
   none: {
-    component: null
+    component: null,
   },
   signIn: {
-    component: <SignInModal />
+    component: <SignInModal />,
   },
   signUpModal: {
     component: <SignUpModal />,
-    preventDismiss: true
+    preventDismiss: true,
   },
   signOutModal: {
-    component: <SignOutModal />
+    component: <SignOutModal />,
   },
   addMember: {
-    component: <AddMemberModal />
+    component: <AddMemberModal />,
   },
   uploadConstitution: {
-    component: <UploadConstitution />
+    component: <UploadConstitution />,
   },
   deleteRole: {
-    component: <DeleteRole />
+    component: <DeleteRole />,
   },
   deleteUser: {
-    component: <DeleteUser />
+    component: <DeleteUser />,
   },
-  compareConstitutionModal: {
-    component: <CompareConstitutionModal />
-  },
+
   addReasoningModal: {
-    component: <AddReasoningModal />
+    component: <AddReasoningModal />,
   },
   reasoningLinkModal: {
-    component: <ReasoningLinkModal />
+    component: <ReasoningLinkModal />,
   },
   previewReasoningModal: {
-    component: <PreviewReasoningModal />
+    component: <PreviewReasoningModal />,
   },
   govActionModal: {
-    component: <GovActionModal />
+    component: <GovActionModal />,
   },
   switchUserStatus: {
-    component: <SwitchUsersStatus />
-  }
+    component: <SwitchUsersStatus />,
+  },
 };
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
@@ -116,7 +112,7 @@ function ModalProvider<T>(props: ProviderProps) {
     basicReducer,
     {
       state: null,
-      type: "none"
+      type: "none",
     }
   );
 
@@ -128,7 +124,7 @@ function ModalProvider<T>(props: ProviderProps) {
       openModal,
       closeModal: callAll(modals[modal.type]?.onClose, () =>
         openModal({ type: "none", state: null })
-      )
+      ),
     }),
     [modal, openModal]
   );

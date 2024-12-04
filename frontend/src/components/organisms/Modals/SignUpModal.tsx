@@ -146,6 +146,7 @@ export const SignUpModal = () => {
             label={t("signUp.fields.description.label")}
             errors={errors}
             control={control}
+            maxLength={500}
             {...register("description")}
           />
 

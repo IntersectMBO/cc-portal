@@ -1,23 +1,23 @@
 "use client";
-import React, { useState } from "react";
-import {
-  ModalWrapper,
-  ModalHeader,
-  ModalContents,
-  ModalActions,
-  Typography,
-} from "@atoms";
-import { useForm } from "react-hook-form";
-import { customPalette, IMAGES } from "@consts";
-import { useTranslations } from "next-intl";
-import { ControlledField } from "@organisms";
-import { useModal } from "@context";
-import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/context/snackbar";
-import { OpenAddReasoningModalState } from "../types";
 import { addOrUpdateReasoning } from "@/lib/api";
 import { ReasoningResponseI } from "@/lib/requests";
+import {
+  ModalActions,
+  ModalContents,
+  ModalHeader,
+  ModalWrapper,
+  Typography
+} from "@atoms";
+import { customPalette, IMAGES } from "@consts";
+import { useModal } from "@context";
+import { ControlledField } from "@organisms";
 import { isResponseErrorI } from "@utils";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { OpenAddReasoningModalState } from "../types";
 
 interface AddReasoningFormData {
   title: string;
@@ -26,7 +26,7 @@ interface AddReasoningFormData {
 export const AddReasoningModal = () => {
   const t = useTranslations("Modals");
   const {
-    state: { callback, id },
+    state: { callback, id }
   } = useModal<OpenAddReasoningModalState>();
   const router = useRouter();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
@@ -36,7 +36,7 @@ export const AddReasoningModal = () => {
     register,
     handleSubmit,
     formState: { errors },
-    control,
+    control
   } = useForm();
 
   const onSubmit = async (data: AddReasoningFormData) => {
@@ -69,18 +69,21 @@ export const AddReasoningModal = () => {
           >
             {t("addRationale.description")}
           </Typography>
-          <ControlledField.Input
+          <ControlledField.TextArea
             label={t("addRationale.fields.title.label")}
             errors={errors}
             control={control}
-            {...register("title", { required: "Title is required" })}
+            maxLength={200}
+            {...register("title", { required: "Summary is required" })}
           />
 
           <ControlledField.TextArea
             label={t("addRationale.fields.rationale.label")}
             errors={errors}
             control={control}
-            {...register("content", { required: "Rationale is required" })}
+            {...register("content", {
+              required: "Rationale Statement is required"
+            })}
           />
 
           <ModalActions isSubmitting={isSubmitting} />

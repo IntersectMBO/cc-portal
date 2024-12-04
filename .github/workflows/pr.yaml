@@ -79,7 +79,6 @@ jobs:
           set -o pipefail
           sudo chmod +x lint.sh && ./lint.sh 2>&1 | tee code_lint_output.txt
 
-
       - name: Unit tests
         id: unit_tests
         run: |
@@ -127,15 +126,15 @@ jobs:
       - name: Scan Docker image with Dockle
         id: dockle
         run: |
-            wget -q https://github.com/goodwithtech/dockle/releases/download/v0.4.14/dockle_0.4.14_Linux-64bit.tar.gz
-            tar zxf dockle_0.4.14_Linux-64bit.tar.gz
-            sudo mv dockle /usr/local/bin
+          wget -q https://github.com/goodwithtech/dockle/releases/download/v0.4.14/dockle_0.4.14_Linux-64bit.tar.gz
+          tar zxf dockle_0.4.14_Linux-64bit.tar.gz
+          sudo mv dockle /usr/local/bin
 
-            dockle --exit-code 1 --exit-level fatal --format json --input '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar' --output ${{ matrix.workdir }}/dockle_scan_output.json
-            rm -rf '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar'
-            cat ${{ matrix.workdir }}/dockle_scan_output.json
+          dockle --exit-code 1 --exit-level fatal --format json --input '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar' --output ${{ matrix.workdir }}/dockle_scan_output.json
+          rm -rf '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar'
+          cat ${{ matrix.workdir }}/dockle_scan_output.json
 
-            echo "outcome=success" >> $GITHUB_OUTPUT
+          echo "outcome=success" >> $GITHUB_OUTPUT
 
       - name: Create PR comment
         if: always()

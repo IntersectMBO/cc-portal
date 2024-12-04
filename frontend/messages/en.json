@@ -16,7 +16,7 @@
     "drawer": {
       "compare": "Compare",
       "latestRevisions": "Latest Revisions",
-      "tableOfContents": "Contents",
+      "tableOfContents": "Content",
       "latest": "Latest"
     }
   },
@@ -204,10 +204,10 @@
       "description": "Please provide rationale for your vote on specific governance action.",
       "fields": {
         "title": {
-          "label": "Title"
+          "label": "Summary"
         },
         "rationale": {
-          "label": "Rationale"
+          "label": "Rationale Statement"
         }
       },
       "alerts": {

@@ -9,7 +9,7 @@ import {
   ModalWrapper,
   OutlinedLightButton,
   Typography,
-  VotePill
+  VotePill,
 } from "@atoms";
 import { IMAGES } from "@consts";
 import { useModal } from "@context";
@@ -19,7 +19,7 @@ import {
   formatDisplayDate,
   getProposalTypeLabel,
   getShortenedGovActionId,
-  isResponseErrorI
+  isResponseErrorI,
 } from "@utils";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -29,7 +29,7 @@ export const PreviewReasoningModal = () => {
   const t = useTranslations("Modals");
   const {
     closeModal,
-    state: { govAction, onActionClick, actionTitle }
+    state: { govAction, onActionClick, actionTitle },
   } = useModal<OpenPreviewReasoningModal>();
   const onClose = () => {
     closeModal();
@@ -74,7 +74,7 @@ export const PreviewReasoningModal = () => {
         sx={{
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          backgroundColor: "rgba(255, 255, 255, 0.3)"
+          backgroundColor: "rgba(255, 255, 255, 0.3)",
         }}
         pt={2}
         pb={2}
@@ -208,20 +208,13 @@ export const PreviewReasoningModal = () => {
           </Typography>
         </Box>
       )}
-      <Box
-        bgcolor="white"
-        px={{ xxs: 1.4, md: 3 }}
-        pt={2.5}
-        sx={{ borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}
-      >
+      <Box px={{ xxs: 1.4, md: 3 }} pt={2.5} display="flex" gap={2}>
         {onActionClick && (
           <Button
             onClick={() => onActionClick(govAction.id)}
             variant="contained"
-            size="large"
             sx={{
-              width: "100%",
-              marginBottom: 1.5
+              marginBottom: 1.5,
             }}
             data-testid="rationale-modal-action-button"
           >
@@ -230,10 +223,9 @@ export const PreviewReasoningModal = () => {
         )}
         <Button
           onClick={onClose}
-          variant="contained"
-          size="large"
+          variant="outlined"
           sx={{
-            width: "100%"
+            width: !onActionClick ? "100%" : undefined,
           }}
           data-testid="rationale-modal-close-button"
         >
