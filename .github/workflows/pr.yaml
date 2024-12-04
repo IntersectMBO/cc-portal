@@ -117,9 +117,11 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           outputs: type=docker,dest=/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar
           build-args: |
-            NEXT_PUBLIC_API_URL=${{ secrets.DEV_NEXT_PUBLIC_API_URL }}
-            NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY }}
-            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
+            NEXT_PUBLIC_API_URL=${{ secrets.QA_NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_USERSNAP_SPACE_API_KEY=${{ secrets.QA_NEXT_PUBLIC_USERSNAP_SPACE_API_KEY }}
+            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.QA_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
+            NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS=${{ secrets.QA_NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS }}
+            NEXT_PUBLIC_IS_MAINNET=${{ secrets.QA_NEXT_PUBLIC_IS_MAINNET }}
           
       - name: Scan Docker image with Dockle
         id: dockle
