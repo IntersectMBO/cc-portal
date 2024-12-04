@@ -6,7 +6,7 @@ on:
       - develop
       - staging
       - beta
-      - main
+      - master
 
 permissions:
   contents: read
@@ -79,7 +79,6 @@ jobs:
           set -o pipefail
           sudo chmod +x lint.sh && ./lint.sh 2>&1 | tee code_lint_output.txt
 
-
       - name: Unit tests
         id: unit_tests
         run: |
@@ -117,25 +116,25 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           outputs: type=docker,dest=/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar
-          build-args: |    
-            NEXT_PUBLIC_API_URL=${{ secrets.QA_NEXT_PUBLIC_API_URL }}
-            NEXT_PUBLIC_USERSNAP_SPACE_API_KEY=${{ secrets.QA_NEXT_PUBLIC_USERSNAP_SPACE_API_KEY }}
-            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.QA_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
-            NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS=${{ secrets.QA_NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS }}
-            NEXT_PUBLIC_IS_MAINNET=${{ secrets.QA_NEXT_PUBLIC_IS_MAINNET }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ secrets.PROD_NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_USERSNAP_SPACE_API_KEY=${{ secrets.PROD_NEXT_PUBLIC_USERSNAP_SPACE_API_KEY }}
+            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.PROD_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
+            NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS=${{ secrets.PROD_NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS }}
+            NEXT_PUBLIC_IS_MAINNET=${{ secrets.PROD_NEXT_PUBLIC_IS_MAINNET }}
 
       - name: Scan Docker image with Dockle
         id: dockle
         run: |
-            wget -q https://github.com/goodwithtech/dockle/releases/download/v0.4.14/dockle_0.4.14_Linux-64bit.tar.gz
-            tar zxf dockle_0.4.14_Linux-64bit.tar.gz
-            sudo mv dockle /usr/local/bin
+          wget -q https://github.com/goodwithtech/dockle/releases/download/v0.4.14/dockle_0.4.14_Linux-64bit.tar.gz
+          tar zxf dockle_0.4.14_Linux-64bit.tar.gz
+          sudo mv dockle /usr/local/bin
 
-            dockle --exit-code 1 --exit-level fatal --format json --input '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar' --output ${{ matrix.workdir }}/dockle_scan_output.json
-            rm -rf '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar'
-            cat ${{ matrix.workdir }}/dockle_scan_output.json
+          dockle --exit-code 1 --exit-level fatal --format json --input '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar' --output ${{ matrix.workdir }}/dockle_scan_output.json
+          rm -rf '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar'
+          cat ${{ matrix.workdir }}/dockle_scan_output.json
 
-            echo "outcome=success" >> $GITHUB_OUTPUT
+          echo "outcome=success" >> $GITHUB_OUTPUT
 
       - name: Create PR comment
         if: always()

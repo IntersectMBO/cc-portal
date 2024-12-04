@@ -2,7 +2,7 @@ import { customPalette } from "@/constants";
 import { Box } from "@mui/material";
 
 export default function ConstitutionLayout({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) {

@@ -20,7 +20,7 @@ import {
   ListItem,
   NavDrawerDesktop,
   Paragraph,
-  TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS
+  TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS,
 } from "./MDXComponents";
 import { TocAccordion } from "./TOCAccordion";
 import TOCLink from "./TOCLink";
@@ -78,7 +78,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
         );
       }
       return <a {...props} />;
-    }
+    },
   };
 
   return (
@@ -114,7 +114,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                   sx={{
                     bgcolor: customPalette.arcticWhite,
                     display: { xxs: "flex", lg: "none" },
-                    justifyContent: "center"
+                    justifyContent: "center",
                   }}
                 >
                   <img src={IMAGES.docSearch} />
