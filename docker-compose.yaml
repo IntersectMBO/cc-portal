@@ -8,7 +8,7 @@ services:
     ports:
       - "1337:1337"
     networks:
-      - bloxico_local
+      - cc
     depends_on:
       - psql
       - cache
@@ -22,7 +22,7 @@ services:
     container_name: worker
     restart: unless-stopped
     networks:
-      - bloxico_local
+      - cc
 
   ipfs:
     build:
@@ -39,7 +39,7 @@ services:
     volumes:
       - ipfs_data:/ipfs/datastore
     networks:
-      - bloxico_local
+      - cc
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -50,9 +50,9 @@ services:
     image: postgres:10
     container_name: postgres
     environment:
-      POSTGRES_DB: cc-portal
-      POSTGRES_USER: BEdev24
-      POSTGRES_PASSWORD: bedev.bloxico24
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres.bloxico24
     volumes:
       - "psql-data:/var/lib/postgresql/data/"
     ports:
@@ -65,11 +65,11 @@ services:
       while ! pg_isready -q -h postgres -p 5432; do 
         sleep 1; 
       done; 
-      PGUSER=BEdev24 PGPASSWORD=bedev.bloxico24 psql -U BEdev24 -d cc-portal -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"; 
+      PGUSER=postgres PGPASSWORD=postgres psql -U postgres -d postgres -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"; 
       wait $pid
       '
     networks:
-      - bloxico_local
+      - cc
 
   cache:
     image: redis/redis-stack:latest
@@ -80,7 +80,7 @@ services:
     volumes:
       - cache:/data
     networks:
-      - bloxico_local
+      - cc
 
   s3:
     image: minio/minio
@@ -89,13 +89,13 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_ROOT_USER: bloxico
-      MINIO_ROOT_PASSWORD: bloxico2
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio
     command: ["server", "/data", "--console-address", ":9001"]
     volumes:
       - s3_data:/data
     networks:
-      - bloxico_local
+      - cc
 
   frontend:
     build:
@@ -103,7 +103,7 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     networks:
-      - bloxico_local
+      - cc
 
   proxy:
     build:
@@ -113,7 +113,7 @@ services:
     ports:
       - "80:80"
     networks:
-      - bloxico_local
+      - cc
 
 volumes:
   cache:
@@ -121,4 +121,4 @@ volumes:
   ipfs_data:
   psql-data:
 networks:
-  bloxico_local:
+  cc:
