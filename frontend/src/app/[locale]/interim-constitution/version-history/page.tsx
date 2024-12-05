@@ -13,7 +13,7 @@ export default async function VersionHistoryPage() {
     <>
       <TopNav />
       <Suspense fallback={<Loading />}>
-        {metadata && !isResponseErrorI(metadata) ? (
+        {!isResponseErrorI(metadata) && metadata.length > 1 ? (
           <ContentWrapper>
             <VersionHistory metadata={metadata.reverse()} />
           </ContentWrapper>
@@ -21,8 +21,8 @@ export default async function VersionHistoryPage() {
           <>
             <ContentWrapper>
               <NotFound
-                title="constitution.title"
-                description="constitution.description"
+                title="versionHistory.title"
+                description="versionHistory.description"
               />
             </ContentWrapper>
             <Footer />

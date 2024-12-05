@@ -129,11 +129,11 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           outputs: type=docker,dest=/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar
           build-args: |
-            NEXT_PUBLIC_API_URL=${{ secrets.PROD_NEXT_PUBLIC_API_URL }}
-            NEXT_PUBLIC_USERSNAP_SPACE_API_KEY=${{ secrets.PROD_NEXT_PUBLIC_USERSNAP_SPACE_API_KEY }}
-            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.PROD_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
-            NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS=${{ secrets.PROD_NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS }}
-            NEXT_PUBLIC_IS_MAINNET=${{ secrets.PROD_NEXT_PUBLIC_IS_MAINNET }}
+            NEXT_PUBLIC_API_URL=${{ secrets.QA_NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_USERSNAP_SPACE_API_KEY=${{ secrets.QA_NEXT_PUBLIC_USERSNAP_SPACE_API_KEY }}
+            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.QA_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
+            NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS=${{ secrets.QA_NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS }}
+            NEXT_PUBLIC_IS_MAINNET=${{ secrets.QA_NEXT_PUBLIC_IS_MAINNET }}
 
       - name: Scan Docker image with Dockle
         id: dockle
@@ -159,6 +159,14 @@ jobs:
           docker load -i '/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar'
           rm -rf '/tmp/image-${{ matrix.name }}-${{ env.ENVIRONMENT }}.tar'
           docker push ${{ steps.image_lowercase.outputs.lowercase }}:${{ env.TAG }}
+
+      - name: Add tag as a PR comment
+        uses: ubie-oss/comment-to-merged-pr-action@v0.3.3
+        id: comment-to-merged-pr
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          message: |-
+            This PR is in the tag: ${{ env.TAG }} , for ${{ matrix.name }} service
 
       - name: Deploy with Qovery
         if: github.ref == 'refs/heads/develop'

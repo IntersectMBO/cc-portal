@@ -286,6 +286,10 @@
     "governanceAction": {
       "title": "No governance actions available",
       "description": "There are currently no governance actions. Please check back later for updates"
+    },
+    "versionHistory": {
+      "title": "No revisions available",
+      "description": "There are currently no revisions available. Please check back later for updates"
     }
   },
   "Snackbar": {
