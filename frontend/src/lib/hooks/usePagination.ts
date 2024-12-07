@@ -58,7 +58,7 @@ export const usePagination = <T>(
         updateState({
           list: [...data, ...newData.data],
           paginationMeta: newData.meta,
-          page: page + 1,
+          page: page + 1
         });
       }
     } catch (error) {
@@ -83,6 +83,6 @@ export const usePagination = <T>(
     data,
     pagination,
     isLoading,
-    loadMore,
+    loadMore
   };
 };

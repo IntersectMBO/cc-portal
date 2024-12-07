@@ -24,6 +24,7 @@
   },
   "Members": {
     "title": "Members",
+    "addNewMember": "Add new member",
     "card": {
       "joined": "Joined",
       "latestUpdates": "Latest updates"
@@ -183,6 +184,23 @@
       "alerts": {
         "success": "New member successfully added",
         "error": "Error adding new member"
+      }
+    },
+    "changeRole": {
+      "headline": "Change role",
+      "fields": {
+        "role": {
+          "label": "Role",
+          "placeholder": "Role"
+        },
+        "permissions": {
+          "label": "Permissions",
+          "placeholder": "Permissions"
+        }
+      },
+      "alerts": {
+        "success": "User role successfully changed",
+        "error": "Error changing user role"
       }
     },
     "uploadConstitution": {

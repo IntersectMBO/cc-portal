@@ -23,5 +23,8 @@ export const ICONS = {
   govAction: "/icons/GovAction.svg",
   externalLink: "/icons/ExternalLink.svg",
   eye: "/icons/Eye.svg",
-  documentSearch: "/icons/DocumentSearch.svg"
+  documentSearch: "/icons/DocumentSearch.svg",
+  trash: "/icons/Trash.svg",
+  resendEmail: "/icons/ResendEmail.svg",
+  editUserRole: "/icons/UserRoleEdit.svg"
 };
