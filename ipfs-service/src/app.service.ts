@@ -36,6 +36,7 @@ import { IpfsDto } from './dto/ipfs.dto.js';
 import { PeerId } from '@libp2p/interface';
 import { config } from 'dotenv';
 import { ProvideToDHTProducer } from './queues/producers/provide-to-dht.producer.js';
+import { PrunePeerStoreProducer } from './queues/producers/prune-peer-store.producer.js';
 config();
 
 const libp2pOptions = {
@@ -91,10 +92,7 @@ const libp2pOptions = {
     identify: identify(),
     keychain: keychain(),
     ping: ping(),
-    relay: circuitRelayServer({
-      advertise: true,
-      hopTimeout: 60000,
-    }),
+    relay: circuitRelayServer(),
     upnp: uPnPNAT(),
   },
 };
@@ -107,7 +105,10 @@ export class AppService implements OnModuleInit {
   private ipnsPeerId: PeerId;
   private logger = new Logger(AppService.name);
 
-  constructor(private readonly provideToDHTProducer: ProvideToDHTProducer) {}
+  constructor(
+    private readonly provideToDHTProducer: ProvideToDHTProducer,
+    private readonly prunePeerStoreProducer: PrunePeerStoreProducer,
+  ) {}
 
   async onModuleInit() {
     console.log(`Initialization helia...`);
@@ -222,27 +223,27 @@ export class AppService implements OnModuleInit {
 
   async getDocByCid(cidString: string): Promise<IpfsDto> {
     try {
-    this.fs = unixfs(this.helia);
-    const decoder = new TextDecoder();
-    const cid = CID.parse(cidString);
+      this.fs = unixfs(this.helia);
+      const decoder = new TextDecoder();
+      const cid = CID.parse(cidString);
 
-    let text = '';
-    for await (const chunk of this.fs.cat(cid)) {
-      text += decoder.decode(chunk, {
-        stream: true,
-      });
+      let text = '';
+      for await (const chunk of this.fs.cat(cid)) {
+        text += decoder.decode(chunk, {
+          stream: true,
+        });
+      }
+      return IpfsMapper.ipfsToIpfsDto(cidString, text);
+    } catch (error) {
+      this.logger.error(`Failed to get doc by CID - ${cidString} error: ${error}`);
+      return null;
     }
-    return IpfsMapper.ipfsToIpfsDto(cidString, text);
-  } catch (error) {
-    this.logger.error(`Failed to get doc by CID - ${cidString} error: ${error}`);
-    return null;
   }
-}
 
   async provideCidtoDHTViaQueue(cid: CID) {
     await this.helia.libp2p.contentRouting.provide(cid);
     this.logger.log(`Announced CID to the DHT: ${cid.toString()}`);
-}
+  }
 
   async getIpnsUrl(): Promise<string> {
     if (!this.ipnsPeerId) {
@@ -250,5 +251,24 @@ export class AppService implements OnModuleInit {
     }
     const ipnsUrl = process.env.IPNS_PUBLIC_URL + this.ipnsPeerId.toString()
     return ipnsUrl;
+  }
+
+  async addPrunePeerStoreJob(): Promise<void> {
+    await this.prunePeerStoreProducer.addToQueue(process.env.MAX_PEERS);
+  }
+
+  async prunePeerStore(maxPeers: number): Promise<void> {
+    let removedPeers = 0;
+    const peers = await this.helia.libp2p.peerStore.all();
+    this.logger.debug(`Total number of stored peers: ${peers.length}`);
+  
+    if (peers.length > maxPeers) {
+      const excessPeers = peers.slice(0, peers.length - maxPeers);
+      for (const peer of excessPeers) {
+        await this.helia.libp2p.peerStore.delete(peer.id);
+        removedPeers++;
+      }
+    }
+    this.logger.debug(`Removed peers: ${removedPeers}`);
   }
 }
