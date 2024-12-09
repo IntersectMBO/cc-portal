@@ -1,37 +1,36 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
-import { Box, Grid } from "@mui/material";
-import { NotFound } from "../NotFound";
-import { MembersCard } from "./MembersCard";
-import { UserListItem } from "../types";
-import { ShowMoreButton, Typography } from "@atoms";
-import { useTranslations } from "next-intl";
-import { isEmpty } from "@utils";
-import { DataActionsBar } from "@molecules";
-import { CC_MEMBERS_SORTING } from "@consts";
-import { PaginationMeta } from "@/lib/requests";
-import { usePagination, useManageQueryParams } from "@hooks";
 import { getMembers } from "@/lib/api";
+import { PaginationMeta } from "@/lib/requests";
+import { ShowMoreButton, Typography } from "@atoms";
+import { useManageQueryParams, usePagination } from "@hooks";
+import { Box, Grid } from "@mui/material";
+import { isEmpty } from "@utils";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { NotFound } from "../NotFound";
+import { UserListItem } from "../types";
+import { MembersCard } from "./MembersCard";
+
+import { DataActionsContainer } from "./DataActionsContainer";
 
 export function MembersCardList({
   members,
   paginationMeta,
-  error,
+  error
 }: {
   members: UserListItem[];
   paginationMeta: PaginationMeta;
   error?: string;
 }) {
   const t = useTranslations("Members");
-
   const { updateQueryParams } = useManageQueryParams();
   const [searchText, setSearchText] = useState<string>("");
-  const [sortOpen, setSortOpen] = useState(false);
   const [chosenSorting, setChosenSorting] = useState<string>("");
+
   const params: Record<string, string | null> = {
     search: searchText || null,
-    sortBy: chosenSorting || null,
+    sortBy: chosenSorting || null
   };
 
   const { data, pagination, isLoading, loadMore } = usePagination(
@@ -39,10 +38,6 @@ export function MembersCardList({
     paginationMeta,
     (page) => getMembers({ page, ...params })
   );
-
-  const closeSorts = useCallback(() => {
-    setSortOpen(false);
-  }, []);
 
   useEffect(() => {
     updateQueryParams(params);
@@ -58,19 +53,10 @@ export function MembersCardList({
         alignItems={{ xxs: "left", md: "center" }}
       >
         <Typography variant="headline4">{t("title")}</Typography>
-        <Box display="flex" sx={{ position: "relative" }}>
-          <DataActionsBar
-            isFiltering={false}
-            chosenSorting={chosenSorting}
-            closeSorts={closeSorts}
-            setChosenSorting={setChosenSorting}
-            setSearchText={setSearchText}
-            setSortOpen={setSortOpen}
-            sortingActive={Boolean(chosenSorting)}
-            sortOpen={sortOpen}
-            sortOptions={CC_MEMBERS_SORTING}
-          />
-        </Box>
+        <DataActionsContainer
+          setSearchText={setSearchText}
+          setChosenSorting={setChosenSorting}
+        />
       </Box>
       {isEmpty(data) || error ? (
         <NotFound
@@ -80,19 +66,25 @@ export function MembersCardList({
         />
       ) : (
         <>
-          <Grid container>
+          <Grid
+            container
+            item
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
             {data &&
               data.map((members, index) => (
                 <Grid
                   key={index}
                   item
                   xxs={12}
-                  sm={6}
+                  md={6}
                   lg={4}
                   data-testid={`members-${members.id}-card`}
                   sx={{
                     padding: 2,
-                    paddingTop: 0,
+                    paddingTop: 0
                   }}
                 >
                   <MembersCard {...members} />

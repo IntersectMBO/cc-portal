@@ -6,13 +6,11 @@ import {
   UserRole,
   UserStatus
 } from "@/components/molecules";
-import { useAppContext, useModal } from "@/context";
 import { UserStatus as UserStatusType } from "@atoms";
 import { Box, Grid } from "@mui/material";
-// import { hasManageUserPermission } from "@utils";
-import { OpenDeleteRoleModalState, UserListItem } from "../types";
-import { UserListStatusDeleteButton } from "./UserListStatusDeleteButton";
-import UserListStatusSwitchButton from "./UserListStatusSwitchButton";
+import { UserListItem } from "../types";
+import { UserListDeleteButton } from "./UserListDeleteButton";
+import UserListSwitchResendButton from "./UserListSwitchResendButton";
 export function UsersListItem({
   id,
   name,
@@ -24,25 +22,9 @@ export function UsersListItem({
   UserListItem,
   "id" | "name" | "email" | "role" | "status" | "profile_photo_url"
 >) {
-  const { userSession } = useAppContext();
-  const { openModal } = useModal<OpenDeleteRoleModalState>();
-  // const allowDeletingUser =
-  //   status !== "inactive" &&
-  //   hasManageUserPermission(role, userSession?.permissions);
-
-  const deleteUserRole = () => {
-    openModal({
-      type: "deleteRole",
-      state: {
-        userId: id,
-        status: "inactive"
-      }
-    });
-  };
-
   const UserInfoColumn = () => {
     return (
-      <Grid container item xxs={12} sm={10} md={10} lg="auto">
+      <Grid container item xxs="auto">
         <Grid item>
           <UserAvatar src={profile_photo_url} />
         </Grid>
@@ -55,24 +37,10 @@ export function UsersListItem({
 
   const UserRoleColumn = () => {
     return (
-      <Grid
-        item
-        xxs={12}
-        sm={12}
-        md={5}
-        lg={4}
-        xl={3}
-        display="flex"
-        flexDirection="row"
-        gap={3}
-      >
+      <Grid item display="flex" flexDirection="row" gap={3}>
         <TableDivider />
         <Box>
-          <UserRole
-            // showCloseButton={allowDeletingUser}
-            roles={[role]}
-            onClick={deleteUserRole}
-          />
+          <UserRole roles={[role]} />
         </Box>
       </Grid>
     );
@@ -80,70 +48,58 @@ export function UsersListItem({
 
   const UserStatusColumn = () => {
     return (
-      <Grid
-        item
-        xxs={12}
-        sm={12}
-        md={4}
-        lg={4}
-        display="flex"
-        flexDirection="row"
-        gap={3}
-      >
+      <Grid item display="flex" flexDirection="row" gap={3}>
         <TableDivider />
         <Box width={150}>
           <UserStatus status={status as UserStatusType} />
         </Box>
-        <Box display="flex" flexDirection="column" justifyContent="flex-end">
-          <UserListStatusSwitchButton
-            status={status}
-            userId={id}
-            role={role}
-            email={email}
-          />
-        </Box>
-      </Grid>
-    );
-  };
-
-  const DeleteButtonColumn = () => {
-    return (
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md="auto"
-        display="flex"
-        justifyContent="flex-end"
-        alignItems="center"
-      >
-        <UserListStatusDeleteButton userId={id} />
       </Grid>
     );
   };
 
   return (
-    <Grid item width="100%">
-      <Card variant="default">
-        <Grid container item gap={{ xxs: 3, sm: 0 }}>
-          <Grid
-            container
-            item
-            xs={12}
-            md={10}
-            lg={11}
-            display="flex"
-            alignItems="center"
-            gap={{ xxs: 3 }}
-          >
-            <UserInfoColumn />
-            <UserRoleColumn />
-            <UserStatusColumn />
-          </Grid>
-
-          <DeleteButtonColumn />
+    <Card
+      variant="default"
+      sx={{
+        padding: { xxs: 2, md: 3 }
+      }}
+    >
+      <Grid
+        container
+        display="flex"
+        justifyContent="space-between"
+        flexWrap="nowrap"
+      >
+        <Grid
+          item
+          display="flex"
+          alignItems="center"
+          gap={{ xxs: 3 }}
+          flexWrap="wrap"
+        >
+          <UserInfoColumn />
+          <UserRoleColumn />
+          <UserStatusColumn />
         </Grid>
-      </Card>
-    </Grid>
+        <Grid
+          item
+          display="flex"
+          alignItems="center"
+          flexDirection={{ md: "row", xxs: "column" }}
+          gap={{ xxs: 3, md: 0 }}
+        >
+          <UserListDeleteButton userId={id} />
+          {/* TODO: wait for BE implementation */}
+          {/* <UserListEditRoleButton userId={id} /> */}
+
+          <UserListSwitchResendButton
+            status={status}
+            userId={id}
+            role={role}
+            email={email}
+          />
+        </Grid>
+      </Grid>
+    </Card>
   );
 }

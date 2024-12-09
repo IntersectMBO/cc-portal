@@ -1,3 +1,4 @@
+import { useAppContext, useModal } from "@/context";
 import { Button, CopyButton, Typography } from "@atoms";
 import { customPalette, ICONS, PATHS } from "@consts";
 import { Box, Grid, IconButton } from "@mui/material";
@@ -7,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
+import PermissionChecker from "../PermissionChecker";
 
 const Anchor = ({ id, offset = "-20vh " }) => {
   return (
@@ -191,9 +193,26 @@ export const DrawerNav = () => {
   const buttonEndIcon = pathname.includes(PATHS.versionHistory)
     ? ICONS.arrowLeft
     : ICONS.documentSearch;
+  const { openModal } = useModal();
+  const { userSession } = useAppContext();
+  const uploadConstitution = () => openModal({ type: "uploadConstitution" });
   return (
     <Grid container direction="column" gap={1} p={2}>
-      {/* <Button variant="contained">{t("drawer.uploadNewVersion")}</Button> */}
+      <PermissionChecker
+        permissions={userSession?.permissions}
+        requiredPermission="add_constitution_version"
+      >
+        <Button
+          variant="contained"
+          size="extraLarge"
+          type="submit"
+          onClick={uploadConstitution}
+          data-testid="admin-top-nav-upload-constitution-button"
+        >
+          {t("drawer.uploadNewVersion")}
+        </Button>
+      </PermissionChecker>
+
       <Link href={linkPath}>
         <Button fullWidth variant="outlined">
           <img src={buttonEndIcon} style={{ marginRight: 8 }} />
