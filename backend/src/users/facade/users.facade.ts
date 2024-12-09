@@ -20,6 +20,7 @@ import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mappe
 import { PermissionEnum } from '../enums/permission.enum';
 import { ToggleStatusRequest } from '../api/request/toggle-status.request';
 import { UserStatusEnum } from '../enums/user-status.enum';
+import { UpdateRoleAndPermissionsRequest } from '../api/request/update-role-and-permissions.request';
 @Injectable()
 export class UsersFacade {
   private logger = new Logger(UsersService.name);
@@ -130,5 +131,14 @@ export class UsersFacade {
         `Error when removing profile photo of the user with id ${userId}: ${e.message}`,
       );
     }
+  }
+
+  async updateUserRoleAndPermissions(
+    updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
+  ): Promise<UserResponse> {
+    const user = await this.usersService.updateUserRoleAndPermissions(
+      updateRoleAndPermissionsRequest,
+    );
+    return UserMapper.mapUserDtoToResponse(user);
   }
 }
