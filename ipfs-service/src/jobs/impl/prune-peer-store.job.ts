@@ -15,7 +15,7 @@ export class PrunePeerStoreJob implements IJob {
   }
   getInterval(): string {
     return (
-      this.configService.get<string>('PRUNE_PEER_STORE_INTERVAL') || '0 * * * * *'
+      this.configService.get<string>('PRUNE_PEER_STORE_INTERVAL') || '0 0 * * * *'
     );
   }
   execute(): void {
