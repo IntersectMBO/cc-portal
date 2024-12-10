@@ -43,6 +43,7 @@ import { ToggleStatusRequest } from './request/toggle-status.request';
 import { ApiConditionalExcludeEndpoint } from 'src/common/decorators/api-conditional-exclude-endpoint.decorator';
 import { Permissions } from 'src/auth/guard/permission.decorator';
 import { RemoveUserRequest } from './request/remove-user.request';
+import { UpdateRoleAndPermissionsRequest } from './request/update-role-and-permissions.request';
 
 @ApiTags('Users')
 @Controller('users')
@@ -306,5 +307,39 @@ export class UsersController {
       success: true,
       message: 'User deleted successfully',
     };
+  }
+
+  @ApiConditionalExcludeEndpoint()
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({
+    summary: 'Update user role and permissions by superadmin',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'Identification number of the user',
+    type: String,
+  })
+  @ApiBody({ type: UpdateRoleAndPermissionsRequest })
+  @ApiResponse({
+    status: 200,
+    description: 'User updated successfully.',
+    type: UserResponse,
+  })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 403, description: 'Forbidden resource' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @HttpCode(200)
+  @Patch(':id/role-permissions')
+  @Permissions(PermissionEnum.MANAGE_ROLES_AND_PERMISSIONS)
+  @UseGuards(JwtAuthGuard, UserPathGuard, PermissionGuard)
+  async updateUserRoleAndPermissions(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
+  ): Promise<UserResponse> {
+    return await this.usersFacade.updateUserRoleAndPermissions(
+      updateRoleAndPermissionsRequest,
+    );
   }
 }
