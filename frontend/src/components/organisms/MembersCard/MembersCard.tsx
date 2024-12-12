@@ -72,11 +72,11 @@ export const MembersCard = ({
           fontWeight={400}
           variant="body1"
           sx={{
-            display: "-webkit-box",
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            WebkitLineClamp: 5,
+            display: "-webkit-box", // Required for line clamping
+            WebkitBoxOrient: "vertical", // Required for line clamping
+            overflow: "hidden", // Hides overflowed text
+            textOverflow: "ellipsis", // Adds ellipsis for overflowed text
+            WebkitLineClamp: 5, // Limits text to a maximum of 5 lines
             transition: "all 0.3s ease",
           }}
         >
