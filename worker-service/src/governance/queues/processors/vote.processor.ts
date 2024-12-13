@@ -1,4 +1,4 @@
-import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
+import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import {
   JOB_NAME_VOTE_SYNC,

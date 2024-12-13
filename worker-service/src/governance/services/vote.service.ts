@@ -127,6 +127,16 @@ export class VoteService extends CommonService {
   private async prepareGAP(
     voteRequest: VoteRequest,
   ): Promise<GovActionProposal> {
+    const endTimeInterval: number =
+      this.configService.getOrThrow('EPOCH_DURATION') *
+      this.configService.getOrThrow('GAP_DURATION_IN_EPOCH_COUNT');
+    let endTime: Date = voteRequest.endTime;
+    if (!voteRequest.endTime) {
+      endTime = await this.getEndTime(
+        voteRequest.govActionProposalSubmitTime,
+        endTimeInterval,
+      );
+    }
     const govMetadataUrl = await this.transformIpfsUrl(
       voteRequest.govMetadataUrl,
     );
@@ -135,7 +145,7 @@ export class VoteService extends CommonService {
     govActionProposalDto.id = voteRequest.govActionProposalId;
     govActionProposalDto.votingAnchorId = voteRequest.votingAnchorId;
     govActionProposalDto.status = voteRequest.status;
-    govActionProposalDto.endTime = voteRequest.endTime;
+    govActionProposalDto.endTime = endTime;
     govActionProposalDto.txHash = Buffer.from(voteRequest.txHash).toString(
       'hex',
     );
