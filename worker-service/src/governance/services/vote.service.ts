@@ -130,10 +130,13 @@ export class VoteService extends CommonService {
     const endTimeInterval: number =
       this.configService.getOrThrow('EPOCH_DURATION') *
       this.configService.getOrThrow('GAP_DURATION_IN_EPOCH_COUNT');
-    const endTime = await this.getEndTime(
-      voteRequest.govActionProposalSubmitTime,
-      endTimeInterval,
-    );
+    let endTime: Date = voteRequest.endTime;
+    if (!voteRequest.endTime) {
+      endTime = await this.getEndTime(
+        voteRequest.govActionProposalSubmitTime,
+        endTimeInterval,
+      );
+    }
     const govMetadataUrl = await this.transformIpfsUrl(
       voteRequest.govMetadataUrl,
     );

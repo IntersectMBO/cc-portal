@@ -205,6 +205,7 @@ describe('VoteService', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://gap-url-1.jsonld',
       status: 'ACTIVE',
+      endTime: null,
       txHash:
         '970e331a2e340597636b26bc8ab44c386cd687d57d86698b81ecce9d43010c0c',
     },
@@ -221,6 +222,7 @@ describe('VoteService', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://gap-url-2.jsonld',
       status: 'ACTIVE',
+      endTime: null,
       txHash:
         '0c0e331a2e340597636b26bc8ab44c386cd687d57d86698b81ecce9d43010c97',
     },
@@ -237,6 +239,7 @@ describe('VoteService', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://gap-url-3.jsonld',
       status: 'ACTIVE',
+      endTime: null,
       txHash:
         '630c0e331a2e3405976b26bc8ab44c386cd687d57d86698b81ecce9d43010c97',
     },

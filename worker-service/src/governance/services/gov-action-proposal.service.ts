@@ -65,10 +65,10 @@ export class GovActionProposalService extends CommonService {
         request.govMetadataUrl,
       );
       const axiosData = await this.getGovActionProposalFromUrl(govMetadataUrl);
-      const endTime = await this.getEndTime(
-        request.submitTime,
-        endTimeInterval,
-      );
+      let endTime: Date = request.endTime;
+      if (!request.endTime) {
+        endTime = await this.getEndTime(request.submitTime, endTimeInterval);
+      }
       const govActionProposal: Partial<GovActionProposalDto> = {
         id: request.id,
         votingAnchorId: request.votingAnchorId,

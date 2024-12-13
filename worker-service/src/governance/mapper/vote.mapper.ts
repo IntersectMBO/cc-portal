@@ -21,6 +21,7 @@ export class VoteMapper {
     voteRequest.govActionType = dbSyncData.type;
     voteRequest.govMetadataUrl = dbSyncData.gap_url;
     voteRequest.status = dbSyncData.epoch_status;
+    voteRequest.endTime = dbSyncData.end_time;
     voteRequest.txHash = dbSyncData.hash;
     voteRequest.govActionProposalSubmitTime = dbSyncData.gap_submit_time;
 
