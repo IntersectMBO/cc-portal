@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-import { Box, ButtonBase, Grid, Hidden, IconButton } from "@mui/material";
+import { Box, ButtonBase, Grid, IconButton } from "@mui/material";
 
 import UserProfileButton from "@/components/molecules/UserProfileButton";
 import { Link } from "@atoms";
@@ -67,6 +67,13 @@ export const TopNav = () => {
             </Button>
           </Box>
         )} */}
+      </>
+    );
+  };
+
+  const renderUserProfileDropdown = () => {
+    return (
+      <>
         {isUserRole(userSession.role) ||
           (isAnyAdminRole(userSession.role) && (
             <Box ml={{ md: 3 }}>
@@ -76,27 +83,40 @@ export const TopNav = () => {
       </>
     );
   };
-
   return (
     <TopNavWrapper homeRedirectionPath={PATHS.home}>
-      <Hidden mdDown>
+      <Box sx={{ display: { xxs: "none", md: "block" } }}>
         <Box>
-          <Grid container alignItems="center" flexWrap="nowrap">
-            {userSession ? renderAuthNavItems() : getNavItems()}
+          <Grid container item alignItems="center" flexWrap="nowrap">
+            {userSession ? (
+              <>
+                {renderAuthNavItems()}
+                {renderUserProfileDropdown()}
+              </>
+            ) : (
+              getNavItems()
+            )}
           </Grid>
         </Box>
-      </Hidden>
-      <Hidden mdUp>
+      </Box>
+      <Box sx={{ display: { xxs: "block", md: "none" } }}>
         <IconButton data-testid="open-drawer-button" onClick={openDrawer}>
           <img src={IMAGES.menu} />
         </IconButton>
-      </Hidden>
+      </Box>
 
       <DrawerMobile
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
       >
-        {userSession ? renderAuthNavItems() : getNavItems()}
+        {userSession ? (
+          <>
+            {renderAuthNavItems()}
+            {renderUserProfileDropdown()}
+          </>
+        ) : (
+          getNavItems()
+        )}
       </DrawerMobile>
     </TopNavWrapper>
   );
