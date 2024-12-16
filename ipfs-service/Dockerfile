@@ -9,6 +9,9 @@ RUN apt-get update && \
 # Upgrade npm to the latest version
 RUN npm install -g npm@latest
 
+# Set the memory limit and max listeners
+ENV NODE_OPTIONS="--max-old-space-size=8192"
+
 # Set the working directory inside the container
 WORKDIR /app
 
