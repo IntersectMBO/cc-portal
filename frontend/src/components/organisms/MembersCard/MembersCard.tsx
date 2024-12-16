@@ -12,13 +12,14 @@ export const MembersCard = ({
   name,
   description,
   profile_photo_url,
-  created_at
+  created_at,
 }: Pick<
   UserListItem,
   "name" | "id" | "description" | "created_at" | "profile_photo_url"
 >) => {
   const t = useTranslations("Members");
 
+  const shouldClampText = description?.length > 234;
   return (
     <Box
       display="flex"
@@ -32,41 +33,55 @@ export const MembersCard = ({
         padding: 3,
         paddingBottom: 4,
         maxWidth: "450px",
-        height: "386px",
-        marginLeft: "auto",
-        marginRight: "auto"
+        height: "425px",
+        position: "relative",
+        overflow: "hidden",
+        "&:hover .members-photo": {
+          display: shouldClampText && "none",
+        },
+        "&:hover p": {
+          WebkitLineClamp: shouldClampText && "unset",
+          overflow: shouldClampText && "visible",
+        },
       }}
     >
-      <Box>
-        <Box textAlign="center" data-testid="members-photo" pb={3}>
-          <UserAvatar width={100} height={100} src={profile_photo_url} />
-        </Box>
-        <Box textAlign="center" data-testid="members-name" pb={3}>
-          <Typography
-            variant="headline5"
-            sx={{
-              overflow: "hidden", // Hides overflowed text
-              textOverflow: "ellipsis", // Adds ellipsis for overflowed text
-              whiteSpace: "nowrap"
-            }}
-          >
-            {name}{" "}
-          </Typography>
+      <Box
+        textAlign="center"
+        pb={4}
+        className="members-photo"
+        data-testid="members-photo"
+      >
+        <UserAvatar width={100} height={100} src={profile_photo_url} />
+      </Box>
 
-          <Typography
-            fontWeight={400}
-            variant="body1"
-            sx={{
-              display: "-webkit-box", // Required for line clamping
-              WebkitBoxOrient: "vertical", // Required for line clamping
-              overflow: "hidden", // Hides overflowed text
-              textOverflow: "ellipsis", // Adds ellipsis for overflowed text
-              WebkitLineClamp: 5 // Limits text to a maximum of 5 lines
-            }}
-          >
-            {description}
-          </Typography>
-        </Box>
+      <Box
+        textAlign="center"
+        data-testid="members-name"
+        pb={shouldClampText ? 1 : 3}
+      >
+        <Typography
+          variant="headline5"
+          sx={{
+            paddingBottom: "8px",
+          }}
+        >
+          {name}
+        </Typography>
+
+        <Typography
+          fontWeight={400}
+          variant="body1"
+          sx={{
+            display: "-webkit-box", // Required for line clamping
+            WebkitBoxOrient: "vertical", // Required for line clamping
+            overflow: "hidden", // Hides overflowed text
+            textOverflow: "ellipsis", // Adds ellipsis for overflowed text
+            WebkitLineClamp: 5, // Limits text to a maximum of 5 lines
+            transition: "all 0.3s ease",
+          }}
+        >
+          {description}
+        </Typography>
       </Box>
 
       <Box
@@ -84,7 +99,7 @@ export const MembersCard = ({
           {t("card.joined")} {formatDisplayDate(created_at)}
         </Typography>
 
-        {/** 
+        {/**
          * temporarily hidden
          * TODO: uncomment and handle button click
          * <Button

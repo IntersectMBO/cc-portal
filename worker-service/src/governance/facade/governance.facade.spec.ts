@@ -26,8 +26,8 @@ describe('GovernanceFacade', () => {
       govMetadataUrl:
         'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
       status: 'DROPPED',
-      submitTime: '2024-05-21 15:18:06.000',
-      endTime: '2024-05-26T22:29:45.000Z',
+      submitTime: new Date('2024-05-21 15:18:06.000'),
+      endTime: new Date('2024-05-26T22:29:45.000Z'),
       txHash:
         'D775FBCB6006524ABBFFE6DAF538E71941745B44A3A735852FBBD49FD7D59A95',
     },
@@ -38,8 +38,8 @@ describe('GovernanceFacade', () => {
       govMetadataUrl:
         'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
       status: 'DROPPED',
-      submitTime: '2024-05-21 17:08:38.000',
-      endTime: '2024-05-26T22:29:45.000Z',
+      submitTime: new Date('2024-05-21 17:08:38.000'),
+      endTime: new Date('2024-05-26T22:29:45.000Z'),
       txHash:
         'DB4DBEB5946E5D49778F457D9C5A460488C40AF0B93D8B98111F5BE11BF165A6',
     },
@@ -50,8 +50,8 @@ describe('GovernanceFacade', () => {
       govMetadataUrl:
         '1111111111111111111111111111111111111111111111111111111111111111',
       status: 'DROPPED',
-      submitTime: '2024-05-22 10:08:20.000',
-      endTime: '2024-05-27T22:29:38.000Z',
+      submitTime: new Date('2024-05-22 10:08:20.000'),
+      endTime: new Date('2024-05-27T22:29:38.000Z'),
       txHash:
         '67820C121787464A9B670CF4C648F67CABD9573EB71B220214971CE467D25027',
     },
@@ -61,8 +61,8 @@ describe('GovernanceFacade', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://my-ip.at/test/cip-0100.common.json',
       status: 'DROPPED',
-      submitTime: '2024-05-17 12:56:00.000',
-      endTime: '2024-05-17 12:56:00.000',
+      submitTime: new Date('2024-05-17 12:56:00.000'),
+      endTime: new Date('2024-05-17 12:56:00.000'),
       txHash:
         '69AA81F4AA0140E8D2AB2B6642C403611CD730FAB42E6C9F9E3E15D6D90BD3E9',
     },
@@ -73,8 +73,8 @@ describe('GovernanceFacade', () => {
       govMetadataUrl:
         'https://github.com/carloslodelar/proposals/blob/main/why-hardfork-to-10.txt',
       status: 'DROPPED',
-      submitTime: '2024-05-17 16:15:34.000',
-      endTime: '2024-05-22T22:29:33.000Z',
+      submitTime: new Date('2024-05-17 16:15:34.000'),
+      endTime: new Date('2024-05-22T22:29:33.000Z'),
       txHash:
         'EDEF927AF962664ED7A02BEDFA913C7F1CD271494871C25EE7DE66E941D83C79',
     },
@@ -85,8 +85,8 @@ describe('GovernanceFacade', () => {
       govMetadataUrl:
         'https://raw.githubusercontent.com/Sworzen1/Testing-Todo-app/main/Treasury.jsonld',
       status: 'DROPPED',
-      submitTime: '2024-05-27 09:19:00.000',
-      endTime: '2024-06-01T22:29:51.000Z',
+      submitTime: new Date('2024-05-27 09:19:00.000'),
+      endTime: new Date('2024-06-01T22:29:51.000Z'),
       txHash:
         '2C2F01F6818CEE5E2EC29EF965DF347099173707BAFCEFC7F6FE3D66CD5F66EC',
     },
@@ -97,8 +97,8 @@ describe('GovernanceFacade', () => {
       govMetadataUrl:
         'https://raw.githubusercontent.com/Ryun1/metadata/main/cip100/ga.jsonld',
       status: 'DROPPED',
-      submitTime: '2024-05-27 20:34:28.000',
-      endTime: '2024-06-01T22:29:51.000Z',
+      submitTime: new Date('2024-05-27 20:34:28.000'),
+      endTime: new Date('2024-06-01T22:29:51.000Z'),
       txHash:
         '3B15AC25580564C8C565121188B142BEE99F6AAD7D4130FFC6A5A764EBA1159A',
     },
@@ -108,8 +108,8 @@ describe('GovernanceFacade', () => {
       govActionType: 'ParameterChange',
       govMetadataUrl: 'https://my-ip.at/test/cip-0100.common.json',
       status: 'DROPPED',
-      submitTime: '2024-05-18 20:25:26.000',
-      endTime: '2024-05-23T22:27:46.000Z',
+      submitTime: new Date('2024-05-18 20:25:26.000'),
+      endTime: new Date('2024-05-23T22:27:46.000Z'),
       txHash:
         '6A3319F5AC57551C4CABF77D0603BD6C72F44E9D10830363D87EB34CB43AFCB2',
     },
@@ -119,8 +119,8 @@ describe('GovernanceFacade', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://metadata.cardanoapi.io/data/Info',
       status: 'DROPPED',
-      submitTime: '2024-05-18 14:29:22.000',
-      endTime: '2024-05-23T22:27:46.000Z',
+      submitTime: new Date('2024-05-18 14:29:22.000'),
+      endTime: new Date('2024-05-23T22:27:46.000Z'),
       txHash:
         'B9532421430F6611C0170993E88DFA29B6AA0D4CCE024AD88346C59BE2B65B41',
     },
@@ -130,8 +130,8 @@ describe('GovernanceFacade', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://metadata.cardanoapi.io/data/Info',
       status: 'DROPPED',
-      submitTime: '2024-05-26 04:02:39.000',
-      endTime: '2024-05-31T22:29:15.000Z',
+      submitTime: new Date('2024-05-26 04:02:39.000'),
+      endTime: new Date('2024-05-31T22:29:15.000Z'),
       txHash:
         '2EC4AD524F0AF3EEB1F05C360BFDECF815936E7CBF8EAC9C07A4E0C7072D03D1',
     },
@@ -144,8 +144,8 @@ describe('GovernanceFacade', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://bit.ly/3zCH2HL',
       status: 'DROPPED',
-      submitTime: '2024-05-20 06:39:16.000',
-      endTime: '2024-05-25T22:29:48.000Z',
+      submitTime: new Date('2024-05-20 06:39:16.000'),
+      endTime: new Date('2024-05-25T22:29:48.000Z'),
       txHash:
         'cef93aface365b575e1f33987fad4093e2a8a06d31c01a260e0e7db325fc0b50',
     },
@@ -155,8 +155,8 @@ describe('GovernanceFacade', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://metadata.cardanoapi.io/data/Info',
       status: 'DROPPED',
-      submitTime: '2024-05-22 12:24:59.000',
-      endTime: '2024-05-27T22:29:38.000Z',
+      submitTime: new Date('2024-05-22 12:24:59.000'),
+      endTime: new Date('2024-05-27T22:29:38.000Z'),
       txHash:
         '75d1c676f459f1192c7fd2c73423635a074c5e7b46497e00f44428861f460153',
     },
@@ -167,8 +167,8 @@ describe('GovernanceFacade', () => {
       govMetadataUrl:
         'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
       status: 'DROPPED',
-      submitTime: '2024-05-22 19:47:27.000',
-      endTime: '2024-05-27T22:29:38.000Z',
+      submitTime: new Date('2024-05-22 19:47:27.000'),
+      endTime: new Date('2024-05-27T22:29:38.000Z'),
       txHash:
         '9bd2b6547ab8e8ed5c34049d6b984772a8352ac70e92198e1a7f6cdbb12d6397',
     },
@@ -179,8 +179,8 @@ describe('GovernanceFacade', () => {
       govMetadataUrl:
         'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
       status: 'DROPPED',
-      submitTime: '2024-05-22 21:44:26.000',
-      endTime: '2024-05-27T22:29:38.000Z',
+      submitTime: new Date('2024-05-22 21:44:26.000'),
+      endTime: new Date('2024-05-27T22:29:38.000Z'),
       txHash:
         'f6ca72e9fe225c01e1a622d529ad807d668a786cb28d1eb352b8da58b66dd8c2',
     },

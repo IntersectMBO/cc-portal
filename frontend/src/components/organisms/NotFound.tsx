@@ -8,7 +8,7 @@ import { customPalette } from "@/constants";
 export function NotFound({
   title,
   description,
-  height = "70vh",
+  height = "82vh",
   sx,
 }: {
   title: string;
@@ -23,7 +23,7 @@ export function NotFound({
       display="flex"
       justifyContent="center"
       alignItems="center"
-      sx={{ height }}
+      sx={{ height, backgroundColor: customPalette.neutralWhite }}
     >
       <Box
         sx={{
@@ -35,10 +35,18 @@ export function NotFound({
         px={3}
         py={5}
       >
-        <Typography fontWeight={600} variant="title2" data-testid="not-found-title-text">
+        <Typography
+          fontWeight={600}
+          variant="title2"
+          data-testid="not-found-title-text"
+        >
           {t(title)}
         </Typography>
-        <Typography fontWeight={400} variant="body1" data-testid="not-found-description-text">
+        <Typography
+          fontWeight={400}
+          variant="body1"
+          data-testid="not-found-description-text"
+        >
           {t(description)}
         </Typography>
       </Box>

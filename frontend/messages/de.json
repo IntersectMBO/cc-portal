@@ -299,11 +299,15 @@
     },
     "constitutionMetadata": {
       "title": "No revisions available",
-      "description": "There are currently no revisions available. Please check back later for updates"
+      "description": "There is only 1 version available. Once there are multiple versions of the constitution, you will be able to compare two versions"
     },
     "governanceAction": {
       "title": "No governance actions available",
       "description": "There are currently no governance actions. Please check back later for updates"
+    },
+    "versionHistory": {
+      "title": "No revisions available",
+      "description": "There is only 1 version available. Once there are multiple versions of the constitution, you will be able to compare two versions"
     }
   },
   "Snackbar": {

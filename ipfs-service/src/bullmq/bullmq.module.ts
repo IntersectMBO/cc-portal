@@ -2,7 +2,7 @@ import { BullBoardModule } from "@bull-board/nestjs";
 import { BullModule } from "@nestjs/bullmq";
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { QUEUE_NAME_PROVIDE_TO_DHT } from "../constants/bullmq.constants.js";
+import { QUEUE_NAME_PROVIDE_TO_DHT, QUEUE_NAME_PRUNE_PEER_STORE } from "../constants/bullmq.constants.js";
 import { BullMQAdapter } from "@bull-board/api/bullMQAdapter.js";
 import { ExpressAdapter } from "@bull-board/express";
 
@@ -30,6 +30,10 @@ import { ExpressAdapter } from "@bull-board/express";
     }),
     BullBoardModule.forFeature({
       name: QUEUE_NAME_PROVIDE_TO_DHT,
+      adapter: BullMQAdapter,
+    }),
+    BullBoardModule.forFeature({
+      name: QUEUE_NAME_PRUNE_PEER_STORE,
       adapter: BullMQAdapter,
     }),
   ],
