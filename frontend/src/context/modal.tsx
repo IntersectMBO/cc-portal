@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useContext, useMemo, useReducer } from "react";
 
+import { ChangeRole } from "@/components/organisms/Modals/ChangeRole";
 import { DeleteUser } from "@/components/organisms/Modals/DeleteUser";
 import { GovActionModal } from "@/components/organisms/Modals/GovActionModal";
 import { PreviewReasoningModal } from "@/components/organisms/Modals/PreviewReasoningModal";
@@ -38,6 +39,7 @@ export type ModalType =
   | "uploadConstitution"
   | "deleteRole"
   | "deleteUser"
+  | "changeRole"
   | "addReasoningModal"
   | "reasoningLinkModal"
   | "previewReasoningModal"
@@ -70,7 +72,9 @@ const modals: Record<ModalType, ContextModal> = {
   deleteUser: {
     component: <DeleteUser />
   },
-
+  changeRole: {
+    component: <ChangeRole />
+  },
   addReasoningModal: {
     component: <AddReasoningModal />
   },

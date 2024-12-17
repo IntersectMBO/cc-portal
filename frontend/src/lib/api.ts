@@ -229,21 +229,23 @@ export async function toggleUserStatus(
 
 export async function getUsersAdmin({
   search,
+  sortBy,
   page = 1,
   limit = DEFAULT_PAGINATION_LIMIT
 }: {
   search?: string;
+  sortBy?: string;
   page?: number;
   limit?: number;
 }): Promise<FetchUsersAdminI | ResponseErrorI> {
   const token = getAccessToken();
-
+  const decodedToken = await decodeUserToken();
   try {
-    const decodedToken = await decodeUserToken();
     const path = buildApiUrl(
       `/api/users/${decodedToken?.userId}/search-admin`,
       {
         search,
+        sortBy,
         page,
         limit
       }

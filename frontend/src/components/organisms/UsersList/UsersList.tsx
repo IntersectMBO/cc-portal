@@ -1,15 +1,18 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
+import { useAppContext, useModal } from "@/context";
 import { useSnackbar } from "@/context/snackbar";
 import { getUsersAdmin } from "@/lib/api";
 import { PaginationMeta } from "@/lib/requests";
-import { ShowMoreButton } from "@atoms";
-import { usePagination } from "@hooks";
-import { Grid } from "@mui/material";
+import { Button, ShowMoreButton, Typography } from "@atoms";
+import { useManageQueryParams, usePagination } from "@hooks";
+import { Box, Grid } from "@mui/material";
 import { isEmpty } from "@utils";
-import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { DataActionsContainer } from "../MembersCard/DataActionsContainer";
 import { NotFound } from "../NotFound";
+import PermissionChecker from "../PermissionChecker";
 import { UserListItem } from "../types";
 import { UsersListItem } from "./UsersListItem";
 
@@ -22,13 +25,31 @@ export function UsersList({
   paginationMeta: PaginationMeta;
   error?: string;
 }) {
-  const searchParams = useSearchParams();
+  const [searchText, setSearchText] = useState<string>("");
+  const [chosenSorting, setChosenSorting] = useState<string>("");
+  const { updateQueryParams } = useManageQueryParams();
   const { addErrorAlert } = useSnackbar();
+  const params: Record<string, string | null> = {
+    search: searchText || null,
+    sortBy: chosenSorting || null
+  };
   const { data, pagination, isLoading, loadMore } = usePagination(
     usersList,
     paginationMeta,
-    (page) => getUsersAdmin({ page, search: searchParams.get("search") })
+    (page) => getUsersAdmin({ ...params, page })
   );
+
+  const t = useTranslations("Members");
+  const { userSession } = useAppContext();
+  const { openModal } = useModal();
+  const addMember = () =>
+    openModal({
+      type: "addMember"
+    });
+
+  useEffect(() => {
+    updateQueryParams(params);
+  }, [searchText, chosenSorting, updateQueryParams]);
 
   useEffect(() => {
     if (error) {
@@ -36,14 +57,6 @@ export function UsersList({
     }
   }, [error]);
 
-  if (isEmpty(data) || error) {
-    return (
-      <NotFound
-        title="adminMembers.title"
-        description="adminMembers.description"
-      />
-    );
-  }
   return (
     <Grid
       px={{ xxs: 3, md: 5 }}
@@ -52,10 +65,50 @@ export function UsersList({
       direction="column"
       gap={2}
     >
-      {data &&
-        data.map((users) => {
-          return <UsersListItem key={users.id} {...users} />;
-        })}
+      <Box
+        paddingBottom={4}
+        display="flex"
+        justifyContent="space-between"
+        flexDirection={{ xxs: "column", md: "row" }}
+        alignItems={{ xxs: "left", md: "center" }}
+        gap={3}
+      >
+        <Typography variant="headline4">{t("title")}</Typography>
+        <Box
+          display="flex"
+          justifyContent={{ xxs: "left", md: "space-between" }}
+          alignItems="center"
+          gap={2}
+          flexWrap={"wrap"}
+        >
+          <PermissionChecker
+            permissions={userSession?.permissions}
+            requiredPermission="manage_cc_members"
+          >
+            <Button
+              size="extraLarge"
+              onClick={addMember}
+              variant="contained"
+              data-testid="admin-top-nav-add-member-button"
+            >
+              {t("addNewMember")}
+            </Button>
+          </PermissionChecker>
+          <DataActionsContainer
+            setSearchText={setSearchText}
+            setChosenSorting={setChosenSorting}
+          />
+        </Box>
+      </Box>
+      {isEmpty(data) || error ? (
+        <NotFound
+          title="adminMembers.title"
+          description="adminMembers.description"
+        />
+      ) : (
+        data.map((user) => <UsersListItem key={user.id} {...user} />)
+      )}
+
       <ShowMoreButton
         isLoading={isLoading}
         hasNextPage={pagination.has_next_page}

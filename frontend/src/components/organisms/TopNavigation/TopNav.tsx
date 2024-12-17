@@ -1,20 +1,12 @@
 "use client";
 import { useState } from "react";
 
-import {
-  Box,
-  Button,
-  ButtonBase,
-  Grid,
-  Hidden,
-  IconButton
-} from "@mui/material";
+import { Box, ButtonBase, Grid, IconButton } from "@mui/material";
 
 import UserProfileButton from "@/components/molecules/UserProfileButton";
 import { Link } from "@atoms";
 import {
   customPalette,
-  ICONS,
   IMAGES,
   NAV_ITEMS,
   PATHS,
@@ -23,7 +15,6 @@ import {
 import { useAppContext } from "@context";
 import { isAnyAdminRole, isUserRole } from "@utils";
 import { useTranslations } from "next-intl";
-import NextLink from "next/link";
 import { DrawerMobile } from "./DrawerMobile";
 import { TopNavWrapper } from "./TopNavWrapper";
 
@@ -62,7 +53,7 @@ export const TopNav = () => {
       <>
         {getNavItems()}
         {getNavItems(PROTECTED_NAV_ITEMS)}
-        {isAnyAdminRole(userSession.role) && (
+        {/* {isAnyAdminRole(userSession.role) && (
           <Box ml={{ md: 3 }}>
             <Button
               endIcon={<img src={ICONS.arrowUpRight} />}
@@ -75,36 +66,57 @@ export const TopNav = () => {
               {t("adminDashboard")}
             </Button>
           </Box>
-        )}
-        {isUserRole(userSession.role) && (
-          <Box ml={{ md: 3 }}>
-            <UserProfileButton user={user} />
-          </Box>
-        )}
+        )} */}
       </>
     );
   };
 
+  const renderUserProfileDropdown = () => {
+    return (
+      <>
+        {isUserRole(userSession.role) ||
+          (isAnyAdminRole(userSession.role) && (
+            <Box ml={{ md: 3 }}>
+              <UserProfileButton user={user} />
+            </Box>
+          ))}
+      </>
+    );
+  };
   return (
     <TopNavWrapper homeRedirectionPath={PATHS.home}>
-      <Hidden mdDown>
+      <Box sx={{ display: { xxs: "none", md: "block" } }}>
         <Box>
-          <Grid container alignItems="center" flexWrap="nowrap">
-            {userSession ? renderAuthNavItems() : getNavItems()}
+          <Grid container item alignItems="center" flexWrap="nowrap">
+            {userSession ? (
+              <>
+                {renderAuthNavItems()}
+                {renderUserProfileDropdown()}
+              </>
+            ) : (
+              getNavItems()
+            )}
           </Grid>
         </Box>
-      </Hidden>
-      <Hidden mdUp>
+      </Box>
+      <Box sx={{ display: { xxs: "block", md: "none" } }}>
         <IconButton data-testid="open-drawer-button" onClick={openDrawer}>
           <img src={IMAGES.menu} />
         </IconButton>
-      </Hidden>
+      </Box>
 
       <DrawerMobile
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
       >
-        {userSession ? renderAuthNavItems() : getNavItems()}
+        {userSession ? (
+          <>
+            {renderAuthNavItems()}
+            {renderUserProfileDropdown()}
+          </>
+        ) : (
+          getNavItems()
+        )}
       </DrawerMobile>
     </TopNavWrapper>
   );
