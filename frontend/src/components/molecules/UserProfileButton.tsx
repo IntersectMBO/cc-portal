@@ -3,7 +3,7 @@ import { FetchUserData } from "@/lib/requests";
 import { ICONS, IMAGES, PATHS } from "@consts";
 import { useModal } from "@context";
 import { UserAvatar } from "@molecules";
-import { Grid, Hidden, Tooltip } from "@mui/material";
+import { Box, Grid, Tooltip } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import { useTranslations } from "next-intl";
 import * as React from "react";
@@ -49,7 +49,7 @@ export default function UserProfileButton({
   const USERNAME_MAX_LENGTH = 32;
   return (
     <>
-      <Hidden mdDown>
+      <Box sx={{ display: { xxs: "none", md: "block" } }}>
         <Button
           id="basic-button"
           size="extraLarge"
@@ -57,7 +57,7 @@ export default function UserProfileButton({
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
           onClick={handleClick}
-          sx={{ minWidth: 170 }}
+          sx={{ minWidth: 160 }}
           startIcon={
             <UserAvatar
               src={user?.profile_photo_url || IMAGES.avatar}
@@ -81,7 +81,6 @@ export default function UserProfileButton({
             </span>
           </Tooltip>
         </Button>
-
         <Menu
           id="basic-menu"
           anchorEl={anchorEl}
@@ -97,12 +96,12 @@ export default function UserProfileButton({
           <Grid
             container
             direction="column"
-            sx={{ minWidth: 170, width: "100%" }}
+            sx={{ minWidth: 160, width: "100%" }}
             gap={0.5}
           >
             <Button
               size="medium"
-              variant="outlined"
+              variant="text"
               onClick={editProfile}
               startIcon={<img width={20} height={20} src={ICONS.edit} />}
               data-testid="edit-profile-button"
@@ -111,7 +110,7 @@ export default function UserProfileButton({
             </Button>
             <Button
               size="medium"
-              variant="outlined"
+              variant="text"
               onClick={signOut}
               startIcon={<img width={20} height={20} src={ICONS.logout} />}
               data-testid="sign-out-button"
@@ -120,8 +119,8 @@ export default function UserProfileButton({
             </Button>
           </Grid>
         </Menu>
-      </Hidden>
-      <Hidden mdUp>
+      </Box>
+      <Box sx={{ display: { xxs: "block", md: "none" } }}>
         <Grid container gap={2}>
           <Grid item>
             <UserAvatar
@@ -135,7 +134,7 @@ export default function UserProfileButton({
         <Grid
           container
           direction="column"
-          sx={{ minWidth: 170, width: "100%" }}
+          sx={{ minWidth: 160, width: "100%" }}
           gap={0.5}
         >
           <Button
@@ -155,7 +154,7 @@ export default function UserProfileButton({
             {t("Navigation.signOut")}
           </Button>
         </Grid>
-      </Hidden>
+      </Box>
     </>
   );
 }

@@ -13,8 +13,8 @@ va2.url vote_url, -- Should be a URL that contains Rationale JSON
 vp_tx.hash, -- Should be transaction hash from tx table
 gap_block.time gap_submit_time, -- Should be Governance Action Proposal "Submit time"
  case 
-    when gap.ratified_epoch is not null then 'RATIFIED'
     when gap.enacted_epoch is not null then 'ENACTED'
+    when gap.ratified_epoch is not null then 'RATIFIED'
     when gap.dropped_epoch is not null then 'DROPPED'
     when gap.expired_epoch is not null then 'EXPIRED'
     else 'ACTIVE'

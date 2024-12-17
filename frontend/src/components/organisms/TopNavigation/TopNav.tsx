@@ -1,36 +1,30 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import {
-  Box,
-  Button,
-  ButtonBase,
-  Grid,
-  Hidden,
-  IconButton
-} from "@mui/material";
+import { Box, ButtonBase, Grid, IconButton } from "@mui/material";
 
 import UserProfileButton from "@/components/molecules/UserProfileButton";
 import { Link } from "@atoms";
 import {
   customPalette,
-  ICONS,
   IMAGES,
   NAV_ITEMS,
   PATHS,
-  PROTECTED_NAV_ITEMS
+  PROTECTED_NAV_ITEMS,
 } from "@consts";
-import { useAppContext } from "@context";
+import { useAppContext, useModal } from "@context";
 import { isAnyAdminRole, isUserRole } from "@utils";
 import { useTranslations } from "next-intl";
-import NextLink from "next/link";
 import { DrawerMobile } from "./DrawerMobile";
 import { TopNavWrapper } from "./TopNavWrapper";
+import { SignupModalState } from "../types";
 
 export const TopNav = () => {
   const { userSession, user } = useAppContext();
-  const t = useTranslations("Navigation");
+
+  const t = useTranslations();
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  const { openModal } = useModal<SignupModalState>();
 
   const openDrawer = () => {
     setIsDrawerOpen(true);
@@ -44,8 +38,8 @@ export const TopNav = () => {
           sx={{
             // Change ripple color
             ".MuiTouchRipple-rippleVisible": {
-              color: `${customPalette.ripple}`
-            }
+              color: `${customPalette.ripple}`,
+            },
           }}
         >
           <Link
@@ -62,7 +56,7 @@ export const TopNav = () => {
       <>
         {getNavItems()}
         {getNavItems(PROTECTED_NAV_ITEMS)}
-        {isAnyAdminRole(userSession.role) && (
+        {/* {isAnyAdminRole(userSession.role) && (
           <Box ml={{ md: 3 }}>
             <Button
               endIcon={<img src={ICONS.arrowUpRight} />}
@@ -72,11 +66,18 @@ export const TopNav = () => {
               data-testid="top-nav-admin-dashboard-button"
               sx={{ width: "100%;" }}
             >
-              {t("adminDashboard")}
+              {t("Navigation.adminDashboard")}
             </Button>
           </Box>
-        )}
-        {isUserRole(userSession.role) && (
+        )} */}
+      </>
+    );
+  };
+
+  const renderUserProfileDropdown = () => {
+    return (
+      <>
+        {(isUserRole(userSession.role) || isAnyAdminRole(userSession.role)) && (
           <Box ml={{ md: 3 }}>
             <UserProfileButton user={user} />
           </Box>
@@ -84,27 +85,53 @@ export const TopNav = () => {
       </>
     );
   };
+  useEffect(() => {
+    if (user && !user?.name && isUserRole(userSession.role)) {
+      openModal({
+        type: "signUpModal",
+        state: {
+          showCloseButton: false,
+          title: t("Modals.signUp.headline"),
+          description: t("Modals.signUp.description"),
+        },
+      });
+    }
+  }, [user]);
 
   return (
     <TopNavWrapper homeRedirectionPath={PATHS.home}>
-      <Hidden mdDown>
+      <Box sx={{ display: { xxs: "none", md: "block" } }}>
         <Box>
-          <Grid container alignItems="center" flexWrap="nowrap">
-            {userSession ? renderAuthNavItems() : getNavItems()}
+          <Grid container item alignItems="center" flexWrap="nowrap">
+            {userSession ? (
+              <>
+                {renderAuthNavItems()}
+                {renderUserProfileDropdown()}
+              </>
+            ) : (
+              getNavItems()
+            )}
           </Grid>
         </Box>
-      </Hidden>
-      <Hidden mdUp>
+      </Box>
+      <Box sx={{ display: { xxs: "block", md: "none" } }}>
         <IconButton data-testid="open-drawer-button" onClick={openDrawer}>
           <img src={IMAGES.menu} />
         </IconButton>
-      </Hidden>
+      </Box>
 
       <DrawerMobile
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
       >
-        {userSession ? renderAuthNavItems() : getNavItems()}
+        {userSession ? (
+          <>
+            {renderAuthNavItems()}
+            {renderUserProfileDropdown()}
+          </>
+        ) : (
+          getNavItems()
+        )}
       </DrawerMobile>
     </TopNavWrapper>
   );
