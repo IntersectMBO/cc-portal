@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Box, ButtonBase, Grid, IconButton } from "@mui/material";
 
@@ -10,18 +10,21 @@ import {
   IMAGES,
   NAV_ITEMS,
   PATHS,
-  PROTECTED_NAV_ITEMS
+  PROTECTED_NAV_ITEMS,
 } from "@consts";
-import { useAppContext } from "@context";
+import { useAppContext, useModal } from "@context";
 import { isAnyAdminRole, isUserRole } from "@utils";
 import { useTranslations } from "next-intl";
 import { DrawerMobile } from "./DrawerMobile";
 import { TopNavWrapper } from "./TopNavWrapper";
+import { SignupModalState } from "../types";
 
 export const TopNav = () => {
   const { userSession, user } = useAppContext();
-  const t = useTranslations("Navigation");
+
+  const t = useTranslations();
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  const { openModal } = useModal<SignupModalState>();
 
   const openDrawer = () => {
     setIsDrawerOpen(true);
@@ -35,8 +38,8 @@ export const TopNav = () => {
           sx={{
             // Change ripple color
             ".MuiTouchRipple-rippleVisible": {
-              color: `${customPalette.ripple}`
-            }
+              color: `${customPalette.ripple}`,
+            },
           }}
         >
           <Link
@@ -63,7 +66,7 @@ export const TopNav = () => {
               data-testid="top-nav-admin-dashboard-button"
               sx={{ width: "100%;" }}
             >
-              {t("adminDashboard")}
+              {t("Navigation.adminDashboard")}
             </Button>
           </Box>
         )} */}
@@ -74,15 +77,27 @@ export const TopNav = () => {
   const renderUserProfileDropdown = () => {
     return (
       <>
-        {isUserRole(userSession.role) ||
-          (isAnyAdminRole(userSession.role) && (
-            <Box ml={{ md: 3 }}>
-              <UserProfileButton user={user} />
-            </Box>
-          ))}
+        {(isUserRole(userSession.role) || isAnyAdminRole(userSession.role)) && (
+          <Box ml={{ md: 3 }}>
+            <UserProfileButton user={user} />
+          </Box>
+        )}
       </>
     );
   };
+  useEffect(() => {
+    if (user && !user?.name && isUserRole(userSession.role)) {
+      openModal({
+        type: "signUpModal",
+        state: {
+          showCloseButton: false,
+          title: t("Modals.signUp.headline"),
+          description: t("Modals.signUp.description"),
+        },
+      });
+    }
+  }, [user]);
+
   return (
     <TopNavWrapper homeRedirectionPath={PATHS.home}>
       <Box sx={{ display: { xxs: "none", md: "block" } }}>
