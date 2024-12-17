@@ -1,5 +1,5 @@
-import React from "react";
-
+"use client";
+import React, { useState, useEffect } from "react";
 import { Box, SxProps } from "@mui/material";
 import { Typography } from "@atoms";
 import { useTranslations } from "next-intl";
@@ -17,13 +17,32 @@ export function NotFound({
   sx?: SxProps;
 }) {
   const t = useTranslations("NotFound");
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(display-mode: fullscreen)");
+    const handleFullscreenChange = () => setIsFullscreen(mediaQuery.matches);
+
+    mediaQuery.addEventListener("change", handleFullscreenChange);
+
+    handleFullscreenChange();
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleFullscreenChange);
+    };
+  }, []);
+
+  const dynamicHeight = isFullscreen ? "85vh" : height;
 
   return (
     <Box
       display="flex"
       justifyContent="center"
       alignItems="center"
-      sx={{ height, backgroundColor: customPalette.neutralWhite }}
+      sx={{
+        height: dynamicHeight,
+        backgroundColor: customPalette.neutralWhite,
+      }}
     >
       <Box
         sx={{
