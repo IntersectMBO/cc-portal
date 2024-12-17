@@ -16,7 +16,6 @@ import { useTranslations } from "next-intl";
 export default function VerifyRegister({ searchParams }) {
   const router = useRouter();
   const { setUserSession } = useAppContext();
-  const { openModal } = useModal<SignupModalState>();
   const { addErrorAlert } = useSnackbar();
   const t = useTranslations();
   const accessToken = useMemo(() => Cookies.get(cookieStore.token), []);
@@ -32,16 +31,16 @@ export default function VerifyRegister({ searchParams }) {
         setUserSession(session);
         const redirectURL = getRoleBasedHomeRedirectURL(response?.user.role);
         router.push(redirectURL);
-        if (!isAnyAdminRole(session.role)) {
-          openModal({
-            type: "signUpModal",
-            state: {
-              showCloseButton: false,
-              title: t("Modals.signUp.headline"),
-              description: t("Modals.signUp.description"),
-            },
-          });
-        }
+        // if (!isAnyAdminRole(session.role)) {
+        //   openModal({
+        //     type: "signUpModal",
+        //     state: {
+        //       showCloseButton: false,
+        //       title: t("Modals.signUp.headline"),
+        //       description: t("Modals.signUp.description"),
+        //     },
+        //   });
+        // }
       }
     };
 
