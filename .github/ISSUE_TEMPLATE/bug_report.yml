@@ -1,0 +1,68 @@
+name: 🐛 Bug report
+description: You found a bug!
+title: '🐛 '
+labels: ["🐛 Bug"]
+projects: ["IntersectMBO/24", "IntersectMBO/34"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🌟 **Thank you for contributing to Constitutional Committee Portal!**
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting a new issue please check the [existing issues](https://github.com/IntersectMBO/cc-portal/issues) to avoid duplication.
+
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Domain
+      description: Which CC Portal instance were you connected to?
+      options:
+        - constitution.gov.tools
+        - sancho.constitution.gov.tools
+        - other
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Please give the context to what you were trying to achieve
+      placeholder: |
+        I was trying to see the latest CC member updates...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Explain the steps to reproduce
+      placeholder: |
+          1. Navigate to view constitution
+          2. Scroll to appendix
+          3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual behavior
+      description:  A description of the erroneous outcome
+      placeholder: |
+        A error came up on the screen stating...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: A description of what you expect to happen instead
+      placeholder: |
+        The constitution appendix is legible and accessible...
+    validations:
+      required: true

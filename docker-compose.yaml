@@ -21,8 +21,6 @@ services:
       dockerfile: Dockerfile
     container_name: worker
     restart: unless-stopped
-    ports:
-      - "3002:3002"
     networks:
       - bloxico_local
 
@@ -114,7 +112,6 @@ services:
     container_name: proxy
     ports:
       - "80:80"
-      - "443:443"
     networks:
       - bloxico_local
 

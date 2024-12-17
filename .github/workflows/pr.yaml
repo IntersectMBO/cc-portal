@@ -5,7 +5,8 @@ on:
     branches:
       - develop
       - staging
-      - main
+      - beta
+      - master
 
 permissions:
   contents: read
@@ -78,7 +79,6 @@ jobs:
           set -o pipefail
           sudo chmod +x lint.sh && ./lint.sh 2>&1 | tee code_lint_output.txt
 
-
       - name: Unit tests
         id: unit_tests
         run: |
@@ -117,9 +117,11 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           outputs: type=docker,dest=/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar
           build-args: |
-            NEXT_PUBLIC_API_URL=${{ secrets.DEV_NEXT_PUBLIC_API_URL }}
-            NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY }}
-            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.DEV_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
+            NEXT_PUBLIC_API_URL=${{ secrets.QA_NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_USERSNAP_SPACE_API_KEY=${{ secrets.QA_NEXT_PUBLIC_USERSNAP_SPACE_API_KEY }}
+            NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY=${{ secrets.QA_NEXT_PUBLIC_USERSNAP_PROJECT_API_KEY }}
+            NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS=${{ secrets.QA_NEXT_PUBLIC_HIDDEN_USERSNAP_PROJECT_IDS }}
+            NEXT_PUBLIC_IS_MAINNET=${{ secrets.QA_NEXT_PUBLIC_IS_MAINNET }}
           
       - name: Scan Docker image with Dockle
         id: dockle
@@ -132,7 +134,7 @@ jobs:
             rm -rf '/tmp/image-${{ matrix.name }}-${{ github.sha }}-pr.tar'
             cat ${{ matrix.workdir }}/dockle_scan_output.json
 
-            echo "outcome=success" >> $GITHUB_OUTPUT
+          echo "outcome=success" >> $GITHUB_OUTPUT
 
       - name: Create PR comment
         if: always()
