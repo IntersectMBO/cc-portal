@@ -6,7 +6,6 @@ import { LoggerService } from '@nestjs/common';
 
 
 async function bootstrap() {
-  
   const app = await NestFactory.create(AppModule);
 
   const logger: LoggerService = LoggerFactory('IPFS Service');

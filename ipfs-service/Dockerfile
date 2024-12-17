@@ -1,5 +1,5 @@
-# Use the official Node.js 22 image as the base image
-FROM node:22
+# Use the official Node.js 20 image as the base image
+FROM node:20
 
 # Install build dependencies for native modules
 RUN apt-get update && \

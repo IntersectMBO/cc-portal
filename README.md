@@ -2,9 +2,9 @@
 
 Welcome to the official repository for the Constitution Committee Portal.
 
-The primary purpose of this solution is to host the Cardano Constitution and allow anyone to get familiar with it and follow its evolution over time. It also serves as the single point of truth for the Cardano Community members to see how Constitutional Committee members voted on a specific Governance Action, with the inclusion of their rationale. For members of the Constitutional Committee, it serves as a portal to add reasoning to their votes and prepare it as an off-chain resource to be attached to on-chain governance actions.
+The primary purpose of the solution is to host the Cardano Constitution and allow anyone to get familiar with it and follow its evolution over time. It also serves as the single point of truth for the Cardano Community members to see how Constitutional Committee members voted on a specific Governance Action, with the inclusion of their rationale. For members of the Constitutional Committee, it serves as a portal to add reasoning to their votes and prepare it as an off-chain resource to be attached to on-chain governance actions.
 
-## Navigation
+## Table of content:
 
 - [Introduction](#introduction)
 - [Prerequisites](#prerequisites)

@@ -20,7 +20,7 @@ import {
   ListItem,
   NavDrawerDesktop,
   Paragraph,
-  TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS,
+  TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS
 } from "./MDXComponents";
 import { TocAccordion } from "./TOCAccordion";
 import TOCLink from "./TOCLink";
@@ -69,16 +69,10 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
     },
     a: (props) => {
       if (props.href && props.href.startsWith("#")) {
-        return (
-          <TOCLink
-            {...props}
-            callback={onTOCLinkClick}
-            disabled={props.className.includes("toc-link-h2")}
-          />
-        );
+        return <TOCLink {...props} callback={onTOCLinkClick} />;
       }
       return <a {...props} />;
-    },
+    }
   };
 
   return (
@@ -114,7 +108,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                   sx={{
                     bgcolor: customPalette.arcticWhite,
                     display: { xxs: "flex", lg: "none" },
-                    justifyContent: "center",
+                    justifyContent: "center"
                   }}
                 >
                   <img src={IMAGES.docSearch} />

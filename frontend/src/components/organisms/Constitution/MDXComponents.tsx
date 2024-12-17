@@ -18,7 +18,7 @@ const Anchor = ({ id, offset = "-20vh " }) => {
         display: "block",
         position: "relative",
         top: offset,
-        visibility: "hidden",
+        visibility: "hidden"
       }}
     />
   );
@@ -38,7 +38,7 @@ export const Heading1 = ({ children, id }) => (
         marginTop: "24px",
         marginBottom: "16px",
         lineHeight: "1.25em",
-        fontSize: { xxs: 20, md: 32 },
+        fontSize: { xxs: 20, md: 32 }
       }}
       variant="headline4"
     >
@@ -57,7 +57,7 @@ export const Heading2 = ({ children, id }) => (
         fontWeight: 600,
         fontSize: { xxs: 16, md: 20 },
 
-        lineHeight: "1.25em",
+        lineHeight: "1.25em"
       }}
     >
       {children}
@@ -74,7 +74,7 @@ export const Heading3 = ({ children, id }) => (
         marginBottom: "16px",
         fontWeight: 600,
         fontSize: { xxs: 14, md: 18 },
-        lineHeight: "1.25em",
+        lineHeight: "1.25em"
       }}
     >
       {children}
@@ -91,7 +91,7 @@ export const Heading5 = ({ children }) => (
       fontWeight: 800,
       fontSize: { xxs: 12, md: 14 },
       lineHeight: "1em",
-      overflowWrap: "break-word",
+      overflowWrap: "break-word"
     }}
   >
     {children}
@@ -105,7 +105,7 @@ export const Paragraph = ({ children, id }) => (
         lineHeight: "1.5",
         marginBottom: "16px",
         fontSize: "14px",
-        color: customPalette.textGray,
+        color: customPalette.textGray
       }}
       variant="caption"
     >
@@ -124,7 +124,7 @@ export const ListItem = ({ children, id }) => (
       flexDirection: "column",
       alignItems: "flex-start",
       justifyContent: "center",
-      wordBreak: "break-all",
+      wordBreak: "break-all"
     }}
   >
     {children}
@@ -140,7 +140,7 @@ export const Code = ({ children }) => (
       margin: 0,
       whiteSpace: "break-spaces",
       backgroundColor: "#afb8c133",
-      borderRadius: "6px",
+      borderRadius: "6px"
     }}
   >
     {children}
@@ -152,7 +152,7 @@ export const TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS = {
   borderRadius: "16px",
   padding: "12px",
   "& ol.toc-level": {
-    margin: 0,
+    margin: 0
   },
   "& ol.toc-level-1": {
     paddingInlineStart: "20px",
@@ -160,12 +160,12 @@ export const TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS = {
     "& li": {
       listStyle: "outside !important",
       "& a.toc-link-h1": {
-        fontWeight: 600,
-      },
-    },
+        fontWeight: 600
+      }
+    }
   },
   "& ol.toc-level-2": {
-    margin: "10px 0px 10px 0px",
+    margin: "10px 0px 10px 0px"
   },
   "& li": {
     width: "100%",
@@ -176,9 +176,9 @@ export const TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS = {
       fontSize: "1rem",
       fontWeight: 400,
       lineHeight: "56px",
-      color: customPalette.textBlack,
-    },
-  },
+      color: customPalette.textBlack
+    }
+  }
 };
 export const DrawerNav = () => {
   const t = useTranslations("Constitution");
@@ -226,7 +226,7 @@ export const NavDrawerDesktop = ({
   children,
   left = 0,
   top = { xxs: 75, md: 90 },
-  dataTestId,
+  dataTestId
 }: {
   children: ReactNode;
   left: number;
@@ -247,7 +247,7 @@ export const NavDrawerDesktop = ({
         borderRadius: "16px",
         height: { xxs: "95vh", md: "calc(100vh - 118px)" },
         zIndex: 1,
-        ...TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS,
+        ...TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS
       }}
     >
       <Box
@@ -256,8 +256,8 @@ export const NavDrawerDesktop = ({
           overflowY: "scroll",
           borderRadiusTop: "16px 16px 0 0",
           "&::-webkit-scrollbar": {
-            display: "none",
-          },
+            display: "none"
+          }
         }}
         data-testid="nav-drawer-collapse-container"
       >
@@ -275,7 +275,7 @@ export const NavCard = ({
   hash,
   url,
   isActive,
-  isLatest,
+  isLatest
 }) => {
   return (
     <Grid
@@ -335,7 +335,7 @@ export const NavCard = ({
           sx={{
             display: "flex",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "center"
           }}
         >
           <Link
@@ -360,7 +360,7 @@ export const NavCard = ({
         sx={{
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "center"
         }}
       >
         {!isActive && !isLatest && (
