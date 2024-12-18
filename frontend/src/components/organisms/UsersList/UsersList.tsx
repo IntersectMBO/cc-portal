@@ -19,7 +19,7 @@ import { UsersListItem } from "./UsersListItem";
 export function UsersList({
   usersList,
   paginationMeta,
-  error
+  error,
 }: {
   usersList: UserListItem[];
   paginationMeta: PaginationMeta;
@@ -31,7 +31,7 @@ export function UsersList({
   const { addErrorAlert } = useSnackbar();
   const params: Record<string, string | null> = {
     search: searchText || null,
-    sortBy: chosenSorting || null
+    sortBy: chosenSorting || null,
   };
   const { data, pagination, isLoading, loadMore } = usePagination(
     usersList,
@@ -44,7 +44,7 @@ export function UsersList({
   const { openModal } = useModal();
   const addMember = () =>
     openModal({
-      type: "addMember"
+      type: "addMember",
     });
 
   useEffect(() => {
@@ -73,14 +73,8 @@ export function UsersList({
         alignItems={{ xxs: "left", md: "center" }}
         gap={3}
       >
-        <Typography variant="headline4">{t("title")}</Typography>
-        <Box
-          display="flex"
-          justifyContent={{ xxs: "left", md: "space-between" }}
-          alignItems="center"
-          gap={2}
-          flexWrap={"wrap"}
-        >
+        <Box display="flex" justifyContent="space-between" gap={3}>
+          <Typography variant="headline4">{t("title")}</Typography>
           <PermissionChecker
             permissions={userSession?.permissions}
             requiredPermission="manage_cc_members"
@@ -94,11 +88,11 @@ export function UsersList({
               {t("addNewMember")}
             </Button>
           </PermissionChecker>
-          <DataActionsContainer
-            setSearchText={setSearchText}
-            setChosenSorting={setChosenSorting}
-          />
         </Box>
+        <DataActionsContainer
+          setSearchText={setSearchText}
+          setChosenSorting={setChosenSorting}
+        />
       </Box>
       {isEmpty(data) || error ? (
         <NotFound
