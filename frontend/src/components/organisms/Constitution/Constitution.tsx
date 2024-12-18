@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentWrapper, Typography } from "@/components/atoms";
+import { Button, ContentWrapper, Typography } from "@/components/atoms";
 import { customPalette, IMAGES } from "@consts";
 import { useScreenDimension } from "@hooks";
 import { Box, Grid, IconButton } from "@mui/material";
@@ -20,16 +20,21 @@ import {
   ListItem,
   NavDrawerDesktop,
   Paragraph,
-  TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS
+  TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS,
 } from "./MDXComponents";
 import { TocAccordion } from "./TOCAccordion";
 import TOCLink from "./TOCLink";
+import PermissionChecker from "../PermissionChecker";
+import { useAppContext, useModal } from "@/context";
 
 export function Constitution({ constitution, metadata }: ConstitutionProps) {
   const { screenWidth } = useScreenDimension();
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = screenWidth < 1025;
   const t = useTranslations("Constitution");
+  const { userSession } = useAppContext();
+  const { openModal } = useModal();
+  const uploadConstitution = () => openModal({ type: "uploadConstitution" });
 
   const onTOCLinkClick = () => {
     if (isMobile) {
@@ -72,7 +77,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
         return <TOCLink {...props} callback={onTOCLinkClick} />;
       }
       return <a {...props} />;
-    }
+    },
   };
 
   return (
@@ -102,13 +107,27 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                 bgcolor={customPalette.bgWhite}
               >
                 <Typography variant="headline4">{t("title")}</Typography>
+                <PermissionChecker
+                  permissions={userSession?.permissions}
+                  requiredPermission="add_constitution_version"
+                >
+                  <Button
+                    variant="contained"
+                    size="extraLarge"
+                    type="submit"
+                    onClick={uploadConstitution}
+                    data-testid="admin-top-nav-upload-constitution-button"
+                  >
+                    {t("drawer.uploadNewVersion")}
+                  </Button>
+                </PermissionChecker>
                 <IconButton
                   data-testid="open-constitution-drawer-button"
                   onClick={() => setIsOpen(true)}
                   sx={{
                     bgcolor: customPalette.arcticWhite,
                     display: { xxs: "flex", lg: "none" },
-                    justifyContent: "center"
+                    justifyContent: "center",
                   }}
                 >
                   <img src={IMAGES.docSearch} />
