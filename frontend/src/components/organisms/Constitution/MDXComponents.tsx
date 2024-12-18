@@ -194,7 +194,7 @@ export const DrawerNav = () => {
     : ICONS.documentSearch;
 
   return (
-    <Grid container direction="column" gap={1} p={2} marginTop="auto">
+    <Grid container direction="column" p={0} pt={1.5} px={2} marginTop="auto">
       <Link href={linkPath}>
         <Button fullWidth variant="outlined">
           <img src={buttonEndIcon} style={{ marginRight: 8 }} />
