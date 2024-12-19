@@ -27,11 +27,11 @@
     "addNewMember": "Add new member",
     "card": {
       "joined": "Joined",
-      "latestUpdates": "Latest updates"
+      "latestUpdates": "Voting updates"
     }
   },
   "LatestUpdates": {
-    "title": "Latest Updates",
+    "title": "Voting Updates",
     "govAction": "Governance Action",
     "govActionCategoryShort": "GA Category",
     "voted": "Voted",

@@ -16,7 +16,7 @@ export const NAV_ITEMS = [
   {
     dataTestId: "latestUpdates",
     href: PATHS.latestUpdates,
-    label: "Latest Updates",
+    label: "Voting Updates",
     newTabLink: null,
   },
 ];
