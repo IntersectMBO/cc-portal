@@ -14,9 +14,9 @@ export const NAV_ITEMS = [
     newTabLink: null,
   },
   {
-    dataTestId: "latestUpdates",
-    href: PATHS.latestUpdates,
-    label: "Latest Updates",
+    dataTestId: "votingUpdates",
+    href: PATHS.votingUpdates,
+    label: "Voting Updates",
     newTabLink: null,
   },
 ];

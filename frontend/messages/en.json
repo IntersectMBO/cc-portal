@@ -27,11 +27,11 @@
     "addNewMember": "Add new member",
     "card": {
       "joined": "Joined",
-      "latestUpdates": "Latest updates"
+      "votingUpdates": "Voting updates"
     }
   },
-  "LatestUpdates": {
-    "title": "Latest Updates",
+  "VotingUpdates": {
+    "title": "Voting Updates",
     "govAction": "Governance Action",
     "govActionCategoryShort": "GA Category",
     "voted": "Voted",
@@ -285,7 +285,7 @@
       "title": "No members found",
       "description": "There are currently no members. Please check back later for updates"
     },
-    "latestUpdates": {
+    "votingUpdates": {
       "title": "No votes found",
       "description": "There are currently no votes. Please check back later for updates"
     },
