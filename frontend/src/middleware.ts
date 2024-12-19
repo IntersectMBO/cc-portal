@@ -4,7 +4,7 @@ import {
   getAuthCookies,
   isAdminProtectedRoute,
   isAnyAdminRole,
-  isUserProtectedRoute
+  isUserProtectedRoute,
 } from "@utils";
 import * as cookie from "cookie";
 import createMiddleware from "next-intl/middleware";
@@ -14,7 +14,7 @@ import { decodeUserToken, isTokenExpired, refreshToken } from "./lib/api";
 // Export the middleware configuration to define supported locales and the default locale.
 const intlMiddleware = createMiddleware({
   locales: locales, // Specify the supported locales for the application.
-  defaultLocale: defaultLocale // Set the default locale to be used when no other locale matches.
+  defaultLocale: defaultLocale, // Set the default locale to be used when no other locale matches.
 });
 
 // Define and export a config object to specify which paths the middleware should apply to.
@@ -23,7 +23,7 @@ export const config = {
   matcher: [
     "/",
     "/interim-constitution",
-    "/latest-updates",
+    "/voting-updates",
     "/my-actions",
     "/governance-actions",
     "/members",
@@ -33,8 +33,8 @@ export const config = {
     "/(de|en)/:path*",
     "/((?!api|_next|_vercel|.*\\..*).*)",
     // However, match all pathnames within `/users`, optionally with a locale prefix
-    "/([\\w-]+)?/users/(.+)"
-  ] // Apply middleware to the root path and any path prefixed with supported locales.
+    "/([\\w-]+)?/users/(.+)",
+  ], // Apply middleware to the root path and any path prefixed with supported locales.
 };
 
 export async function middleware(req: NextRequest) {
@@ -76,8 +76,8 @@ export async function middleware(req: NextRequest) {
       // Return updated response with new token
       const response = NextResponse.next({
         request: {
-          headers: newRequestHeaders
-        }
+          headers: newRequestHeaders,
+        },
       });
       response.cookies.set("token", newToken?.access_token);
       response.cookies.set("refresh_token", newToken?.refresh_token);

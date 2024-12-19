@@ -4,10 +4,10 @@ import { useModal } from "@/context";
 import { getUserVotes } from "@/lib/api";
 import { PaginationMeta, VotesTableI } from "@/lib/requests";
 import {
-  LATEST_UPDATES_FILTERS,
-  LATEST_UPDATES_SORTING,
+  VOTING_UPDATES_FILTERS,
+  VOTING_UPDATES_SORTING,
   MY_ACTIONS_TABS,
-  PATHS
+  PATHS,
 } from "@consts";
 import { useManageQueryParams, usePagination } from "@hooks";
 import { Box } from "@mui/material";
@@ -26,7 +26,7 @@ export const MyActions = ({
   actions,
   paginationMeta,
   error,
-  userId
+  userId,
 }: {
   actions: VotesTableI[];
   paginationMeta: PaginationMeta;
@@ -59,9 +59,9 @@ export const MyActions = ({
           reasoning_title: action.reasoning_title,
           rationale_url: action.rationale_url,
           status: action.gov_action_proposal_status,
-          title: action.gov_action_proposal_title
-        }
-      }
+          title: action.gov_action_proposal_title,
+        },
+      },
     });
   };
   const params: Record<string, string | null> = {
@@ -72,7 +72,7 @@ export const MyActions = ({
         : null,
     vote: chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
     sortBy: chosenSorting || null,
-    userId
+    userId,
   };
 
   const { data, pagination, isLoading, loadMore } = usePagination(
@@ -124,8 +124,8 @@ export const MyActions = ({
             setSortOpen={setSortOpen}
             sortingActive={Boolean(chosenSorting)}
             sortOpen={sortOpen}
-            sortOptions={LATEST_UPDATES_SORTING}
-            filterOptions={LATEST_UPDATES_FILTERS}
+            sortOptions={VOTING_UPDATES_SORTING}
+            filterOptions={VOTING_UPDATES_FILTERS}
           />
         </Box>
       </Box>

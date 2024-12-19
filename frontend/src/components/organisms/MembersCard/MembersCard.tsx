@@ -108,7 +108,7 @@ export const MembersCard = ({
           data-testid={`members-${id}-latest-updates`}
           endIcon={<img src={ICONS.arrowUpRight} />}
         >
-          {t("card.latestUpdates")}
+          {t("card.votingUpdates")}
         </Button>
         */}
       </Box>
