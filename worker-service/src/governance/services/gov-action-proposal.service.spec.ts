@@ -20,10 +20,10 @@ describe('GovActionProposalService', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://my-ip.at/test/cip-0100.common.json',
       status: 'DROPPED',
-      endTime: '2024-05-22T22:29:33.000Z',
+      endTime: new Date('2024-05-22T22:29:33.000Z'),
       txHash:
         '69aa81f4aa0140e8d2ab2b6642c403611cd730fab42e6c9f9e3e15d6d90bd3e9',
-      submitTime: '2024-05-17T10:56:00.000Z',
+      submitTime: new Date('2024-05-17T10:56:00.000Z'),
     },
     {
       id: '2',
@@ -32,10 +32,10 @@ describe('GovActionProposalService', () => {
       govMetadataUrl:
         'https://github.com/carloslodelar/proposals/blob/main/why-hardfork-to-10.txt',
       status: 'DROPPED',
-      endTime: '2024-05-22T22:29:33.000Z',
+      endTime: new Date('2024-05-22T22:29:33.000Z'),
       txHash:
         'edef927af962664ed7a02bedfa913c7f1cd271494871c25ee7de66e941d83c79',
-      submitTime: '2024-05-17T14:15:34.000Z',
+      submitTime: new Date('2024-05-17T14:15:34.000Z'),
     },
     {
       id: '3',
@@ -43,10 +43,10 @@ describe('GovActionProposalService', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://metadata.cardanoapi.io/data/Info',
       status: 'DROPPED',
-      endTime: '2024-05-23T22:27:46.000Z',
+      endTime: new Date('2024-05-23T22:27:46.000Z'),
       txHash:
         'b9532421430f6611c0170993e88dfa29b6aa0d4cce024ad88346c59be2b65b41',
-      submitTime: '2024-05-18T12:29:22.000Z',
+      submitTime: new Date('2024-05-18T12:29:22.000Z'),
     },
     {
       id: '4',
@@ -54,10 +54,10 @@ describe('GovActionProposalService', () => {
       govActionType: 'ParameterChange',
       govMetadataUrl: 'https://my-ip.at/test/cip-0100.common.json',
       status: 'DROPPED',
-      endTime: '2024-05-23T22:27:46.000Z',
+      endTime: new Date('2024-05-23T22:27:46.000Z'),
       txHash:
         '6a3319f5ac57551c4cabf77d0603bd6c72f44e9d10830363d87eb34cb43afcb2',
-      submitTime: '2024-05-18T18:25:26.000Z',
+      submitTime: new Date('2024-05-18T18:25:26.000Z'),
     },
     {
       id: '5',
@@ -65,10 +65,10 @@ describe('GovActionProposalService', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://bit.ly/3zCH2HL',
       status: 'DROPPED',
-      endTime: '2024-05-25T22:29:48.000Z',
+      endTime: new Date('2024-05-25T22:29:48.000Z'),
       txHash:
         'cef93aface365b575e1f33987fad4093e2a8a06d31c01a260e0e7db325fc0b50',
-      submitTime: '2024-05-20T04:39:16.000Z',
+      submitTime: new Date('2024-05-20T04:39:16.000Z'),
     },
     {
       id: '6',
@@ -77,10 +77,10 @@ describe('GovActionProposalService', () => {
       govMetadataUrl:
         'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
       status: 'DROPPED',
-      endTime: '2024-05-26T22:29:45.000Z',
+      endTime: new Date('2024-05-26T22:29:45.000Z'),
       txHash:
         'd775fbcb6006524abbffe6daf538e71941745b44a3a735852fbbd49fd7d59a95',
-      submitTime: '2024-05-21T13:18:06.000Z',
+      submitTime: new Date('2024-05-21T13:18:06.000Z'),
     },
     {
       id: '7',
@@ -89,10 +89,10 @@ describe('GovActionProposalService', () => {
       govMetadataUrl:
         'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
       status: 'DROPPED',
-      endTime: '2024-05-26T22:29:45.000Z',
+      endTime: new Date('2024-05-26T22:29:45.000Z'),
       txHash:
         'db4dbeb5946e5d49778f457d9c5a460488c40af0b93d8b98111f5be11bf165a6',
-      submitTime: '2024-05-21T15:08:38.000Z',
+      submitTime: new Date('2024-05-21T15:08:38.000Z'),
     },
     {
       id: '8',
@@ -101,10 +101,10 @@ describe('GovActionProposalService', () => {
       govMetadataUrl:
         '1111111111111111111111111111111111111111111111111111111111111111',
       status: 'DROPPED',
-      endTime: '2024-05-27T22:29:38.000Z',
+      endTime: new Date('2024-05-27T22:29:38.000Z'),
       txHash:
         '67820c121787464a9b670cf4c648f67cabd9573eb71b220214971ce467d25027',
-      submitTime: '2024-05-22T08:08:20.000Z',
+      submitTime: new Date('2024-05-22T08:08:20.000Z'),
     },
     {
       id: '9',
@@ -112,10 +112,10 @@ describe('GovActionProposalService', () => {
       govActionType: 'InfoAction',
       govMetadataUrl: 'https://metadata.cardanoapi.io/data/Info',
       status: 'DROPPED',
-      endTime: '2024-05-27T22:29:38.000Z',
+      endTime: new Date('2024-05-27T22:29:38.000Z'),
       txHash:
         '75d1c676f459f1192c7fd2c73423635a074c5e7b46497e00f44428861f460153',
-      submitTime: '2024-05-22T10:24:59.000Z',
+      submitTime: new Date('2024-05-22T10:24:59.000Z'),
     },
     {
       id: '10',
@@ -124,10 +124,10 @@ describe('GovActionProposalService', () => {
       govMetadataUrl:
         'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
       status: 'DROPPED',
-      endTime: '2024-05-27T22:29:38.000Z',
+      endTime: new Date('2024-05-27T22:29:38.000Z'),
       txHash:
         '9bd2b6547ab8e8ed5c34049d6b984772a8352ac70e92198e1a7f6cdbb12d6397',
-      submitTime: '2024-05-22T17:47:27.000Z',
+      submitTime: new Date('2024-05-22T17:47:27.000Z'),
     },
   ];
 
@@ -296,7 +296,7 @@ describe('GovActionProposalService', () => {
     {
       id: '1',
       type: 'InfoAction',
-      end_time: '2024-05-22T22:29:33.000Z',
+      end_time: new Date('2024-05-22T22:29:33.000Z'),
       voting_anchor_id: '1',
       url: 'https://my-ip.at/test/cip-0100.common.json',
       hash: new Uint8Array([
@@ -304,13 +304,13 @@ describe('GovActionProposalService', () => {
         28, 215, 48, 250, 180, 46, 108, 159, 158, 62, 21, 214, 217, 11, 211,
         233,
       ]),
-      time: '2024-05-17T10:56:00.000Z',
+      time: new Date('2024-05-17T10:56:00.000Z'),
       epoch_status: 'DROPPED',
     },
     {
       id: '2',
       type: 'HardForkInitiation',
-      end_time: '2024-05-22T22:29:33.000Z',
+      end_time: new Date('2024-05-22T22:29:33.000Z'),
       voting_anchor_id: '2',
       url: 'https://github.com/carloslodelar/proposals/blob/main/why-hardfork-to-10.txt',
       hash: new Uint8Array([
@@ -318,52 +318,52 @@ describe('GovActionProposalService', () => {
         127, 28, 210, 113, 73, 72, 113, 194, 94, 231, 222, 102, 233, 65, 216,
         60, 121,
       ]),
-      time: '2024-05-17T14:15:34.000Z',
+      time: new Date('2024-05-17T14:15:34.000Z'),
       epoch_status: 'DROPPED',
     },
     {
       id: '3',
       type: 'InfoAction',
-      end_time: '2024-05-23T22:27:46.000Z',
+      end_time: new Date('2024-05-23T22:27:46.000Z'),
       voting_anchor_id: '4',
       url: 'https://metadata.cardanoapi.io/data/Info',
       hash: new Uint8Array([
         185, 83, 36, 33, 67, 15, 102, 17, 192, 23, 9, 147, 232, 141, 250, 41,
         182, 170, 13, 76, 206, 2, 74, 216, 131, 70, 197, 155, 226, 182, 91, 65,
       ]),
-      time: '2024-05-18T12:29:22.000Z',
+      time: new Date('2024-05-18T12:29:22.000Z'),
       epoch_status: 'DROPPED',
     },
     {
       id: '4',
       type: 'ParameterChange',
-      end_time: '2024-05-23T22:27:46.000Z',
+      end_time: new Date('2024-05-23T22:27:46.000Z'),
       voting_anchor_id: '1',
       url: 'https://my-ip.at/test/cip-0100.common.json',
       hash: new Uint8Array([
         106, 51, 25, 245, 172, 87, 85, 28, 76, 171, 247, 125, 6, 3, 189, 108,
         114, 244, 78, 157, 16, 131, 3, 99, 216, 126, 179, 76, 180, 58, 252, 178,
       ]),
-      time: '2024-05-18T18:25:26.000Z',
+      time: new Date('2024-05-18T18:25:26.000Z'),
       epoch_status: 'DROPPED',
     },
     {
       id: '5',
       type: 'InfoAction',
-      end_time: '2024-05-25T22:29:48.000Z',
+      end_time: new Date('2024-05-25T22:29:48.000Z'),
       voting_anchor_id: '62',
       url: 'https://bit.ly/3zCH2HL',
       hash: new Uint8Array([
         206, 249, 58, 250, 206, 54, 91, 87, 94, 31, 51, 152, 127, 173, 64, 147,
         226, 168, 160, 109, 49, 192, 26, 38, 14, 14, 125, 179, 37, 252, 11, 80,
       ]),
-      time: '2024-05-20T04:39:16.000Z',
+      time: new Date('2024-05-20T04:39:16.000Z'),
       epoch_status: 'DROPPED',
     },
     {
       id: '6',
       type: 'InfoAction',
-      end_time: '2024-05-26T22:29:45.000Z',
+      end_time: new Date('2024-05-26T22:29:45.000Z'),
       voting_anchor_id: '168',
       url: 'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
       hash: new Uint8Array([
@@ -371,13 +371,13 @@ describe('GovActionProposalService', () => {
         65, 116, 91, 68, 163, 167, 53, 133, 47, 187, 212, 159, 215, 213, 154,
         149,
       ]),
-      time: '2024-05-21T13:18:06.000Z',
+      time: new Date('2024-05-21T13:18:06.000Z'),
       epoch_status: 'DROPPED',
     },
     {
       id: '7',
       type: 'InfoAction',
-      end_time: '2024-05-26T22:29:45.000Z',
+      end_time: new Date('2024-05-26T22:29:45.000Z'),
       voting_anchor_id: '168',
       url: 'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
       hash: new Uint8Array([
@@ -385,39 +385,39 @@ describe('GovActionProposalService', () => {
         136, 196, 10, 240, 185, 61, 139, 152, 17, 31, 91, 225, 27, 241, 101,
         166,
       ]),
-      time: '2024-05-21T15:08:38.000Z',
+      time: new Date('2024-05-21T15:08:38.000Z'),
       epoch_status: 'DROPPED',
     },
     {
       id: '8',
       type: 'HardForkInitiation',
-      end_time: '2024-05-27T22:29:38.000Z',
+      end_time: new Date('2024-05-27T22:29:38.000Z'),
       voting_anchor_id: '216',
       url: '1111111111111111111111111111111111111111111111111111111111111111',
       hash: new Uint8Array([
         103, 130, 12, 18, 23, 135, 70, 74, 155, 103, 12, 244, 198, 72, 246, 124,
         171, 217, 87, 62, 183, 27, 34, 2, 20, 151, 28, 228, 103, 210, 80, 39,
       ]),
-      time: '2024-05-22T08:08:20.000Z',
+      time: new Date('2024-05-22T08:08:20.000Z'),
       epoch_status: 'DROPPED',
     },
     {
       id: '9',
       type: 'InfoAction',
-      end_time: '2024-05-27T22:29:38.000Z',
+      end_time: new Date('2024-05-27T22:29:38.000Z'),
       voting_anchor_id: '239',
       url: 'https://metadata.cardanoapi.io/data/Info',
       hash: new Uint8Array([
         117, 209, 198, 118, 244, 89, 241, 25, 44, 127, 210, 199, 52, 35, 99, 90,
         7, 76, 94, 123, 70, 73, 126, 0, 244, 68, 40, 134, 31, 70, 1, 83,
       ]),
-      time: '2024-05-22T10:24:59.000Z',
+      time: new Date('2024-05-22T10:24:59.000Z'),
       epoch_status: 'DROPPED',
     },
     {
       id: '10',
       type: 'InfoAction',
-      end_time: '2024-05-27T22:29:38.000Z',
+      end_time: new Date('2024-05-27T22:29:38.000Z'),
       voting_anchor_id: '168',
       url: 'https://raw.githubusercontent.com/mpawel79/testrepo/master/Info.jsonld',
       hash: new Uint8Array([
@@ -425,7 +425,7 @@ describe('GovActionProposalService', () => {
         114, 168, 53, 42, 199, 14, 146, 25, 142, 26, 127, 108, 219, 177, 45, 99,
         151,
       ]),
-      time: '2024-05-22T17:47:27.000Z',
+      time: new Date('2024-05-22T17:47:27.000Z'),
       epoch_status: 'DROPPED',
     },
   ];

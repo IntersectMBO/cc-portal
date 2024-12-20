@@ -24,13 +24,14 @@
   },
   "Members": {
     "title": "Members",
+    "addNewMember": "Add new member",
     "card": {
       "joined": "Joined",
-      "latestUpdates": "Latest updates"
+      "votingUpdates": "Voting updates"
     }
   },
-  "LatestUpdates": {
-    "title": "Latest Updates",
+  "VotingUpdates": {
+    "title": "Voting Updates",
     "govAction": "Governance Action",
     "govActionCategoryShort": "GA Category",
     "voted": "Voted",
@@ -185,6 +186,23 @@
         "error": "Error adding new member"
       }
     },
+    "changeRole": {
+      "headline": "Change role",
+      "fields": {
+        "role": {
+          "label": "Role",
+          "placeholder": "Role"
+        },
+        "permissions": {
+          "label": "Permissions",
+          "placeholder": "Permissions"
+        }
+      },
+      "alerts": {
+        "success": "User role successfully changed",
+        "error": "Error changing user role"
+      }
+    },
     "uploadConstitution": {
       "headline": "Upload new version of Constitution",
       "description": "Please upload the new version of the constitution.",
@@ -267,7 +285,7 @@
       "title": "No members found",
       "description": "There are currently no members. Please check back later for updates"
     },
-    "latestUpdates": {
+    "votingUpdates": {
       "title": "No votes found",
       "description": "There are currently no votes. Please check back later for updates"
     },
@@ -281,7 +299,7 @@
     },
     "constitutionMetadata": {
       "title": "No revisions available",
-      "description": "There are currently no revisions available. Please check back later for updates"
+      "description": "There is only 1 version available. Once there are multiple versions of the constitution, you will be able to compare two versions"
     },
     "governanceAction": {
       "title": "No governance actions available",
@@ -289,7 +307,7 @@
     },
     "versionHistory": {
       "title": "No revisions available",
-      "description": "There are currently no revisions available. Please check back later for updates"
+      "description": "There is only 1 version available. Once there are multiple versions of the constitution, you will be able to compare two versions"
     }
   },
   "Snackbar": {

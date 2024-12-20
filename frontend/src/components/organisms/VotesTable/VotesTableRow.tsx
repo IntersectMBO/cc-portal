@@ -19,9 +19,9 @@ export const VotesTableRow = ({
   votes,
   disabled,
   actionTitle,
-  onActionClick
+  onActionClick,
 }: Props) => {
-  const t = useTranslations("LatestUpdates");
+  const t = useTranslations("VotingUpdates");
   const {
     user_name,
     user_address,
@@ -30,7 +30,7 @@ export const VotesTableRow = ({
     rationale_url,
     gov_action_proposal_title,
     gov_action_proposal_type,
-    vote_submit_time
+    vote_submit_time,
   } = votes;
 
   return (
@@ -41,7 +41,7 @@ export const VotesTableRow = ({
         display: "flex",
         flexDirection: { xxs: "column", md: "row" },
         gap: { xxs: 3, md: 0 },
-        width: "100%"
+        width: "100%",
       }}
     >
       <Grid

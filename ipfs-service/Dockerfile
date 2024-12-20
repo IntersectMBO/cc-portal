@@ -1,5 +1,5 @@
-# Use the official Node.js 22 image as the base image
-FROM node:22
+# Use the official Node.js 20 image as the base image
+FROM node:20
 
 # Install build dependencies for native modules
 RUN apt-get update && \
@@ -8,6 +8,9 @@ RUN apt-get update && \
 
 # Upgrade npm to the latest version
 RUN npm install -g npm@latest
+
+# Set the memory limit and max listeners
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 
 # Set the working directory inside the container
 WORKDIR /app

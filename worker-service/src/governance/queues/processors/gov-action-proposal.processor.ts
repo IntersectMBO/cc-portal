@@ -1,4 +1,4 @@
-import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
+import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import {
   JOB_NAME_GOV_ACTIONS_SYNC,
@@ -7,12 +7,11 @@ import {
 import { Logger } from '@nestjs/common';
 import { GovActionProposalService } from '../../services/gov-action-proposal.service';
 
-
 @Processor(QUEUE_NAME_DB_SYNC_GOV_ACTIONS)
 export class GovActionsProposalProcessor extends WorkerHost {
   protected readonly logger = new Logger(GovActionsProposalProcessor.name);
   constructor(
-    private readonly govActionProposalService: GovActionProposalService
+    private readonly govActionProposalService: GovActionProposalService,
   ) {
     super();
   }

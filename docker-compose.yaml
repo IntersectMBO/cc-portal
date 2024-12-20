@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     container_name: worker
     restart: unless-stopped
+    ports:
+      - "3002:3002"
     networks:
       - cc
 
@@ -37,7 +39,7 @@ services:
       - "5001:5001"
       - "8080:8080"
     volumes:
-      - ipfs_data:/ipfs/datastore
+      - ipfs_data:/app/ipfs/
     networks:
       - cc
     extra_hosts:
@@ -112,6 +114,7 @@ services:
     container_name: proxy
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - cc
 

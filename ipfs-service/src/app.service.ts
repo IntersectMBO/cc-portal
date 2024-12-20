@@ -18,7 +18,7 @@ import { FsBlockstore } from 'blockstore-fs';
 import { LevelDatastore } from 'datastore-level';
 import { IPNS, ipns } from '@helia/ipns';
 import { keychain, type Keychain } from '@libp2p/keychain';
-import { kadDHT } from '@libp2p/kad-dht';
+import { kadDHT, removePrivateAddressesMapper } from '@libp2p/kad-dht';
 import { ipnsSelector } from 'ipns/selector';
 import { ipnsValidator } from 'ipns/validator';
 import { dcutr } from '@libp2p/dcutr';
@@ -36,6 +36,7 @@ import { IpfsDto } from './dto/ipfs.dto.js';
 import { PeerId } from '@libp2p/interface';
 import { config } from 'dotenv';
 import { ProvideToDHTProducer } from './queues/producers/provide-to-dht.producer.js';
+import { PrunePeerStoreProducer } from './queues/producers/prune-peer-store.producer.js';
 config();
 
 const libp2pOptions = {
@@ -63,13 +64,13 @@ const libp2pOptions = {
    mdns(),
     bootstrap({
       list: [
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
-        '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
-        '/ip4/104.131.131.82/udp/4001/quic-v1/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
+        '/dns4/am6.bootstrap.libp2p.io/tcp/443/wss/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
+        '/dns4/sg1.bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
+        '/dns4/sv15.bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
+        // va1 is not in the TXT records for _dnsaddr.bootstrap.libp2p.io yet
+        // so use the host name directly
+        '/dnsaddr/va1.bootstrap.libp2p.io/p2p/12D3KooWKnDdG3iXw9eTFijk3EWSunZcFi54Zka4wmtqtt6rPxc8',
+        '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ'
       ],
     }),
   ],
@@ -78,23 +79,17 @@ const libp2pOptions = {
     dcutr: dcutr(),
     delegatedRouting: () =>
       createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
-    dht: kadDHT({
+    aminoDHT: kadDHT({
       clientMode: false,
-      initialQuerySelfInterval: 1000,
-      kBucketSize: 20,
+      peerInfoMapper: removePrivateAddressesMapper,
       protocol: '/ipfs/kad/1.0.0',
-      maxInboundStreams: 32,
-      maxOutboundStreams: 64,
       validators: { ipns: ipnsValidator },
       selectors: { ipns: ipnsSelector },
     }),
     identify: identify(),
     keychain: keychain(),
     ping: ping(),
-    relay: circuitRelayServer({
-      advertise: true,
-      hopTimeout: 60000,
-    }),
+    relay: circuitRelayServer(),
     upnp: uPnPNAT(),
   },
 };
@@ -107,7 +102,10 @@ export class AppService implements OnModuleInit {
   private ipnsPeerId: PeerId;
   private logger = new Logger(AppService.name);
 
-  constructor(private readonly provideToDHTProducer: ProvideToDHTProducer) {}
+  constructor(
+    private readonly provideToDHTProducer: ProvideToDHTProducer,
+    private readonly prunePeerStoreProducer: PrunePeerStoreProducer,
+  ) {}
 
   async onModuleInit() {
     console.log(`Initialization helia...`);
@@ -222,27 +220,27 @@ export class AppService implements OnModuleInit {
 
   async getDocByCid(cidString: string): Promise<IpfsDto> {
     try {
-    this.fs = unixfs(this.helia);
-    const decoder = new TextDecoder();
-    const cid = CID.parse(cidString);
+      this.fs = unixfs(this.helia);
+      const decoder = new TextDecoder();
+      const cid = CID.parse(cidString);
 
-    let text = '';
-    for await (const chunk of this.fs.cat(cid)) {
-      text += decoder.decode(chunk, {
-        stream: true,
-      });
+      let text = '';
+      for await (const chunk of this.fs.cat(cid)) {
+        text += decoder.decode(chunk, {
+          stream: true,
+        });
+      }
+      return IpfsMapper.ipfsToIpfsDto(cidString, text);
+    } catch (error) {
+      this.logger.error(`Failed to get doc by CID - ${cidString} error: ${error}`);
+      return null;
     }
-    return IpfsMapper.ipfsToIpfsDto(cidString, text);
-  } catch (error) {
-    this.logger.error(`Failed to get doc by CID - ${cidString} error: ${error}`);
-    return null;
   }
-}
 
   async provideCidtoDHTViaQueue(cid: CID) {
     await this.helia.libp2p.contentRouting.provide(cid);
     this.logger.log(`Announced CID to the DHT: ${cid.toString()}`);
-}
+  }
 
   async getIpnsUrl(): Promise<string> {
     if (!this.ipnsPeerId) {
@@ -250,5 +248,24 @@ export class AppService implements OnModuleInit {
     }
     const ipnsUrl = process.env.IPNS_PUBLIC_URL + this.ipnsPeerId.toString()
     return ipnsUrl;
+  }
+
+  async addPrunePeerStoreJob(): Promise<void> {
+    await this.prunePeerStoreProducer.addToQueue(process.env.MAX_PEERS);
+  }
+
+  async prunePeerStore(maxPeers: number): Promise<void> {
+    let removedPeers = 0;
+    const peers = await this.helia.libp2p.peerStore.all();
+    this.logger.debug(`Total number of stored peers: ${peers.length}`);
+  
+    if (peers.length > maxPeers) {
+      const excessPeers = peers.slice(0, peers.length - maxPeers);
+      for (const peer of excessPeers) {
+        await this.helia.libp2p.peerStore.delete(peer.id);
+        removedPeers++;
+      }
+    }
+    this.logger.debug(`Removed peers: ${removedPeers}`);
   }
 }

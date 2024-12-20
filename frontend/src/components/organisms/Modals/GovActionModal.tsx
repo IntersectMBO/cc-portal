@@ -7,7 +7,7 @@ import {
   ModalHeader,
   ModalWrapper,
   OutlinedLightButton,
-  Typography,
+  Typography
 } from "@atoms";
 import { customPalette, IMAGES } from "@consts";
 import { useModal } from "@context";
@@ -19,7 +19,7 @@ import {
   formatDisplayDate,
   getProposalTypeLabel,
   getShortenedGovActionId,
-  isResponseErrorI,
+  isResponseErrorI
 } from "@utils";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";

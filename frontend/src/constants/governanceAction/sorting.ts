@@ -1,6 +1,6 @@
 import { FilterItem } from "@molecules";
 
-export const LATEST_UPDATES_SORTING: FilterItem[] = [
+export const VOTING_UPDATES_SORTING: FilterItem[] = [
   {
     key: "submitTime:ASC",
     label: "Newest first",
