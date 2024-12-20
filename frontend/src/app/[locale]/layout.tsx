@@ -44,7 +44,7 @@ async function RootLayout({ children, params: { locale } }) {
         <title>{metadata.title}</title>
         <link rel="icon" href={IMAGES.favicon} type="image/x-icon" />
         {/* Matomo script */}
-        {/* {process.env.NODE_ENV === "production" && (
+        {process.env.NODE_ENV === "production" && (
           <script
             dangerouslySetInnerHTML={{
               __html: `
@@ -61,7 +61,7 @@ async function RootLayout({ children, params: { locale } }) {
               `,
             }}
           />
-        )} */}
+        )}
       </head>
       {/* Apply font class and suppress hydration warning. */}
       <body className={poppins.className} suppressHydrationWarning={true}>
