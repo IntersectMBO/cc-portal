@@ -1,10 +1,10 @@
 "use client";
 
 import { useModal } from "@/context";
-import { getLatestUpdates } from "@/lib/api";
+import { getVotingUpdates } from "@/lib/api";
 import { PaginationMeta, VotesTableI } from "@/lib/requests";
 import { ShowMoreButton, Typography } from "@atoms";
-import { LATEST_UPDATES_FILTERS, LATEST_UPDATES_SORTING } from "@consts";
+import { VOTING_UPDATES_FILTERS, VOTING_UPDATES_SORTING } from "@consts";
 import { useManageQueryParams, usePagination } from "@hooks";
 import { Box } from "@mui/material";
 import { countSelectedFilters, isEmpty } from "@utils";
@@ -15,16 +15,16 @@ import { NotFound } from "./NotFound";
 import { OpenPreviewReasoningModal } from "./types";
 import { VotesTable } from "./VotesTable";
 
-export const LatestUpdates = ({
-  latestUpdates,
+export const VotingUpdates = ({
+  votingUpdates,
   paginationMeta,
-  error
+  error,
 }: {
-  latestUpdates: VotesTableI[];
+  votingUpdates: VotesTableI[];
   paginationMeta: PaginationMeta;
   error?: string;
 }) => {
-  const t = useTranslations("LatestUpdates");
+  const t = useTranslations("VotingUpdates");
   const { updateQueryParams } = useManageQueryParams();
   const [searchText, setSearchText] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -49,9 +49,9 @@ export const LatestUpdates = ({
           reasoning_title: action.reasoning_title,
           rationale_url: action.rationale_url,
           status: action.gov_action_proposal_status,
-          title: action.gov_action_proposal_title
-        }
-      }
+          title: action.gov_action_proposal_title,
+        },
+      },
     });
   };
 
@@ -62,13 +62,13 @@ export const LatestUpdates = ({
         ? chosenFilters.govActionType?.join(",")
         : null,
     vote: chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
-    sortBy: chosenSorting || null
+    sortBy: chosenSorting || null,
   };
 
   const { data, pagination, isLoading, loadMore } = usePagination(
-    latestUpdates,
+    votingUpdates,
     paginationMeta,
-    (page) => getLatestUpdates({ page, ...params })
+    (page) => getVotingUpdates({ page, ...params })
   );
 
   const closeFilters = useCallback(() => {
@@ -108,16 +108,16 @@ export const LatestUpdates = ({
             setSortOpen={setSortOpen}
             sortingActive={Boolean(chosenSorting)}
             sortOpen={sortOpen}
-            sortOptions={LATEST_UPDATES_SORTING}
-            filterOptions={LATEST_UPDATES_FILTERS}
+            sortOptions={VOTING_UPDATES_SORTING}
+            filterOptions={VOTING_UPDATES_FILTERS}
           />
         </Box>
       </Box>
       {isEmpty(data) || error ? (
         <NotFound
           height="50vh"
-          title="latestUpdates.title"
-          description="latestUpdates.description"
+          title="votingUpdates.title"
+          description="votingUpdates.description"
         />
       ) : (
         <Box display="flex" flexDirection="column" gap={4}>

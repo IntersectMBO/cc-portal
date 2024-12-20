@@ -3,14 +3,14 @@ export const PATHS = {
   constitution: "/interim-constitution",
   versionHistory: "/interim-constitution/version-history",
   members: "/members",
-  latestUpdates: "/latest-updates",
+  votingUpdates: "/voting-updates",
   myActions: "/my-actions",
   governanceActions: "/governance-actions",
   logout: "/logout",
   admin: {
     home: "/admin",
-    dashboard: "/admin/dashboard"
-  }
+    dashboard: "/admin/dashboard",
+  },
 };
 
 export const EXTERNAL_LINKS = {
@@ -23,7 +23,7 @@ export const EXTERNAL_LINKS = {
   guardrailsScript:
     "https://github.com/IntersectMBO/plutus/tree/master/cardano-constitution",
   guardrailsRationale:
-    "https://docs.google.com/document/d/1FDVnDwugtA5RlgH8a-_8pWL_W-VGvMYA"
+    "https://docs.google.com/document/d/1FDVnDwugtA5RlgH8a-_8pWL_W-VGvMYA",
 };
 
 export const adminProtectedPath = PATHS.admin.dashboard;

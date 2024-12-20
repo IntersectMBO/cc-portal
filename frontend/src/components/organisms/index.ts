@@ -10,7 +10,7 @@ export * from "./Constitution";
 export * from "./MembersCard";
 export * from "./Tabs";
 export * from "./VotesTable";
-export * from "./LatestUpdates";
+export * from "./VotingUpdates";
 export * from "./MyActions";
 export * from "./PageTitleTabs";
 export * from "./GovernanceActions";

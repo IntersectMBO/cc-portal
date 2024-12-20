@@ -9,20 +9,22 @@ export const UserBasicInfo = ({
   name,
   email,
   hotAddress,
-  maxWidth = 300
+  maxWidth = 278,
+  textAlign = "left"
 }: {
   name: string;
   email?: string;
   hotAddress?: string;
   maxWidth?: number;
+  textAlign?: string;
 }) => (
   <Grid
     container
     sx={{
       paddingRight: 3,
-      width: { xxs: "auto", md: maxWidth },
+      width: { xxs: maxWidth },
       height: "100%",
-      textAlign: { xxs: "center", sm: "left" }
+      textAlign
     }}
     px={{ xxs: 1, lg: 3 }}
     display="flex"
@@ -32,7 +34,7 @@ export const UserBasicInfo = ({
       sx={{
         marginBottom: 0.5,
         minHeight: 24,
-        width: { xxs: "auto", md: maxWidth }
+        width: { xxs: maxWidth }
       }}
       dataTestId="user-info-username-text"
       variant="body1"

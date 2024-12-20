@@ -1,6 +1,6 @@
 import { FilterItems } from "@molecules";
 
-export const LATEST_UPDATES_FILTERS: Record<string, FilterItems> = {
+export const VOTING_UPDATES_FILTERS: Record<string, FilterItems> = {
   govActionType: {
     key: "govActionType",
     title: "Governance Action Type",

@@ -3,7 +3,7 @@
 import {
   ConstitutionByCid,
   ConstitutionMetadata,
-  GovActionMetadata
+  GovActionMetadata,
 } from "@organisms";
 import { getAccessToken, isEmpty, setAuthCookies } from "@utils";
 import jwt from "jsonwebtoken";
@@ -21,7 +21,7 @@ import {
   ReasoningResponseI,
   ResponseErrorI,
   UserAuthStatus,
-  VotesTableI
+  VotesTableI,
 } from "./requests";
 
 import { getTranslations } from "next-intl/server";
@@ -114,14 +114,14 @@ export async function login(
 ): Promise<LoginResponse | ResponseErrorI> {
   try {
     const res: LoginResponse = await axiosInstance.post("/api/auth/login", {
-      destination: email
+      destination: email,
     });
     return res;
   } catch (error) {
     const t = await getTranslations();
     return {
       error: t("Modals.signIn.alerts.error"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -138,7 +138,7 @@ export async function loginAuthCallback(token: string) {
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -155,7 +155,7 @@ export async function registerAuthCallback(token: string) {
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -166,8 +166,8 @@ export async function refreshToken(refresh_token: string) {
       method: "POST",
       body: JSON.stringify({ refresh_token }),
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
 
     const responseData = await res.json();
@@ -189,7 +189,7 @@ export async function getUser(
       error.res?.statusCode === 401 && t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t(`General.errors.somethingWentWrong`),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -205,12 +205,12 @@ export async function toggleUserStatus(
       `/api/users/${decodedToken?.userId}/toggle-status`,
       {
         user_id,
-        status
+        status,
       },
       {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     return res;
@@ -222,37 +222,39 @@ export async function toggleUserStatus(
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("Modals.deleteRole.alerts.error"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
 
 export async function getUsersAdmin({
   search,
+  sortBy,
   page = 1,
-  limit = DEFAULT_PAGINATION_LIMIT
+  limit = DEFAULT_PAGINATION_LIMIT,
 }: {
   search?: string;
+  sortBy?: string;
   page?: number;
   limit?: number;
 }): Promise<FetchUsersAdminI | ResponseErrorI> {
   const token = getAccessToken();
-
+  const decodedToken = await decodeUserToken();
   try {
-    const decodedToken = await decodeUserToken();
     const path = buildApiUrl(
       `/api/users/${decodedToken?.userId}/search-admin`,
       {
         search,
+        sortBy,
         page,
-        limit
+        limit,
       }
     );
     const res: { data: FetchUserData[]; meta: PaginationMeta } =
       await axiosInstance.get(path, {
         headers: {
-          Authorization: `bearer ${token}`
-        }
+          Authorization: `bearer ${token}`,
+        },
       });
     return res;
   } catch (error) {
@@ -263,7 +265,7 @@ export async function getUsersAdmin({
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -272,7 +274,7 @@ export async function getMembers({
   search,
   sortBy,
   page = 1,
-  limit = DEFAULT_PAGINATION_LIMIT
+  limit = DEFAULT_PAGINATION_LIMIT,
 }: {
   search?: string;
   sortBy?: string;
@@ -284,7 +286,7 @@ export async function getMembers({
       search,
       sortBy,
       page,
-      limit
+      limit,
     });
     const res: { data: FetchUserData[]; meta: PaginationMeta } =
       await axiosInstance.get(path);
@@ -293,18 +295,18 @@ export async function getMembers({
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
 
-export async function getLatestUpdates({
+export async function getVotingUpdates({
   page = 1,
   limit = DEFAULT_PAGINATION_LIMIT,
   search,
   govActionType,
   vote,
-  sortBy
+  sortBy,
 }: {
   page?: number;
   limit?: number;
@@ -321,7 +323,7 @@ export async function getLatestUpdates({
       sortBy,
       "filter.govActionProposal.govActionType":
         govActionType && `$in:${govActionType}`,
-      "filter.vote": vote && `$in:${vote}`
+      "filter.vote": vote && `$in:${vote}`,
     });
     const res: { data: VotesTableI[]; meta: PaginationMeta } =
       await axiosInstance.get(path);
@@ -331,7 +333,7 @@ export async function getLatestUpdates({
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -343,7 +345,7 @@ export async function getUserVotes({
   govActionType,
   vote,
   sortBy,
-  userId
+  userId,
 }: {
   page?: number;
   limit?: number;
@@ -362,7 +364,7 @@ export async function getUserVotes({
       "filter.govActionProposal.govActionType":
         govActionType && `$in:${govActionType}`,
       "filter.vote": vote && `$in:${vote}`,
-      "filter.userId": `$eq:${userId}`
+      "filter.userId": `$eq:${userId}`,
     });
     const res: { data: VotesTableI[]; meta: PaginationMeta } =
       await axiosInstance.get(path);
@@ -371,7 +373,7 @@ export async function getUserVotes({
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -388,7 +390,7 @@ export async function getGovernanceMetadata(
     const t = await getTranslations();
     return {
       error: t("Modals.govActionModal.alerts.error"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -399,7 +401,7 @@ export async function getGovernanceActions({
   search,
   govActionType,
   status,
-  sortBy
+  sortBy,
 }: {
   page?: number;
   limit?: number;
@@ -420,14 +422,14 @@ export async function getGovernanceActions({
         search,
         sortBy,
         "filter.govActionType": govActionType && `$in:${govActionType}`,
-        "filter.status": status && `$in:${status}`
+        "filter.status": status && `$in:${status}`,
       }
     );
     const res: { data: GovernanceActionTableI[]; meta: PaginationMeta } =
       await axiosInstance.get(path, {
         headers: {
-          Authorization: `bearer ${token}`
-        }
+          Authorization: `bearer ${token}`,
+        },
       });
 
     return res;
@@ -439,7 +441,7 @@ export async function getGovernanceActions({
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -456,8 +458,8 @@ export async function addOrUpdateReasoning({
       data,
       {
         headers: {
-          Authorization: `bearer ${token}`
-        }
+          Authorization: `bearer ${token}`,
+        },
       }
     );
     return response;
@@ -469,7 +471,7 @@ export async function addOrUpdateReasoning({
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -484,8 +486,8 @@ export async function getReasoningData(
       `/api/governance/users/${user?.userId}/proposals/${proposalId}/rationale`,
       {
         headers: {
-          Authorization: `bearer ${token}`
-        }
+          Authorization: `bearer ${token}`,
+        },
       }
     );
 
@@ -494,7 +496,7 @@ export async function getReasoningData(
     const t = await getTranslations();
     return {
       error: t("Modals.previewRationale.alerts.error"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -506,12 +508,12 @@ export async function registerUser(email: string) {
     const res = await axiosInstance.post(
       "/api/auth/register-user",
       {
-        destination: email
+        destination: email,
       },
       {
         headers: {
-          Authorization: `bearer ${token}`
-        }
+          Authorization: `bearer ${token}`,
+        },
       }
     );
     return res;
@@ -523,7 +525,7 @@ export async function registerUser(email: string) {
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("Modals.addMember.alerts.error"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -536,12 +538,12 @@ export async function registerAdmin(email: string, permissions: Permissions[]) {
       "/api/auth/register-admin",
       {
         destination: email,
-        permissions
+        permissions,
       },
       {
         headers: {
-          Authorization: `bearer ${token}`
-        }
+          Authorization: `bearer ${token}`,
+        },
       }
     );
     return res;
@@ -553,7 +555,7 @@ export async function registerAdmin(email: string, permissions: Permissions[]) {
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("Modals.addMember.alerts.error"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -569,8 +571,8 @@ export async function editUser(
       data,
       {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     return response;
@@ -582,7 +584,7 @@ export async function editUser(
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("Modals.signUp.alerts.error"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -599,7 +601,7 @@ export async function getConstitutionMetadata(): Promise<
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -616,7 +618,7 @@ export async function getConstitutionByCid(
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -627,8 +629,8 @@ export async function uploadConstitution(data: FormData) {
   try {
     const response = await axiosInstance.post("/api/constitution", data, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
@@ -642,7 +644,7 @@ export async function uploadConstitution(data: FormData) {
 
     return {
       error: errorMessage,
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -658,8 +660,8 @@ export async function uploadUserPhoto(
       data,
       {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
 
@@ -673,7 +675,7 @@ export async function uploadUserPhoto(
     return {
       error:
         customErrorMessage || t("Modals.signUp.alerts.errorUploadProfilePhoto"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -684,12 +686,12 @@ export async function resendRegisterEmail(email: string) {
     const res = await axiosInstance.post(
       `/api/auth/resend-register-invite`,
       {
-        destination: email
+        destination: email,
       },
       {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
 
@@ -698,7 +700,7 @@ export async function resendRegisterEmail(email: string) {
     const t = await getTranslations();
     return {
       error: t("UsersList.resendAlerts.error"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }
@@ -707,18 +709,18 @@ export async function deleteUser(sAdminId: string, userId: string) {
   try {
     const res = await axiosInstance.delete(`/api/users/${sAdminId}`, {
       data: {
-        user_id: userId
+        user_id: userId,
       },
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return res;
   } catch (error) {
     const t = await getTranslations();
     return {
       error: t("Modals.deleteUser.alerts.error"),
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }

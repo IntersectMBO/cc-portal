@@ -1,3 +1,4 @@
+import { useAppContext, useModal } from "@/context";
 import { Button, CopyButton, Typography } from "@atoms";
 import { customPalette, ICONS, PATHS } from "@consts";
 import { Box, Grid, IconButton } from "@mui/material";
@@ -191,9 +192,9 @@ export const DrawerNav = () => {
   const buttonEndIcon = pathname.includes(PATHS.versionHistory)
     ? ICONS.arrowLeft
     : ICONS.documentSearch;
+
   return (
-    <Grid container direction="column" gap={1} p={2}>
-      {/* <Button variant="contained">{t("drawer.uploadNewVersion")}</Button> */}
+    <Grid container direction="column" p={0} pt={1.5} px={2} marginTop="auto">
       <Link href={linkPath}>
         <Button fullWidth variant="outlined">
           <img src={buttonEndIcon} style={{ marginRight: 8 }} />
@@ -228,12 +229,14 @@ export const NavDrawerDesktop = ({
         borderRadius: "16px",
         height: { xxs: "95vh", md: "calc(100vh - 118px)" },
         zIndex: 1,
+        display: "flex",
+        flexDirection: "column",
         ...TABLE_OF_CONTENTS_WRAPPER_STYLE_PROPS,
       }}
     >
       <Box
         sx={{
-          height: { xxs: "90vh", md: "calc(100vh - 250px)" },
+          height: { xxs: "90vh", md: "calc(100vh - 150px)" },
           overflowY: "scroll",
           borderRadiusTop: "16px 16px 0 0",
           "&::-webkit-scrollbar": {

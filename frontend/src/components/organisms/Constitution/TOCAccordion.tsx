@@ -4,7 +4,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
+  Box
 } from "@mui/material";
 import { Children, useEffect, useState } from "react";
 import { TocNested } from "./TOCNested";
@@ -35,9 +35,9 @@ export const TocAccordion = ({ children }) => {
               sx={{
                 boxShadow: "none",
                 "&:before": {
-                  display: "none",
+                  display: "none"
                 },
-                width: "100%",
+                width: "100%"
               }}
               disableGutters
             >
@@ -49,9 +49,9 @@ export const TocAccordion = ({ children }) => {
                   padding: 0,
                   "& a": {
                     "&:active": {
-                      pointerEvents: "none", // disables the href activation on click but keep tooltip showing
-                    },
-                  },
+                      pointerEvents: "none" // disables the href activation on click but keep tooltip showing
+                    }
+                  }
                 }}
               >
                 {child.props.children[0]}
@@ -70,9 +70,9 @@ export const TocAccordion = ({ children }) => {
                       minHeight: "56px",
                       margin: "0",
                       "&:a": {
-                        margin: "auto",
-                      },
-                    },
+                        margin: "auto"
+                      }
+                    }
                   }}
                 >
                   {Array.isArray(child.props.children[1]?.props.children)
@@ -99,8 +99,8 @@ export const TocAccordion = ({ children }) => {
 
                 "& li": {
                   display: "flex",
-                  alignItems: "center",
-                },
+                  alignItems: "center"
+                }
               }}
             >
               {child}
@@ -112,8 +112,8 @@ export const TocAccordion = ({ children }) => {
                 padding: 0,
                 height: "56px",
                 "& li": {
-                  minHeight: "56px",
-                },
+                  minHeight: "56px"
+                }
               }}
             >
               {child}
