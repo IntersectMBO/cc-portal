@@ -57,7 +57,7 @@ export class AppModule {
   ) {}
 
   onModuleInit() {
-    this.scheduler.registerJob(this.prunePeerStoreJob);
+    // this.scheduler.registerJob(this.prunePeerStoreJob);
     this.scheduler.registerJob(this.provideAllCidsJob);
   }
 }

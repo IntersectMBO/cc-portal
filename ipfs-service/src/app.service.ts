@@ -5,13 +5,32 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { createHelia } from 'helia';
-import type { HeliaLibp2p } from 'helia';
 import { CID } from 'multiformats/cid';
 import * as raw from 'multiformats/codecs/raw';
+import { bootstrap } from '@libp2p/bootstrap';
+import { identify } from '@libp2p/identify';
+import { webSockets } from '@libp2p/websockets';
+import { tcp } from '@libp2p/tcp';
+import { noise } from '@chainsafe/libp2p-noise';
+import { yamux } from '@chainsafe/libp2p-yamux';
 import { unixfs } from '@helia/unixfs';
 import { FsBlockstore } from 'blockstore-fs';
-import { LevelDatastore } from 'datastore-level';
+import { FsDatastore } from 'datastore-fs';
 import { IPNS, ipns } from '@helia/ipns';
+import { keychain } from '@libp2p/keychain';
+import { kadDHT, removePrivateAddressesMapper } from '@libp2p/kad-dht';
+import { ipnsSelector } from 'ipns/selector';
+import { ipnsValidator } from 'ipns/validator';
+import { dcutr } from '@libp2p/dcutr';
+import { autoNAT } from '@libp2p/autonat';
+import { ping } from '@libp2p/ping';
+import { uPnPNAT } from '@libp2p/upnp-nat';
+import { mdns } from '@libp2p/mdns';
+import { createDelegatedRoutingV1HttpApiClient } from '@helia/delegated-routing-v1-http-api-client';
+import {
+  circuitRelayTransport,
+  circuitRelayServer,
+} from '@libp2p/circuit-relay-v2';
 import { IpfsMapper } from './mapper/ipfs.mapper.js';
 import { IpfsDto } from './dto/ipfs.dto.js';
 import { PeerId } from '@libp2p/interface';
@@ -22,9 +41,77 @@ import { ProvideAllCidsProducer } from './queues/producers/provide-all-cids.prod
 import fs from 'fs';
 config();
 
+const libp2pOptions = {
+  config: {
+    dht: {
+      enabled: true,
+    },
+  },
+  addresses: {
+    listen: [
+      // add a listen address (localhost) to accept TCP connections on a random port
+      process.env.LISTEN_TCP_ADDRESS,
+      process.env.LISTEN_WS_ADDRESS,
+      process.env.LISTEN_QUIC_ADDRESS,
+    ],
+  },
+  connectionManager: {
+    autoDial: true, // Attempt to dial new peers automatically
+    minConnections: 10, // Set a minimum number of connections
+    maxConnections: 100, // Adjust based on your requirements
+  },
+  gater: {
+    denyDialPeer: () => false, // Allow all peers
+    denyDialMultiaddr: () => false, // Allow all multiaddresses
+    denyInboundConnection: () => false, // Allow inbound connections
+    denyOutboundConnection: () => false, // Allow outbound connections
+  },
+  transports: [
+    circuitRelayTransport({ discoverRelays: 1 }),
+    tcp(),
+    webSockets(),
+  ],
+  connectionEncryption: [noise()],
+  streamMuxers: [yamux()],
+  peerDiscovery: [
+    mdns(),
+    bootstrap({
+      list: [
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
+        '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
+        '/ip4/104.131.131.82/udp/4001/quic-v1/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
+      ],
+    }),
+  ],
+  services: {
+    autoNAT: autoNAT(),
+    dcutr: dcutr(),
+    delegatedRouting: () =>
+      createDelegatedRoutingV1HttpApiClient(
+        'https://delegated-ipfs.dev/routing/v1',
+      ),
+    dht: kadDHT({
+      clientMode: false,
+      peerInfoMapper: removePrivateAddressesMapper,
+      protocol: '/ipfs/kad/1.0.0',
+      validators: { ipns: ipnsValidator },
+      selectors: { ipns: ipnsSelector },
+    }),
+    identify: identify(),
+    keychain: keychain(),
+    ping: ping(),
+    relay: circuitRelayServer(),
+    upnp: uPnPNAT(),
+  },
+};
+
 @Injectable()
 export class AppService implements OnModuleInit {
-  private helia: HeliaLibp2p;
+  private helia;
   private fs;
   private ipns: IPNS;
   private ipnsPeerId: PeerId;
@@ -48,15 +135,16 @@ export class AppService implements OnModuleInit {
     }
   }
 
-  async getHelia(): Promise<HeliaLibp2p> {
+  async getHelia() {
     if (this.helia == null) {
       const blockstore = new FsBlockstore('ipfs/blockstore');
-      const datastore = new LevelDatastore('ipfs/datastore');
+      const datastore = new FsDatastore('ipfs/datastore');
       await datastore.open();
 
       this.helia = await createHelia({
         blockstore,
         datastore,
+        libp2p: libp2pOptions,
       });
 
       this.logger.log('PeerId: ' + this.helia.libp2p.peerId.toString());
