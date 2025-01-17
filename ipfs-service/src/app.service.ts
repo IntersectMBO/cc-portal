@@ -5,6 +5,7 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { createHelia } from 'helia';
+import type { HeliaLibp2p } from 'helia';
 import { CID } from 'multiformats/cid';
 import * as raw from 'multiformats/codecs/raw';
 import { bootstrap } from '@libp2p/bootstrap';
@@ -111,7 +112,7 @@ const libp2pOptions = {
 
 @Injectable()
 export class AppService implements OnModuleInit {
-  private helia;
+  private helia: HeliaLibp2p;
   private fs;
   private ipns: IPNS;
   private ipnsPeerId: PeerId;
@@ -135,7 +136,7 @@ export class AppService implements OnModuleInit {
     }
   }
 
-  async getHelia() {
+  async getHelia(): Promise<HeliaLibp2p> {
     if (this.helia == null) {
       const blockstore = new FsBlockstore('ipfs/blockstore');
       const datastore = new FsDatastore('ipfs/datastore');
@@ -144,7 +145,6 @@ export class AppService implements OnModuleInit {
       this.helia = await createHelia({
         blockstore,
         datastore,
-        libp2p: libp2pOptions,
       });
 
       this.logger.log('PeerId: ' + this.helia.libp2p.peerId.toString());
