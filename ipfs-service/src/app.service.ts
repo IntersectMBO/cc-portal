@@ -91,9 +91,7 @@ const libp2pOptions = {
     autoNAT: autoNAT(),
     dcutr: dcutr(),
     delegatedRouting: () =>
-      createDelegatedRoutingV1HttpApiClient(
-        'https://delegated-ipfs.dev/routing/v1',
-      ),
+      createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
     dht: kadDHT({
       clientMode: false,
       peerInfoMapper: removePrivateAddressesMapper,
