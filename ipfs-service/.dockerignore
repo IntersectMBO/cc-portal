@@ -1,0 +1,7 @@
+# compiled output
+/dist
+/node_modules
+
+# ipfs blockstore/datestore
+/ipfs
+/ipfs_data
