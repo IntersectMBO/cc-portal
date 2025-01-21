@@ -54,6 +54,10 @@ const libp2pOptions = {
       process.env.LISTEN_WS_ADDRESS,
       process.env.LISTEN_QUIC_ADDRESS,
     ],
+    announce: [
+      process.env.ANNOUNCE_TCP_ADDRESS,
+      process.env.ANNOUNCE_WS_ADDRESS,
+    ],
   },
   connectionManager: {
     autoDial: true, // Attempt to dial new peers automatically
