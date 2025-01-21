@@ -54,6 +54,10 @@ const libp2pOptions = {
       process.env.LISTEN_WS_ADDRESS,
       process.env.LISTEN_QUIC_ADDRESS,
     ],
+    announce: [
+      process.env.ANNOUNCE_TCP_ADDRESS,
+      process.env.ANNOUNCE_WS_ADDRESS,
+    ],
   },
   connectionManager: {
     autoDial: true, // Attempt to dial new peers automatically
@@ -91,9 +95,7 @@ const libp2pOptions = {
     autoNAT: autoNAT(),
     dcutr: dcutr(),
     delegatedRouting: () =>
-      createDelegatedRoutingV1HttpApiClient(
-        'https://delegated-ipfs.dev/routing/v1',
-      ),
+      createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
     dht: kadDHT({
       clientMode: false,
       peerInfoMapper: removePrivateAddressesMapper,
