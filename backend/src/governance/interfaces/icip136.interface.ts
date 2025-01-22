@@ -1,11 +1,13 @@
-export interface ICIP100 {
+export interface ICIP136 {
   '@context': Context;
   hashAlgorithm: string;
-  authors: any[];
+  authors: AuthorContent[];
   body: BodyContent;
 }
 interface Context {
   '@language': string;
+  CIP100: string;
+  CIP136: string;
   hashAlgorithm: string;
   body: Body;
   authors: Authors;
@@ -18,8 +20,12 @@ interface Body {
 
 interface BodyContext {
   references: References;
-  comment: string;
-  externalUpdates: ExternalUpdates;
+  summary: string;
+  rationaleStatement: string;
+  precedentDiscussion: string;
+  counterargumentDiscussion: string;
+  conclusion: string;
+  internalVote: InternalVote;
 }
 
 interface References {
@@ -29,20 +35,24 @@ interface References {
 }
 
 interface ReferencesContext {
-  governanceMetadata: string;
-  other: string;
+  GovernanceMetadata: string;
+  Other: string;
   label: string;
   uri: string;
+  RelevantArticles: string;
 }
 
-interface ExternalUpdates {
+interface InternalVote {
   '@id': string;
-  '@context': ExternalUpdatesContext;
+  '@container': string;
+  '@context': InternalVoteContext;
 }
 
-interface ExternalUpdatesContext {
-  title: string;
-  uri: string;
+interface InternalVoteContext {
+  constitutional: string;
+  unconstitutional: string;
+  abstain: string;
+  didNotVote: string;
 }
 
 interface Authors {
@@ -69,5 +79,10 @@ interface WitnessContext {
 }
 
 interface BodyContent {
-  comment: string;
+  summary: string;
+  rationaleStatement: string;
+}
+
+interface AuthorContent {
+  name: string;
 }
