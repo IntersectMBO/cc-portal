@@ -26,7 +26,7 @@ import {
 
 import { getTranslations } from "next-intl/server";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
-const DEFAULT_PAGINATION_LIMIT = 7;
+const DEFAULT_PAGINATION_LIMIT = 12;
 
 /**
  * Checks if the provided token is expired.
