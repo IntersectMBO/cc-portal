@@ -41,9 +41,12 @@ export function MultipleSelect({
   required,
   name,
   dataTestId,
+  value = [],
 }: MultipleSelectProps) {
   const theme = useTheme();
-  const [selectedValue, setSelectedValue] = React.useState<string[]>([]);
+  const [selectedValue, setSelectedValue] = React.useState<string[]>(
+    Array.isArray(value) ? value : [value]
+  );
 
   const handleChange = (event: SelectChangeEvent<typeof selectedValue>) => {
     const {
@@ -54,9 +57,9 @@ export function MultipleSelect({
     onChange(event);
   };
 
-  const renderValue = () => {
+  const renderValue = (selected: string[]) => {
     if (!multiple) {
-      if (selectedValue.length === 0) {
+      if (selected.length === 0) {
         return (
           <Typography
             fontWeight={400}
@@ -67,37 +70,46 @@ export function MultipleSelect({
           </Typography>
         );
       }
-      const selectedOption = items.find(
-        (item) => item.value === selectedValue[0]
+      const selectedOption = items.find((item) => item.value === selected[0]);
+      const label = selectedOption?.label ?? "";
+      return (
+        <Typography dataTestId={`${dataTestId}-item-selected`} variant="body2">
+          {label.length > 50 ? `${label.substring(0, 50)}...` : label}
+        </Typography>
       );
-      if (selectedOption) {
-        return (
-          <Typography
-            dataTestId={`${dataTestId}-item-selected`}
-            variant="body2"
-          >
-            {selectedOption.label}
-          </Typography>
-        );
-      }
     }
+
+    if (selected.length === 0) {
+      return (
+        <Typography
+          fontWeight={400}
+          variant="body1"
+          color={customPalette.inputPlaceholder}
+        >
+          {placeholder}
+        </Typography>
+      );
+    }
+
+    const selectedLabels = selected
+      .map(
+        (selectedItem) =>
+          items.find((item) => item.value === selectedItem)?.label
+      )
+      .filter(Boolean) as string[];
+
+    const combinedText = selectedLabels.join(", ");
     return (
-      <Typography
-        fontWeight={400}
-        variant="body1"
-        color={customPalette.inputPlaceholder}
-      >
-        {placeholder}
+      <Typography dataTestId={`${dataTestId}-selected-values`} variant="body2">
+        {combinedText.length > 50
+          ? `${combinedText.substring(0, 50)}...`
+          : combinedText}
       </Typography>
     );
   };
 
   return (
-    <FormControl
-      sx={{
-        width: "100%",
-      }}
-    >
+    <FormControl sx={{ width: "100%" }}>
       <Select
         name={name}
         multiple={multiple}
@@ -106,7 +118,7 @@ export function MultipleSelect({
         onChange={handleChange}
         input={<Input />}
         IconComponent={() => <img src={ICONS.arrowDown} />}
-        renderValue={renderValue}
+        renderValue={(selected) => renderValue(selected as string[])}
         MenuProps={MenuProps}
         required={required}
         data-testid={`${dataTestId}--dropdown`}
