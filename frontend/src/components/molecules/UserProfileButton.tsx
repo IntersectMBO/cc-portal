@@ -95,9 +95,9 @@ export default function UserProfileButton({
           }}
           PaperProps={{
             style: {
-              boxShadow: "none",
-              border: `1px solid ${theme.palette.primary.main}`,
+              boxShadow: "1px 2px 11px 0px #00123D5E",
               minWidth: menuWidth || "auto",
+              marginTop: "7px",
             },
           }}
         >
