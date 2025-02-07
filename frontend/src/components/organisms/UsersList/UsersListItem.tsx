@@ -4,7 +4,7 @@ import {
   UserAvatar,
   UserBasicInfo,
   UserRole,
-  UserStatus
+  UserStatus,
 } from "@/components/molecules";
 import { UserStatus as UserStatusType } from "@atoms";
 import { Box, Grid } from "@mui/material";
@@ -17,7 +17,7 @@ export function UsersListItem({
   email,
   role,
   status,
-  profile_photo_url
+  profile_photo_url,
 }: Pick<
   UserListItem,
   "id" | "name" | "email" | "role" | "status" | "profile_photo_url"
@@ -61,7 +61,7 @@ export function UsersListItem({
     <Card
       variant="default"
       sx={{
-        padding: { xxs: 2, md: 3 }
+        padding: { xxs: 2, md: 3 },
       }}
     >
       <Grid

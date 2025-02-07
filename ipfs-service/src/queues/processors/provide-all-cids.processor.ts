@@ -1,30 +1,27 @@
 import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import {
-  JOB_NAME_PROVIDE_TO_DHT,
-  QUEUE_NAME_PROVIDE_TO_DHT,
+  JOB_NAME_PROVIDE_ALL_CIDS,
+  QUEUE_NAME_PROVIDE_ALL_CIDS,
 } from '../../constants/bullmq.constants.js';
 import { Logger } from '@nestjs/common';
 import { AppService } from '../../app.service.js';
-import { CID } from 'multiformats/cid';
 
-@Processor(QUEUE_NAME_PROVIDE_TO_DHT)
-export class ProvideToDHTProcessor extends WorkerHost {
-  protected readonly logger = new Logger(ProvideToDHTProcessor.name);
+@Processor(QUEUE_NAME_PROVIDE_ALL_CIDS)
+export class ProvideAllCidsProcessor extends WorkerHost {
+  protected readonly logger = new Logger(ProvideAllCidsProcessor.name);
   constructor(private readonly appService: AppService) {
     super();
   }
 
   async process(job: Job<any>): Promise<any> {
     switch (job.name) {
-      case JOB_NAME_PROVIDE_TO_DHT: {
-        const cid = CID.parse(job.data);
-        this.logger.debug(
-          'Job triggered: Provide to DHT - CID:',
-          cid.toString(),
-        );
+      case JOB_NAME_PROVIDE_ALL_CIDS: {
         try {
-          await this.appService.provideCidtoDHTViaQueue(cid);
+          this.logger.debug(
+            `Processing CIDs - amount of CIDs to be processed, ${job.data?.length}`,
+          );
+          await this.appService.provideCidsToDHTViaQueue(job.data);
         } catch (error) {
           this.logger.error(
             `Error processing job id: ${job.id}, name: ${job.name}. - Error: ${error}`,

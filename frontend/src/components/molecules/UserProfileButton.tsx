@@ -8,9 +8,10 @@ import Menu from "@mui/material/Menu";
 import { useTranslations } from "next-intl";
 import * as React from "react";
 import { Button } from "../atoms";
+import theme from "@/theme";
 
 export default function UserProfileButton({
-  user
+  user,
 }: {
   user: Pick<FetchUserData, "name" | "profile_photo_url">;
 }) {
@@ -18,9 +19,12 @@ export default function UserProfileButton({
   const t = useTranslations();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [menuWidth, setMenuWidth] = React.useState<number | null>(null);
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+    setMenuWidth(event.currentTarget.offsetWidth);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -31,8 +35,8 @@ export default function UserProfileButton({
       type: "signUpModal",
       state: {
         showCloseButton: true,
-        title: t("Modals.editProfile.headline")
-      }
+        title: t("Modals.editProfile.headline"),
+      },
     });
     handleClose();
   };
@@ -41,8 +45,8 @@ export default function UserProfileButton({
     openModal({
       type: "signOutModal",
       state: {
-        homeRedirectionPath: PATHS.home
-      }
+        homeRedirectionPath: PATHS.home,
+      },
     });
   };
 
@@ -87,10 +91,14 @@ export default function UserProfileButton({
           open={open}
           onClose={handleClose}
           MenuListProps={{
-            "aria-labelledby": "basic-button"
+            "aria-labelledby": "basic-button",
           }}
           PaperProps={{
-            style: { boxShadow: "none" }
+            style: {
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.primary.main}`,
+              minWidth: menuWidth || "auto",
+            },
           }}
         >
           <Grid

@@ -13,6 +13,13 @@ import { CONNECTION_NAME_DB_SYNC } from '../common/constants/sql.constants';
         database: configService.getOrThrow('BE_POSTGRES_DB'),
         username: configService.getOrThrow('BE_POSTGRES_USERNAME'),
         password: configService.getOrThrow('BE_POSTGRES_PASSWORD'),
+        ...(configService.get('BE_POSTGRES_TLS') === 'false'
+          ? {}
+          : {
+              ssl: {
+                rejectUnauthorized: false,
+              },
+            }),
         autoLoadEntities: true,
       }),
       inject: [ConfigService],

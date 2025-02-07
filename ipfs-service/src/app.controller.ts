@@ -38,7 +38,7 @@ export class AppController {
     if (!doc) {
       throw new NotFoundException(`Document with cid: ${cid} not found`);
     }
-    return doc
+    return doc;
   }
 
   @Get('ipns/url')
