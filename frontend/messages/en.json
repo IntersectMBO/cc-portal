@@ -251,6 +251,7 @@
       "rationaleLink": "Rationale link",
       "rationale": "Rationale",
       "notAvailable": "Not Available",
+      "governanceActionAbstract": "Governance Action Abstract",
       "governanceActionStatus": "Governance Action Status",
       "governanceActionCategory": "Governance Action Category",
       "governanceActionId": "Governance Action ID",
