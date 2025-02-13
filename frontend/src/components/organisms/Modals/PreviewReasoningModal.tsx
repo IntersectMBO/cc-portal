@@ -9,7 +9,7 @@ import {
   ModalWrapper,
   OutlinedLightButton,
   Typography,
-  VotePill
+  VotePill,
 } from "@atoms";
 import { IMAGES } from "@consts";
 import { useModal } from "@context";
@@ -19,7 +19,7 @@ import {
   formatDisplayDate,
   getProposalTypeLabel,
   getShortenedGovActionId,
-  isResponseErrorI
+  isResponseErrorI,
 } from "@utils";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -29,7 +29,7 @@ export const PreviewReasoningModal = () => {
   const t = useTranslations("Modals");
   const {
     closeModal,
-    state: { govAction, onActionClick, actionTitle }
+    state: { govAction, onActionClick, actionTitle },
   } = useModal<OpenPreviewReasoningModal>();
   const onClose = () => {
     closeModal();
@@ -74,21 +74,64 @@ export const PreviewReasoningModal = () => {
         sx={{
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          backgroundColor: "rgba(255, 255, 255, 0.3)"
+          backgroundColor: "rgba(255, 255, 255, 0.3)",
         }}
         pt={2}
         pb={2}
         px={{ xxs: 2.25, md: 3 }}
       >
-        <Box>
-          <Typography
-            variant="body2"
-            fontWeight={400}
-            sx={{ pb: 0 }}
-            data-testid="governance-action-modal-abstract-text"
-          >
-            {govMetadata.abstract}
+        <Box
+          display="flex"
+          flexDirection={{ xxs: "column", md: "row" }}
+          gap={isMobile ? 2 : 5}
+        >
+          {govAction.vote && (
+            <Box>
+              <Typography color="neutralGray" variant="caption">
+                {t("previewRationale.voted")}
+              </Typography>
+              <Box display="flex" mt={0.25}>
+                <VotePill vote={govAction.vote} />
+              </Box>
+            </Box>
+          )}
+          <Box>
+            <Typography color="neutralGray" variant="caption">
+              {t("previewRationale.rationale")}
+            </Typography>
+            {govAction.rationale_url ? (
+              <Box display="flex" mt={0.25}>
+                <CopyPill
+                  copyValue={govAction.rationale_url}
+                  copyText={getShortenedGovActionId(
+                    govAction.rationale_url,
+                    isMobile ? 4 : 20
+                  )}
+                />
+              </Box>
+            ) : (
+              <Box display="flex" mt={0.25}>
+                <OutlinedLightButton sx={{ minHeight: "30px" }} nonInteractive>
+                  {t("previewRationale.notAvailable")}
+                </OutlinedLightButton>
+              </Box>
+            )}
+          </Box>
+        </Box>
+        <Box mt={3}>
+          <Typography color="neutralGray" variant="caption">
+            {t("previewRationale.governanceActionAbstract")}
           </Typography>
+          <Box display="flex" mt={0.25}>
+            <Typography
+              variant="body2"
+              fontWeight={400}
+              sx={{ pb: 0 }}
+              data-testid="governance-action-modal-abstract-text"
+            >
+              {govMetadata.abstract}
+            </Typography>
+          </Box>
         </Box>
         <Box mt={3}>
           <Typography color="neutralGray" variant="caption">
@@ -126,39 +169,6 @@ export const PreviewReasoningModal = () => {
               {govAction.status}
             </OutlinedLightButton>
           </Box>
-        </Box>
-        {govAction.vote && (
-          <Box mt={3}>
-            <Typography color="neutralGray" variant="caption">
-              {t("previewRationale.voted")}
-            </Typography>
-            <Box
-              display="flex"
-              mt={0.25}
-              data-testid={`rationale-modal-vote-text`}
-            >
-              <VotePill vote={govAction.vote} />
-            </Box>
-          </Box>
-        )}
-
-        <Box mt={3} data-testid="governance-action-rationale-url">
-          <Typography color="neutralGray" variant="caption">
-            {t("previewRationale.rationale")}
-          </Typography>
-          {govAction.rationale_url ? (
-            <CopyPill
-              copyValue={govAction.rationale_url}
-              copyText={getShortenedGovActionId(
-                govAction.rationale_url,
-                isMobile ? 4 : 20
-              )}
-            />
-          ) : (
-            <Typography variant="caption">
-              {t("previewRationale.notAvailable")}
-            </Typography>
-          )}
         </Box>
       </Box>
 
@@ -213,9 +223,7 @@ export const PreviewReasoningModal = () => {
           <Button
             onClick={() => onActionClick(govAction.id)}
             variant="contained"
-            sx={{
-              marginBottom: 1.5
-            }}
+            sx={{ marginBottom: 1.5 }}
             data-testid="rationale-modal-action-button"
           >
             {actionTitle}
@@ -224,9 +232,7 @@ export const PreviewReasoningModal = () => {
         <Button
           onClick={onClose}
           variant="outlined"
-          sx={{
-            width: !onActionClick ? "100%" : undefined
-          }}
+          sx={{ width: !onActionClick ? "100%" : undefined }}
           data-testid="rationale-modal-close-button"
         >
           {t("common.close")}
