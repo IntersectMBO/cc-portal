@@ -3,8 +3,8 @@
     "title": "Web App Boilerplate",
     "hero": {
       "headline": "Championing Cardano's community-led governance",
-      "description": "Until a final Cardano Constitution has been developed and ratified by the community - a programme of consultation taking place throughout 2024 - a set of interim rules is required to support the transition.",
-      "seeConstitution": "Read the Interim Constitution",
+      "description": "Until a final Cardano Constitution has been developed and ratified by the community - a programme of consultation taking place throughout 2024 - a set of rules is required to support the transition.",
+      "seeConstitution": "Read the Constitution",
       "guardrailsScript": "Guardrails Script",
       "guardrailsRationale": "Guardrails Rationale",
       "signIn": "Sign In",
@@ -12,7 +12,7 @@
     }
   },
   "Constitution": {
-    "title": "Interim Constitution",
+    "title": "Constitution",
     "drawer": {
       "compare": "Compare",
       "versionHistory": "Version History",

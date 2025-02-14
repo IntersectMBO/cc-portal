@@ -4,7 +4,7 @@ export const NAV_ITEMS = [
   {
     dataTestId: "constitution-link",
     href: PATHS.constitution,
-    label: "Interim Constitution",
+    label: "Constitution",
     newTabLink: null,
   },
   {
