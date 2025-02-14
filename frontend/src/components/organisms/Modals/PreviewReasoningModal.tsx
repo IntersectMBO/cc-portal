@@ -101,13 +101,14 @@ export const PreviewReasoningModal = () => {
             </Typography>
             {govAction.rationale_url ? (
               <Box display="flex" mt={0.25}>
-                <CopyPill
-                  copyValue={govAction.rationale_url}
-                  copyText={getShortenedGovActionId(
+                <OutlinedLightButton
+                  onClick={() => window.open(govAction.rationale_url, "_blank")}
+                >
+                  {getShortenedGovActionId(
                     govAction.rationale_url,
                     isMobile ? 4 : 20
                   )}
-                />
+                </OutlinedLightButton>
               </Box>
             ) : (
               <Box display="flex" mt={0.25}>
