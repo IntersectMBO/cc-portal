@@ -25,8 +25,6 @@ import { GovActionProposal } from '../entities/gov-action-proposal.entity';
 
 @Injectable()
 export class VoteService extends CommonService {
-  // private cronInterval: string;
-
   constructor(
     @InjectDataSource(CONNECTION_NAME_DB_SYNC)
     dataSource: DataSource,
@@ -41,25 +39,21 @@ export class VoteService extends CommonService {
     private readonly configService: ConfigService,
   ) {
     super(dataSource);
-    // this.cronInterval =
-    //   this.configService.get<string>('VOTES_JOB_FREQUENCY') || '0 * * * * *';
     this.logger = new Logger(VoteService.name);
   }
 
-  // getCronExpression(): string {
-  //   return this.cronInterval;
-  // }
-
   async storeVoteData(voteRequests: VoteRequest[]): Promise<void> {
     const votes = await this.prepareVotes(voteRequests);
-    try {
-      await this.entityManager.transaction(async () => {
-        return await this.voteRepository.save(votes);
-      });
-    } catch (e) {
-      this.logger.error(`Error within transaction: ${e.message}`);
-      throw new InternalServerErrorException('Transaction failed');
-    }
+    votes.forEach(async (vote) => {
+      try {
+        await this.voteRepository.save(vote);
+      } catch (e) {
+        this.logger.error(
+          `Error within vote sync for vote_id ${vote.id}: ${e.message}`,
+        );
+        //throw new InternalServerErrorException(`Vote sync failed`);
+      }
+    });
   }
 
   private async prepareVotes(
