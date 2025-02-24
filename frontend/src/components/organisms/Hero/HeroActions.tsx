@@ -1,7 +1,6 @@
 "use client";
-import { OutlinedLightButton } from "@/components/atoms";
 import { Button } from "@/components/atoms/Button";
-import { EXTERNAL_LINKS, ICONS, IMAGES, PATHS } from "@/constants";
+import { IMAGES, PATHS } from "@/constants";
 import { useModal } from "@context";
 import { Grid } from "@mui/material";
 import { useTranslations } from "next-intl";
