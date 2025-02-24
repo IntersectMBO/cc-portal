@@ -33,7 +33,7 @@ export const Hero = ({ children }: HeroProps) => {
           variant="title1"
           sx={{
             maxWidth: 630,
-            my: { xxs: 2, md: 5 },
+            my: { xxs: 2, md: 2 },
             whiteSpace: "pre-line"
           }}
           data-testid="hero-section-description-text"

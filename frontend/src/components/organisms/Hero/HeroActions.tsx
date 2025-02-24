@@ -27,7 +27,7 @@ export function HeroActions({ role }: HeroActionsProps) {
               startIcon={<img src={IMAGES.login} />}
               onClick={() => {
                 openModal({
-                  type: "signIn"
+                  type: "signIn",
                 });
               }}
               data-testid="admin-hero-sign-in-button"
@@ -64,34 +64,6 @@ export function HeroActions({ role }: HeroActionsProps) {
               {t("hero.seeConstitution")}
             </Button>
           </Link>
-          <a
-            href={EXTERNAL_LINKS.guardrailsScript}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "inherit", textDecoration: "none" }}
-          >
-            <OutlinedLightButton
-              size="large"
-              data-testid="hero-see-guardrails-script-button"
-              sx={{ height: "40px", fontSize: 14, fontWeight: 500 }}
-            >
-              {t("hero.guardrailsScript")}
-            </OutlinedLightButton>
-          </a>
-          <a
-            href={EXTERNAL_LINKS.guardrailsRationale}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "inherit", textDecoration: "none" }}
-          >
-            <OutlinedLightButton
-              size="large"
-              data-testid="hero-see-guardrails-rationale-button"
-              sx={{ height: "40px", fontSize: 14, fontWeight: 500 }}
-            >
-              {t("hero.guardrailsRationale")}
-            </OutlinedLightButton>
-          </a>
         </Grid>
       )}
     </Grid>

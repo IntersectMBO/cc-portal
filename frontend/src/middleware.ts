@@ -22,7 +22,7 @@ const intlMiddleware = createMiddleware({
 export const config = {
   matcher: [
     "/",
-    "/interim-constitution",
+    "/constitution",
     "/voting-updates",
     "/my-actions",
     "/governance-actions",
