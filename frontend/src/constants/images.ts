@@ -17,5 +17,4 @@ export const IMAGES = {
   docSearch: "/images/DocSearch.png",
   menu: "/images/Menu.png",
   readingBook: "/images/ReadingBook.png",
-  openBook: "/images/OpenBook.svg",
 };
