@@ -59,7 +59,7 @@ export function HeroActions({ role }: HeroActionsProps) {
             <Button
               size="large"
               data-testid="hero-see-constitution-button"
-              startIcon={<img src={ICONS.rocketLaunch} />}
+              startIcon={<img src={IMAGES.readingBook} />}
             >
               {t("hero.seeConstitution")}
             </Button>
