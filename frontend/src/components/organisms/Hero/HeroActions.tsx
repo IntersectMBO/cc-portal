@@ -58,7 +58,12 @@ export function HeroActions({ role }: HeroActionsProps) {
             <Button
               size="large"
               data-testid="hero-see-constitution-button"
-              startIcon={<img src={IMAGES.readingBook} />}
+              startIcon={
+                <img
+                  src={IMAGES.readingBook}
+                  style={{ width: "30px", height: "30px" }}
+                />
+              }
             >
               {t("hero.seeConstitution")}
             </Button>
