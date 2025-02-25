@@ -42,32 +42,30 @@ import fs from 'fs';
 config();
 
 const libp2pOptions = {
-  config: {
-    dht: {
-      enabled: true,
-    },
-  },
   addresses: {
     listen: [
       // add a listen address (localhost) to accept TCP connections on a random port
       process.env.LISTEN_TCP_ADDRESS,
       process.env.LISTEN_WS_ADDRESS,
-      process.env.LISTEN_QUIC_ADDRESS,
+      // process.env.LISTEN_QUIC_ADDRESS,
+    ],
+    announce: [
+      process.env.ANNOUNCE_TCP_ADDRESS,
+      process.env.ANNOUNCE_WS_ADDRESS,
     ],
   },
   connectionManager: {
-    autoDial: true, // Attempt to dial new peers automatically
-    minConnections: 10, // Set a minimum number of connections
-    maxConnections: 100, // Adjust based on your requirements
+    minConnections: 50, // Set a minimum number of connections
+    maxConnections: 300, // Adjust based on your requirements
   },
-  gater: {
+  connectionGater: {
     denyDialPeer: () => false, // Allow all peers
     denyDialMultiaddr: () => false, // Allow all multiaddresses
     denyInboundConnection: () => false, // Allow inbound connections
     denyOutboundConnection: () => false, // Allow outbound connections
   },
   transports: [
-    circuitRelayTransport({ discoverRelays: 1 }),
+    // circuitRelayTransport({ discoverRelays: 1 }),
     tcp(),
     webSockets(),
   ],
@@ -77,13 +75,13 @@ const libp2pOptions = {
     mdns(),
     bootstrap({
       list: [
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
+        '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
         '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
+        // va1 is not in the TXT records for _dnsaddr.bootstrap.libp2p.io yet
+        // so use the host name directly
+        '/dnsaddr/va1.bootstrap.libp2p.io/p2p/12D3KooWKnDdG3iXw9eTFijk3EWSunZcFi54Zka4wmtqtt6rPxc8',
         '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
-        '/ip4/104.131.131.82/udp/4001/quic-v1/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
       ],
     }),
   ],
@@ -91,7 +89,9 @@ const libp2pOptions = {
     autoNAT: autoNAT(),
     dcutr: dcutr(),
     delegatedRouting: () =>
-      createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev'),
+      createDelegatedRoutingV1HttpApiClient(
+        'https://delegated-ipfs.dev/routing/v1',
+      ),
     dht: kadDHT({
       clientMode: false,
       peerInfoMapper: removePrivateAddressesMapper,
@@ -102,7 +102,7 @@ const libp2pOptions = {
     identify: identify(),
     keychain: keychain(),
     ping: ping(),
-    relay: circuitRelayServer(),
+    // relay: circuitRelayServer(),
     upnp: uPnPNAT(),
   },
 };
