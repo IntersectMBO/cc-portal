@@ -1,7 +1,6 @@
 "use client";
-import { OutlinedLightButton } from "@/components/atoms";
 import { Button } from "@/components/atoms/Button";
-import { EXTERNAL_LINKS, ICONS, IMAGES, PATHS } from "@/constants";
+import { IMAGES, PATHS } from "@/constants";
 import { useModal } from "@context";
 import { Grid } from "@mui/material";
 import { useTranslations } from "next-intl";
@@ -59,7 +58,7 @@ export function HeroActions({ role }: HeroActionsProps) {
             <Button
               size="large"
               data-testid="hero-see-constitution-button"
-              startIcon={<img src={ICONS.rocketLaunch} />}
+              startIcon={<img src={IMAGES.readingBook} />}
             >
               {t("hero.seeConstitution")}
             </Button>
