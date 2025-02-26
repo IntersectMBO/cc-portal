@@ -56,9 +56,14 @@ export function HeroActions({ role }: HeroActionsProps) {
         >
           <Link href={PATHS.constitution}>
             <Button
-              size="extraLarge"
+              size="large"
               data-testid="hero-see-constitution-button"
-              startIcon={<img src={ICONS.rocketLaunch} />}
+              startIcon={
+                <img
+                  src={IMAGES.readingBook}
+                  style={{ width: "30px", height: "30px" }}
+                />
+              }
             >
               {t("hero.seeConstitution")}
             </Button>
