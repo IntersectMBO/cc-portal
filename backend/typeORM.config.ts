@@ -36,6 +36,8 @@ export default new DataSource({
   ...(configService.get('POSTGRES_TLS') === 'false'
     ? {}
     : {
-        ssl: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
       }),
 });
