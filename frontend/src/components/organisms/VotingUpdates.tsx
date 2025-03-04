@@ -54,20 +54,21 @@ export const VotingUpdates = ({
       },
     });
   };
+
   const params: Record<string, string | null> = {
     search: searchText || null,
     govActionType:
       chosenFilters.govActionType?.length > 0
-        ? chosenFilters.govActionType.join(",")
+        ? chosenFilters.govActionType?.join(",")
         : null,
-    vote: chosenFilters.vote?.length > 0 ? chosenFilters.vote.join(",") : null,
+    vote: chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
     sortBy: chosenSorting || null,
     voteMetadataUrl:
       chosenFilters.voteMetadataUrl?.length === 1
         ? chosenFilters.voteMetadataUrl[0]
         : null,
   };
-  
+
   const { data, pagination, isLoading, loadMore } = usePagination(
     votingUpdates,
     paginationMeta,
