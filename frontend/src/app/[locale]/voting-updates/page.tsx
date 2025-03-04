@@ -17,6 +17,7 @@ export default async function VotingUpdatesPage({
     govActionType: searchParams?.govActionType,
     vote: searchParams?.vote,
     sortBy: searchParams?.sortBy,
+    voteMetadataUrl: searchParams?.voteMetadataUrl,
   });
   const hasError = isResponseErrorI(votingUpdates);
   return (

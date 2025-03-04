@@ -306,6 +306,7 @@ export async function getVotingUpdates({
   search,
   govActionType,
   vote,
+  voteMetadataUrl,
   sortBy,
 }: {
   page?: number;
@@ -313,6 +314,7 @@ export async function getVotingUpdates({
   search?: string;
   govActionType?: string;
   vote?: string;
+  voteMetadataUrl?: string;
   sortBy?: string;
 }): Promise<{ data: VotesTableI[]; meta: PaginationMeta } | ResponseErrorI> {
   try {
@@ -324,6 +326,7 @@ export async function getVotingUpdates({
       "filter.govActionProposal.govActionType":
         govActionType && `$in:${govActionType}`,
       "filter.vote": vote && `$in:${vote}`,
+      "filter.voteMetadataUrl": voteMetadataUrl,
     });
     const res: { data: VotesTableI[]; meta: PaginationMeta } =
       await axiosInstance.get(path);
