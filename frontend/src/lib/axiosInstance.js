@@ -19,12 +19,7 @@ axiosInstance.interceptors.response.use(
   (result) => result.data,
   // Error handler: Handle errors in the response.
   async (error) => {
-    const { response } = error;
-    if (error.request) {
-      return Promise.reject(error.request);
-    } else {
-      return Promise.reject(error.message);
-    }
+    return Promise.reject(error);
   }
 );
 
