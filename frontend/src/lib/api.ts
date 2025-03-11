@@ -5,7 +5,12 @@ import {
   ConstitutionMetadata,
   GovActionMetadata,
 } from "@organisms";
-import { getAccessToken, isEmpty, setAuthCookies } from "@utils";
+import {
+  getAccessToken,
+  getShortenedGovActionId,
+  isEmpty,
+  setAuthCookies,
+} from "@utils";
 import jwt from "jsonwebtoken";
 import axiosInstance from "./axiosInstance";
 import {
@@ -121,7 +126,7 @@ export async function login(
     const t = await getTranslations();
     return {
       error: t("Modals.signIn.alerts.error"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -138,7 +143,7 @@ export async function loginAuthCallback(token: string) {
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -155,7 +160,7 @@ export async function registerAuthCallback(token: string) {
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -186,10 +191,11 @@ export async function getUser(
   } catch (error) {
     const t = await getTranslations();
     const customErrorMessage =
-      error.res?.statusCode === 401 && t(`General.errors.sessionExpired`);
+      error.request.res?.statusCode === 401 &&
+      t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t(`General.errors.somethingWentWrong`),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -218,11 +224,11 @@ export async function toggleUserStatus(
     const t = await getTranslations();
     const customErrorMessage =
       !token &&
-      error.res?.statusCode === 401 &&
+      error.request.res?.statusCode === 401 &&
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("Modals.deleteRole.alerts.error"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -261,11 +267,11 @@ export async function getUsersAdmin({
     const t = await getTranslations();
     const customErrorMessage =
       !token &&
-      error.res?.statusCode === 401 &&
+      error.request.res?.statusCode === 401 &&
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -295,7 +301,7 @@ export async function getMembers({
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -336,7 +342,7 @@ export async function getVotingUpdates({
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -376,7 +382,7 @@ export async function getUserVotes({
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -393,7 +399,7 @@ export async function getGovernanceMetadata(
     const t = await getTranslations();
     return {
       error: t("Modals.govActionModal.alerts.error"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -440,11 +446,11 @@ export async function getGovernanceActions({
     const t = await getTranslations();
     const customErrorMessage =
       !token &&
-      error.res?.statusCode === 401 &&
+      error.request.res?.statusCode === 401 &&
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -470,11 +476,11 @@ export async function addOrUpdateReasoning({
     const t = await getTranslations();
     const customErrorMessage =
       !token &&
-      error.res?.statusCode === 401 &&
+      error.request.res?.statusCode === 401 &&
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -499,7 +505,7 @@ export async function getReasoningData(
     const t = await getTranslations();
     return {
       error: t("Modals.previewRationale.alerts.error"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -524,11 +530,11 @@ export async function registerUser(email: string) {
     const t = await getTranslations();
     const customErrorMessage =
       !token &&
-      error.res?.statusCode === 401 &&
+      error.request.res?.statusCode === 401 &&
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("Modals.addMember.alerts.error"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -554,18 +560,19 @@ export async function registerAdmin(email: string, permissions: Permissions[]) {
     const t = await getTranslations();
     const customErrorMessage =
       !token &&
-      error.res?.statusCode === 401 &&
+      error.request.res?.statusCode === 401 &&
       t(`General.errors.sessionExpired`);
     return {
       error: customErrorMessage || t("Modals.addMember.alerts.error"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
 
 export async function editUser(
   id: string,
-  data: FormData
+  data: FormData,
+  hotAddress?: string
 ): Promise<ResponseErrorI | FetchUserData> {
   const token = getAccessToken();
   try {
@@ -581,14 +588,26 @@ export async function editUser(
     return response;
   } catch (error) {
     const t = await getTranslations();
+
     const customErrorMessage =
       !token &&
-      error.res?.statusCode === 401 &&
+      error.request.res?.statusCode === 401 &&
       t(`General.errors.sessionExpired`);
-    return {
-      error: customErrorMessage || t("Modals.signUp.alerts.error"),
-      statusCode: error.res?.statusCode || null,
-    };
+
+    if (error.response?.data.message.includes("Address")) {
+      return {
+        error: `Address ${getShortenedGovActionId(
+          hotAddress,
+          10
+        )} already assigned`,
+        statusCode: error.response?.data.statusCode || null,
+      };
+    } else {
+      return {
+        error: customErrorMessage || t("Modals.signUp.alerts.error"),
+        statusCode: error.request.res?.statusCode || null,
+      };
+    }
   }
 }
 
@@ -604,7 +623,7 @@ export async function getConstitutionMetadata(): Promise<
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -621,7 +640,7 @@ export async function getConstitutionByCid(
     const t = await getTranslations();
     return {
       error: t("General.errors.somethingWentWrong"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -639,15 +658,15 @@ export async function uploadConstitution(data: FormData) {
   } catch (error) {
     const t = await getTranslations();
     let errorMessage = t("Modals.uploadConstitution.alerts.error");
-    if (token && error.res?.statusCode === 401) {
+    if (token && error.request.res?.statusCode === 401) {
       errorMessage = t(`General.errors.sessionExpired`);
-    } else if (error.res?.statusCode === 409) {
+    } else if (error.request.res?.statusCode === 409) {
       errorMessage = t(`Modals.uploadConstitution.alerts.409`);
     }
 
     return {
       error: errorMessage,
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -673,12 +692,12 @@ export async function uploadUserPhoto(
     const t = await getTranslations();
     const customErrorMessage =
       !token &&
-      error.res?.statusCode === 401 &&
+      error.request.res?.statusCode === 401 &&
       t(`General.errors.sessionExpired`);
     return {
       error:
         customErrorMessage || t("Modals.signUp.alerts.errorUploadProfilePhoto"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -703,7 +722,7 @@ export async function resendRegisterEmail(email: string) {
     const t = await getTranslations();
     return {
       error: t("UsersList.resendAlerts.error"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }
@@ -723,7 +742,7 @@ export async function deleteUser(sAdminId: string, userId: string) {
     const t = await getTranslations();
     return {
       error: t("Modals.deleteUser.alerts.error"),
-      statusCode: error.res?.statusCode || null,
+      statusCode: error.request.res?.statusCode || null,
     };
   }
 }

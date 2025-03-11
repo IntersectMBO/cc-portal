@@ -8,7 +8,7 @@ import {
   ModalHeader,
   ModalWrapper,
   Tooltip,
-  Typography
+  Typography,
 } from "@atoms";
 import { IMAGES, PATTERNS, PROFILE_PICTURE_MAX_FILE_SIZE } from "@consts";
 import { useAppContext, useModal } from "@context";
@@ -35,7 +35,7 @@ export const SignUpModal = () => {
     handleSubmit,
     formState: { errors },
     control,
-    setValue
+    setValue,
   } = useForm();
 
   useEffect(() => {
@@ -73,7 +73,11 @@ export const SignUpModal = () => {
         return;
       }
     }
-    const editUserRes = await editUser(userSession?.userId, userData);
+    const editUserRes = await editUser(
+      userSession?.userId,
+      userData,
+      userData.hotAddress
+    );
 
     if (isResponseErrorI(editUserRes)) {
       handleError(editUserRes.error);
@@ -102,14 +106,14 @@ export const SignUpModal = () => {
             {...register("name", {
               maxLength: {
                 value: 64,
-                message: "Display name cannot exceed 64 characters"
+                message: "Display name cannot exceed 64 characters",
               },
               pattern: {
                 value: PATTERNS.username,
                 message:
-                  "Display name can only contain letters, numbers, spaces, underscores, pipes, and periods"
+                  "Display name can only contain letters, numbers, spaces, underscores, pipes, and periods",
               },
-              required: "Display name is required"
+              required: "Display name is required",
             })}
           />
 
@@ -125,7 +129,7 @@ export const SignUpModal = () => {
                   {t("signUp.fields.hotCredential.label")}
                   <InfoOutlinedIcon
                     style={{
-                      color: "#ADAEAD"
+                      color: "#ADAEAD",
                     }}
                     sx={{ ml: 0.7 }}
                     fontSize="small"
@@ -138,8 +142,8 @@ export const SignUpModal = () => {
             {...register("hotAddress", {
               pattern: {
                 value: PATTERNS.hotAddress,
-                message: "Entered value does not match the expected format"
-              }
+                message: "Entered value does not match the expected format",
+              },
             })}
           />
           <ControlledField.TextArea
@@ -168,15 +172,15 @@ export const SignUpModal = () => {
                 fileSize: (file) =>
                   !file ||
                   file.size / (1024 * 1024) < PROFILE_PICTURE_MAX_FILE_SIZE ||
-                  "The file size should be less than 5MB"
-              }
+                  "The file size should be less than 5MB",
+              },
             })}
           >
             {t("signUp.fields.upload")}
           </ControlledField.Upload>
           <Box
             sx={{
-              display: "flex"
+              display: "flex",
             }}
           >
             {state.showCloseButton ? (
