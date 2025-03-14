@@ -1,6 +1,6 @@
 "use client";
 import { useSnackbar } from "@/context/snackbar";
-import { editUser, uploadUserPhoto } from "@/lib/api";
+import { deleteUserPhoto, editUser, uploadUserPhoto } from "@/lib/api";
 import {
   Button,
   ModalActions,
@@ -10,7 +10,12 @@ import {
   Tooltip,
   Typography,
 } from "@atoms";
-import { IMAGES, PATTERNS, PROFILE_PICTURE_MAX_FILE_SIZE } from "@consts";
+import {
+  ICONS,
+  IMAGES,
+  PATTERNS,
+  PROFILE_PICTURE_MAX_FILE_SIZE,
+} from "@consts";
 import { useAppContext, useModal } from "@context";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Box, CircularProgress } from "@mui/material";
@@ -21,12 +26,15 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ControlledField } from "../ControlledField";
 import { SignupModalState } from "../types";
+import { useScreenDimension } from "@/lib/hooks";
 
 export const SignUpModal = () => {
   const { state, closeModal } = useModal<SignupModalState>();
   const [isSubmitting, setSubmitting] = useState(false);
+  const [isDeleting, setDeleting] = useState(false);
   const { userSession, user, fetchUserData } = useAppContext();
   const { addSuccessAlert, addErrorAlert } = useSnackbar();
+  const { isMobile } = useScreenDimension();
   const router = useRouter();
 
   const t = useTranslations("Modals");
@@ -36,7 +44,11 @@ export const SignUpModal = () => {
     formState: { errors },
     control,
     setValue,
+    watch,
+    resetField,
   } = useForm();
+
+  const userPhoto = watch("file");
 
   useEffect(() => {
     // Populate form fields with user data when the component mounts
@@ -61,6 +73,23 @@ export const SignUpModal = () => {
       handleError(res.error);
     }
     return res;
+  };
+
+  const deleteImage = async () => {
+    setDeleting(true);
+    if (user.profile_photo_url) {
+      const res = await deleteUserPhoto(userSession?.userId);
+      if (isResponseErrorI(res)) {
+        handleError(res.error);
+      } else {
+        addSuccessAlert(t("signUp.alerts.successRemovedPhoto"));
+        await fetchUserData(userSession?.userId);
+      }
+    } else {
+      resetField("file");
+      setValue("file", null);
+    }
+    setDeleting(false);
   };
 
   const onSubmit = async (data) => {
@@ -153,31 +182,60 @@ export const SignUpModal = () => {
             maxLength={500}
             {...register("description")}
           />
-
-          <ControlledField.Upload
-            fullWidth={false}
-            size="large"
-            errors={errors}
-            control={control}
-            accept="image/png, image/jpg, image/jpeg"
-            dataTestId="upload-profile-photo-button"
-            {...register("file", {
-              validate: {
-                fileType: (file) =>
-                  !file ||
-                  file.type === "image/png" ||
-                  file.type === "image/jpg" ||
-                  file.type === "image/jpeg" ||
-                  "The file type should be jpg, png or jpeg",
-                fileSize: (file) =>
-                  !file ||
-                  file.size / (1024 * 1024) < PROFILE_PICTURE_MAX_FILE_SIZE ||
-                  "The file size should be less than 5MB",
-              },
-            })}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: isMobile ? "column" : "row",
+            }}
           >
-            {t("signUp.fields.upload")}
-          </ControlledField.Upload>
+            <ControlledField.Upload
+              fullWidth={false}
+              size="large"
+              errors={errors}
+              defaultValue={watch("file")}
+              control={control}
+              style={{ width: "206px" }}
+              accept="image/png, image/jpg, image/jpeg"
+              dataTestId="upload-profile-photo-button"
+              {...register("file", {
+                validate: {
+                  fileType: (file) =>
+                    !file ||
+                    file.type === "image/png" ||
+                    file.type === "image/jpg" ||
+                    file.type === "image/jpeg" ||
+                    "The file type should be jpg, png or jpeg",
+                  fileSize: (file) =>
+                    !file ||
+                    file.size / (1024 * 1024) < PROFILE_PICTURE_MAX_FILE_SIZE ||
+                    "The file size should be less than 5MB",
+                },
+              })}
+            >
+              {t("signUp.fields.upload")}
+            </ControlledField.Upload>
+            {(user.profile_photo_url || userPhoto) && (
+              <Button
+                variant="outlined"
+                startIcon={
+                  isDeleting ? (
+                    <CircularProgress color="inherit" size="14px" />
+                  ) : (
+                    <img src={ICONS.trash} />
+                  )
+                }
+                onClick={deleteImage}
+                style={{
+                  marginLeft: isMobile ? 0 : 10,
+                  marginTop: isMobile ? 10 : 0,
+                  maxWidth: "206px",
+                }}
+                disabled={isDeleting ? true : false}
+              >
+                {t("signUp.fields.deletePhoto")}
+              </Button>
+            )}
+          </Box>
           <Box
             sx={{
               display: "flex",
