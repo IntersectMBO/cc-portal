@@ -594,7 +594,7 @@ export async function editUser(
       error.request.res?.statusCode === 401 &&
       t(`General.errors.sessionExpired`);
 
-    if (error.response?.data.message.includes("Address")) {
+    if (error.response?.data.message.includes("already assigned")) {
       return {
         error: `Address ${getShortenedGovActionId(
           hotAddress,
@@ -697,6 +697,30 @@ export async function uploadUserPhoto(
     return {
       error:
         customErrorMessage || t("Modals.signUp.alerts.errorUploadProfilePhoto"),
+      statusCode: error.request.res?.statusCode || null,
+    };
+  }
+}
+
+export async function deleteUserPhoto(userId: string) {
+  const token = getAccessToken();
+  try {
+    const res = await axiosInstance.delete(
+      `/api/users/${userId}/profile-photo`,
+      {
+        data: {
+          user_id: userId,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res;
+  } catch (error) {
+    const t = await getTranslations();
+    return {
+      error: error.response?.data.message,
       statusCode: error.request.res?.statusCode || null,
     };
   }

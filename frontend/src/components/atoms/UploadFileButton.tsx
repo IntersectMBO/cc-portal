@@ -2,7 +2,7 @@
 import { Button } from "@atoms";
 import { ICONS } from "@consts";
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormErrorMessage } from "./FormErrorMessage";
 import { ButtonProps, FormErrorMessageProps } from "./types";
 
@@ -18,6 +18,7 @@ export const UploadFileButton = ({
   errorMessage,
   errorStyles,
   name,
+  value,
   accept = "image/jpeg",
   dataTestId,
   ...buttonProps
@@ -32,6 +33,12 @@ export const UploadFileButton = ({
       onChange(file);
     }
   };
+
+  useEffect(() => {
+    if (!value) {
+      setSelectedFile(null);
+    }
+  }, [value]);
 
   return (
     <label htmlFor="btn-upload">
@@ -55,7 +62,7 @@ export const UploadFileButton = ({
             sx={{
               overflow: "hidden",
               textOverflow: "ellipsis",
-              whiteSpace: "nowrap"
+              whiteSpace: "nowrap",
             }}
           >
             {selectedFile && selectedFile.name ? selectedFile.name : children}
