@@ -2,37 +2,44 @@
   "Index": {
     "title": "Web App Boilerplate",
     "hero": {
-      "headline": "Championing Cardano's community-led governance",
-      "description": "Until a final Cardano Constitution has been developed and ratified by the community - a programme of consultation taking place throughout 2024 - a set of interim rules is required to support the transition.",
-      "seeConstitution": "Read the Interim Constitution",
+      "headline": "The Cardano Blockchain Ecosystem Constitution",
+      "description": "approved by delegates at the Constitutional Convention and ratified on-chain, now serves as the foundation of Cardano governance.",
+      "seeConstitution": "Read the Constitution",
+      "guardrailsScript": "Guardrails Script",
+      "guardrailsRationale": "Guardrails Rationale",
       "signIn": "Sign In",
       "constitutionalCommitteePortal": "Constitutional Committee Portal"
     }
   },
   "Constitution": {
-    "title": "Cardano Constituition",
+    "title": "Constitution",
     "drawer": {
       "compare": "Compare",
-      "latestRevisions": "Latest Revisions",
-      "tableOfContents": "Content",
-      "latest": "Latest"
+      "versionHistory": "Version History",
+      "tableOfContents": "Contents",
+      "latest": "Latest",
+      "uploadNewVersion": "Upload new version",
+      "backToContents": "Back to contents"
     }
   },
   "Members": {
-    "title": "Active Members",
+    "title": "Members",
+    "addNewMember": "Add new member",
     "card": {
       "joined": "Joined",
-      "latestUpdates": "Latest updates"
+      "votingUpdates": "Voting updates"
     }
   },
-  "LatestUpdates": {
-    "title": "Latest Updates",
+  "VotingUpdates": {
+    "title": "Voting Updates",
     "govAction": "Governance Action",
     "govActionCategoryShort": "GA Category",
     "voted": "Voted",
+    "time": "Time",
     "rationale": "Rationale",
     "actionTitle": "Show more",
-    "notAvailable": "Not Available"
+    "notAvailable": "Not Available",
+    "available": "Available"
   },
   "MyActions": {
     "myVotesTab": "My Votes",
@@ -130,6 +137,34 @@
         "error": "Error changing user status"
       }
     },
+    "deleteUser": {
+      "headline": "Delete user",
+      "description": "Are you sure you want to delete this user?",
+      "fields": {
+        "confirm": {
+          "label": "Please confirm the action by typing expected below",
+          "placeholder": "Write DELETE"
+        }
+      },
+      "alerts": {
+        "success": "User deleted successfully",
+        "error": "Error deleting user"
+      }
+    },
+    "switchUserStatus": {
+      "headline": "Change status",
+      "description": "Are you sure you want to change the status?",
+      "fields": {
+        "confirm": {
+          "label": "Please confirm the action by typing expected below",
+          "placeholder": "Write CONFIRM"
+        }
+      },
+      "alerts": {
+        "success": "Status changed successfully",
+        "error": "Error changing status user"
+      }
+    },
     "addMember": {
       "headline": "Add member",
       "fields": {
@@ -149,6 +184,23 @@
       "alerts": {
         "success": "New member successfully added",
         "error": "Error adding new member"
+      }
+    },
+    "changeRole": {
+      "headline": "Change role",
+      "fields": {
+        "role": {
+          "label": "Role",
+          "placeholder": "Role"
+        },
+        "permissions": {
+          "label": "Permissions",
+          "placeholder": "Permissions"
+        }
+      },
+      "alerts": {
+        "success": "User role successfully changed",
+        "error": "Error changing user role"
       }
     },
     "uploadConstitution": {
@@ -172,10 +224,10 @@
       "description": "Please provide rationale for your vote on specific governance action.",
       "fields": {
         "title": {
-          "label": "Title"
+          "label": "Summary"
         },
         "rationale": {
-          "label": "Rationale"
+          "label": "Rationale Statement"
         }
       },
       "alerts": {
@@ -196,27 +248,16 @@
     "previewRationale": {
       "headline": "Rationale",
       "description": "Please update rationale for your vote on specific governance action.",
+      "rationaleLink": "Rationale link",
+      "rationale": "Rationale",
+      "notAvailable": "Not Available",
+      "governanceActionAbstract": "Governance Action Abstract",
+      "governanceActionStatus": "Governance Action Status",
       "governanceActionCategory": "Governance Action Category",
       "governanceActionId": "Governance Action ID",
       "voted": "Voted",
-      "submissionDate": "Submission date",
-      "expiryDate": "Expiry date",
-      "voteSubmissionDate": "Vote submission date",
-      "tooltips": {
-        "expiryDate": {
-          "heading": "Expiry Date",
-          "paragraphOne": "The date when the governance action will expiry if it doesn’t reach ratification thresholds.",
-          "paragraphTwo": "IMPORTANT: If the governance action is ratified before the expiry date it will be considered ratified and it will not be available to vote on afterwards."
-        },
-        "submissionDate": {
-          "heading": "Submission Date",
-          "paragraphOne": "The date when the governance action was submitted on-chain.",
-          "vote": {
-            "heading": "Vote Submission Date",
-            "paragraphOne": "The date when the vote was submitted on-chain."
-          }
-        }
-      },
+      "submissionDate": "GA submitted on:",
+      "expiryDate": "GA expiration date:",
       "alerts": {
         "error": "Error fetching rationale data"
       }
@@ -243,15 +284,15 @@
     },
     "members": {
       "title": "No members found",
-      "description": "There is currently no members. Please check back later for updates"
+      "description": "There are currently no members. Please check back later for updates"
     },
-    "latestUpdates": {
+    "votingUpdates": {
       "title": "No votes found",
-      "description": "There is currently no votes. Please check back later for updates"
+      "description": "There are currently no votes. Please check back later for updates"
     },
     "myActions": {
       "title": "No votes found",
-      "description": "There is currently no votes. Please check back later for updates"
+      "description": "There are currently no votes. Please check back later for updates"
     },
     "constitution": {
       "title": "No Constitution available",
@@ -259,11 +300,15 @@
     },
     "constitutionMetadata": {
       "title": "No revisions available",
-      "description": "There is currently no revisions available. Please check back later for updates"
+      "description": "There is only 1 version available. Once there are multiple versions of the constitution, you will be able to compare two versions"
     },
     "governanceAction": {
       "title": "No governance actions available",
-      "description": "There is currently no governance actions. Please check back later for updates"
+      "description": "There are currently no governance actions. Please check back later for updates"
+    },
+    "versionHistory": {
+      "title": "No revisions available",
+      "description": "There is only 1 version available. Once there are multiple versions of the constitution, you will be able to compare two versions"
     }
   },
   "Snackbar": {
@@ -288,6 +333,16 @@
       "somethingWentWrong": "Something went wrong. Please refresh the page or try again later",
       "sessionExists": "Session already exists. Please try again.",
       "pagination": "Error loading more data"
+    }
+  },
+  "UsersList": {
+    "resendInv": "Resend Invitation",
+    "makeInactive": "Make Inactive",
+    "makeActive": "Make Active",
+    "deleteUser": "Delete User",
+    "resendAlerts": {
+      "success": "Email successfully resent",
+      "error": "Error resending email"
     }
   }
 }
