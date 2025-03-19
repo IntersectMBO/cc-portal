@@ -31,6 +31,8 @@ export const UploadFileButton = ({
       const file = target.files[0];
       setSelectedFile(file);
       onChange(file);
+
+      e.target.value = "";
     }
   };
 
