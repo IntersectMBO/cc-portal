@@ -22,15 +22,9 @@ import { kadDHT, removePrivateAddressesMapper } from '@libp2p/kad-dht';
 import { ipnsSelector } from 'ipns/selector';
 import { ipnsValidator } from 'ipns/validator';
 import { dcutr } from '@libp2p/dcutr';
-import { autoNAT } from '@libp2p/autonat';
 import { ping } from '@libp2p/ping';
-import { uPnPNAT } from '@libp2p/upnp-nat';
 import { mdns } from '@libp2p/mdns';
 import { createDelegatedRoutingV1HttpApiClient } from '@helia/delegated-routing-v1-http-api-client';
-import {
-  circuitRelayTransport,
-  circuitRelayServer,
-} from '@libp2p/circuit-relay-v2';
 import { IpfsMapper } from './mapper/ipfs.mapper.js';
 import { IpfsDto } from './dto/ipfs.dto.js';
 import { PeerId } from '@libp2p/interface';
@@ -47,7 +41,6 @@ const libp2pOptions = {
       // add a listen address (localhost) to accept TCP connections on a random port
       process.env.LISTEN_TCP_ADDRESS,
       process.env.LISTEN_WS_ADDRESS,
-      // process.env.LISTEN_QUIC_ADDRESS,
     ],
     announce: [
       process.env.ANNOUNCE_TCP_ADDRESS,
@@ -55,20 +48,13 @@ const libp2pOptions = {
     ],
   },
   connectionManager: {
-    minConnections: 50, // Set a minimum number of connections
-    maxConnections: 300, // Adjust based on your requirements
+    maxIncomingPendingConnections: 50,
+    maxConnections: 500,
   },
   connectionGater: {
-    denyDialPeer: () => false, // Allow all peers
     denyDialMultiaddr: () => false, // Allow all multiaddresses
-    denyInboundConnection: () => false, // Allow inbound connections
-    denyOutboundConnection: () => false, // Allow outbound connections
   },
-  transports: [
-    // circuitRelayTransport({ discoverRelays: 1 }),
-    tcp(),
-    webSockets(),
-  ],
+  transports: [tcp(), webSockets()],
   connectionEncryption: [noise()],
   streamMuxers: [yamux()],
   peerDiscovery: [
@@ -82,11 +68,11 @@ const libp2pOptions = {
         // so use the host name directly
         '/dnsaddr/va1.bootstrap.libp2p.io/p2p/12D3KooWKnDdG3iXw9eTFijk3EWSunZcFi54Zka4wmtqtt6rPxc8',
         '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
+        '/ip4/104.131.131.82/udp/4001/quic-v1/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
       ],
     }),
   ],
   services: {
-    autoNAT: autoNAT(),
     dcutr: dcutr(),
     delegatedRouting: () =>
       createDelegatedRoutingV1HttpApiClient(
@@ -102,8 +88,6 @@ const libp2pOptions = {
     identify: identify(),
     keychain: keychain(),
     ping: ping(),
-    // relay: circuitRelayServer(),
-    upnp: uPnPNAT(),
   },
 };
 
