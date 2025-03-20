@@ -16,6 +16,7 @@ import { useModal } from "@context";
 import { useScreenDimension } from "@hooks";
 import { Box } from "@mui/material";
 import {
+  changeVotingLabels,
   formatDisplayDate,
   getProposalTypeLabel,
   getShortenedGovActionId,
@@ -37,6 +38,7 @@ export const PreviewReasoningModal = () => {
   const { isMobile } = useScreenDimension();
   const { addErrorAlert } = useSnackbar();
   const [govMetadata, setGovMetadata] = useState<GovActionMetadata>();
+  const updatedVoteLabel = changeVotingLabels(govAction.vote);
 
   useEffect(() => {
     async function fetchGAMetadata(id) {
@@ -91,7 +93,7 @@ export const PreviewReasoningModal = () => {
                 {t("previewRationale.voted")}
               </Typography>
               <Box display="flex" mt={0.25}>
-                <VotePill vote={govAction.vote} />
+                <VotePill vote={updatedVoteLabel} />
               </Box>
             </Box>
           )}
