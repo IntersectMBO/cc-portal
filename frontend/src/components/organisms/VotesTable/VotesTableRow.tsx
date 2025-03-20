@@ -5,7 +5,12 @@ import { Button, OutlinedLightButton, Typography, VotePill } from "@atoms";
 import { customPalette } from "@consts";
 import { Card, TableDivider, UserAvatar, UserBasicInfo } from "@molecules";
 import { Box, Grid, Stack, Tooltip } from "@mui/material";
-import { formatDisplayDate, getProposalTypeLabel, truncateText } from "@utils";
+import {
+  changeVotingLabels,
+  formatDisplayDate,
+  getProposalTypeLabel,
+  truncateText,
+} from "@utils";
 import { useTranslations } from "next-intl";
 
 interface Props {
@@ -32,6 +37,8 @@ export const VotesTableRow = ({
     gov_action_proposal_type,
     vote_submit_time,
   } = votes;
+
+  const updatedValue = changeVotingLabels(value);
 
   return (
     <Card
@@ -128,9 +135,9 @@ export const VotesTableRow = ({
           container
           gap={2}
           xxs={12}
-          md={5}
-          lg={3}
-          xl={1.5}
+          md={6}
+          lg={4}
+          xl={2.11}
           flexWrap="nowrap"
         >
           <TableDivider />
@@ -145,7 +152,7 @@ export const VotesTableRow = ({
             </Typography>
 
             <Box display="flex" alignItems="center" gap={2}>
-              <VotePill vote={value} />
+              <VotePill vote={updatedValue} />
             </Box>
           </Grid>
         </Grid>
