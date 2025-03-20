@@ -17,17 +17,14 @@ export async function getConstitution(): Promise<any> {
     const mdxSource = await serialize(mdxContent, {
       mdxOptions: {
         remarkPlugins: [remarkToc],
-        rehypePlugins: [
-          rehypeSlug,
-          [rehypeToc, { headings: ["h2", "h3", "h4"] }]
-        ]
-      }
+        rehypePlugins: [rehypeSlug, [rehypeToc, { headings: ["h2", "h3"] }]],
+      },
     });
     return mdxSource;
   } catch (error) {
     return {
       error: "Error fetching and processing MDX content:",
-      statusCode: error.res?.statusCode || null
+      statusCode: error.res?.statusCode || null,
     };
   }
 }

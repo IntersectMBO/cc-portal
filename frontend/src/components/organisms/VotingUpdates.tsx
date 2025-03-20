@@ -63,6 +63,10 @@ export const VotingUpdates = ({
         : null,
     vote: chosenFilters.vote?.length > 0 ? chosenFilters.vote?.join(",") : null,
     sortBy: chosenSorting || null,
+    voteMetadataUrl:
+      chosenFilters.voteMetadataUrl?.length === 1
+        ? chosenFilters.voteMetadataUrl[0]
+        : null,
   };
 
   const { data, pagination, isLoading, loadMore } = usePagination(

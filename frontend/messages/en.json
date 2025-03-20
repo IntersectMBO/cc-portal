@@ -2,9 +2,9 @@
   "Index": {
     "title": "Web App Boilerplate",
     "hero": {
-      "headline": "Championing Cardano's community-led governance",
-      "description": "Until a final Cardano Constitution has been developed and ratified by the community - a programme of consultation taking place throughout 2024 - a set of interim rules is required to support the transition.",
-      "seeConstitution": "Read the Interim Constitution",
+      "headline": "The Cardano Blockchain Ecosystem Constitution",
+      "description": "approved by delegates at the Constitutional Convention and ratified on-chain, now serves as the foundation of Cardano governance.",
+      "seeConstitution": "Read the Constitution",
       "guardrailsScript": "Guardrails Script",
       "guardrailsRationale": "Guardrails Rationale",
       "signIn": "Sign In",
@@ -12,7 +12,7 @@
     }
   },
   "Constitution": {
-    "title": "Interim Constitution",
+    "title": "Constitution",
     "drawer": {
       "compare": "Compare",
       "versionHistory": "Version History",
@@ -108,12 +108,14 @@
         "description": {
           "label": "Description"
         },
-        "upload": "Upload profile photo"
+        "upload": "Upload profile photo",
+        "deletePhoto": "Delete current photo"
       },
       "alerts": {
         "success": "Profile successfully updated",
         "error": "Error updating profile",
-        "errorUploadProfilePhoto": "Error uploading photo"
+        "errorUploadProfilePhoto": "Error uploading photo",
+        "successRemovedPhoto": "Photo successfully removed"
       }
     },
     "editProfile": {

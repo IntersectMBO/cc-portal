@@ -1,7 +1,6 @@
 "use client";
-import { OutlinedLightButton } from "@/components/atoms";
 import { Button } from "@/components/atoms/Button";
-import { EXTERNAL_LINKS, ICONS, IMAGES, PATHS } from "@/constants";
+import { ICONS, IMAGES, PATHS } from "@/constants";
 import { useModal } from "@context";
 import { Grid } from "@mui/material";
 import { useTranslations } from "next-intl";
@@ -27,7 +26,7 @@ export function HeroActions({ role }: HeroActionsProps) {
               startIcon={<img src={IMAGES.login} />}
               onClick={() => {
                 openModal({
-                  type: "signIn"
+                  type: "signIn",
                 });
               }}
               data-testid="admin-hero-sign-in-button"
@@ -59,39 +58,16 @@ export function HeroActions({ role }: HeroActionsProps) {
             <Button
               size="large"
               data-testid="hero-see-constitution-button"
-              startIcon={<img src={ICONS.rocketLaunch} />}
+              startIcon={
+                <img
+                  src={IMAGES.readingBook}
+                  style={{ width: "30px", height: "30px" }}
+                />
+              }
             >
               {t("hero.seeConstitution")}
             </Button>
           </Link>
-          <a
-            href={EXTERNAL_LINKS.guardrailsScript}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "inherit", textDecoration: "none" }}
-          >
-            <OutlinedLightButton
-              size="large"
-              data-testid="hero-see-guardrails-script-button"
-              sx={{ height: "40px", fontSize: 14, fontWeight: 500 }}
-            >
-              {t("hero.guardrailsScript")}
-            </OutlinedLightButton>
-          </a>
-          <a
-            href={EXTERNAL_LINKS.guardrailsRationale}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "inherit", textDecoration: "none" }}
-          >
-            <OutlinedLightButton
-              size="large"
-              data-testid="hero-see-guardrails-rationale-button"
-              sx={{ height: "40px", fontSize: 14, fontWeight: 500 }}
-            >
-              {t("hero.guardrailsRationale")}
-            </OutlinedLightButton>
-          </a>
         </Grid>
       )}
     </Grid>
