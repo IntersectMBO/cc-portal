@@ -44,11 +44,7 @@ export const SignUpModal = () => {
     formState: { errors },
     control,
     setValue,
-    watch,
-    resetField,
   } = useForm();
-
-  const userPhoto = watch("file");
 
   useEffect(() => {
     // Populate form fields with user data when the component mounts
@@ -85,9 +81,6 @@ export const SignUpModal = () => {
         addSuccessAlert(t("signUp.alerts.successRemovedPhoto"));
         await fetchUserData(userSession?.userId);
       }
-    } else {
-      resetField("file");
-      setValue("file", null);
     }
     setDeleting(false);
   };
@@ -192,7 +185,6 @@ export const SignUpModal = () => {
               fullWidth={false}
               size="large"
               errors={errors}
-              defaultValue={watch("file")}
               control={control}
               style={{ width: "206px" }}
               accept="image/png, image/jpg, image/jpeg"
@@ -214,7 +206,7 @@ export const SignUpModal = () => {
             >
               {t("signUp.fields.upload")}
             </ControlledField.Upload>
-            {(user.profile_photo_url || userPhoto) && (
+            {user.profile_photo_url && (
               <Button
                 variant="outlined"
                 startIcon={
