@@ -64,7 +64,11 @@ export default function UserProfileButton({
           sx={{ minWidth: 160 }}
           startIcon={
             <UserAvatar
-              src={user?.profile_photo_url || IMAGES.avatar}
+              src={
+                (user?.profile_photo_url &&
+                  `${user?.profile_photo_url}?timestamp=${Date.now()}`) ||
+                IMAGES.avatar
+              }
               width={20}
               height={20}
             />

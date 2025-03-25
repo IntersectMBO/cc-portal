@@ -108,6 +108,8 @@ export const SignUpModal = () => {
       await fetchUserData(userSession?.userId);
       closeModal();
     }
+    await fetchUserData(userSession?.userId);
+
     setSubmitting(false);
   };
 

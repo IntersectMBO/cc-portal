@@ -77,7 +77,7 @@ export const UploadFileButton = ({
             sx={{
               top: "-10px",
               backgroundColor: "#fff",
-              border: "1px solid #ebf0ff",
+              border: "1.5px solid #ebf0ff",
               "&:hover": { backgroundColor: "#f1f3fc", borderColor: "#1233ad" },
             }}
           >
