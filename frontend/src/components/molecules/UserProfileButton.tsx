@@ -94,6 +94,7 @@ export default function UserProfileButton({
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
+          disableScrollLock
           MenuListProps={{
             "aria-labelledby": "basic-button",
           }}
