@@ -95,6 +95,7 @@ export default function UserProfileButton({
           open={open}
           onClose={handleClose}
           disableScrollLock
+          disableAutoFocus
           MenuListProps={{
             "aria-labelledby": "basic-button",
           }}
