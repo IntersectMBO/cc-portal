@@ -66,7 +66,16 @@ export const UploadFileButton = ({
             data-testid={`${dataTestId}-button`}
             {...buttonProps}
           >
-            {selectedFile?.name || children}
+            <Box
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                maxWidth: "145px",
+              }}
+            >
+              {selectedFile?.name || children}
+            </Box>
           </Button>
         </label>
 
