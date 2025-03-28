@@ -41,11 +41,11 @@ export const VOTING_UPDATES_FILTERS: Record<string, FilterItems> = {
     items: [
       {
         key: "Yes",
-        label: "CONSTITUTIONAL",
+        label: "Constitutional",
       },
       {
         key: "No",
-        label: "UNCONSTITUTIONAL",
+        label: "Unconstitutional",
       },
       {
         key: "Abstain",
