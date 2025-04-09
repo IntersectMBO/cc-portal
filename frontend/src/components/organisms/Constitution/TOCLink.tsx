@@ -1,11 +1,13 @@
 import { customPalette } from "@/constants";
 import { Tooltip } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+
 interface Props {
   href: string;
   children: React.ReactNode;
   callback: () => void;
 }
+
 /**
  * TOCLink Component
  *
@@ -23,45 +25,50 @@ const TOCLink = ({ href, children, callback }: Props) => {
   const [isTruncated, setIsTruncated] = useState(false);
   const linkRef = useRef<HTMLAnchorElement>(null);
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    // Extract the target element's ID from the href (e.g., "#section1" => "section1")
+
+    // Extract the target ID from href (e.g., "#section1" => "section1")
     const targetId = href.substring(1);
     const target = document.getElementById(targetId);
 
     if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
-      window.history.pushState(null, null, href);
-
-      // Dispatch a custom event to notify other TOC links to reset their active state
-      window.dispatchEvent(new CustomEvent("toc-link-click", { detail: href }));
-
-      setIsActive(true);
+      // Add a timeout to ensure the scroll happens after the DOM is fully ready
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.history.pushState(null, "", href); // Update browser URL
+        window.dispatchEvent(
+          new CustomEvent("toc-link-click", { detail: href })
+        ); // Reset other links
+        setIsActive(true);
+      }, 100); // Timeout of 100ms or adjust as needed
     }
+
     callback();
   };
 
-  /**
-   * Listens for the custom "toc-link-click" event and resets this link's active state
-   * if the clicked link's href does not match this link's href.
-   */
   useEffect(() => {
-    const handleTocLinkClick = (event) => {
+    const handleTocLinkClick = (event: CustomEvent) => {
       if (event.detail !== href) {
         setIsActive(false); // Reset the active state if another link is clicked
       }
     };
 
-    window.addEventListener("toc-link-click", handleTocLinkClick);
+    window.addEventListener(
+      "toc-link-click",
+      handleTocLinkClick as EventListener
+    );
 
     return () => {
-      window.removeEventListener("toc-link-click", handleTocLinkClick);
+      window.removeEventListener(
+        "toc-link-click",
+        handleTocLinkClick as EventListener
+      );
     };
   }, [href]);
 
   useEffect(() => {
     if (linkRef.current) {
-      // check if child is truncated
       setIsTruncated(linkRef.current.scrollWidth > linkRef.current.clientWidth);
     }
   }, [children]);
@@ -89,7 +96,7 @@ const TOCLink = ({ href, children, callback }: Props) => {
           backgroundColor: isActive ? customPalette.accordionBg : undefined,
           borderRadius: "30px",
           padding: "0 8px",
-          boxSizing: "border-box"
+          boxSizing: "border-box",
         }}
       >
         {children}
