@@ -27,6 +27,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ConstitutionMetadataResponse } from './response/constitution-metadata.response';
 import { getFileValidator } from '../pipe/fileValidatorPipe';
 import { ApiConditionalExcludeEndpoint } from 'src/common/decorators/api-conditional-exclude-endpoint.decorator';
+import { ConstitutionIpnsUrlResponse } from './response/constitutio-ipns-url.response';
 
 @ApiTags('Constitution')
 @Controller('constitution')
@@ -137,7 +138,7 @@ export class ConstitutionController {
   @ApiResponse({
     status: 200,
     description: 'Returns a IPNS URL',
-    type: ConstitutionMetadataResponse,
+    type: ConstitutionIpnsUrlResponse,
   })
   @Permissions(PermissionEnum.ADD_CONSTITUTION)
   @UseGuards(JwtAuthGuard, PermissionGuard)
