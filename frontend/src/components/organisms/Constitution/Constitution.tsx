@@ -87,6 +87,7 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
       position="relative"
       justifyContent={{ xxs: "center", lg: "flex-start" }}
       flex={1}
+      sx={{ overflowX: "hidden" }}
     >
       <Grid
         mt={3}
