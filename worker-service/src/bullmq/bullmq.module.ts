@@ -6,7 +6,7 @@ import {
   QUEUE_NAME_DB_SYNC_GOV_ACTIONS,
   QUEUE_NAME_DB_SYNC_VOTES,
 } from '../common/constants/bullmq.constants';
-import { BullMQAdapter } from '@bull-board/api/bullMQAdapter.js';
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { ExpressAdapter } from '@bull-board/express';
 
 @Module({

@@ -15,5 +15,6 @@ export const IMAGES = {
   mail: "/images/Mail.png",
   favicon: "/images/Favicon.ico",
   docSearch: "/images/DocSearch.png",
-  menu: "/images/Menu.png"
+  menu: "/images/Menu.png",
+  readingBook: "/images/ReadingBook.png",
 };
