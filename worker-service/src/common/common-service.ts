@@ -94,7 +94,12 @@ export abstract class CommonService {
     url: string,
   ): Promise<Partial<GovActionProposalDto>> {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url, {
+        headers: {
+          'User-Agent': 'axios',
+          Accept: 'application/json',
+        },
+      });
       const jsonData = response.data;
       const title = jsonData.body?.title;
       const abstract = jsonData.body?.abstract;

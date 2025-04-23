@@ -41,16 +41,25 @@ export const VOTING_UPDATES_FILTERS: Record<string, FilterItems> = {
     items: [
       {
         key: "Yes",
-        label: "Yes",
+        label: "Constitutional",
       },
       {
         key: "No",
-        label: "No",
+        label: "Unconstitutional",
       },
       {
         key: "Abstain",
         label: "Abstain",
       },
+    ],
+  },
+
+  voteMetadataUrl: {
+    key: "voteMetadataUrl",
+    title: "Rationale",
+    items: [
+      { key: "$not:$null", label: "Available" },
+      { key: "$or:$null", label: "Not Available" },
     ],
   },
 };

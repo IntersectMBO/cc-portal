@@ -64,7 +64,11 @@ export default function UserProfileButton({
           sx={{ minWidth: 160 }}
           startIcon={
             <UserAvatar
-              src={user?.profile_photo_url || IMAGES.avatar}
+              src={
+                (user?.profile_photo_url &&
+                  `${user?.profile_photo_url}?timestamp=${Date.now()}`) ||
+                IMAGES.avatar
+              }
               width={20}
               height={20}
             />
@@ -90,14 +94,16 @@ export default function UserProfileButton({
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
+          disableScrollLock
+          disableAutoFocus
           MenuListProps={{
             "aria-labelledby": "basic-button",
           }}
           PaperProps={{
             style: {
-              boxShadow: "none",
-              border: `1px solid ${theme.palette.primary.main}`,
+              boxShadow: "1px 2px 11px 0px #00123D5E",
               minWidth: menuWidth || "auto",
+              marginTop: "7px",
             },
           }}
         >

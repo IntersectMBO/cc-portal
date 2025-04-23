@@ -1,13 +1,13 @@
 "use client";
 import { Button } from "@atoms";
 import { ICONS } from "@consts";
-import { Box } from "@mui/material";
-import { useState } from "react";
+import { Box, IconButton, Stack } from "@mui/material";
+import { useEffect, useState } from "react";
 import { FormErrorMessage } from "./FormErrorMessage";
 import { ButtonProps, FormErrorMessageProps } from "./types";
 
 interface UploadFileButtonProps extends Omit<ButtonProps, "onChange"> {
-  onChange: (file: File) => void;
+  onChange: (file: File | null) => void;
   accept?: string;
   dataTestId?: string;
 }
@@ -18,6 +18,7 @@ export const UploadFileButton = ({
   errorMessage,
   errorStyles,
   name,
+  value,
   accept = "image/jpeg",
   dataTestId,
   ...buttonProps
@@ -25,16 +26,28 @@ export const UploadFileButton = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const fileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-      const file = target.files[0];
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
       setSelectedFile(file);
       onChange(file);
+      e.target.value = "";
     }
   };
 
+  const removeFile = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setSelectedFile(null);
+    onChange(null);
+  };
+
+  useEffect(() => {
+    if (!value) {
+      setSelectedFile(null);
+    }
+  }, [value]);
+
   return (
-    <label htmlFor="btn-upload">
+    <Box>
       <input
         accept={accept}
         id="btn-upload"
@@ -44,25 +57,45 @@ export const UploadFileButton = ({
         onChange={fileChange}
         data-testid={`${dataTestId}-input`}
       />
-      <Box sx={{ display: "flex" }}>
-        <Button
-          startIcon={<img src={ICONS.upload} />}
-          component="span"
-          data-testid={`${dataTestId}-button`}
-          {...buttonProps}
-        >
-          <Box
+
+      <Stack direction="row" spacing={"-20px"} alignItems="center">
+        <label htmlFor="btn-upload">
+          <Button
+            startIcon={<img src={ICONS.upload} />}
+            component="span"
+            data-testid={`${dataTestId}-button`}
+            {...buttonProps}
+          >
+            <Box
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                maxWidth: "145px",
+              }}
+            >
+              {selectedFile?.name || children}
+            </Box>
+          </Button>
+        </label>
+
+        {selectedFile && (
+          <IconButton
+            onClick={removeFile}
+            size="medium"
             sx={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap"
+              top: "-10px",
+              backgroundColor: "#fff",
+              border: "1.5px solid #ebf0ff",
+              "&:hover": { backgroundColor: "#f1f3fc", borderColor: "#1233ad" },
             }}
           >
-            {selectedFile && selectedFile.name ? selectedFile.name : children}
-          </Box>
-        </Button>
-      </Box>
+            <img src={ICONS.close} width="13px" height="13px" alt="Remove" />
+          </IconButton>
+        )}
+      </Stack>
+
       <FormErrorMessage errorMessage={errorMessage} errorStyles={errorStyles} />
-    </label>
+    </Box>
   );
 };
