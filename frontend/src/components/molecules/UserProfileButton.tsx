@@ -8,9 +8,10 @@ import Menu from "@mui/material/Menu";
 import { useTranslations } from "next-intl";
 import * as React from "react";
 import { Button } from "../atoms";
+import theme from "@/theme";
 
 export default function UserProfileButton({
-  user
+  user,
 }: {
   user: Pick<FetchUserData, "name" | "profile_photo_url">;
 }) {
@@ -18,9 +19,12 @@ export default function UserProfileButton({
   const t = useTranslations();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [menuWidth, setMenuWidth] = React.useState<number | null>(null);
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+    setMenuWidth(event.currentTarget.offsetWidth);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -31,8 +35,8 @@ export default function UserProfileButton({
       type: "signUpModal",
       state: {
         showCloseButton: true,
-        title: t("Modals.editProfile.headline")
-      }
+        title: t("Modals.editProfile.headline"),
+      },
     });
     handleClose();
   };
@@ -41,8 +45,8 @@ export default function UserProfileButton({
     openModal({
       type: "signOutModal",
       state: {
-        homeRedirectionPath: PATHS.home
-      }
+        homeRedirectionPath: PATHS.home,
+      },
     });
   };
 
@@ -60,7 +64,11 @@ export default function UserProfileButton({
           sx={{ minWidth: 160 }}
           startIcon={
             <UserAvatar
-              src={user?.profile_photo_url || IMAGES.avatar}
+              src={
+                (user?.profile_photo_url &&
+                  `${user?.profile_photo_url}?timestamp=${Date.now()}`) ||
+                IMAGES.avatar
+              }
               width={20}
               height={20}
             />
@@ -86,11 +94,17 @@ export default function UserProfileButton({
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
+          disableScrollLock
+          disableAutoFocus
           MenuListProps={{
-            "aria-labelledby": "basic-button"
+            "aria-labelledby": "basic-button",
           }}
           PaperProps={{
-            style: { boxShadow: "none" }
+            style: {
+              boxShadow: "1px 2px 11px 0px #00123D5E",
+              minWidth: menuWidth || "auto",
+              marginTop: "7px",
+            },
           }}
         >
           <Grid

@@ -25,5 +25,7 @@
       "@dto/*": ["src/dto/*"],
       "@mapper/*": ["src/mapper/*"],
     }
-  }
+  },
+  "include": ["src/**/*", ".eslintrc.cjs"],
+  "exclude": ["node_modules", "dist"]
 }

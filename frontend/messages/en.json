@@ -108,12 +108,14 @@
         "description": {
           "label": "Description"
         },
-        "upload": "Upload profile photo"
+        "upload": "Upload profile photo",
+        "deletePhoto": "Delete current photo"
       },
       "alerts": {
         "success": "Profile successfully updated",
         "error": "Error updating profile",
-        "errorUploadProfilePhoto": "Error uploading photo"
+        "errorUploadProfilePhoto": "Error uploading photo",
+        "successRemovedPhoto": "Photo successfully removed"
       }
     },
     "editProfile": {
@@ -251,6 +253,7 @@
       "rationaleLink": "Rationale link",
       "rationale": "Rationale",
       "notAvailable": "Not Available",
+      "governanceActionAbstract": "Governance Action Abstract",
       "governanceActionStatus": "Governance Action Status",
       "governanceActionCategory": "Governance Action Category",
       "governanceActionId": "Governance Action ID",

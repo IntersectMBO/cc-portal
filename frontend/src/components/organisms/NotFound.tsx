@@ -1,23 +1,28 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Box, SxProps } from "@mui/material";
-import { Typography } from "@atoms";
+import { Button, Typography } from "@atoms";
 import { useTranslations } from "next-intl";
 import { customPalette } from "@/constants";
+import { useModal } from "@/context";
 
 export function NotFound({
   title,
   description,
   height = "82vh",
+  buttonText,
   sx,
 }: {
   title: string;
   description: string;
   height?: string;
+  buttonText?: string;
   sx?: SxProps;
 }) {
   const t = useTranslations("NotFound");
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const { openModal } = useModal();
+  const uploadConstitution = () => openModal({ type: "uploadConstitution" });
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(display-mode: fullscreen)");
@@ -61,13 +66,24 @@ export function NotFound({
         >
           {t(title)}
         </Typography>
-        <Typography
-          fontWeight={400}
-          variant="body1"
-          data-testid="not-found-description-text"
-        >
-          {t(description)}
-        </Typography>
+        {description && (
+          <Typography
+            fontWeight={400}
+            variant="body1"
+            data-testid="not-found-description-text"
+          >
+            {t(description)}
+          </Typography>
+        )}
+        {buttonText && (
+          <Button
+            style={{ marginTop: "10px" }}
+            size="extraLarge"
+            onClick={uploadConstitution}
+          >
+            {buttonText}
+          </Button>
+        )}
       </Box>
     </Box>
   );

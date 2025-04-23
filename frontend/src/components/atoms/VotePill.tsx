@@ -17,10 +17,18 @@ export const VotePill = ({
       px={2.25}
       border={1}
       borderColor={
-        VOTE === "yes" ? "#C0E4BA" : VOTE === "no" ? "#EDACAC" : "#99ADDE"
+        VOTE === "constitutional"
+          ? "#C0E4BA"
+          : VOTE === "unconstitutional"
+          ? "#EDACAC"
+          : "#99ADDE"
       }
       bgcolor={
-        VOTE === "yes" ? "#F0F9EE" : VOTE === "no" ? "#FBEBEB" : "#E6EBF7"
+        VOTE === "constitutional"
+          ? "#F0F9EE"
+          : VOTE === "unconstitutional"
+          ? "#FBEBEB"
+          : "#E6EBF7"
       }
       borderRadius={100}
       textAlign="center"

@@ -10,15 +10,15 @@ export function UserListEditRoleButton({ userId }: { userId: string }) {
   const { userSession } = useAppContext();
   const { openModal } = useModal<OpenDeleteUserModalState>();
 
-  if (!isSuperAdminRole(userSession.role)) return null;
+  if (!userSession || !isSuperAdminRole(userSession.role)) return null;
 
   const handleEditUserRole = () => {
     openModal({
       type: "changeRole",
       state: {
         sAdminId: userSession.userId,
-        userId
-      }
+        userId,
+      },
     });
   };
 
