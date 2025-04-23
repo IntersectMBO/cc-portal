@@ -3,7 +3,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormLabel,
-  Typography
+  Typography,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useCallback } from "react";
 
@@ -19,7 +19,7 @@ interface Props {
 export const GovernanceActionsFilters = ({
   chosenFilters,
   setChosenFilters,
-  filterOptions
+  filterOptions,
 }: Props) => {
   const t = useTranslations();
 
@@ -56,7 +56,7 @@ export const GovernanceActionsFilters = ({
         borderRadius: "10px",
         padding: "12px 0px",
         width: "auto",
-        zIndex: "1"
+        zIndex: "1",
       }}
     >
       <Box
@@ -80,7 +80,7 @@ export const GovernanceActionsFilters = ({
                 fontSize: 14,
                 fontWeight: 500,
                 color: "#9792B5",
-                paddingX: "20px"
+                paddingX: "20px",
               }}
             >
               {filter.title}
@@ -106,7 +106,14 @@ export const GovernanceActionsFilters = ({
                     />
                   }
                   label={
-                    <Typography fontSize={14} fontWeight={500} data-testid={`${item.label.replace(/ /g, "")}-checkbox-text`}>
+                    <Typography
+                      fontSize={14}
+                      fontWeight={500}
+                      data-testid={`${item.label.replace(
+                        / /g,
+                        ""
+                      )}-checkbox-text`}
+                    >
                       {item.label}
                     </Typography>
                   }

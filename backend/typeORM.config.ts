@@ -33,4 +33,11 @@ export default new DataSource({
     GovActionProposal,
     Rationale,
   ],
+  ...(configService.get('POSTGRES_TLS') === 'false'
+    ? {}
+    : {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      }),
 });

@@ -9,7 +9,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
-const Anchor = ({ id, offset = "-20vh " }) => {
+const Anchor = ({ id, offset = "-20vh" }) => {
   return (
     <span
       id={id}
@@ -61,7 +61,7 @@ export const Heading2 = ({ children, id }) => (
     >
       {children}
     </Typography>
-    <Anchor id={id} />
+    <Anchor id={id} offset="-30vh" />
   </>
 );
 
@@ -78,7 +78,7 @@ export const Heading3 = ({ children, id }) => (
     >
       {children}
     </Typography>
-    <Anchor id={id} />
+    <Anchor id={id} offset="-30vh" />
   </>
 );
 export const Heading5 = ({ children }) => (

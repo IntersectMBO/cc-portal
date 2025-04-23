@@ -21,7 +21,7 @@ export default function UserListSwitchResendButton({
   status,
   userId,
   role,
-  email
+  email,
 }: {
   userId: string;
   status: UserStatusType;
@@ -29,8 +29,8 @@ export default function UserListSwitchResendButton({
   email: string;
 }) {
   const { userSession } = useAppContext();
-  const isSuperAdmin = isSuperAdminRole(userSession.role);
-  const isAdmin = isAdminRole(userSession.role);
+  const isSuperAdmin = userSession ? isSuperAdminRole(userSession.role) : false;
+  const isAdmin = userSession ? isAdminRole(userSession.role) : false;
   const t = useTranslations("UsersList");
   const { openModal } = useModal<OpenSwitchStatusModalState>();
 
@@ -53,7 +53,7 @@ export default function UserListSwitchResendButton({
           } else {
             addErrorAlert(res.error);
           }
-        }
+        },
       };
     }
 
@@ -76,7 +76,7 @@ export default function UserListSwitchResendButton({
           ),
           action: async () => {
             handleSwitchUser(newStatus);
-          }
+          },
         };
       }
 
@@ -93,7 +93,7 @@ export default function UserListSwitchResendButton({
           ),
           action: async () => {
             handleSwitchUser(newStatus);
-          }
+          },
         };
       }
     }
@@ -112,8 +112,8 @@ export default function UserListSwitchResendButton({
       type: "switchUserStatus",
       state: {
         newStatus,
-        userId
-      }
+        userId,
+      },
     });
   };
 

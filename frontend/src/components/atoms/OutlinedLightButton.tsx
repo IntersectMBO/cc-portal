@@ -26,8 +26,8 @@ export const OutlinedLightButton = ({
     wordBreak: "break-word",
 
     "&": {
-      pointerEvents: nonInteractive ? "none" : "all"
-    }
+      pointerEvents: nonInteractive ? "none" : "all",
+    },
   } as React.CSSProperties;
 
   return (
@@ -37,7 +37,7 @@ export const OutlinedLightButton = ({
       onClick={nonInteractive ? undefined : onClick}
       sx={{
         ...defaultSxProps,
-        ...sx
+        ...sx,
       }}
       {...props}
     >

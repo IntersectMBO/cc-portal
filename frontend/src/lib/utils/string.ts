@@ -31,3 +31,12 @@ export const truncateText = (text: string, limit: number): string => {
   const truncated = text.slice(0, limit) + "...";
   return truncated;
 };
+
+export const changeVotingLabels = (value) => {
+  if (value === "Yes") {
+    return "CONSTITUTIONAL";
+  } else if (value === "No") {
+    return "UNCONSTITUTIONAL";
+  }
+  return value;
+};

@@ -34,7 +34,7 @@ export const Hero = ({ children }: HeroProps) => {
           sx={{
             maxWidth: 630,
             my: { xxs: 2, md: 2 },
-            whiteSpace: "pre-line"
+            whiteSpace: "pre-line",
           }}
           data-testid="hero-section-description-text"
         >
@@ -52,8 +52,8 @@ export const Hero = ({ children }: HeroProps) => {
         sx={{
           position: { xxs: "absolute", lg: "relative" },
           "& img": {
-            maxHeight: 558
-          }
+            maxHeight: 558,
+          },
         }}
       >
         <img src={IMAGES.heroImage} />

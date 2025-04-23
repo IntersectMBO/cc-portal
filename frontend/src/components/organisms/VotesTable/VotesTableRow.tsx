@@ -4,8 +4,13 @@ import { VotesTableI } from "@/lib/requests";
 import { Button, OutlinedLightButton, Typography, VotePill } from "@atoms";
 import { customPalette } from "@consts";
 import { Card, TableDivider, UserAvatar, UserBasicInfo } from "@molecules";
-import { Box, Grid, Stack } from "@mui/material";
-import { formatDisplayDate, getProposalTypeLabel, truncateText } from "@utils";
+import { Box, Grid, Stack, Tooltip } from "@mui/material";
+import {
+  changeVotingLabels,
+  formatDisplayDate,
+  getProposalTypeLabel,
+  truncateText,
+} from "@utils";
 import { useTranslations } from "next-intl";
 
 interface Props {
@@ -32,6 +37,8 @@ export const VotesTableRow = ({
     gov_action_proposal_type,
     vote_submit_time,
   } = votes;
+
+  const updatedValue = changeVotingLabels(value);
 
   return (
     <Card
@@ -78,22 +85,35 @@ export const VotesTableRow = ({
       >
         <Grid container gap={2} xxs={12} md={6} lg={5} xl={3} flexWrap="nowrap">
           <TableDivider />
-          <Grid item>
-            <Typography
-              color={customPalette.neutralGray}
-              sx={{ marginBottom: 1 }}
-              variant="caption"
-              fontWeight={500}
-            >
-              {t("govAction")}
-            </Typography>
+          <Tooltip
+            title={
+              gov_action_proposal_title.length > 40
+                ? gov_action_proposal_title
+                : ""
+            }
+            arrow
+            enterDelay={200}
+            enterNextDelay={200}
+            enterTouchDelay={0}
+            leaveDelay={0}
+          >
+            <Grid item>
+              <Typography
+                color={customPalette.neutralGray}
+                sx={{ marginBottom: 1 }}
+                variant="caption"
+                fontWeight={500}
+              >
+                {t("govAction")}
+              </Typography>
 
-            <Typography variant="caption">
-              {gov_action_proposal_title
-                ? truncateText(gov_action_proposal_title, 40)
-                : t("notAvailable")}
-            </Typography>
-          </Grid>
+              <Typography variant="caption">
+                {gov_action_proposal_title
+                  ? truncateText(gov_action_proposal_title, 40)
+                  : t("notAvailable")}
+              </Typography>
+            </Grid>
+          </Tooltip>
         </Grid>
         <Grid container gap={2} xxs={12} md={5} lg={5} xl={3} flexWrap="nowrap">
           <TableDivider />
@@ -115,9 +135,9 @@ export const VotesTableRow = ({
           container
           gap={2}
           xxs={12}
-          md={5}
-          lg={3}
-          xl={1.5}
+          md={6}
+          lg={4}
+          xl={2.11}
           flexWrap="nowrap"
         >
           <TableDivider />
@@ -132,7 +152,7 @@ export const VotesTableRow = ({
             </Typography>
 
             <Box display="flex" alignItems="center" gap={2}>
-              <VotePill vote={value} />
+              <VotePill vote={updatedValue} />
             </Box>
           </Grid>
         </Grid>
