@@ -1,10 +1,8 @@
-# Constitution Committee Portal
-
 Welcome to the official repository for the Constitution Committee Portal.
 
-The primary purpose of the solution is to host the Cardano Constitution and allow anyone to get familiar with it and follow the evolution over time. It also serves as the single point of truth for the Cardano Community members to see how Constitutional Committee members voted on a specific Governance Action, with the inclusion of their rationale. For members of the Constitutional Committee, it serves as a portal to add reasoning to their votes and prepare it as an off-chain resource to be attached to on-chain governance actions.
+The primary purpose of this solution is to host the Cardano Constitution and allow anyone to get familiar with it and follow its evolution over time. It also serves as the single point of truth for the Cardano Community members to see how Constitutional Committee members voted on a specific Governance Action, with the inclusion of their rationale. For members of the Constitutional Committee, it serves as a portal to add reasoning to their votes and prepare it as an off-chain resource to be attached to on-chain governance actions.
 
-## Table of content:
+## Navigation
 
 - [Introduction](#introduction)
 - [Prerequisites](#prerequisites)
@@ -27,21 +25,15 @@ This document serves as a comprehensive guide for setting up the full stack of o
 ## Tech stack:
 
 **Frontend:** [Next.js](https://nextjs.org/)
-
 **Backend:** [Node](https://nodejs.org/en/about/), [Nest.js](https://nestjs.com/)
-
 **Database:** [PostgreSQL](https://www.postgresql.org/)
-
 **Caching service:** [Redis](https://redis.io/docs)
-
 **Worker service:** [Nest.js](https://nestjs.com/)
-
 **Helia IPFS/IPNS node:** [Helia](https://github.com/ipfs/helia), [Nest.js](https://nestjs.com/)
 
 ### Frontend
 
 The Frontend is developed with Next.js, a React framework that allows for server-side rendering and static site generation. This choice enables us to create fast, SEO-friendly web pages that integrate seamlessly with our Nest.js backend.
-
 The instructions that follow will guide you through setting up each component of our application stack, ensuring a cohesive development and deployment process.
 
 ### Backend
@@ -69,24 +61,19 @@ The IPFS node is powered by Nest.js with Helia JS library. This service is used 
 Before you begin setting up the application, you'll need to clone the repository from GitHub to get a local copy of the code. Follow these steps to clone the repository and start setting up the application components:
 
 1. **Clone the Repository:**
-
    - Open a terminal on your computer.
    - Navigate to the directory where you want to store the project.
    - Run the following command to clone the repository:
      ```
      git clone https://github.com/IntersectMBO/cc-portal.git
      ```
-
 2. **Navigate to the Project Directory:**
-
    - After cloning, change into the project's root directory:
      ```
      cd cc-portal
      ```
      This directory contains all the files you need to set up the application, including the Docker Compose file and the separate directories for the frontend, backend, ipfs and worker components.
-
 3. **Configure Environment Variables:**
-
    - Navigate to the `backend` directory and run the following command:
      ```
      cp example.env .env
@@ -94,17 +81,13 @@ Before you begin setting up the application, you'll need to clone the repository
      Edit the .env file to reflect your local settings. Env variables description can be found [below](#environment-variables).
    - Run this command within folders: `frontend`, `worker-service`, `ipfs-service` to configure environment variables for all these services. Edit every .env file to reflect your local settings.
      Important: for `worker-service` environment variables ensure the right credentials for connection to DB-SYNC Database
-
 4. **Docker Setup:**
-
    - Change your directory to the root of your project where the `docker-compose.yaml` file is located.
    - Execute the following command to start up all the services as defined in your `docker-compose.yaml` file.
      ```
      docker-compose up --build -d
      ```
-
 5. **Database migration:**
-
    - Run the following commands:
      1. Navigate to the backend docker container
      ```
@@ -118,7 +101,6 @@ Before you begin setting up the application, you'll need to clone the repository
      ```
      exit
      ```
-
 6. **Create Super Admin**
 
    A Super Admin should be created manually. To do that, run the following SQL queries on the Backend PostgreSQL database:
@@ -152,11 +134,8 @@ If the installation process passes successfully, the CC Portal is ready to use.
 Below is a description of the environment variables used in the `.env` file:
 
 1. **Frontend:**
-
    - `NEXT_PUBLIC_API_URL`: Url of the Backend service. Example: `http://localhost:1337`.
-
 2. **Backend:**
-
    - `POSTGRES_DB`: The name of the PostgreSQL database. Example: `cc-portal`.
    - `POSTGRES_HOST`: The hostname for the PostgreSQL database. Example: `postgres`
    - `POSTGRES_PORT`: The port number for the PostgreSQL database. Example: `5432`.
@@ -192,9 +171,7 @@ Below is a description of the environment variables used in the `.env` file:
    - `IPFS_SERVICE_URL`: URL of the IPFS service.Example `http://localhost:3001`.
    - `FE_LOGIN_CALLBACK_URL`: Frontend login callback URL. Example `http://localhost:3000/en/verify/login`.
    - `FE_REGISTER_CALLBACK_URL`: Frontend register callback URL. Example `http://localhost:3000/en/verify/register`.
-
 3. **IPFS service**
-
    - `LISTEN_TCP_ADDRESS`: Define where the IPFS node should expect and accept connections from other peers over TCP protocol.
    - `LISTEN_WS_ADDRESS`: WebSocket address over TCP protocol.
    - `LISTEN_QUIC_ADDRESS`: Quic-v1 address over UDP protocol.
@@ -210,9 +187,7 @@ Below is a description of the environment variables used in the `.env` file:
    - `DHT_QUEUE_BACKOFF_DELAY`: Backoff delay in milliseconds. Example `1000`.
    - `MAX_PEERS`: Limit of peers stored in the peer store. Example `5000`.
    - `PRUNE_PEER_STORE_INTERVAL`: Frequency of the job that reduces the total number of peers limited to MAX_PEERS. Example `0 0 */12 * * *`.
-
 4. **Worker service**
-
    - `BE_POSTGRES_DB`: The name of the Backend PostgreSQL database. Example: `cc-portal`.
    - `BE_POSTGRES_HOST`: The hostname for the Backend PostgreSQL database. Example: `postgres`
    - `BE_POSTGRES_PORT`: The port number for the Backend PostgreSQL database. Example: `5432`.
