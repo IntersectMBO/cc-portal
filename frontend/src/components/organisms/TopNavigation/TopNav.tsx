@@ -46,6 +46,7 @@ export const TopNav = () => {
             dataTestId={`top-nav-${navItem.href.replace("/", "")}-link`}
             label={navItem.label}
             href={navItem.href}
+            external={navItem.newTabLink}
           />
         </ButtonBase>
       </Grid>
