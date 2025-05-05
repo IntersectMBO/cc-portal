@@ -1,4 +1,4 @@
-import { PATHS } from "./paths";
+import { EXTERNAL_LINKS, PATHS } from "./paths";
 
 export const NAV_ITEMS = [
   {
@@ -18,6 +18,12 @@ export const NAV_ITEMS = [
     href: PATHS.votingUpdates,
     label: "Voting Updates",
     newTabLink: null,
+  },
+  {
+    dataTestId: "elections",
+    href: EXTERNAL_LINKS.elections,
+    label: "Elections",
+    newTabLink: true,
   },
 ];
 

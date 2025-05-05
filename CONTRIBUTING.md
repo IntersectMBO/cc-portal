@@ -1,21 +1,14 @@
-# Contributing to the `CC Portal` project
+# Contributing to the `xxxx` project
 
-⚠️ This is a work in progress document, more instruction on how-to contribute to come!
-
-Contributing todo:
-
-- [ ] Refactor to reflect reality
-- [ ] Make more friendly to open source contributors
-
-Thanks for considering contributing and helping us on creating CC Portal! 😎
+Thanks for considering contributing and helping us on creating xxxx! 😎
 
 The best way to contribute right now is to try things out and provide feedback, but we also accept contributions to the documentation and the obviously to the code itself.
 
-This document contains guidelines to help you get started and how to make sure your contribution gets accepted, making you our newest CC Portal contributor!
+This document contains guidelines to help you get started and how to make sure your contribution gets accepted, making you our newest xxxx contributor!
 
 ## Table of Contents
 
-- [Contributing to the `CC Portal` project](#contributing-to-the-cc-portal-project)
+- [Contributing to the `xxxx` project](#contributing-to-the-xxxx-project)
   - [Table of Contents](#table-of-contents)
   - [Code of Conduct](#code-of-conduct)
   - [Ask for Help](#ask-for-help)
@@ -37,6 +30,12 @@ This document contains guidelines to help you get started and how to make sure y
       - [React](#react)
       - [CSS in Javascript](#css-in-javascript)
       - [CSS / SASS](#css--sass)
+      - [Haskell](#haskell)
+  - [Development Processes](#development-processes)
+    - [Developer workflow](#developer-workflow)
+    - [QA Workflow](#qa-workflow)
+    - [PO Workflow](#po-workflow)
+    - [Tech Lead Workflow](#tech-lead-workflow)
 
 ## Code of Conduct
 
@@ -78,11 +77,11 @@ Please complete the following steps in advance to help us fix any potential bug 
 
 We use GitHub issues to track bugs and errors. If you run into an issue with the project:
 
-- Open an [Issue](https://github.com/IntersectMBO/cc-portal/issues/new).
+- Open an [Issue](https://github.com/IntersectMBO/xxxx/issues/new).
   (Since we can't be sure at this point whether it is a bug or not, we ask you not to talk about a bug yet and not to label the issue.)
 - Explain the behavior you would expect and the actual behavior.
 - Please provide as much context as possible.
-  Describe the _reproduction steps_ that someone else can follow to recreate the issue on their own.
+  Describe the *reproduction steps* that someone else can follow to recreate the issue on their own.
   This usually includes your code.
   For good bug reports you should isolate the problem and create a reduced test case.
 - Provide the information you collected in the previous section.
@@ -109,7 +108,6 @@ TODO
 Thank you for contributing your changes by opening a pull requests!
 
 To get something merged we usually require:
-
 - Follow the Pull Request template
 - Description of the changes - if your commit messages are great, this is less important
 - Quality of changes is ensured - through new or updated automated tests
@@ -126,7 +124,6 @@ Please reuse the branch naming for the pull request naming.
 - Using the related issue number after the prefix is required.
 
 Examples:
-
 - `feat/123-added-ability-for-dreps-to-change-drep-id`
 - `fix/312-fixed-drep-ids-being-reversed`
 - `chore/567-bumped-cardano-node-version-to-9`
@@ -134,7 +131,7 @@ Examples:
 
 ### Commit Messages
 
-Please make informative commit messages!
+Please make informative commit messages! 
 It makes it much easier to work out why things are the way they are when you’re debugging things later.
 
 A commit message is communication, so as usual, put yourself in the position of the reader: what does a reviewer, or someone reading the commit message later need to do their job?
@@ -145,7 +142,6 @@ Also, include any relevant meta-information, such as issue numbers.
 If a commit completely addresses a issue, you can put that in the headline if you want, but it’s fine to just put it in the body.
 
 Here are seven rules for great git commit messages:
-
 1. Separate subject from body with a blank line
 2. Limit the subject line to 50 characters (soft limit)
 3. Capitalize the subject line
@@ -169,7 +165,6 @@ Try to keep branches up-to-date with main (not strict requirement though).
 Once merged to main, please delete the branch.
 
 **Tip:** Use Github's merge button in PRs to merge with commit.
-This strategy helps us operate on the commits you've delivered: it's easier to [cherry-pick a merge commit](https://git-scm.com/docs/git-cherry-pick#Documentation/git-cherry-pick.txt--mltparent-numbergt) than a series of commits, and it's also easier to [revert changes using a merge commit](https://git-scm.com/docs/git-revert#Documentation/git-revert.txt--mparent-number) instead of a series of reverts.
 If a branch is outdated, use the rebase button in PRs to rebase feature branches (NOT update via merge).
 
 #### Rationale
@@ -177,7 +172,7 @@ If a branch is outdated, use the rebase button in PRs to rebase feature branches
 Keeping branches ahead of main not only make the git history a lot nicer to process, it also makes conflict resolutions easier.
 Merging main into a branch repeatedly is a good recipe to introduce invalid conflict resolutions and loose track of the actual changes brought by a the branch.
 
-### Versioning
+### Versioning 
 
 Not all releases are declared stable.
 Releases that aren't stable will be released as pre-releases and will append a -pre tag indicating it is not ready for running on production networks.
@@ -185,7 +180,6 @@ Releases that aren't stable will be released as pre-releases and will append a -
 ### Changelog
 
 During development, on every PR;
-
 - Make sure `CHANGELOG.md` is kept up-to-date with high-level, technical, but user-focused list of changes according to [keepachangelog](https://keepachangelog.com/en/1.0.0/).
 - Bump `UNRELEASED` version in `CHANGELOG.md` according to [semver](https://semver.org/).
 
