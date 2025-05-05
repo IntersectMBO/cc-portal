@@ -24,6 +24,7 @@ export const EXTERNAL_LINKS = {
     "https://github.com/IntersectMBO/plutus/tree/master/cardano-constitution",
   guardrailsRationale:
     "https://docs.google.com/document/d/1FDVnDwugtA5RlgH8a-_8pWL_W-VGvMYA",
+  elections: "https://elections.constitution.gov.tools/",
 };
 
 export const adminProtectedPath = PATHS.admin.dashboard;
