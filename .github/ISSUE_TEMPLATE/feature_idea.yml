@@ -12,17 +12,19 @@ body:
     attributes:
       value: |
         Before submitting a new issue consider [starting a new discussion](https://github.com/IntersectMBO/cc-portal/discussions/new?category=ideas).
+
   - type: dropdown
     id: design-needed
     attributes:
       label: Is there new design needed?
       description: Will this feature require new or edit to existing frontend designs?
       options:
-        - "Yes"
-        - "No"
+        - 'Yes'
+        - 'No'
         - Not sure
     validations:
       required: true
+
   - type: textarea
     id: what
     attributes:
@@ -59,6 +61,7 @@ body:
     attributes:
       value: |
         ---
+
   - type: textarea
     id: user-story
     attributes:

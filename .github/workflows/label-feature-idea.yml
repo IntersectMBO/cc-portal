@@ -21,14 +21,17 @@ jobs:
           else
             echo "is_feature_idea=false" >> $GITHUB_ENV
           fi
+
       - name: Apply "🎨 Design Needed" label if design needed is "Yes"
         if: ${{ env.is_feature_idea == 'true' }}
         uses: actions/github-script@v6
         with:
           script: |
             const issueBody = context.payload.issue.body;
+
             // Match the "Yes" selection under the "### Is there new design needed?" header
             const designNeededMatch = issueBody.match(/### Is there new design needed\?\s*\n\s*Yes\s*\n/);
+
             if (designNeededMatch) {
               await github.rest.issues.addLabels({
                 issue_number: context.issue.number,
@@ -37,14 +40,17 @@ jobs:
                 labels: ["🎨 Design Needed"],
               });
             }
+
       - name: Apply "User Story Needed" label if user story not provided
         if: ${{ env.is_feature_idea == 'true' }}
         uses: actions/github-script@v6
         with:
           script: |
             const issueBody = context.payload.issue.body;
+
             const userStoryPattern = /### \(Optional\) User Story with acceptance criteria\s*\n\s*_No response_/;
             const userStoryMissing = userStoryPattern.test(issueBody);
+
             if (userStoryMissing) {
               await github.rest.issues.addLabels({
                 issue_number: context.issue.number,

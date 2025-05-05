@@ -1,6 +1,6 @@
 name: 🐛 Bug report
 description: You found a bug!
-title: "🐛 "
+title: '🐛 '
 labels: ["🐛 Bug"]
 projects: ["IntersectMBO/24", "IntersectMBO/34"]
 body:
@@ -12,6 +12,7 @@ body:
     attributes:
       value: |
         Before submitting a new issue please check the [existing issues](https://github.com/IntersectMBO/cc-portal/issues) to avoid duplication.
+
   - type: dropdown
     id: domain
     attributes:
@@ -40,9 +41,9 @@ body:
       label: Steps to reproduce
       description: Explain the steps to reproduce
       placeholder: |
-        1. Navigate to view constitution
-        2. Scroll to appendix
-        3. ...
+          1. Navigate to view constitution
+          2. Scroll to appendix
+          3. ...
     validations:
       required: true
 
@@ -50,7 +51,7 @@ body:
     id: actual-behavior
     attributes:
       label: Actual behavior
-      description: A description of the erroneous outcome
+      description:  A description of the erroneous outcome
       placeholder: |
         A error came up on the screen stating...
     validations:

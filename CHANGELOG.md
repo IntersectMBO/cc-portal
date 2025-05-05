@@ -11,17 +11,13 @@ changes.
 ## [tag-xxxx](https://github.com/IntersectMBO/cc-portal/releases/tag/xxxx) 2024-xx-xx
 
 ### Added
-
 -
 
 ### Fixed
-
 -
 
 ### Changed
-
--
+- 
 
 ### Removed
-
 -

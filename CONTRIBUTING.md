@@ -21,9 +21,9 @@ This document contains guidelines to help you get started and how to make sure y
   - [Ask for Help](#ask-for-help)
   - [Roles and Responsibilities](#roles-and-responsibilities)
   - [I Want To Contribute](#i-want-to-contribute)
-    - [Before Submitting a Bug Report](#before-submitting-a-bug-report)
-    - [How Do I Submit a Good Bug Report?](#how-do-i-submit-a-good-bug-report)
-    - [Your First Code Contribution](#your-first-code-contribution)
+      - [Before Submitting a Bug Report](#before-submitting-a-bug-report)
+      - [How Do I Submit a Good Bug Report?](#how-do-i-submit-a-good-bug-report)
+      - [Your First Code Contribution](#your-first-code-contribution)
   - [Working Conventions](#working-conventions)
     - [Pull Requests](#pull-requests)
     - [Branch Naming](#branch-naming)
@@ -86,7 +86,9 @@ We use GitHub issues to track bugs and errors. If you run into an issue with the
   This usually includes your code.
   For good bug reports you should isolate the problem and create a reduced test case.
 - Provide the information you collected in the previous section.
-  Once it's filed:
+
+Once it's filed:
+
 - The project team will label the issue accordingly.
 - A team member will try to reproduce the issue with your provided steps.
   If there are no reproduction steps or no obvious way to reproduce the issue, the team will ask you for those steps.
@@ -114,7 +116,8 @@ To get something merged we usually require:
 - Change is related to an issue, feature (idea) or bug report - ideally discussed beforehand
 - Well-scoped - we prefer multiple PRs, rather than a big one
 - Add changes to changelog, see [Changelog](#changelog).
-  Please reuse the branch naming for the pull request naming.
+
+Please reuse the branch naming for the pull request naming.
 
 ### Branch Naming
 
@@ -137,6 +140,7 @@ It makes it much easier to work out why things are the way they are when you’r
 A commit message is communication, so as usual, put yourself in the position of the reader: what does a reviewer, or someone reading the commit message later need to do their job?
 Write it down!
 It is even better to include this information in the code itself, but sometimes it doesn’t belong there (e.g. ticket info).
+
 Also, include any relevant meta-information, such as issue numbers.
 If a commit completely addresses a issue, you can put that in the headline if you want, but it’s fine to just put it in the body.
 
@@ -149,7 +153,8 @@ Here are seven rules for great git commit messages:
 5. Use the imperative mood in the subject line and suffix with ticket number if applicable
 6. Wrap the body at 72 characters (hard limit)
 7. Use the body to explain what and why vs. how
-   There is plenty to say on this topic, but broadly the guidelines in [this post](https://cbea.ms/git-commit/) are good.
+
+There is plenty to say on this topic, but broadly the guidelines in [this post](https://cbea.ms/git-commit/) are good.
 
 #### Rationale
 
