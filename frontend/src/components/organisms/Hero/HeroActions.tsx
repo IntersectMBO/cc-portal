@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/atoms/Button";
-import { IMAGES, PATHS } from "@/constants";
+import { ICONS, IMAGES, PATHS } from "@/constants";
 import { useModal } from "@context";
 import { Grid } from "@mui/material";
 import { useTranslations } from "next-intl";
