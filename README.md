@@ -2,9 +2,9 @@
 
 Welcome to the official repository for the Constitution Committee Portal.
 
-The primary purpose of the solution is to host the Cardano Constitution and allow anyone to get familiar with it and follow its evolution over time. It also serves as the single point of truth for the Cardano Community members to see how Constitutional Committee members voted on a specific Governance Action, with the inclusion of their rationale. For members of the Constitutional Committee, it serves as a portal to add reasoning to their votes and prepare it as an off-chain resource to be attached to on-chain governance actions.
+The primary purpose of this solution is to host the Cardano Constitution and allow anyone to get familiar with it and follow its evolution over time. It also serves as the single point of truth for the Cardano Community members to see how Constitutional Committee members voted on a specific Governance Action, with the inclusion of their rationale. For members of the Constitutional Committee, it serves as a portal to add reasoning to their votes and prepare it as an off-chain resource to be attached to on-chain governance actions.
 
-## Table of content:
+## Navigation
 
 - [Introduction](#introduction)
 - [Prerequisites](#prerequisites)
@@ -171,6 +171,7 @@ Below is a description of the environment variables used in the `.env` file:
    - `REDIS_HOST`: Hostname for Redis. Example `cache`.
    - `REDIS_PORT`: Port number for Redis. Example `6379`.
    - `REDIS_PASSWORD`: Password for Redis. Example `password`.
+   - `REDIS_TLS`: TLS connection is enabled/disabled. Example `false`.
    - `AWS_ACCESS_KEY_ID`: AWS SES access key id.
    - `AWS_SECRET_ACCESS_KEY`: AWS SES secret access key.
    - `AWS_REGION`: AWS SES region.
@@ -182,6 +183,7 @@ Below is a description of the environment variables used in the `.env` file:
    - `MINIO_SECRET_KEY`: Secret key for Minio.
    - `MINIO_USE_SSL`: Dedines whether Minio use SSL. Example `true`, `false`.
    - `MINIO_BUCKET`: Bucket name for Minio.
+   - `S3_BASE_URL`: URL of the AWS S3 service. Example: `https://s3.us-east-1.amazonaws.com`.
    - `IPFS_SERVICE_URL`: URL of the IPFS service.Example `http://localhost:3001`.
    - `FE_LOGIN_CALLBACK_URL`: Frontend login callback URL. Example `http://localhost:3000/en/verify/login`.
    - `FE_REGISTER_CALLBACK_URL`: Frontend register callback URL. Example `http://localhost:3000/en/verify/register`.
@@ -194,6 +196,15 @@ Below is a description of the environment variables used in the `.env` file:
    - `IPFS_PUBLIC_URL`: The base of public IPFS URL.
    - `IPNS_PUBLIC_URL`: The base of public IPNS URL.
    - `IPNS_CONSTITUTION_KEY_NAME`: Key name used to generate IPNS peer ID. Example `some-random-string`.
+   - `REDIS_HOST`: Hostname for Redis. Example `cache`.
+   - `REDIS_PORT`: Port number for Redis. Example `6379`.
+   - `REDIS_PASSWORD`: Password for Redis. Example `password`.
+   - `REDIS_TLS`: TLS connection is enabled/disabled. Example `false`.
+   - `DHT_QUEUE_ATTEMPTS`: Count of attempts. Example `10`.
+   - `DHT_QUEUE_BACKOFF_TYPE`: Backoff type (exponential, fixed). Example `exponential`.
+   - `DHT_QUEUE_BACKOFF_DELAY`: Backoff delay in milliseconds. Example `1000`.
+   - `MAX_PEERS`: Limit of peers stored in the peer store. Example `5000`.
+   - `PRUNE_PEER_STORE_INTERVAL`: Frequency of the job that reduces the total number of peers limited to MAX_PEERS. Example `0 0 */12 * * *`.
 
 4. **Worker service**
 
@@ -211,10 +222,13 @@ Below is a description of the environment variables used in the `.env` file:
    - `REDIS_HOST`: Hostname for Redis. Example `cache`.
    - `REDIS_PORT`: Port number for Redis. Example `6379`.
    - `REDIS_PASSWORD`: Password for Redis. Example `password`.
+   - `REDIS_TLS`: TLS connection is enabled/disabled. Example `false`.
    - `HOT_ADDRESSES_PER_PAGE`: Password for the DB-Sync PostgreSQL database user. Example: `10`.
    - `GOV_ACTION_PROPOSALS_PER_PAGE`: Password for the DB-Sync PostgreSQL database user. Example: `10`.
    - `VOTES_JOB_FREQUENCY`: Frequency of the job that retrieves votes. Example: `*/30 * * * * *`.
    - `GOV_ACTION_PROPOSALS_JOB_FREQUENCY`: Frequency of the job that retrieves Governance Action Proposals. Example: `0 * * * * *`.
+   - `EPOCH_DURATION`: Epoch duration in seconds. Example: `86400`.
+   - `GAP_DURATION_IN_EPOCH_COUNT`: Govenrnance action proposal duration expressed in number of epochs. Example: `6`.
 
 ## API Documentation
 
