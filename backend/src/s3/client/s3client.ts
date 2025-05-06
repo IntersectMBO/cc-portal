@@ -12,7 +12,9 @@ export const s3ClientFactory: FactoryProvider<Minio.Client> = {
       useSSL: configService.get('MINIO_USE_SSL') === 'true',
       accessKey: configService.get('MINIO_ACCESS_KEY'),
       secretKey: configService.get('MINIO_SECRET_KEY'),
-      region: configService.get('MINIO_REGION', 'us-east-1'),
+      ...(configService.get('ENVIRONMENT') !== 'dev'
+        ? { region: configService.get('MINIO_REGION', 'us-east-1') }
+        : {}),
     });
 
     const bucketName = configService.get('MINIO_BUCKET');
