@@ -8,12 +8,13 @@ import {
   ParseUUIDPipe,
   UseInterceptors,
   UploadedFile,
-  HttpStatus,
-  ParseFilePipeBuilder,
   UseGuards,
   Request,
   Delete,
   BadRequestException,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
@@ -194,17 +195,12 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, UserPathGuard)
   async updateProfilePhoto(
     @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: /^image\/(png|jpg|jpeg)$/,
-        })
-        .addMaxSizeValidator({
-          maxSize: 5242880, // 5MB
-        })
-        .build({
-          fileIsRequired: true,
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }),
+          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+        ],
+      }),
     )
     file: Express.Multer.File,
     @Request() req: any,
