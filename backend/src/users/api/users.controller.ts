@@ -13,8 +13,6 @@ import {
   Delete,
   BadRequestException,
   ParseFilePipe,
-  MaxFileSizeValidator,
-  FileTypeValidator,
 } from '@nestjs/common';
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
@@ -45,6 +43,8 @@ import { ApiConditionalExcludeEndpoint } from 'src/common/decorators/api-conditi
 import { Permissions } from 'src/auth/guard/permission.decorator';
 import { RemoveUserRequest } from './request/remove-user.request';
 import { UpdateRoleAndPermissionsRequest } from './request/update-role-and-permissions.request';
+import { MaxFileSizeValidator } from '../../util/validators/max-file-size.validator';
+import { FileTypeValidator } from '../../util/validators/file-type.validator';
 
 @ApiTags('Users')
 @Controller('users')
@@ -197,9 +197,10 @@ export class UsersController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }),
-          new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
+          new MaxFileSizeValidator(5 * 1024 * 1024),
+          new FileTypeValidator(['image/png', 'image/jpeg']),
         ],
+        fileIsRequired: true,
       }),
     )
     file: Express.Multer.File,
