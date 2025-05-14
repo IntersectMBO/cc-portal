@@ -6,7 +6,7 @@ import {
   GOVERNANCE_ACTIONS_FILTERS,
   GOVERNANCE_ACTIONS_SORTING,
   MY_ACTIONS_TABS,
-  PATHS
+  PATHS,
 } from "@consts";
 import { useManageQueryParams, usePagination } from "@hooks";
 import { Box } from "@mui/material";
@@ -21,7 +21,7 @@ import { PageTitleTabs } from "./PageTitleTabs";
 
 export const GovernanceActions = ({
   actions,
-  paginationMeta
+  paginationMeta,
 }: {
   actions: GovernanceActionTableI[];
   paginationMeta: PaginationMeta;
@@ -43,7 +43,7 @@ export const GovernanceActions = ({
         : null,
     status:
       chosenFilters.status?.length > 0 ? chosenFilters.status?.join(",") : null,
-    sortBy: chosenSorting || null
+    sortBy: chosenSorting || null,
   };
 
   const { data, pagination, isLoading, loadMore } = usePagination(
@@ -97,6 +97,7 @@ export const GovernanceActions = ({
             sortOpen={sortOpen}
             sortOptions={GOVERNANCE_ACTIONS_SORTING}
             filterOptions={GOVERNANCE_ACTIONS_FILTERS}
+            searchLabel="Search governance actions..."
           />
         </Box>
       </Box>

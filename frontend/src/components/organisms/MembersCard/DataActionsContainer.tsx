@@ -8,10 +8,12 @@ import { useCallback, useEffect, useState } from "react";
 
 export function DataActionsContainer({
   setSearchText,
-  setChosenSorting
+  setChosenSorting,
+  searchLabel,
 }: {
   setSearchText: (text: string) => void;
   setChosenSorting: (sorting: string) => void;
+  searchLabel?: string;
 }) {
   const [sortOpen, setSortOpen] = useState(false);
   const [chosenSorting, localSetChosenSorting] = useState<string>("");
@@ -42,6 +44,7 @@ export function DataActionsContainer({
         sortingActive={Boolean(chosenSorting)}
         sortOpen={sortOpen}
         sortOptions={CC_MEMBERS_SORTING}
+        searchLabel={searchLabel}
       />
     </Box>
   );

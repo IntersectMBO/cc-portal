@@ -17,7 +17,7 @@ import { DataActionsContainer } from "./DataActionsContainer";
 export function MembersCardList({
   members,
   paginationMeta,
-  error
+  error,
 }: {
   members: UserListItem[];
   paginationMeta: PaginationMeta;
@@ -30,7 +30,7 @@ export function MembersCardList({
 
   const params: Record<string, string | null> = {
     search: searchText || null,
-    sortBy: chosenSorting || null
+    sortBy: chosenSorting || null,
   };
 
   const { data, pagination, isLoading, loadMore } = usePagination(
@@ -56,6 +56,7 @@ export function MembersCardList({
         <DataActionsContainer
           setSearchText={setSearchText}
           setChosenSorting={setChosenSorting}
+          searchLabel="Search a member..."
         />
       </Box>
       {isEmpty(data) || error ? (
@@ -84,7 +85,7 @@ export function MembersCardList({
                   data-testid={`members-${members.id}-card`}
                   sx={{
                     padding: 2,
-                    paddingTop: 0
+                    paddingTop: 0,
                   }}
                 >
                   <MembersCard {...members} />
