@@ -114,6 +114,7 @@ export const VotingUpdates = ({
             sortOpen={sortOpen}
             sortOptions={VOTING_UPDATES_SORTING}
             filterOptions={VOTING_UPDATES_FILTERS}
+            searchLabel="Search voting updates..."
           />
         </Box>
       </Box>

@@ -9,7 +9,7 @@ import {
   Hidden,
   Button as MUIButton,
   Typography as MUITypography,
-  SxProps
+  SxProps,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -18,7 +18,7 @@ export const Footer = ({
   showSignIn = true,
   sx,
   isFixed = false,
-  bgColor = "#FFF"
+  bgColor = "#FFF",
 }: {
   showSignIn?: boolean;
   sx?: SxProps;
@@ -90,28 +90,6 @@ export const Footer = ({
               {t("termsOfService")}
             </a>
           </Typography>
-
-          {!userSession && showSignIn && (
-            <Typography fontWeight={400} variant="caption">
-              {t("AreYouCCMember")}
-              <MUITypography
-                component="span"
-                fontSize="12px"
-                lineHeight="16px"
-                sx={{ cursor: "pointer", ml: 1 }}
-                fontWeight={500}
-                variant="caption"
-                data-testid="footer-sign-in-button"
-                onClick={() => {
-                  openModal({
-                    type: "signIn"
-                  });
-                }}
-              >
-                <span data-testid="footer-sign-in-text">{t("signIn")}</span>
-              </MUITypography>
-            </Typography>
-          )}
           <MUIButton
             component={Link}
             target="_blank"
