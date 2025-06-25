@@ -10,7 +10,7 @@ export const DrawerMobile = ({
   setIsDrawerOpen,
   children,
   sx = {},
-  rowGap = 4
+  rowGap = 4,
 }) => {
   return (
     <SwipeableDrawer
@@ -19,7 +19,7 @@ export const DrawerMobile = ({
       onOpen={() => setIsDrawerOpen(true)}
       open={isDrawerOpen}
       PaperProps={{
-        sx: { width: "100%", ...sx }
+        sx: { width: "100%", ...sx },
       }}
     >
       <Box
@@ -27,7 +27,7 @@ export const DrawerMobile = ({
           display: "flex",
           flex: 1,
           flexDirection: "column",
-          px: { xxs: 0, md: 2 }
+          px: { xxs: 0, md: 2 },
         }}
       >
         <Box
@@ -35,7 +35,7 @@ export const DrawerMobile = ({
             display: "flex",
             justifyContent: "flex-end",
             pt: 3,
-            pb: 2
+            pb: 2,
           }}
         >
           <IconButton onClick={() => setIsDrawerOpen(false)}>
