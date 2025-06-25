@@ -123,7 +123,7 @@ export const TopNav = () => {
                   }}
                   sx={{ ml: 2 }}
                 >
-                  Sign In
+                  {t("Footer.signIn")}
                 </Button>
               </>
             )}
@@ -159,7 +159,7 @@ export const TopNav = () => {
               }}
               sx={{ mx: 2 }}
             >
-              Sign In
+              {t("Footer.signIn")}
             </Button>
           </>
         )}
