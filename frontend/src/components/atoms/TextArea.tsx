@@ -10,6 +10,9 @@ const TextAreaBase = styled(TextareaAutosize)(
   font-family: ${poppins.style.fontFamily};
   font-size: 16px;
   font-weight: 400;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
     ::placeholder {
       font-family: ${poppins.style.fontFamily};
       font-size: 16px;
@@ -45,7 +48,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         ({
           focus: handleFocus,
           blur: handleBlur,
-          ...textAraeRef.current
+          ...textAraeRef.current,
         } as unknown as HTMLTextAreaElement),
       [handleBlur, handleFocus]
     );
@@ -61,7 +64,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           outline: "none",
           padding: "12px 14px",
           resize: "none",
-          overflow: "scroll"
+          overflow: "scroll",
+          paddingBottom: "28px",
         }}
         maxLength={maxLength}
         ref={textAraeRef}
