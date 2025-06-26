@@ -72,12 +72,15 @@ export const MembersCard = ({
           fontWeight={400}
           variant="body1"
           sx={{
-            display: "-webkit-box", // Required for line clamping
-            WebkitBoxOrient: "vertical", // Required for line clamping
-            overflow: "hidden", // Hides overflowed text
-            textOverflow: "ellipsis", // Adds ellipsis for overflowed text
-            WebkitLineClamp: 5, // Limits text to a maximum of 5 lines
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            WebkitLineClamp: 5,
             transition: "all 0.3s ease",
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
+            whiteSpace: "pre-wrap",
           }}
         >
           {description}
