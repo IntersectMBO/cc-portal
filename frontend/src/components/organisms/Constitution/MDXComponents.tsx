@@ -194,7 +194,7 @@ export const DrawerNav = () => {
     : ICONS.documentSearch;
 
   return (
-    <Grid container direction="column" p={0} pt={1.5} px={2} marginTop="auto">
+    <Grid container direction="column" p={0} pt={1.5} marginTop="auto">
       <Link href={linkPath}>
         <Button fullWidth variant="outlined">
           <img src={buttonEndIcon} style={{ marginRight: 8 }} />
@@ -246,6 +246,21 @@ export const NavDrawerDesktop = ({
         data-testid="nav-drawer-collapse-container"
       >
         {children}
+      </Box>
+      <Box mb={0.5} px={2}>
+        <a
+          href="/downloads/cardano-constitution.pdf"
+          download
+          style={{ textDecoration: "none" }}
+        >
+          <Button
+            fullWidth
+            variant="contained"
+            endIcon={<img src={ICONS.upload} />}
+          >
+            Download PDF
+          </Button>
+        </a>
       </Box>
       <DrawerNav />
     </Grid>
