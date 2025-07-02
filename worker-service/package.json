@@ -25,6 +25,7 @@
     "typeorm:revert-migrations": "npm run typeorm migration:revert -- -d ./typeORM.config.ts"
   },
   "dependencies": {
+    "@bull-board/express": "^6.10.1",
     "@bull-board/nestjs": "^6.9.0",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/bullmq": "^11.0.2",
