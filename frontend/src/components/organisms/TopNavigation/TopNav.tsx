@@ -121,7 +121,7 @@ export const TopNav = () => {
                       type: "signIn",
                     });
                   }}
-                  sx={{ ml: 2 }}
+                  sx={{ ml: 2, whiteSpace: "nowrap" }}
                 >
                   {t("Footer.signIn")}
                 </Button>
