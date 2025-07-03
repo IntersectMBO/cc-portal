@@ -103,8 +103,8 @@ export function Constitution({ constitution, metadata }: ConstitutionProps) {
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                position={{ xxs: "sticky", lg: "static" }}
-                top={{ xxs: "72px", md: "104px" }}
+                position={{ lg: "static" }}
+                top={{ xxs: "50px", md: "104px" }}
                 bgcolor={customPalette.bgWhite}
               >
                 <Typography variant="headline4">{t("title")}</Typography>
