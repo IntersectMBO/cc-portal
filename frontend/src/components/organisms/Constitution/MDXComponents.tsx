@@ -247,7 +247,7 @@ export const NavDrawerDesktop = ({
       >
         {children}
       </Box>
-      <Box mb={0.5} px={2}>
+      <Box mt={2} px={2} bgcolor="white">
         <a
           href="/downloads/cardano-constitution.pdf"
           download
