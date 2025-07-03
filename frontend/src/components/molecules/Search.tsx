@@ -10,12 +10,14 @@ interface Props {
   setSearchText: (value) => void;
   delay?: number;
   dataTestId?: string;
+  searchLabel?: string;
 }
 
 export const Search = ({
   setSearchText,
   delay = 500,
   dataTestId = "search-input",
+  searchLabel = "Search...",
 }: Props) => {
   const [searchInput, setSearchInput] = useState("");
   const debouncedSearchInput = useDebounce(searchInput, delay);
@@ -28,7 +30,7 @@ export const Search = ({
     <InputBase
       inputProps={{ "data-testid": dataTestId }}
       onChange={(e) => setSearchInput(e.target.value)}
-      placeholder="Search..."
+      placeholder={searchLabel}
       value={searchInput}
       startAdornment={
         <SearchIcon

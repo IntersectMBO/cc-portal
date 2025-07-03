@@ -19,7 +19,8 @@
       "tableOfContents": "Contents",
       "latest": "Latest",
       "uploadNewVersion": "Upload new version",
-      "backToContents": "Back to contents"
+      "backToContents": "Back to contents",
+      "constitutionDefinitions": "Constitution definitions"
     }
   },
   "Members": {
@@ -82,7 +83,7 @@
       "close": "Close"
     },
     "signIn": {
-      "headline": "Sign In",
+      "headline": "Are you CC member? Sign In",
       "description": "A magic link will be sent to the email address provided. This may take a few minutes.",
       "fields": {
         "email": {

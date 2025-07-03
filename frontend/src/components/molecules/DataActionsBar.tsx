@@ -25,6 +25,7 @@ type DataActionsBarProps = {
   sortOpen: boolean;
   sortOptions: FilterItem[];
   filterOptions?: Record<string, FilterItems>;
+  searchLabel?: string;
 };
 
 export const DataActionsBar: FC<DataActionsBarProps> = ({ ...props }) => {
@@ -45,6 +46,7 @@ export const DataActionsBar: FC<DataActionsBarProps> = ({ ...props }) => {
     sortOpen,
     sortOptions,
     filterOptions,
+    searchLabel,
   } = props;
 
   return (
@@ -55,7 +57,7 @@ export const DataActionsBar: FC<DataActionsBarProps> = ({ ...props }) => {
         display="flex"
         justifyContent={{ xxs: "space-between", md: "flex-start" }}
       >
-        <Search setSearchText={setSearchText} />
+        <Search setSearchText={setSearchText} searchLabel={searchLabel} />
         <OrderActionsChip
           chosenFiltersLength={chosenFiltersLength}
           filtersOpen={filtersOpen}
