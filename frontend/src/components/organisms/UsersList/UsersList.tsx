@@ -92,6 +92,7 @@ export function UsersList({
         <DataActionsContainer
           setSearchText={setSearchText}
           setChosenSorting={setChosenSorting}
+          searchLabel="Search a user..."
         />
       </Box>
       {isEmpty(data) || error ? (

@@ -56,6 +56,7 @@ export function MembersCardList({
         <DataActionsContainer
           setSearchText={setSearchText}
           setChosenSorting={setChosenSorting}
+          searchLabel="Search a member..."
         />
       </Box>
       {isEmpty(data) || error ? (

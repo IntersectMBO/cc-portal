@@ -4,13 +4,14 @@ import { Box, Grid, IconButton, SwipeableDrawer } from "@mui/material";
 
 import { ICONS } from "@consts";
 import { DrawerNav } from "../Constitution";
+import { Button } from "@/components/atoms";
 
 export const DrawerMobile = ({
   isDrawerOpen,
   setIsDrawerOpen,
   children,
   sx = {},
-  rowGap = 4
+  rowGap = 4,
 }) => {
   return (
     <SwipeableDrawer
@@ -19,7 +20,7 @@ export const DrawerMobile = ({
       onOpen={() => setIsDrawerOpen(true)}
       open={isDrawerOpen}
       PaperProps={{
-        sx: { width: "100%", ...sx }
+        sx: { width: "100%", ...sx },
       }}
     >
       <Box
@@ -27,7 +28,7 @@ export const DrawerMobile = ({
           display: "flex",
           flex: 1,
           flexDirection: "column",
-          px: { xxs: 0, md: 2 }
+          px: { xxs: 0, md: 2 },
         }}
       >
         <Box
@@ -35,7 +36,7 @@ export const DrawerMobile = ({
             display: "flex",
             justifyContent: "flex-end",
             pt: 3,
-            pb: 2
+            pb: 2,
           }}
         >
           <IconButton onClick={() => setIsDrawerOpen(false)}>
@@ -46,7 +47,24 @@ export const DrawerMobile = ({
         <Box sx={{ display: "flex", flex: 1, flexDirection: "column" }}>
           <Grid container direction="column" rowGap={rowGap}>
             {children}
-            <DrawerNav />
+            <Grid container direction="column" rowGap={1} px={2}>
+              <a
+                href="/downloads/cardano-constitution.pdf"
+                download
+                style={{
+                  textDecoration: "none",
+                }}
+              >
+                <Button
+                  fullWidth
+                  variant="contained"
+                  endIcon={<img src={ICONS.upload} />}
+                >
+                  Download PDF
+                </Button>
+              </a>
+              <DrawerNav />
+            </Grid>
           </Grid>
         </Box>
       </Box>

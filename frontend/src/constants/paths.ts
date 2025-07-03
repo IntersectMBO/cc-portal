@@ -25,6 +25,8 @@ export const EXTERNAL_LINKS = {
   guardrailsRationale:
     "https://docs.google.com/document/d/1FDVnDwugtA5RlgH8a-_8pWL_W-VGvMYA",
   elections: "https://elections.constitution.gov.tools/",
+  constitutionDefinitions:
+    "https://ipfs.io/ipfs/bafkreiewp5bgrdiesq6ft3qypykgcjhvfgpp4s5o4yrjrvko4wuhi4iecu",
 };
 
 export const adminProtectedPath = PATHS.admin.dashboard;

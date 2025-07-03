@@ -11,7 +11,7 @@ The primary purpose of this solution is to host the Cardano Constitution and all
 - [Tech stack](#tech-stack)
 - [Getting started](#getting-started)
 - [Usage](#usage)
-- [Environment Variables](#environment-variables) 
+- [Environment Variables](#environment-variables)
 - [API Documentation](#api-documentation)
 - [License](#license)
 
@@ -93,7 +93,7 @@ Before you begin setting up the application, you'll need to clone the repository
      ```
      Edit the .env file to reflect your local settings. Env variables description can be found [below](#environment-variables).
    - Run this command within folders: `frontend`, `worker-service`, `ipfs-service` to configure environment variables for all these services. Edit every .env file to reflect your local settings.
-     Important: for `worker-service` environment variables ensure the right credentials for connection to DB-SYNC Database 
+     Important: for `worker-service` environment variables ensure the right credentials for connection to DB-SYNC Database
 
 4. **Docker Setup:**
 
@@ -120,18 +120,22 @@ Before you begin setting up the application, you'll need to clone the repository
      ```
 
 6. **Create Super Admin**
-   
+
    A Super Admin should be created manually. To do that, run the following SQL queries on the Backend PostgreSQL database:
+
    1. Create super admin user with valid email address
+
    ```
    INSERT INTO users (email, status, role_id) VALUES ('your@email.com', 'active', (SELECT r.id FROM roles r WHERE r.code='super_admin'));
    ```
+
    2. Add permissions to super admin
+
    ```
    INSERT INTO user_permissions(user_id, permission_id)
    SELECT users.id, permissions.id
    FROM permissions
-   INNER join users on users.email 
+   INNER join users on users.email
    IN ('your@email.com')
    WHERE code IN ('manage_admins', 'manage_cc_members', 'add_constitution_version');
    ```
@@ -139,8 +143,9 @@ Before you begin setting up the application, you'll need to clone the repository
 ## Usage
 
 If the installation process passes successfully, the CC Portal is ready to use.
-   - Frontend should be available on the URL: `http://localhost:3000`.
-   - Backend shoul be available on the URL: `http://localhost:1337`.
+
+- Frontend should be available on the URL: `http://localhost:3000`.
+- Backend shoul be available on the URL: `http://localhost:1337`.
 
 ## Environment Variables
 

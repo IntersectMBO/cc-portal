@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Box, ButtonBase, Grid, IconButton } from "@mui/material";
 
 import UserProfileButton from "@/components/molecules/UserProfileButton";
-import { Link } from "@atoms";
+import { Button, Link } from "@atoms";
 import {
   customPalette,
   IMAGES,
@@ -110,7 +110,22 @@ export const TopNav = () => {
                 {renderUserProfileDropdown()}
               </>
             ) : (
-              getNavItems()
+              <>
+                {getNavItems()}
+                <Button
+                  variant="contained"
+                  size="extraLarge"
+                  color="primary"
+                  onClick={() => {
+                    openModal({
+                      type: "signIn",
+                    });
+                  }}
+                  sx={{ ml: 2 }}
+                >
+                  {t("Footer.signIn")}
+                </Button>
+              </>
             )}
           </Grid>
         </Box>
@@ -131,7 +146,22 @@ export const TopNav = () => {
             {renderUserProfileDropdown()}
           </>
         ) : (
-          getNavItems()
+          <>
+            {getNavItems()}
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={() => {
+                openModal({
+                  type: "signIn",
+                });
+              }}
+              sx={{ mx: 2 }}
+            >
+              {t("Footer.signIn")}
+            </Button>
+          </>
         )}
       </DrawerMobile>
     </TopNavWrapper>
