@@ -260,7 +260,8 @@ export class UsersController {
   })
   @ApiBody({ type: ToggleStatusRequest })
   @HttpCode(200)
-  @UseGuards(JwtAuthGuard, UserPathGuard, PermissionGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @Permissions(PermissionEnum.MANAGE_CC_MEMBERS)
   @Patch(':id/toggle-status')
   async toggleStatus(
     @Request() req: any,
@@ -268,6 +269,8 @@ export class UsersController {
     @Body() toggleStatusRequest: ToggleStatusRequest,
   ): Promise<UserResponse> {
     const permissions: PermissionEnum[] = req.user.permissions;
+    // The target user is always the path :id.
+    toggleStatusRequest.userId = id;
     return await this.usersFacade.toggleStatus(
       toggleStatusRequest,
       permissions,
@@ -290,16 +293,19 @@ export class UsersController {
   @ApiBody({ type: RemoveUserRequest })
   @HttpCode(200)
   @Permissions(PermissionEnum.MANAGE_ADMINS) // Superadmin only
-  @UseGuards(JwtAuthGuard, UserPathGuard, PermissionGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @Delete(':id')
   async removeUser(
+    @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() removeUserRequest: RemoveUserRequest,
   ) {
-    if (id === removeUserRequest.userId) {
+    // A super-admin must not be able to delete their own account.
+    if (req.user.userId === id) {
       throw new BadRequestException(`You cannot delete yourself`);
     }
-    await this.usersFacade.removeUser(removeUserRequest.userId);
+    // The target user is always the path :id.
+    await this.usersFacade.removeUser(id);
     return {
       success: true,
       message: 'User deleted successfully',
@@ -330,11 +336,13 @@ export class UsersController {
   @HttpCode(200)
   @Patch(':id/role-permissions')
   @Permissions(PermissionEnum.MANAGE_ROLES_AND_PERMISSIONS)
-  @UseGuards(JwtAuthGuard, UserPathGuard, PermissionGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   async updateUserRoleAndPermissions(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
   ): Promise<UserResponse> {
+    // The target user is always the path :id.
+    updateRoleAndPermissionsRequest.userId = id;
     return await this.usersFacade.updateUserRoleAndPermissions(
       updateRoleAndPermissionsRequest,
     );
