@@ -227,8 +227,11 @@ export class UsersService {
   ): Promise<UserDto> {
     const user = await this.findEntityById(id);
     user.status = userStatus;
-    user.deactivatedAt =
-      userStatus === UserStatusEnum.INACTIVE ? new Date() : null;
+    // Keep the last deactivation time after reactivation so that sessions
+    // started before the deactivation stay invalid
+    if (userStatus === UserStatusEnum.INACTIVE) {
+      user.deactivatedAt = new Date();
+    }
     await this.userRepository.save(user);
     return UserMapper.userToDto(user);
   }

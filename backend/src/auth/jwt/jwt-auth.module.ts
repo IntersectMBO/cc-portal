@@ -4,10 +4,12 @@ import { JwtAuthStrategy } from './jwt-auth.strategy';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config'; // Assuming you're using nestjs/config for configuration
 import { Module } from '@nestjs/common';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
     PassportModule,
+    UsersModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

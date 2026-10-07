@@ -150,7 +150,10 @@ describe('AuthService', () => {
       const refreshToken = jwt.sign(payload, 'test_refresh_secret');
       const decodedToken = service.validateRefreshToken(refreshToken);
 
-      expect(decodedToken).toEqual(payload);
+      expect(decodedToken).toEqual({
+        ...payload,
+        issuedAt: expect.any(Number),
+      });
     });
 
     it('should throw an UnauthorizedException for invalid refresh token', () => {

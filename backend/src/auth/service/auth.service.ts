@@ -24,7 +24,7 @@ export class AuthService {
 
   validateRefreshToken(
     refreshToken: string,
-  ): { userId: string; email: string } | null {
+  ): { userId: string; email: string; issuedAt?: number } | null {
     try {
       const decoded = jwt.verify(
         refreshToken,
@@ -38,7 +38,11 @@ export class AuthService {
         'userId' in decoded &&
         'email' in decoded
       ) {
-        return { userId: decoded.userId, email: decoded.email };
+        return {
+          userId: decoded.userId,
+          email: decoded.email,
+          issuedAt: decoded.iat,
+        };
       } else {
         // If the necessary fields are not in the decoded payload, throw an error
         throw new BadRequestException('Invalid payload structure');

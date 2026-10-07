@@ -550,6 +550,43 @@ describe('UsersService', () => {
       expect(mockUserRepository.save).toHaveBeenCalled();
     });
 
+    it('should record the deactivation time', async () => {
+      const user = {
+        id: 'statusUserId',
+        status: UserStatusEnum.ACTIVE,
+        deactivatedAt: null,
+        role: { code: RoleEnum.USER },
+      };
+      mockUserRepository.findOne.mockResolvedValueOnce(user);
+
+      const updatedUser = await service.updateUserStatus(
+        user.id,
+        UserStatusEnum.INACTIVE,
+      );
+
+      expect(updatedUser.status).toBe(UserStatusEnum.INACTIVE);
+      expect(updatedUser.deactivatedAt).toBeInstanceOf(Date);
+    });
+
+    it('should keep the last deactivation time when reactivating', async () => {
+      const deactivatedAt = new Date('2026-01-01T12:00:00.000Z');
+      const user = {
+        id: 'statusUserId',
+        status: UserStatusEnum.INACTIVE,
+        deactivatedAt,
+        role: { code: RoleEnum.USER },
+      };
+      mockUserRepository.findOne.mockResolvedValueOnce(user);
+
+      const updatedUser = await service.updateUserStatus(
+        user.id,
+        UserStatusEnum.ACTIVE,
+      );
+
+      expect(updatedUser.status).toBe(UserStatusEnum.ACTIVE);
+      expect(updatedUser.deactivatedAt).toEqual(deactivatedAt);
+    });
+
     it('should throw NotFoundException for invalid user ID', async () => {
       const invalidUserId: string = 'invalidId';
       const newUserStatus: UserStatusEnum = UserStatusEnum.INACTIVE;

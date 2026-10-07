@@ -67,7 +67,7 @@ export class UserResponse {
     name: 'deactivated_at',
     type: Date,
     format: 'date-time',
-    description: 'Time of deactivatinb a user',
+    description: 'Time the user was last deactivated',
   })
   @Expose({ name: 'deactivated_at' })
   deactivatedAt: Date;

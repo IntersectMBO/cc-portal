@@ -530,8 +530,50 @@ describe('AuthFacade', () => {
       mockUserService.findByEmail.mockRejectedValue(new NotFoundException());
 
       await expect(facade.refreshAccessToken(refreshToken)).rejects.toThrow(
-        NotFoundException,
+        UnauthorizedException,
       );
+    });
+
+    it('should not refresh tokens of an inactive user', async () => {
+      const refreshToken = 'validRefreshToken';
+      const inactiveUser: UserDto = {
+        ...mockUsers[1],
+        status: UserStatusEnum.INACTIVE,
+        deactivatedAt: new Date(),
+      };
+
+      mockAuthService.validateRefreshToken.mockReturnValue({
+        ...mockValidateRefreshTokenPayload,
+        issuedAt: Math.floor(Date.now() / 1000) - 60,
+      });
+      mockUserService.findByEmail.mockResolvedValue(inactiveUser);
+      const generateTokens = jest.spyOn(facade, 'generateTokens');
+
+      await expect(facade.refreshAccessToken(refreshToken)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      expect(generateTokens).not.toHaveBeenCalled();
+    });
+
+    it('should not refresh tokens issued before the user was last deactivated', async () => {
+      const refreshToken = 'validRefreshToken';
+      const reactivatedUser: UserDto = {
+        ...mockUsers[1],
+        status: UserStatusEnum.ACTIVE,
+        deactivatedAt: new Date(),
+      };
+
+      mockAuthService.validateRefreshToken.mockReturnValue({
+        ...mockValidateRefreshTokenPayload,
+        issuedAt: Math.floor(Date.now() / 1000) - 3600,
+      });
+      mockUserService.findByEmail.mockResolvedValue(reactivatedUser);
+      const generateTokens = jest.spyOn(facade, 'generateTokens');
+
+      await expect(facade.refreshAccessToken(refreshToken)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      expect(generateTokens).not.toHaveBeenCalled();
     });
 
     it('should throw an error if user ID does not match', async () => {
