@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createHash, timingSafeEqual } from 'crypto';
+import { timingSafeEqual } from 'crypto';
 import { Request } from 'express';
 
 export const API_KEY_HEADER = 'x-api-key';
@@ -43,10 +43,8 @@ export class ApiKeyGuard implements CanActivate {
   }
 
   private static keysMatch(provided: string, expected: string): boolean {
-    // Compare fixed-length digests so the comparison time does not depend
-    // on the key length or content.
-    const a = createHash('sha256').update(provided).digest();
-    const b = createHash('sha256').update(expected).digest();
-    return timingSafeEqual(a, b);
+    const a = Buffer.from(provided);
+    const b = Buffer.from(expected);
+    return a.length === b.length && timingSafeEqual(a, b);
   }
 }
