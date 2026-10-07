@@ -6,8 +6,8 @@ RUN apt-get update && \
     apt-get install -y build-essential cmake && \
     rm -rf /var/lib/apt/lists/*
 
-# Upgrade npm to the latest version
-RUN npm install -g npm@latest
+# Upgrade npm to the latest release that supports Node.js 20
+RUN npm install -g npm@10
 
 # Set the memory limit and max listeners
 ENV NODE_OPTIONS="--max-old-space-size=8192"
