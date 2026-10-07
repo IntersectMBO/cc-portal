@@ -40,8 +40,6 @@
     "bullmq": "^5.81.5",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "i": "^0.3.7",
-    "npm": "^10.9.9",
     "pg": "^8.11.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
