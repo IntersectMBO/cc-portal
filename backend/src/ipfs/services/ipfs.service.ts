@@ -57,6 +57,7 @@ export class IpfsService {
     const requestConfig = {
       headers: {
         'Content-Type': 'multipart/form-data',
+        ...this.ipfsServiceAuthHeaders(),
       },
     };
     const response = await axios.post(apiLink, formData, requestConfig);
@@ -72,6 +73,12 @@ export class IpfsService {
       contentType: contentType,
       contents: content,
       version: newVersion,
+    };
+  }
+
+  private ipfsServiceAuthHeaders(): Record<string, string> {
+    return {
+      'x-api-key': this.configService.getOrThrow('IPFS_SERVICE_API_KEY'),
     };
   }
 
@@ -165,6 +172,7 @@ export class IpfsService {
     const requestConfig = {
       headers: {
         'Content-Type': 'application/json',
+        ...this.ipfsServiceAuthHeaders(),
       },
     };
     const response = await axios.post(apiLink, rationaleJson, requestConfig);
