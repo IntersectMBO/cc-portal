@@ -22,7 +22,10 @@ import { RoleMapper } from '../mapper/roleMapper.mapper';
 import { HotAddress } from '../entities/hotaddress.entity';
 import { RoleEnum } from '../enums/role.enum';
 import { PaginateQuery } from 'nestjs-paginate';
-import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
+import {
+  USER_PAGINATION_CONFIG,
+  USER_PUBLIC_PAGINATION_CONFIG,
+} from '../util/pagination/user-pagination.config';
 import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
 import { PaginationEntityMapper } from 'src/util/pagination/mapper/pagination.mapper';
 import { Paginator } from 'src/util/pagination/paginator';
@@ -254,7 +257,7 @@ export class UsersService {
     const result = await this.paginator.paginate(
       query,
       customQuery,
-      USER_PAGINATION_CONFIG,
+      isAdmin ? USER_PAGINATION_CONFIG : USER_PUBLIC_PAGINATION_CONFIG,
     );
 
     return new PaginationEntityMapper<User, UserDto>().paginatedToDto(

@@ -3,6 +3,7 @@ import { CreateCCMemberRequest } from '../api/request/create-cc-member.request';
 import { CreateUserRequest } from '../api/request/create-user.request';
 import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UserResponse } from '../api/response/user.response';
+import { PublicUserResponse } from '../api/response/public-user.response';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserDto } from '../dto/user.dto';
@@ -82,5 +83,15 @@ export class UserMapper {
     userResponse.createdAt = userDto.createdAt;
     userResponse.updatedAt = userDto.updatedAt;
     return userResponse;
+  }
+
+  static mapUserDtoToPublicResponse(userDto: UserDto): PublicUserResponse {
+    const publicUserResponse = new PublicUserResponse();
+    publicUserResponse.id = userDto.id;
+    publicUserResponse.name = userDto.name;
+    publicUserResponse.description = userDto.description;
+    publicUserResponse.profilePhotoUrl = userDto.profilePhotoUrl;
+    publicUserResponse.createdAt = userDto.createdAt;
+    return publicUserResponse;
   }
 }

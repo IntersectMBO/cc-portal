@@ -7,6 +7,7 @@ import {
 import { UpdateUserRequest } from '../api/request/update-user.request';
 import { UsersService } from '../services/users.service';
 import { UserResponse } from '../api/response/user.response';
+import { PublicUserResponse } from '../api/response/public-user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { RoleResponse } from '../api/response/role.response';
 import { RoleMapper } from '../mapper/roleMapper.mapper';
@@ -93,6 +94,17 @@ export class UsersFacade {
     return new PaginationDtoMapper<UserDto, UserResponse>().dtoToResponse(
       usersPaginatedDto,
       UserMapper.mapUserDtoToResponse,
+    );
+  }
+
+  async searchMembers(
+    query: PaginateQuery,
+  ): Promise<PaginatedResponse<PublicUserResponse>> {
+    const usersPaginatedDto = await this.usersService.searchUsers(query, false);
+
+    return new PaginationDtoMapper<UserDto, PublicUserResponse>().dtoToResponse(
+      usersPaginatedDto,
+      UserMapper.mapUserDtoToPublicResponse,
     );
   }
 

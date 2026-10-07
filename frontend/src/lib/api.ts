@@ -185,8 +185,13 @@ export async function refreshToken(refresh_token: string) {
 export async function getUser(
   id: string
 ): Promise<FetchUserData | ResponseErrorI> {
+  const token = getAccessToken();
   try {
-    const res: FetchUserData = await axiosInstance.get(`/api/users/${id}`);
+    const res: FetchUserData = await axiosInstance.get(`/api/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res;
   } catch (error) {
     const t = await getTranslations();

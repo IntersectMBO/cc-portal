@@ -8,6 +8,8 @@ import { ToggleStatusRequest } from './request/toggle-status.request';
 import { UpdateRoleAndPermissionsRequest } from './request/update-role-and-permissions.request';
 import { PermissionGuard } from '../../auth/guard/permission.guard';
 import { UserPathGuard } from '../../auth/guard/users-path.guard';
+import { JwtAuthGuard } from '../../auth/jwt/jwt-auth.guard';
+import { PaginateQuery } from 'nestjs-paginate';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -15,6 +17,8 @@ describe('UsersController', () => {
   const callerId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
   const targetId = '82dbbfb1-2552-4aaf-a9a7-1195497410c0';
 
+  const mockSearchMembers = jest.fn();
+  const mockSearchUsers = jest.fn();
   const mockToggleStatus = jest.fn();
   const mockRemoveUser = jest.fn();
   const mockUpdateRoleAndPermissions = jest.fn();
@@ -26,6 +30,8 @@ describe('UsersController', () => {
         {
           provide: UsersFacade,
           useValue: {
+            searchMembers: mockSearchMembers,
+            searchUsers: mockSearchUsers,
             toggleStatus: mockToggleStatus,
             removeUser: mockRemoveUser,
             updateUserRoleAndPermissions: mockUpdateRoleAndPermissions,
@@ -45,6 +51,25 @@ describe('UsersController', () => {
     Reflect.getMetadata('__guards__', handler) ?? [];
   const permissionsOf = (handler: (...args: any[]) => any) =>
     Reflect.getMetadata('permissions', handler) ?? [];
+
+  describe('findOne', () => {
+    it('requires authentication and is limited to the caller', () => {
+      const guards = guardsOf(UsersController.prototype.findOne);
+      expect(guards).toContain(JwtAuthGuard);
+      expect(guards).toContain(UserPathGuard);
+    });
+  });
+
+  describe('searchMembersPaginated', () => {
+    it('returns the public member listing', async () => {
+      const query = { path: 'randomPath' } as PaginateQuery;
+
+      await controller.searchMembersPaginated(query);
+
+      expect(mockSearchMembers).toHaveBeenCalledWith(query);
+      expect(mockSearchUsers).not.toHaveBeenCalled();
+    });
+  });
 
   describe('toggleStatus', () => {
     it('uses the path id as the target user', async () => {

@@ -17,6 +17,7 @@ import {
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
 import { UserResponse } from './response/user.response';
+import { PublicUserResponse } from './response/public-user.response';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -35,7 +36,10 @@ import { Roles } from '../../auth/guard/role.decorator';
 import { RoleGuard } from '../../auth/guard/role.guard';
 import { PaginatedResponse } from '../../util/pagination/response/paginated.response';
 import { ApiPaginationQuery, Paginate, PaginateQuery } from 'nestjs-paginate';
-import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
+import {
+  USER_PAGINATION_CONFIG,
+  USER_PUBLIC_PAGINATION_CONFIG,
+} from '../util/pagination/user-pagination.config';
 import { PermissionEnum } from '../enums/permission.enum';
 import { PermissionGuard } from 'src/auth/guard/permission.guard';
 import { ToggleStatusRequest } from './request/toggle-status.request';
@@ -56,8 +60,11 @@ export class UsersController {
     description: 'The user details',
     type: UserResponse,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'User with {id} not found' })
+  @ApiBearerAuth('JWT-auth')
   @Get(':id')
+  @UseGuards(JwtAuthGuard, UserPathGuard)
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponse> {
     return await this.usersFacade.findOne(id);
   }
@@ -106,18 +113,18 @@ export class UsersController {
    Returns all registered CC Members
    **/
   @ApiOperation({ summary: 'Search users' })
-  @ApiPaginationQuery(USER_PAGINATION_CONFIG)
+  @ApiPaginationQuery(USER_PUBLIC_PAGINATION_CONFIG)
   @ApiResponse({
     status: 200,
-    description: 'Users - returns UserResponse array within data',
+    description: 'Users - returns PublicUserResponse array within data',
     isArray: true,
-    type: PaginatedResponse<UserResponse>,
+    type: PaginatedResponse<PublicUserResponse>,
   })
   @Get('cc-member/search')
   async searchMembersPaginated(
     @Paginate() query: PaginateQuery,
-  ): Promise<PaginatedResponse<UserResponse>> {
-    return await this.usersFacade.searchUsers(query, false);
+  ): Promise<PaginatedResponse<PublicUserResponse>> {
+    return await this.usersFacade.searchMembers(query);
   }
 
   /**

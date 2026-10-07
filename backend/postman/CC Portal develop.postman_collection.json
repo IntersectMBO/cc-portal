@@ -13,7 +13,13 @@
 					"name": "Get User By Id",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{base-url}}/api/users/{{userId}}",
 							"host": [

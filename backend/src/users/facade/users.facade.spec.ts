@@ -447,6 +447,24 @@ describe('UsersFacade', () => {
       expect(mockUserService.searchUsers).toHaveBeenCalledWith(query, false);
     });
 
+    it('should return only public profile fields for CC members', async () => {
+      const query: PaginateQuery = {
+        page: 0,
+        limit: 10,
+        path: 'randomPath',
+      };
+
+      const result = await facade.searchMembers(query);
+
+      expect(mockUserService.searchUsers).toHaveBeenCalledWith(query, false);
+      expect(result.data.length).toBeGreaterThan(0);
+      result.data.forEach((member) => {
+        expect(Object.keys(member).sort()).toEqual(
+          ['createdAt', 'description', 'id', 'name', 'profilePhotoUrl'].sort(),
+        );
+      });
+    });
+
     it('should return an array of Admins and CC Members', async () => {
       const query: PaginateQuery = {
         page: 0,

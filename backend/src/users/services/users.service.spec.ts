@@ -19,6 +19,10 @@ import { PaginateQuery, Paginated } from 'nestjs-paginate';
 import { Paginator } from 'src/util/pagination/paginator';
 import { RoleEnum } from '../enums/role.enum';
 import { RoleFactory } from '../role/role.factory';
+import {
+  USER_PAGINATION_CONFIG,
+  USER_PUBLIC_PAGINATION_CONFIG,
+} from '../util/pagination/user-pagination.config';
 const mockS3Service = {
   uploadFileMinio: jest.fn().mockResolvedValue('mocked_file_name'),
   createBucketIfNotExists: jest.fn().mockResolvedValue('new_bucket'),
@@ -684,6 +688,40 @@ describe('UsersService', () => {
       expect(userPaginatedDto.items[0].name).toEqual(user.name);
       expect(userPaginatedDto.items.length).toEqual(1);
       expect(mockPaginator.paginate).toHaveBeenCalled();
+    });
+
+    it('should only search CC members by name', async () => {
+      const query: PaginateQuery = {
+        page: 0,
+        limit: 10,
+        search: 'example.com',
+        path: 'randomPath',
+      };
+
+      await service.searchUsers(query, false);
+
+      expect(mockPaginator.paginate).toHaveBeenLastCalledWith(
+        query,
+        expect.anything(),
+        USER_PUBLIC_PAGINATION_CONFIG,
+      );
+      expect(USER_PUBLIC_PAGINATION_CONFIG.searchableColumns).toEqual(['name']);
+    });
+
+    it('should use the admin search config for admins', async () => {
+      const query: PaginateQuery = {
+        page: 0,
+        limit: 10,
+        path: 'randomPath',
+      };
+
+      await service.searchUsers(query, true);
+
+      expect(mockPaginator.paginate).toHaveBeenLastCalledWith(
+        query,
+        expect.anything(),
+        USER_PAGINATION_CONFIG,
+      );
     });
 
     it('should return an empty array of users', async () => {
