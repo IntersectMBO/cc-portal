@@ -18,7 +18,6 @@ import { UserResponse } from '../api/response/user.response';
 import { UserMapper } from '../mapper/userMapper.mapper';
 import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
 import { PaginateQuery } from 'nestjs-paginate';
-import { ToggleStatusRequest } from '../api/request/toggle-status.request';
 import { PermissionEnum } from '../enums/permission.enum';
 import { RoleFactory } from '../role/role.factory';
 
@@ -238,6 +237,7 @@ describe('UsersFacade', () => {
     updateUserStatus: jest.fn(),
     removeUser: jest.fn(),
     checkRoleManagedByPermission: jest.fn(),
+    updateUserRoleAndPermissions: jest.fn(),
   };
 
   const mockS3Service = {
@@ -472,7 +472,7 @@ describe('UsersFacade', () => {
   describe(`Activate/Deactivate user's status`, () => {
     it('should deactivate a user by id', async () => {
       const user = mockUsers[1];
-      const request: ToggleStatusRequest = {
+      const request = {
         userId: user.id,
         status: UserStatusEnum.INACTIVE,
       };
@@ -484,7 +484,11 @@ describe('UsersFacade', () => {
         managedBy: () => PermissionEnum.MANAGE_CC_MEMBERS,
       });
       mockUserService.updateUserStatus.mockResolvedValue(updatedUser);
-      const result = await facade.toggleStatus(request, permissions);
+      const result = await facade.toggleStatus(
+        request.userId,
+        request.status,
+        permissions,
+      );
       expect(mockUserService.findById).toHaveBeenCalledWith(request.userId);
       expect(mockUserService.updateUserStatus).toHaveBeenCalledWith(
         user.id,
@@ -495,7 +499,7 @@ describe('UsersFacade', () => {
 
     it('should deactivate an admin', async () => {
       const user = mockUsers[1];
-      const request: ToggleStatusRequest = {
+      const request = {
         userId: user.id,
         status: UserStatusEnum.INACTIVE,
       };
@@ -510,7 +514,11 @@ describe('UsersFacade', () => {
         managedBy: () => PermissionEnum.MANAGE_ADMINS,
       });
       mockUserService.updateUserStatus.mockResolvedValue(updatedUser);
-      const result = await facade.toggleStatus(request, permissions);
+      const result = await facade.toggleStatus(
+        request.userId,
+        request.status,
+        permissions,
+      );
       expect(mockUserService.findById).toHaveBeenCalledWith(request.userId);
       expect(mockUserService.updateUserStatus).toHaveBeenCalledWith(
         user.id,
@@ -521,7 +529,7 @@ describe('UsersFacade', () => {
 
     it(`shouldn't deactivate an admin - no permission`, async () => {
       const user = mockUsers[1];
-      const request: ToggleStatusRequest = {
+      const request = {
         userId: user.id,
         status: UserStatusEnum.INACTIVE,
       };
@@ -530,7 +538,7 @@ describe('UsersFacade', () => {
         managedBy: () => PermissionEnum.MANAGE_ADMINS,
       });
       try {
-        await facade.toggleStatus(request, permissions);
+        await facade.toggleStatus(request.userId, request.status, permissions);
       } catch (error) {
         expect(error).toBeInstanceOf(ForbiddenException);
         expect(error.status).toEqual(403);
@@ -540,7 +548,7 @@ describe('UsersFacade', () => {
 
     it(`shouldn't deactivate a super admin - no permission`, async () => {
       const user = mockUsers[1];
-      const request: ToggleStatusRequest = {
+      const request = {
         userId: user.id,
         status: UserStatusEnum.INACTIVE,
       };
@@ -552,7 +560,7 @@ describe('UsersFacade', () => {
         managedBy: () => null,
       });
       try {
-        await facade.toggleStatus(request, permissions);
+        await facade.toggleStatus(request.userId, request.status, permissions);
       } catch (error) {
         expect(error).toBeInstanceOf(ForbiddenException);
         expect(error.status).toEqual(403);
@@ -561,13 +569,13 @@ describe('UsersFacade', () => {
     });
 
     it(`shouldn't deactivate a user - user not found by id`, async () => {
-      const request: ToggleStatusRequest = {
+      const request = {
         userId: 'notExistingUser',
         status: UserStatusEnum.INACTIVE,
       };
       const permissions: PermissionEnum[] = [PermissionEnum.MANAGE_CC_MEMBERS];
       try {
-        await facade.toggleStatus(request, permissions);
+        await facade.toggleStatus(request.userId, request.status, permissions);
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
         expect(error.status).toEqual(404);
@@ -621,6 +629,35 @@ describe('UsersFacade', () => {
           `Error when removing profile photo of the user with id ${mockUserDto.id}: Deletion error`,
         );
       }
+    });
+  });
+
+  describe('Update user role and permissions', () => {
+    it('should update the user identified by the given id', async () => {
+      const user = mockUsers[1];
+      const request = {
+        newRole: 'admin',
+        newPermissions: [PermissionEnum.MANAGE_CC_MEMBERS],
+      };
+      const updatedUser: UserDto = {
+        ...user,
+        role: 'admin',
+        permissions: [PermissionEnum.MANAGE_CC_MEMBERS],
+      };
+      mockUserService.updateUserRoleAndPermissions.mockResolvedValue(
+        updatedUser,
+      );
+
+      const result = await facade.updateUserRoleAndPermissions(
+        user.id,
+        request,
+      );
+
+      expect(mockUserService.updateUserRoleAndPermissions).toHaveBeenCalledWith(
+        user.id,
+        request,
+      );
+      expect(result).toEqual(UserMapper.mapUserDtoToResponse(updatedUser));
     });
   });
 });

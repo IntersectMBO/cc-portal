@@ -18,7 +18,6 @@ import { UploadContext } from '../../s3/enums/upload-context';
 import { PaginateQuery } from 'nestjs-paginate';
 import { PaginationDtoMapper } from 'src/util/pagination/mapper/pagination.mapper';
 import { PermissionEnum } from '../enums/permission.enum';
-import { ToggleStatusRequest } from '../api/request/toggle-status.request';
 import { UserStatusEnum } from '../enums/user-status.enum';
 import { UpdateRoleAndPermissionsRequest } from '../api/request/update-role-and-permissions.request';
 @Injectable()
@@ -98,10 +97,11 @@ export class UsersFacade {
   }
 
   async toggleStatus(
-    toggleStatusRequest: ToggleStatusRequest,
+    userId: string,
+    status: UserStatusEnum,
     permissions: PermissionEnum[],
   ): Promise<UserResponse> {
-    const user = await this.usersService.findById(toggleStatusRequest.userId);
+    const user = await this.usersService.findById(userId);
     // Current status of the user 'pending' cannot be changed in this way
     if (user.status === UserStatusEnum.PENDING) {
       throw new BadRequestException(
@@ -109,10 +109,7 @@ export class UsersFacade {
       );
     }
     this.usersService.checkRoleManagedByPermission(user.role, permissions);
-    const result = await this.usersService.updateUserStatus(
-      user.id,
-      toggleStatusRequest.status,
-    );
+    const result = await this.usersService.updateUserStatus(user.id, status);
     return UserMapper.mapUserDtoToResponse(result);
   }
 
@@ -134,9 +131,11 @@ export class UsersFacade {
   }
 
   async updateUserRoleAndPermissions(
+    userId: string,
     updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
   ): Promise<UserResponse> {
     const user = await this.usersService.updateUserRoleAndPermissions(
+      userId,
       updateRoleAndPermissionsRequest,
     );
     return UserMapper.mapUserDtoToResponse(user);

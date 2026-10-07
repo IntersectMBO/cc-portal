@@ -41,7 +41,6 @@ import { PermissionGuard } from 'src/auth/guard/permission.guard';
 import { ToggleStatusRequest } from './request/toggle-status.request';
 import { ApiConditionalExcludeEndpoint } from 'src/common/decorators/api-conditional-exclude-endpoint.decorator';
 import { Permissions } from 'src/auth/guard/permission.decorator';
-import { RemoveUserRequest } from './request/remove-user.request';
 import { UpdateRoleAndPermissionsRequest } from './request/update-role-and-permissions.request';
 import { MaxFileSizeValidator } from '../../util/validators/max-file-size.validator';
 import { FileTypeValidator } from '../../util/validators/file-type.validator';
@@ -261,18 +260,20 @@ export class UsersController {
   @ApiBody({ type: ToggleStatusRequest })
   @HttpCode(200)
   @UseGuards(JwtAuthGuard, PermissionGuard)
-  @Permissions(PermissionEnum.MANAGE_CC_MEMBERS)
+  @Permissions(PermissionEnum.MANAGE_CC_MEMBERS, PermissionEnum.MANAGE_ADMINS)
   @Patch(':id/toggle-status')
   async toggleStatus(
     @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() toggleStatusRequest: ToggleStatusRequest,
   ): Promise<UserResponse> {
+    if (req.user.userId === id) {
+      throw new BadRequestException(`You cannot change your own status`);
+    }
     const permissions: PermissionEnum[] = req.user.permissions;
-    // The target user is always the path :id.
-    toggleStatusRequest.userId = id;
     return await this.usersFacade.toggleStatus(
-      toggleStatusRequest,
+      id,
+      toggleStatusRequest.status,
       permissions,
     );
   }
@@ -290,7 +291,6 @@ export class UsersController {
     type: String,
     description: 'identifactor of user',
   })
-  @ApiBody({ type: RemoveUserRequest })
   @HttpCode(200)
   @Permissions(PermissionEnum.MANAGE_ADMINS) // Superadmin only
   @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -298,13 +298,10 @@ export class UsersController {
   async removeUser(
     @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() removeUserRequest: RemoveUserRequest,
   ) {
-    // A super-admin must not be able to delete their own account.
     if (req.user.userId === id) {
       throw new BadRequestException(`You cannot delete yourself`);
     }
-    // The target user is always the path :id.
     await this.usersFacade.removeUser(id);
     return {
       success: true,
@@ -338,12 +335,17 @@ export class UsersController {
   @Permissions(PermissionEnum.MANAGE_ROLES_AND_PERMISSIONS)
   @UseGuards(JwtAuthGuard, PermissionGuard)
   async updateUserRoleAndPermissions(
+    @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
   ): Promise<UserResponse> {
-    // The target user is always the path :id.
-    updateRoleAndPermissionsRequest.userId = id;
+    if (req.user.userId === id) {
+      throw new BadRequestException(
+        `You cannot change your own role and permissions`,
+      );
+    }
     return await this.usersFacade.updateUserRoleAndPermissions(
+      id,
       updateRoleAndPermissionsRequest,
     );
   }

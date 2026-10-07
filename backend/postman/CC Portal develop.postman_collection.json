@@ -223,7 +223,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"user_id\": \"9c9e412a-31b9-43ab-9732-ace1931afc11\",\n    \"status\": \"inactive\"\n}",
+							"raw": "{\n    \"status\": \"inactive\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -231,14 +231,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base-url}}/api/users/{{userId}}/toggle-status",
+							"raw": "{{base-url}}/api/users/{{targetUserId}}/toggle-status",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"{{userId}}",
+								"{{targetUserId}}",
 								"toggle-status"
 							]
 						}
@@ -256,24 +256,15 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"user_id\": \"a132f533-875f-466a-b194-79f4afe0937b\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{base-url}}/api/users/{{userId}}",
+							"raw": "{{base-url}}/api/users/{{targetUserId}}",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"{{userId}}"
+								"{{targetUserId}}"
 							]
 						}
 					},
@@ -292,7 +283,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"user_id\": \"1c3b9794-95c1-4c78-9948-b057996763f6\",\n    \"new_role\": \"admin\",\n    \"new_permissions\": [\"manage_cc_members\"]\n}",
+							"raw": "{\n    \"new_role\": \"admin\",\n    \"new_permissions\": [\"manage_cc_members\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -300,14 +291,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base-url}}/api/users/{{userId}}/role-permissions",
+							"raw": "{{base-url}}/api/users/{{targetUserId}}/role-permissions",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"{{userId}}",
+								"{{targetUserId}}",
 								"role-permissions"
 							]
 						}

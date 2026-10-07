@@ -205,12 +205,10 @@ export async function toggleUserStatus(
   status: Omit<UserAuthStatus, "pending">
 ): Promise<FetchUserData | ResponseErrorI> {
   const token = getAccessToken();
-  const decodedToken = await decodeUserToken();
   try {
     const res: FetchUserData = await axiosInstance.patch(
-      `/api/users/${decodedToken?.userId}/toggle-status`,
+      `/api/users/${user_id}/toggle-status`,
       {
-        user_id,
         status,
       },
       {
@@ -750,13 +748,10 @@ export async function resendRegisterEmail(email: string) {
     };
   }
 }
-export async function deleteUser(sAdminId: string, userId: string) {
+export async function deleteUser(userId: string) {
   const token = getAccessToken();
   try {
-    const res = await axiosInstance.delete(`/api/users/${sAdminId}`, {
-      data: {
-        user_id: userId,
-      },
+    const res = await axiosInstance.delete(`/api/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

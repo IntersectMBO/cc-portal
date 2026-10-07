@@ -1,13 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { BadRequestException } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersFacade } from '../facade/users.facade';
 import { PermissionEnum } from '../enums/permission.enum';
+import { UserStatusEnum } from '../enums/user-status.enum';
 import { ToggleStatusRequest } from './request/toggle-status.request';
 import { UpdateRoleAndPermissionsRequest } from './request/update-role-and-permissions.request';
+import { PermissionGuard } from '../../auth/guard/permission.guard';
+import { UserPathGuard } from '../../auth/guard/users-path.guard';
 
 describe('UsersController', () => {
   let controller: UsersController;
-  let facade: UsersFacade;
+
+  const callerId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+  const targetId = '82dbbfb1-2552-4aaf-a9a7-1195497410c0';
 
   const mockToggleStatus = jest.fn();
   const mockRemoveUser = jest.fn();
@@ -29,74 +35,128 @@ describe('UsersController', () => {
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
-    facade = module.get<UsersFacade>(UsersFacade);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
+  const guardsOf = (handler: (...args: any[]) => any) =>
+    Reflect.getMetadata('__guards__', handler) ?? [];
+  const permissionsOf = (handler: (...args: any[]) => any) =>
+    Reflect.getMetadata('permissions', handler) ?? [];
+
   describe('toggleStatus', () => {
     it('uses the path id as the target user', async () => {
-      const pathId = '82dbbfb1-2552-4aaf-a9a7-1195497410c0';
-      const body: ToggleStatusRequest = {
-        userId: '00000000-0000-0000-0000-000000000000',
-        status: 'inactive',
-      } as ToggleStatusRequest;
       const permissions: PermissionEnum[] = [PermissionEnum.MANAGE_CC_MEMBERS];
+      const body: ToggleStatusRequest = { status: UserStatusEnum.INACTIVE };
 
       await controller.toggleStatus(
-        { user: { userId: pathId, permissions } },
-        pathId,
+        { user: { userId: callerId, permissions } },
+        targetId,
         body,
       );
 
-      // The facade must receive the path id as the target.
       expect(mockToggleStatus).toHaveBeenCalledTimes(1);
-      expect(mockToggleStatus.mock.calls[0][0].userId).toBe(pathId);
+      expect(mockToggleStatus).toHaveBeenCalledWith(
+        targetId,
+        UserStatusEnum.INACTIVE,
+        permissions,
+      );
+    });
+
+    it('rejects changing your own status', async () => {
+      await expect(
+        controller.toggleStatus(
+          {
+            user: {
+              userId: callerId,
+              permissions: [PermissionEnum.MANAGE_ADMINS],
+            },
+          },
+          callerId,
+          { status: UserStatusEnum.INACTIVE },
+        ),
+      ).rejects.toThrow(BadRequestException);
+      expect(mockToggleStatus).not.toHaveBeenCalled();
+    });
+
+    it('requires a user management permission', () => {
+      expect(guardsOf(UsersController.prototype.toggleStatus)).toContain(
+        PermissionGuard,
+      );
+      expect(guardsOf(UsersController.prototype.toggleStatus)).not.toContain(
+        UserPathGuard,
+      );
+      expect(permissionsOf(UsersController.prototype.toggleStatus)).toEqual(
+        expect.arrayContaining([
+          PermissionEnum.MANAGE_CC_MEMBERS,
+          PermissionEnum.MANAGE_ADMINS,
+        ]),
+      );
     });
   });
 
   describe('removeUser', () => {
     it('uses the path id as the target user', async () => {
-      const callerId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
-      const targetId = '82dbbfb1-2552-4aaf-a9a7-1195497410c0';
-      const body = { userId: '00000000-0000-0000-0000-000000000000' };
-
-      await controller.removeUser(
-        { user: { userId: callerId } },
-        targetId,
-        body,
-      );
+      await controller.removeUser({ user: { userId: callerId } }, targetId);
 
       expect(mockRemoveUser).toHaveBeenCalledTimes(1);
       expect(mockRemoveUser).toHaveBeenCalledWith(targetId);
     });
 
     it('throws BadRequest when the caller tries to delete themself', async () => {
-      const pathId = '82dbbfb1-2552-4aaf-a9a7-1195497410c0';
       await expect(
-        controller.removeUser({ user: { userId: pathId } }, pathId, {
-          userId: pathId,
-        }),
+        controller.removeUser({ user: { userId: callerId } }, callerId),
       ).rejects.toThrow('You cannot delete yourself');
       expect(mockRemoveUser).not.toHaveBeenCalled();
+    });
+
+    it('requires the manage_admins permission', () => {
+      expect(guardsOf(UsersController.prototype.removeUser)).toContain(
+        PermissionGuard,
+      );
+      expect(permissionsOf(UsersController.prototype.removeUser)).toEqual([
+        PermissionEnum.MANAGE_ADMINS,
+      ]);
     });
   });
 
   describe('updateUserRoleAndPermissions', () => {
-    it('uses the path id as the target user', async () => {
-      const pathId = '82dbbfb1-2552-4aaf-a9a7-1195497410c0';
-      const body: UpdateRoleAndPermissionsRequest = {
-        userId: '00000000-0000-0000-0000-000000000000',
-        newRole: 'admin',
-        newPermissions: ['manage_cc_members'],
-      } as UpdateRoleAndPermissionsRequest;
+    const body: UpdateRoleAndPermissionsRequest = {
+      newRole: 'admin',
+      newPermissions: [PermissionEnum.MANAGE_CC_MEMBERS],
+    };
 
-      await controller.updateUserRoleAndPermissions(pathId, body);
+    it('uses the path id as the target user', async () => {
+      await controller.updateUserRoleAndPermissions(
+        { user: { userId: callerId } },
+        targetId,
+        body,
+      );
 
       expect(mockUpdateRoleAndPermissions).toHaveBeenCalledTimes(1);
-      expect(mockUpdateRoleAndPermissions.mock.calls[0][0].userId).toBe(pathId);
+      expect(mockUpdateRoleAndPermissions).toHaveBeenCalledWith(targetId, body);
+    });
+
+    it('rejects changing your own role and permissions', async () => {
+      await expect(
+        controller.updateUserRoleAndPermissions(
+          { user: { userId: callerId } },
+          callerId,
+          body,
+        ),
+      ).rejects.toThrow(BadRequestException);
+      expect(mockUpdateRoleAndPermissions).not.toHaveBeenCalled();
+    });
+
+    it('requires the manage_roles_and_permissions permission', () => {
+      expect(
+        guardsOf(UsersController.prototype.updateUserRoleAndPermissions),
+      ).toContain(PermissionGuard);
+      expect(
+        permissionsOf(UsersController.prototype.updateUserRoleAndPermissions),
+      ).toEqual([PermissionEnum.MANAGE_ROLES_AND_PERMISSIONS]);
     });
   });
 });

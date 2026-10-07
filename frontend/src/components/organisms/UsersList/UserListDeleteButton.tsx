@@ -16,7 +16,6 @@ export function UserListDeleteButton({ userId }: { userId: string }) {
     openModal({
       type: "deleteUser",
       state: {
-        sAdminId: userSession.userId,
         userId,
       },
     });

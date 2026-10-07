@@ -295,11 +295,10 @@ export class UsersService {
   }
 
   async updateUserRoleAndPermissions(
+    userId: string,
     updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
   ): Promise<UserDto> {
-    const user = await this.findEntityById(
-      updateRoleAndPermissionsRequest.userId,
-    );
+    const user = await this.findEntityById(userId);
     if (user.role.code === RoleEnum.SUPER_ADMIN) {
       throw new ForbiddenException(`You have no permission for this action`);
     }
