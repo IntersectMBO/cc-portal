@@ -4,8 +4,10 @@ import * as path from 'path';
 import { DataSource } from 'typeorm';
 import { CONNECTION_NAME_DB_SYNC } from './constants/sql.constants';
 import { InjectDataSource } from '@nestjs/typeorm';
-import axios from 'axios';
 import { GovActionProposalDto } from '../governance/dto/gov-action-proposal.dto';
+import { fetchMetadataJson } from './metadata-fetcher';
+
+const DEFAULT_IPFS_GATEWAY_URL = 'https://ipfs.io/ipfs/';
 
 export abstract class CommonService {
   protected logger = new Logger(CommonService.name);
@@ -94,13 +96,7 @@ export abstract class CommonService {
     url: string,
   ): Promise<Partial<GovActionProposalDto>> {
     try {
-      const response = await axios.get(url, {
-        headers: {
-          'User-Agent': 'axios',
-          Accept: 'application/json',
-        },
-      });
-      const jsonData = response.data;
+      const jsonData = await fetchMetadataJson(url);
       const title = jsonData.body?.title;
       const abstract = jsonData.body?.abstract;
       const govActionProposal: Partial<GovActionProposalDto> = {
@@ -120,7 +116,8 @@ export abstract class CommonService {
   async transformIpfsUrl(ipfsUrl: string): Promise<string> {
     if (ipfsUrl && ipfsUrl.startsWith('ipfs://')) {
       const cid = ipfsUrl.replace('ipfs://', '');
-      return `https://ipfs.io/ipfs/${cid}`;
+      const gateway = process.env.IPFS_GATEWAY_URL || DEFAULT_IPFS_GATEWAY_URL;
+      return `${gateway.replace(/\/+$/, '')}/${cid}`;
     }
     return ipfsUrl; // Return the original URL if it doesn't start with ipfs://
   }
