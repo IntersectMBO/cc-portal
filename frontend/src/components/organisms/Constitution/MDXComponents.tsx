@@ -1,3 +1,5 @@
+"use client";
+
 import { useAppContext, useModal } from "@/context";
 import { Button, CopyButton, Typography } from "@atoms";
 import { customPalette, ICONS, PATHS } from "@consts";

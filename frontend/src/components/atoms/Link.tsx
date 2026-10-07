@@ -1,3 +1,5 @@
+"use client";
+
 import MUILink from "@mui/material/Link";
 import NextLink from "next/link";
 import { FC } from "react";
