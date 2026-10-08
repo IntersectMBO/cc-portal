@@ -630,4 +630,47 @@ describe('GovActionProposalService', () => {
       expect(result).toEqual(mockEmptyArray);
     });
   });
+
+  describe('transformIpfsUrl', () => {
+    const originalGateway = process.env.IPFS_GATEWAY_URL;
+
+    afterEach(() => {
+      if (originalGateway === undefined) {
+        delete process.env.IPFS_GATEWAY_URL;
+      } else {
+        process.env.IPFS_GATEWAY_URL = originalGateway;
+      }
+    });
+
+    it('should use the default IPFS gateway', async () => {
+      delete process.env.IPFS_GATEWAY_URL;
+      expect(await service.transformIpfsUrl('ipfs://bafyCid')).toBe(
+        'https://ipfs.io/ipfs/bafyCid',
+      );
+    });
+
+    it('should use the configured IPFS gateway', async () => {
+      process.env.IPFS_GATEWAY_URL = 'https://gateway.example/ipfs/';
+      expect(await service.transformIpfsUrl('ipfs://bafyCid')).toBe(
+        'https://gateway.example/ipfs/bafyCid',
+      );
+    });
+
+    it('should leave other URLs unchanged', async () => {
+      expect(await service.transformIpfsUrl('https://example.com/a.json')).toBe(
+        'https://example.com/a.json',
+      );
+    });
+  });
+
+  describe('getGovActionProposalFromUrl', () => {
+    it('should return null for URLs that are not allowed', async () => {
+      expect(
+        await service.getGovActionProposalFromUrl('http://127.0.0.1:1337/'),
+      ).toBeNull();
+      expect(
+        await service.getGovActionProposalFromUrl('file:///etc/hosts'),
+      ).toBeNull();
+    });
+  });
 });

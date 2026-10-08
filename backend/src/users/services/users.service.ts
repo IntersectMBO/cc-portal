@@ -22,7 +22,10 @@ import { RoleMapper } from '../mapper/roleMapper.mapper';
 import { HotAddress } from '../entities/hotaddress.entity';
 import { RoleEnum } from '../enums/role.enum';
 import { PaginateQuery } from 'nestjs-paginate';
-import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
+import {
+  USER_PAGINATION_CONFIG,
+  USER_PUBLIC_PAGINATION_CONFIG,
+} from '../util/pagination/user-pagination.config';
 import { PaginatedDto } from 'src/util/pagination/dto/paginated.dto';
 import { PaginationEntityMapper } from 'src/util/pagination/mapper/pagination.mapper';
 import { Paginator } from 'src/util/pagination/paginator';
@@ -224,8 +227,11 @@ export class UsersService {
   ): Promise<UserDto> {
     const user = await this.findEntityById(id);
     user.status = userStatus;
-    user.deactivatedAt =
-      userStatus === UserStatusEnum.INACTIVE ? new Date() : null;
+    // Keep the last deactivation time after reactivation so that sessions
+    // started before the deactivation stay invalid
+    if (userStatus === UserStatusEnum.INACTIVE) {
+      user.deactivatedAt = new Date();
+    }
     await this.userRepository.save(user);
     return UserMapper.userToDto(user);
   }
@@ -254,7 +260,7 @@ export class UsersService {
     const result = await this.paginator.paginate(
       query,
       customQuery,
-      USER_PAGINATION_CONFIG,
+      isAdmin ? USER_PAGINATION_CONFIG : USER_PUBLIC_PAGINATION_CONFIG,
     );
 
     return new PaginationEntityMapper<User, UserDto>().paginatedToDto(
@@ -295,11 +301,10 @@ export class UsersService {
   }
 
   async updateUserRoleAndPermissions(
+    userId: string,
     updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
   ): Promise<UserDto> {
-    const user = await this.findEntityById(
-      updateRoleAndPermissionsRequest.userId,
-    );
+    const user = await this.findEntityById(userId);
     if (user.role.code === RoleEnum.SUPER_ADMIN) {
       throw new ForbiddenException(`You have no permission for this action`);
     }

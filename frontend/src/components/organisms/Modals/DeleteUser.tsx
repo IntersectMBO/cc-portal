@@ -20,7 +20,7 @@ export const DeleteUser = () => {
 
   const {
     closeModal,
-    state: { sAdminId, userId }
+    state: { userId }
   } = useModal<OpenDeleteUserModalState>();
 
   const {
@@ -31,7 +31,7 @@ export const DeleteUser = () => {
   } = useForm();
 
   const onSubmit = async () => {
-    const res = await deleteUser(sAdminId, userId);
+    const res = await deleteUser(userId);
 
     if (!isResponseErrorI(res)) {
       addSuccessAlert(t("deleteUser.alerts.success"));

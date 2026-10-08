@@ -67,6 +67,9 @@ describe('IpfsService', () => {
       if (url === 'IPFS_SERVICE_URL') {
         return 'http://localhost:3001';
       }
+      if (url === 'IPFS_SERVICE_API_KEY') {
+        return 'test-api-key';
+      }
     }),
   };
 
@@ -255,6 +258,46 @@ describe('IpfsService', () => {
           `Error when add rationale to the IPFS service`,
         );
       }
+    });
+  });
+
+  describe('IPFS service authentication', () => {
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('should send the API key when adding JSON', async () => {
+      const post = jest.spyOn(axios, 'post').mockResolvedValueOnce({
+        data: { cid: 'cid', url: 'url', content: 'content' },
+      });
+
+      await service.addRationaleToIpfs(mockJson);
+
+      expect(post).toHaveBeenCalledWith(
+        'http://localhost:3001/ipfs/json',
+        mockJson,
+        expect.objectContaining({
+          headers: expect.objectContaining({ 'x-api-key': 'test-api-key' }),
+        }),
+      );
+    });
+
+    it('should send the API key when adding a file', async () => {
+      const post = jest.spyOn(axios, 'post').mockResolvedValueOnce({
+        data: { cid: 'cid', content: 'content' },
+      });
+      mockIpfsMetadataRepository.count.mockResolvedValueOnce(0);
+      mockIpfsMetadataRepository.findOne.mockResolvedValueOnce(null);
+
+      await service.addToIpfs(mockFile);
+
+      expect(post).toHaveBeenCalledWith(
+        'http://localhost:3001/ipfs/file',
+        expect.anything(),
+        expect.objectContaining({
+          headers: expect.objectContaining({ 'x-api-key': 'test-api-key' }),
+        }),
+      );
     });
   });
 });

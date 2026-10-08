@@ -4,7 +4,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
-import * as aws from '@aws-sdk/client-ses';
+import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import * as aws from '@aws-sdk/client-ses';
       useFactory: async (configService: ConfigService) => ({
         transport: {
           SES: {
-            ses: new aws.SES({
+            sesClient: new SESv2Client({
               region: configService.getOrThrow('AWS_REGION'),
               credentials: {
                 accessKeyId: configService.getOrThrow('AWS_ACCESS_KEY_ID'),
@@ -21,7 +21,7 @@ import * as aws from '@aws-sdk/client-ses';
                 ),
               },
             }),
-            aws,
+            SendEmailCommand,
           },
         },
         defaults: {

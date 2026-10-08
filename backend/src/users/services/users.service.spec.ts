@@ -19,6 +19,10 @@ import { PaginateQuery, Paginated } from 'nestjs-paginate';
 import { Paginator } from 'src/util/pagination/paginator';
 import { RoleEnum } from '../enums/role.enum';
 import { RoleFactory } from '../role/role.factory';
+import {
+  USER_PAGINATION_CONFIG,
+  USER_PUBLIC_PAGINATION_CONFIG,
+} from '../util/pagination/user-pagination.config';
 const mockS3Service = {
   uploadFileMinio: jest.fn().mockResolvedValue('mocked_file_name'),
   createBucketIfNotExists: jest.fn().mockResolvedValue('new_bucket'),
@@ -546,6 +550,43 @@ describe('UsersService', () => {
       expect(mockUserRepository.save).toHaveBeenCalled();
     });
 
+    it('should record the deactivation time', async () => {
+      const user = {
+        id: 'statusUserId',
+        status: UserStatusEnum.ACTIVE,
+        deactivatedAt: null,
+        role: { code: RoleEnum.USER },
+      };
+      mockUserRepository.findOne.mockResolvedValueOnce(user);
+
+      const updatedUser = await service.updateUserStatus(
+        user.id,
+        UserStatusEnum.INACTIVE,
+      );
+
+      expect(updatedUser.status).toBe(UserStatusEnum.INACTIVE);
+      expect(updatedUser.deactivatedAt).toBeInstanceOf(Date);
+    });
+
+    it('should keep the last deactivation time when reactivating', async () => {
+      const deactivatedAt = new Date('2026-01-01T12:00:00.000Z');
+      const user = {
+        id: 'statusUserId',
+        status: UserStatusEnum.INACTIVE,
+        deactivatedAt,
+        role: { code: RoleEnum.USER },
+      };
+      mockUserRepository.findOne.mockResolvedValueOnce(user);
+
+      const updatedUser = await service.updateUserStatus(
+        user.id,
+        UserStatusEnum.ACTIVE,
+      );
+
+      expect(updatedUser.status).toBe(UserStatusEnum.ACTIVE);
+      expect(updatedUser.deactivatedAt).toEqual(deactivatedAt);
+    });
+
     it('should throw NotFoundException for invalid user ID', async () => {
       const invalidUserId: string = 'invalidId';
       const newUserStatus: UserStatusEnum = UserStatusEnum.INACTIVE;
@@ -684,6 +725,40 @@ describe('UsersService', () => {
       expect(userPaginatedDto.items[0].name).toEqual(user.name);
       expect(userPaginatedDto.items.length).toEqual(1);
       expect(mockPaginator.paginate).toHaveBeenCalled();
+    });
+
+    it('should only search CC members by name', async () => {
+      const query: PaginateQuery = {
+        page: 0,
+        limit: 10,
+        search: 'example.com',
+        path: 'randomPath',
+      };
+
+      await service.searchUsers(query, false);
+
+      expect(mockPaginator.paginate).toHaveBeenLastCalledWith(
+        query,
+        expect.anything(),
+        USER_PUBLIC_PAGINATION_CONFIG,
+      );
+      expect(USER_PUBLIC_PAGINATION_CONFIG.searchableColumns).toEqual(['name']);
+    });
+
+    it('should use the admin search config for admins', async () => {
+      const query: PaginateQuery = {
+        page: 0,
+        limit: 10,
+        path: 'randomPath',
+      };
+
+      await service.searchUsers(query, true);
+
+      expect(mockPaginator.paginate).toHaveBeenLastCalledWith(
+        query,
+        expect.anything(),
+        USER_PAGINATION_CONFIG,
+      );
     });
 
     it('should return an empty array of users', async () => {

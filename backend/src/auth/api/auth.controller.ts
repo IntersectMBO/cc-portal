@@ -205,6 +205,7 @@ export class AuthController {
   @ApiResponse({ status: 403, description: 'Forbidden resource' })
   @ApiResponse({ status: 409, description: 'Conflict' })
   @ApiBody({ type: ResendRegisterRequest })
+  @Permissions(PermissionEnum.MANAGE_CC_MEMBERS, PermissionEnum.MANAGE_ADMINS)
   @UseGuards(JwtAuthGuard, PermissionGuard)
   @Post('resend-register-invite')
   async resendRegisterInvite(

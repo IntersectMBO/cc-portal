@@ -6,11 +6,16 @@ import {
   Param,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AppService } from './app.service.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { IpfsDto } from './dto/ipfs.dto.js';
+import { ApiKeyGuard } from './guards/api-key.guard.js';
+
+// Upper bound for uploaded files; the backend accepts up to 5 MB.
+const MAX_UPLOAD_FILE_SIZE = 10 * 1024 * 1024;
 
 @Controller('ipfs')
 @Controller()
@@ -21,12 +26,16 @@ export class AppController {
     await this.appService.onApplicationShutdown();
   }
 
-  @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(ApiKeyGuard)
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: MAX_UPLOAD_FILE_SIZE } }),
+  )
   @Post('file')
   async addFile(@UploadedFile() file: Express.Multer.File): Promise<IpfsDto> {
     return await this.appService.addFile(file);
   }
 
+  @UseGuards(ApiKeyGuard)
   @Post('json')
   async addJson(@Body() json: string): Promise<IpfsDto> {
     return await this.appService.addJson(json);

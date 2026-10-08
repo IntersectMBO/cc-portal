@@ -16,7 +16,6 @@ export function UserListEditRoleButton({ userId }: { userId: string }) {
     openModal({
       type: "changeRole",
       state: {
-        sAdminId: userSession.userId,
         userId,
       },
     });

@@ -15,6 +15,7 @@ import { UserStatusEnum } from '../../users/enums/user-status.enum';
 import { CreateUserRequest } from 'src/users/api/request/create-user.request';
 import { RoleEnum } from 'src/users/enums/role.enum';
 import { PermissionEnum } from 'src/users/enums/permission.enum';
+import { assertTokenAllowedForUser } from '../util/session.util';
 
 @Injectable()
 export class AuthFacade {
@@ -89,13 +90,21 @@ export class AuthFacade {
     }
 
     // Extract userId and address from the payload
-    const { userId, email } = payload;
+    const { userId, email, issuedAt } = payload;
 
     // Make sure the user still exists and is valid
-    const user = await this.usersService.findByEmail(email);
+    let user: UserDto;
+    try {
+      user = await this.usersService.findByEmail(email);
+    } catch (e) {
+      throw new UnauthorizedException('Authentication failed');
+    }
     if (!user || user.id !== userId) {
       throw new UnauthorizedException('Authentication failed');
     }
+    // Inactive users, and tokens issued before the last deactivation,
+    // cannot be refreshed
+    assertTokenAllowedForUser(user, issuedAt);
 
     // Issue new access and refresh tokens using the same payload
     const result = this.generateTokens(user);

@@ -135,7 +135,7 @@ export class VoteService extends CommonService {
       voteRequest.govMetadataUrl,
     );
     const govActionProposalDto: Partial<GovActionProposalDto> =
-      await this.getGovActionProposalFromUrl(govMetadataUrl);
+      (await this.getGovActionProposalFromUrl(govMetadataUrl)) ?? {};
     govActionProposalDto.id = voteRequest.govActionProposalId;
     govActionProposalDto.votingAnchorId = voteRequest.votingAnchorId;
     govActionProposalDto.status = voteRequest.status;

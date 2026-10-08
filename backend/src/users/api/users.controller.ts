@@ -17,6 +17,7 @@ import {
 import { UsersFacade } from '../facade/users.facade';
 import { UpdateUserRequest } from './request/update-user.request';
 import { UserResponse } from './response/user.response';
+import { PublicUserResponse } from './response/public-user.response';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -35,13 +36,15 @@ import { Roles } from '../../auth/guard/role.decorator';
 import { RoleGuard } from '../../auth/guard/role.guard';
 import { PaginatedResponse } from '../../util/pagination/response/paginated.response';
 import { ApiPaginationQuery, Paginate, PaginateQuery } from 'nestjs-paginate';
-import { USER_PAGINATION_CONFIG } from '../util/pagination/user-pagination.config';
+import {
+  USER_PAGINATION_CONFIG,
+  USER_PUBLIC_PAGINATION_CONFIG,
+} from '../util/pagination/user-pagination.config';
 import { PermissionEnum } from '../enums/permission.enum';
 import { PermissionGuard } from 'src/auth/guard/permission.guard';
 import { ToggleStatusRequest } from './request/toggle-status.request';
 import { ApiConditionalExcludeEndpoint } from 'src/common/decorators/api-conditional-exclude-endpoint.decorator';
 import { Permissions } from 'src/auth/guard/permission.decorator';
-import { RemoveUserRequest } from './request/remove-user.request';
 import { UpdateRoleAndPermissionsRequest } from './request/update-role-and-permissions.request';
 import { MaxFileSizeValidator } from '../../util/validators/max-file-size.validator';
 import { FileTypeValidator } from '../../util/validators/file-type.validator';
@@ -57,8 +60,11 @@ export class UsersController {
     description: 'The user details',
     type: UserResponse,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'User with {id} not found' })
+  @ApiBearerAuth('JWT-auth')
   @Get(':id')
+  @UseGuards(JwtAuthGuard, UserPathGuard)
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponse> {
     return await this.usersFacade.findOne(id);
   }
@@ -107,18 +113,18 @@ export class UsersController {
    Returns all registered CC Members
    **/
   @ApiOperation({ summary: 'Search users' })
-  @ApiPaginationQuery(USER_PAGINATION_CONFIG)
+  @ApiPaginationQuery(USER_PUBLIC_PAGINATION_CONFIG)
   @ApiResponse({
     status: 200,
-    description: 'Users - returns UserResponse array within data',
+    description: 'Users - returns PublicUserResponse array within data',
     isArray: true,
-    type: PaginatedResponse<UserResponse>,
+    type: PaginatedResponse<PublicUserResponse>,
   })
   @Get('cc-member/search')
   async searchMembersPaginated(
     @Paginate() query: PaginateQuery,
-  ): Promise<PaginatedResponse<UserResponse>> {
-    return await this.usersFacade.searchUsers(query, false);
+  ): Promise<PaginatedResponse<PublicUserResponse>> {
+    return await this.usersFacade.searchMembers(query);
   }
 
   /**
@@ -260,16 +266,21 @@ export class UsersController {
   })
   @ApiBody({ type: ToggleStatusRequest })
   @HttpCode(200)
-  @UseGuards(JwtAuthGuard, UserPathGuard, PermissionGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @Permissions(PermissionEnum.MANAGE_CC_MEMBERS, PermissionEnum.MANAGE_ADMINS)
   @Patch(':id/toggle-status')
   async toggleStatus(
     @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() toggleStatusRequest: ToggleStatusRequest,
   ): Promise<UserResponse> {
+    if (req.user.userId === id) {
+      throw new BadRequestException(`You cannot change your own status`);
+    }
     const permissions: PermissionEnum[] = req.user.permissions;
     return await this.usersFacade.toggleStatus(
-      toggleStatusRequest,
+      id,
+      toggleStatusRequest.status,
       permissions,
     );
   }
@@ -287,19 +298,18 @@ export class UsersController {
     type: String,
     description: 'identifactor of user',
   })
-  @ApiBody({ type: RemoveUserRequest })
   @HttpCode(200)
   @Permissions(PermissionEnum.MANAGE_ADMINS) // Superadmin only
-  @UseGuards(JwtAuthGuard, UserPathGuard, PermissionGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @Delete(':id')
   async removeUser(
+    @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() removeUserRequest: RemoveUserRequest,
   ) {
-    if (id === removeUserRequest.userId) {
+    if (req.user.userId === id) {
       throw new BadRequestException(`You cannot delete yourself`);
     }
-    await this.usersFacade.removeUser(removeUserRequest.userId);
+    await this.usersFacade.removeUser(id);
     return {
       success: true,
       message: 'User deleted successfully',
@@ -330,12 +340,19 @@ export class UsersController {
   @HttpCode(200)
   @Patch(':id/role-permissions')
   @Permissions(PermissionEnum.MANAGE_ROLES_AND_PERMISSIONS)
-  @UseGuards(JwtAuthGuard, UserPathGuard, PermissionGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   async updateUserRoleAndPermissions(
+    @Request() req: any,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateRoleAndPermissionsRequest: UpdateRoleAndPermissionsRequest,
   ): Promise<UserResponse> {
+    if (req.user.userId === id) {
+      throw new BadRequestException(
+        `You cannot change your own role and permissions`,
+      );
+    }
     return await this.usersFacade.updateUserRoleAndPermissions(
+      id,
       updateRoleAndPermissionsRequest,
     );
   }

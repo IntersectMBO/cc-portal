@@ -3,6 +3,14 @@ const withNextIntl = require("next-intl/plugin")();
 const nextConfig = {
   output: "standalone",
   reactStrictMode: false,
+  // Bundle next-mdx-remote instead of loading it as an external ES module,
+  // which Next.js 14.2 does by default and which breaks client components that import it.
+  transpilePackages: ["next-mdx-remote"],
+  experimental: {
+    // Keep the Next.js 14.1 behaviour for pages that call useSearchParams()
+    // outside a Suspense boundary, which Next.js 14.2 turns into a build error.
+    missingSuspenseWithCSRBailout: false,
+  },
 };
 
 // This line integrates the NextIntl library with the Next.js configuration.

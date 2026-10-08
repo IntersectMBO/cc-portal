@@ -74,7 +74,6 @@ export interface OpenDeleteRoleModalState {
 }
 
 export interface OpenDeleteUserModalState {
-  sAdminId: string;
   userId: string;
 }
 

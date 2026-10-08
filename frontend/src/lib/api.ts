@@ -185,8 +185,16 @@ export async function refreshToken(refresh_token: string) {
 export async function getUser(
   id: string
 ): Promise<FetchUserData | ResponseErrorI> {
+  const token = getAccessToken();
   try {
-    const res: FetchUserData = await axiosInstance.get(`/api/users/${id}`);
+    const res: FetchUserData = await axiosInstance.get(
+      `/api/users/${encodeURIComponent(id)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return res;
   } catch (error) {
     const t = await getTranslations();
@@ -205,12 +213,10 @@ export async function toggleUserStatus(
   status: Omit<UserAuthStatus, "pending">
 ): Promise<FetchUserData | ResponseErrorI> {
   const token = getAccessToken();
-  const decodedToken = await decodeUserToken();
   try {
     const res: FetchUserData = await axiosInstance.patch(
-      `/api/users/${decodedToken?.userId}/toggle-status`,
+      `/api/users/${encodeURIComponent(user_id)}/toggle-status`,
       {
-        user_id,
         status,
       },
       {
@@ -750,17 +756,17 @@ export async function resendRegisterEmail(email: string) {
     };
   }
 }
-export async function deleteUser(sAdminId: string, userId: string) {
+export async function deleteUser(userId: string) {
   const token = getAccessToken();
   try {
-    const res = await axiosInstance.delete(`/api/users/${sAdminId}`, {
-      data: {
-        user_id: userId,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axiosInstance.delete(
+      `/api/users/${encodeURIComponent(userId)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return res;
   } catch (error) {
     const t = await getTranslations();
